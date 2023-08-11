@@ -104,7 +104,7 @@ Thực hiện các bước như dưới đây:
    2. Set up database schema and data for ACV database. Các scripts có thế được tìm thấy trong thư mục `docker/sql`.
    *Lưu ý: Các script khi được thực thi trong PostgreSQL sẽ được sắp xếp theo thứ tự alpha-b*
 
-3. Open file `ACV.Toll.Admin.API.sln` và chạy toàn bộ test suite
+3. Open file `EPAY.ETC.Core.API.sln` và chạy toàn bộ test suite
 4. Để có thể đăng nhập vào dockerized PostgreSQL, ta có thể sử dụng pgAdmin4 với connection string như sau: `Server=localhost; Port=5432; User Id=postgres; Password=postgres; Database=MainDB;`. *Connection string này có thể được tìm thấy trong file `appsettings.IntegrationTests.json`*
 5. Để clean up Docker containers sau khi chạy xong integration tests, thực hiện lệnh sau `docker-compose down`
 
