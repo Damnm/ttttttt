@@ -361,4 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
-src/EPAY.ETC.Core.API/logs/internal-nlog.txt
+
+# Logs
+[Ll]ogs/
