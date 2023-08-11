@@ -2661,3 +2661,1323 @@
 2023-08-11 10:38:51.1116 Debug Logger Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor [Warn] => logfile
 2023-08-11 10:38:51.1116 Debug Logger Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor [Error] => logfile
 2023-08-11 10:38:51.1116 Debug Logger Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor [Fatal] => logfile
+2023-08-11 15:01:15.2861 Debug Message Template Auto Format enabled
+2023-08-11 15:01:15.3128 Debug Skipped already loaded assembly name: NLog.Web.AspNetCore
+2023-08-11 15:01:15.3128 Info Loading assembly name: NLog.Targets.ElasticSearch
+2023-08-11 15:01:15.3315 Info NLog.Targets.ElasticSearch, Version=1.0.0.0, Culture=neutral, PublicKeyToken=3eb62cd298662c6a. File version: 1.0.0.0. Product version: 1.0.0+2fb9a27ff48217059d2b3648bb2a79b6b0af9922. GlobalAssemblyCache: False
+2023-08-11 15:01:15.3315 Debug ScanAssembly('NLog.Targets.ElasticSearch, Version=1.0.0.0, Culture=neutral, PublicKeyToken=3eb62cd298662c6a')
+2023-08-11 15:01:15.3485 Debug Loading assembly name: NLog.Targets.ElasticSearch succeeded!
+2023-08-11 15:01:15.3829 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2023-08-11 15:01:15.3846 Trace Scanning ShortDateLayoutRenderer 'Layout Renderer: ${shortdate}'
+2023-08-11 15:01:15.3846 Debug FileTarget FilePathLayout with FilePathKind.Relative using AppDomain.BaseDirectory: D:\Project\Epay Message queue\epay.etc.core.api\src\EPAY.ETC.Core.API\bin\Debug\net6.0\
+2023-08-11 15:01:15.3846 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2023-08-11 15:01:15.3846 Trace Scanning LongDateLayoutRenderer 'Layout Renderer: ${longdate}'
+2023-08-11 15:01:15.3846 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2023-08-11 15:01:15.3846 Trace Scanning LoggerNameLayoutRenderer 'Layout Renderer: ${loggername}'
+2023-08-11 15:01:15.3846 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2023-08-11 15:01:15.3846 Trace Scanning LevelLayoutRenderer 'Layout Renderer: ${level}'
+2023-08-11 15:01:15.3846 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2023-08-11 15:01:15.3846 Trace Scanning MessageLayoutRenderer 'Layout Renderer: ${message}'
+2023-08-11 15:01:15.4077 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2023-08-11 15:01:15.4077 Trace Scanning ExceptionLayoutRenderer 'Layout Renderer: ${exception}'
+2023-08-11 15:01:15.4077 Trace  Scanning Property Formats 'System.Collections.Generic.List`1[NLog.Config.ExceptionRenderingFormat]' System.Collections.Generic.List`1[NLog.Config.ExceptionRenderingFormat]
+2023-08-11 15:01:15.4077 Debug Wrapping target 'logfile' with 'NLog.Targets.Wrappers.AsyncTargetWrapper' and renaming to 'logfile_wrapped
+2023-08-11 15:01:15.4157 Debug Adding target NLog.Targets.Wrappers.AsyncTargetWrapper(Name=logfile)
+2023-08-11 15:01:15.4157 Info Registered target NLog.Targets.Wrappers.AsyncTargetWrapper(Name=logfile)
+2023-08-11 15:01:15.4372 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2023-08-11 15:01:15.4372 Trace Scanning DateLayoutRenderer 'Layout Renderer: ${date}'
+2023-08-11 15:01:15.4574 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2023-08-11 15:01:15.4574 Trace Scanning ShortDateLayoutRenderer 'Layout Renderer: ${shortdate}'
+2023-08-11 15:01:15.4574 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2023-08-11 15:01:15.4574 Trace Scanning LongDateLayoutRenderer 'Layout Renderer: ${longdate}'
+2023-08-11 15:01:15.4574 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2023-08-11 15:01:15.4574 Trace Scanning LoggerNameLayoutRenderer 'Layout Renderer: ${loggername}'
+2023-08-11 15:01:15.4574 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2023-08-11 15:01:15.4574 Trace Scanning AspNetRequestUrlRenderer 'Layout Renderer: ${aspnet-request-url}'
+2023-08-11 15:01:15.4574 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2023-08-11 15:01:15.4574 Trace Scanning AspNetMvcActionRenderer 'Layout Renderer: ${aspnet-mvc-action}'
+2023-08-11 15:01:15.4574 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2023-08-11 15:01:15.4574 Trace Scanning LevelLayoutRenderer 'Layout Renderer: ${level}'
+2023-08-11 15:01:15.4627 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2023-08-11 15:01:15.4627 Trace Scanning MessageLayoutRenderer 'Layout Renderer: ${message}'
+2023-08-11 15:01:15.4627 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2023-08-11 15:01:15.4627 Trace Scanning ExceptionLayoutRenderer 'Layout Renderer: ${exception}'
+2023-08-11 15:01:15.4627 Trace  Scanning Property Formats 'System.Collections.Generic.List`1[NLog.Config.ExceptionRenderingFormat]' System.Collections.Generic.List`1[NLog.Config.ExceptionRenderingFormat]
+2023-08-11 15:01:15.4627 Debug Adding target NLog.Targets.ElasticSearch.ElasticSearchTarget(Name=ElasticSearch)
+2023-08-11 15:01:15.4627 Info Registered target NLog.Targets.ElasticSearch.ElasticSearchTarget(Name=ElasticSearch)
+2023-08-11 15:01:15.4627 Debug Wrapping target 'elastic' with 'NLog.Targets.Wrappers.AsyncTargetWrapper' and renaming to 'elastic_wrapped
+2023-08-11 15:01:15.4627 Debug Adding target NLog.Targets.Wrappers.AsyncTargetWrapper(Name=elastic)
+2023-08-11 15:01:15.4627 Info Registered target NLog.Targets.Wrappers.AsyncTargetWrapper(Name=elastic)
+2023-08-11 15:01:15.4627 Trace ParseRulesElement
+2023-08-11 15:01:15.4801 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.2.3.1999. Product version: 5.2.3+a5ddef92a8afb22508450803e37c001f4a3ba52a. GlobalAssemblyCache: False
+2023-08-11 15:01:15.4801 Debug Watching file-filter 'NLog.config' in directory: D:\Project\Epay Message queue\epay.etc.core.api\src\EPAY.ETC.Core.API\bin\Debug\net6.0
+2023-08-11 15:01:15.4801 Debug --- NLog configuration dump ---
+2023-08-11 15:01:15.4801 Debug Targets:
+2023-08-11 15:01:15.4801 Debug AsyncWrapper_FileTarget(Name=logfile)
+2023-08-11 15:01:15.4937 Debug ElasticSearchTarget(Name=ElasticSearch)
+2023-08-11 15:01:15.4937 Debug AsyncWrapper_BufferingWrapper(Name=elastic)
+2023-08-11 15:01:15.4937 Debug Rules:
+2023-08-11 15:01:15.4937 Debug logNamePattern: (Microsoft.:StartsWith) levels: [ Trace Debug Info Warn Error Fatal ] writeTo: [ ]
+2023-08-11 15:01:15.4937 Debug logNamePattern: (:All) levels: [ Info Warn Error Fatal ] writeTo: [ logfile ]
+2023-08-11 15:01:15.4937 Debug logNamePattern: (:All) levels: [ Debug Info Warn Error Fatal ] writeTo: [ elastic ]
+2023-08-11 15:01:15.4937 Debug --- End of NLog configuration dump ---
+2023-08-11 15:01:15.4937 Trace FindReachableObject<System.Object>:
+2023-08-11 15:01:15.4937 Trace Scanning LoggingRule 'logNamePattern: (Microsoft.:StartsWith) levels: [ Trace Debug Info Warn Error Fatal ] writeTo: [ ]'
+2023-08-11 15:01:15.4937 Trace  Scanning Property Targets 'System.Collections.Generic.List`1[NLog.Targets.Target]' System.Collections.Generic.IList`1[NLog.Targets.Target]
+2023-08-11 15:01:15.4937 Trace  Scanning Property ChildRules 'System.Collections.Generic.List`1[NLog.Config.LoggingRule]' System.Collections.Generic.IList`1[NLog.Config.LoggingRule]
+2023-08-11 15:01:15.4937 Trace  Scanning Property Filters 'System.Collections.Generic.List`1[NLog.Filters.Filter]' System.Collections.Generic.IList`1[NLog.Filters.Filter]
+2023-08-11 15:01:15.4937 Trace Scanning LoggingRule 'logNamePattern: (:All) levels: [ Info Warn Error Fatal ] writeTo: [ logfile ]'
+2023-08-11 15:01:15.4937 Trace  Scanning Property Targets 'System.Collections.Generic.List`1[NLog.Targets.Target]' System.Collections.Generic.IList`1[NLog.Targets.Target]
+2023-08-11 15:01:15.4937 Trace  Scanning AsyncTargetWrapper 'AsyncWrapper_FileTarget(Name=logfile)'
+2023-08-11 15:01:15.4937 Trace   Scanning Property WrappedTarget 'FileTarget(Name=logfile_wrapped)' NLog.Targets.Target
+2023-08-11 15:01:15.4937 Trace   Scanning FileTarget 'FileTarget(Name=logfile_wrapped)'
+2023-08-11 15:01:15.4937 Trace    Scanning Property FileName 'logs/log-${shortdate}.txt' NLog.Layouts.Layout
+2023-08-11 15:01:15.4937 Trace    Scanning SimpleLayout 'logs/log-${shortdate}.txt'
+2023-08-11 15:01:15.4937 Trace     Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.4937 Trace     Scanning LiteralLayoutRenderer 'Layout Renderer: ${literal}'
+2023-08-11 15:01:15.4937 Trace     Scanning ShortDateLayoutRenderer 'Layout Renderer: ${shortdate}'
+2023-08-11 15:01:15.4937 Trace     Scanning LiteralLayoutRenderer 'Layout Renderer: ${literal}'
+2023-08-11 15:01:15.5112 Trace    Scanning Property Layout 'JsonLayout=time-${longdate}|logger-${logger}|level-${level:upperCase=true}|message-${message}|exception-${exception}' NLog.Layouts.Layout
+2023-08-11 15:01:15.5112 Trace    Scanning JsonLayout 'JsonLayout=time-${longdate}|logger-${logger}|level-${level:upperCase=true}|message-${message}|exception-${exception}'
+2023-08-11 15:01:15.5112 Trace     Scanning Property Attributes 'System.Collections.Generic.List`1[NLog.Layouts.JsonAttribute]' System.Collections.Generic.IList`1[NLog.Layouts.JsonAttribute]
+2023-08-11 15:01:15.5112 Trace     Scanning JsonAttribute 'NLog.Layouts.JsonAttribute'
+2023-08-11 15:01:15.5112 Trace      Scanning Property Layout '${longdate}' NLog.Layouts.Layout
+2023-08-11 15:01:15.5112 Trace      Scanning SimpleLayout '${longdate}'
+2023-08-11 15:01:15.5112 Trace       Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.5112 Trace       Scanning LongDateLayoutRenderer 'Layout Renderer: ${longdate}'
+2023-08-11 15:01:15.5112 Trace      Scanning Property DefaultValue 'null' NLog.Layouts.Layout
+2023-08-11 15:01:15.5112 Trace      Scanning Layout`1 'null'
+2023-08-11 15:01:15.5112 Trace     Scanning JsonAttribute 'NLog.Layouts.JsonAttribute'
+2023-08-11 15:01:15.5112 Trace      Scanning Property Layout '${logger}' NLog.Layouts.Layout
+2023-08-11 15:01:15.5112 Trace      Scanning SimpleLayout '${logger}'
+2023-08-11 15:01:15.5112 Trace       Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.5112 Trace       Scanning LoggerNameLayoutRenderer 'Layout Renderer: ${loggername}'
+2023-08-11 15:01:15.5112 Trace      Scanning Property DefaultValue 'null' NLog.Layouts.Layout
+2023-08-11 15:01:15.5112 Trace      Scanning Layout`1 'null'
+2023-08-11 15:01:15.5112 Trace     Scanning JsonAttribute 'NLog.Layouts.JsonAttribute'
+2023-08-11 15:01:15.5112 Trace      Scanning Property Layout '${level:upperCase=true}' NLog.Layouts.Layout
+2023-08-11 15:01:15.5112 Trace      Scanning SimpleLayout '${level:upperCase=true}'
+2023-08-11 15:01:15.5112 Trace       Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.5112 Trace       Scanning LevelLayoutRenderer 'Layout Renderer: ${level}'
+2023-08-11 15:01:15.5112 Trace      Scanning Property DefaultValue 'null' NLog.Layouts.Layout
+2023-08-11 15:01:15.5112 Trace      Scanning Layout`1 'null'
+2023-08-11 15:01:15.5112 Trace     Scanning JsonAttribute 'NLog.Layouts.JsonAttribute'
+2023-08-11 15:01:15.5112 Trace      Scanning Property Layout '${message}' NLog.Layouts.Layout
+2023-08-11 15:01:15.5112 Trace      Scanning SimpleLayout '${message}'
+2023-08-11 15:01:15.5112 Trace       Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.5112 Trace       Scanning MessageLayoutRenderer 'Layout Renderer: ${message}'
+2023-08-11 15:01:15.5112 Trace      Scanning Property DefaultValue 'null' NLog.Layouts.Layout
+2023-08-11 15:01:15.5112 Trace      Scanning Layout`1 'null'
+2023-08-11 15:01:15.5112 Trace     Scanning JsonAttribute 'NLog.Layouts.JsonAttribute'
+2023-08-11 15:01:15.5112 Trace      Scanning Property Layout '${exception}' NLog.Layouts.Layout
+2023-08-11 15:01:15.5112 Trace      Scanning SimpleLayout '${exception}'
+2023-08-11 15:01:15.5112 Trace       Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.5112 Trace       Scanning ExceptionLayoutRenderer 'Layout Renderer: ${exception}'
+2023-08-11 15:01:15.5112 Trace        Scanning Property Formats 'System.Collections.Generic.List`1[NLog.Config.ExceptionRenderingFormat]' System.Collections.Generic.List`1[NLog.Config.ExceptionRenderingFormat]
+2023-08-11 15:01:15.5112 Trace      Scanning Property DefaultValue 'null' NLog.Layouts.Layout
+2023-08-11 15:01:15.5112 Trace      Scanning Layout`1 'null'
+2023-08-11 15:01:15.5112 Trace     Scanning Property Attributes 'System.Collections.Generic.List`1[NLog.Layouts.JsonAttribute]' System.Collections.Generic.IList`1[NLog.Layouts.JsonAttribute]
+2023-08-11 15:01:15.5112 Trace     Scanning Property ExcludeProperties 'System.Collections.Generic.HashSet`1[System.String]' System.Collections.Generic.ISet`1[System.String]
+2023-08-11 15:01:15.5112 Trace  Scanning Property ChildRules 'System.Collections.Generic.List`1[NLog.Config.LoggingRule]' System.Collections.Generic.IList`1[NLog.Config.LoggingRule]
+2023-08-11 15:01:15.5112 Trace  Scanning Property Filters 'System.Collections.Generic.List`1[NLog.Filters.Filter]' System.Collections.Generic.IList`1[NLog.Filters.Filter]
+2023-08-11 15:01:15.5112 Trace Scanning LoggingRule 'logNamePattern: (:All) levels: [ Debug Info Warn Error Fatal ] writeTo: [ elastic ]'
+2023-08-11 15:01:15.5112 Trace  Scanning Property Targets 'System.Collections.Generic.List`1[NLog.Targets.Target]' System.Collections.Generic.IList`1[NLog.Targets.Target]
+2023-08-11 15:01:15.5112 Trace  Scanning AsyncTargetWrapper 'AsyncWrapper_BufferingWrapper(Name=elastic)'
+2023-08-11 15:01:15.5112 Trace   Scanning Property WrappedTarget 'BufferingWrapper_ElasticSearchTarget(Name=elastic_wrapped)' NLog.Targets.Target
+2023-08-11 15:01:15.5254 Trace   Scanning BufferingTargetWrapper 'BufferingWrapper_ElasticSearchTarget(Name=elastic_wrapped)'
+2023-08-11 15:01:15.5254 Trace    Scanning Property BufferSize '100' NLog.Layouts.Layout`1[System.Int32]
+2023-08-11 15:01:15.5254 Trace    Scanning Layout`1 '100'
+2023-08-11 15:01:15.5254 Trace    Scanning Property FlushTimeout '5000' NLog.Layouts.Layout`1[System.Int32]
+2023-08-11 15:01:15.5254 Trace    Scanning Layout`1 '5000'
+2023-08-11 15:01:15.5254 Trace    Scanning Property WrappedTarget 'ElasticSearchTarget(Name=ElasticSearch)' NLog.Targets.Target
+2023-08-11 15:01:15.5254 Trace    Scanning ElasticSearchTarget 'ElasticSearchTarget(Name=ElasticSearch)'
+2023-08-11 15:01:15.5254 Trace     Scanning Property Index 'epay.etc.core.api-${shortdate}' NLog.Layouts.Layout
+2023-08-11 15:01:15.5254 Trace     Scanning SimpleLayout 'epay.etc.core.api-${shortdate}'
+2023-08-11 15:01:15.5254 Trace      Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.5254 Trace      Scanning LiteralLayoutRenderer 'Layout Renderer: ${literal}'
+2023-08-11 15:01:15.5254 Trace      Scanning ShortDateLayoutRenderer 'Layout Renderer: ${shortdate}'
+2023-08-11 15:01:15.5254 Trace     Scanning Property DocumentType '' NLog.Layouts.Layout
+2023-08-11 15:01:15.5254 Trace     Scanning SimpleLayout ''
+2023-08-11 15:01:15.5254 Trace      Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.5254 Trace      Scanning LiteralLayoutRenderer 'Layout Renderer: ${literal}'
+2023-08-11 15:01:15.5254 Trace     Scanning Property Fields 'System.Collections.Generic.List`1[NLog.Targets.ElasticSearch.Field]' System.Collections.Generic.IList`1[NLog.Targets.ElasticSearch.Field]
+2023-08-11 15:01:15.5254 Trace     Scanning Property Fields 'System.Collections.Generic.List`1[NLog.Targets.ElasticSearch.Field]' System.Collections.Generic.IList`1[NLog.Targets.ElasticSearch.Field]
+2023-08-11 15:01:15.5254 Trace     Scanning Property ObjectTypeConverters 'System.Collections.Generic.List`1[NLog.Targets.ElasticSearch.ObjectTypeConvert]' System.Collections.Generic.IList`1[NLog.Targets.ElasticSearch.ObjectTypeConvert]
+2023-08-11 15:01:15.5254 Debug Object reflection needed to configure instance of type: NLog.Targets.ElasticSearch.ObjectTypeConvert
+2023-08-11 15:01:15.5254 Trace     Scanning ObjectTypeConvert 'NLog.Targets.ElasticSearch.ObjectTypeConvert'
+2023-08-11 15:01:15.5254 Trace     Scanning ObjectTypeConvert 'NLog.Targets.ElasticSearch.ObjectTypeConvert'
+2023-08-11 15:01:15.5254 Trace     Scanning ObjectTypeConvert 'NLog.Targets.ElasticSearch.ObjectTypeConvert'
+2023-08-11 15:01:15.5254 Trace     Scanning ObjectTypeConvert 'NLog.Targets.ElasticSearch.ObjectTypeConvert'
+2023-08-11 15:01:15.5254 Trace     Scanning ObjectTypeConvert 'NLog.Targets.ElasticSearch.ObjectTypeConvert'
+2023-08-11 15:01:15.5254 Trace     Scanning Property ObjectTypeConverters 'System.Collections.Generic.List`1[NLog.Targets.ElasticSearch.ObjectTypeConvert]' System.Collections.Generic.IList`1[NLog.Targets.ElasticSearch.ObjectTypeConvert]
+2023-08-11 15:01:15.5254 Trace     Scanning Property Layout 'JsonLayout=time-${longdate}|sourceCategory-epay.etc.core.api|environment-Development|logger-${logger}|requestUrl-${aspnet-request-url}|action-${aspnet-mvc-action}|level-${level:upperCase=true}|message-${message}|exception-${exception}' NLog.Layouts.Layout
+2023-08-11 15:01:15.5254 Trace     Scanning JsonLayout 'JsonLayout=time-${longdate}|sourceCategory-epay.etc.core.api|environment-Development|logger-${logger}|requestUrl-${aspnet-request-url}|action-${aspnet-mvc-action}|level-${level:upperCase=true}|message-${message}|exception-${exception}'
+2023-08-11 15:01:15.5254 Trace      Scanning Property Attributes 'System.Collections.Generic.List`1[NLog.Layouts.JsonAttribute]' System.Collections.Generic.IList`1[NLog.Layouts.JsonAttribute]
+2023-08-11 15:01:15.5254 Trace      Scanning JsonAttribute 'NLog.Layouts.JsonAttribute'
+2023-08-11 15:01:15.5254 Trace       Scanning Property Layout '${longdate}' NLog.Layouts.Layout
+2023-08-11 15:01:15.5254 Trace       Scanning SimpleLayout '${longdate}'
+2023-08-11 15:01:15.5254 Trace        Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.5254 Trace        Scanning LongDateLayoutRenderer 'Layout Renderer: ${longdate}'
+2023-08-11 15:01:15.5254 Trace       Scanning Property DefaultValue 'null' NLog.Layouts.Layout
+2023-08-11 15:01:15.5254 Trace       Scanning Layout`1 'null'
+2023-08-11 15:01:15.5254 Trace      Scanning JsonAttribute 'NLog.Layouts.JsonAttribute'
+2023-08-11 15:01:15.5254 Trace       Scanning Property Layout 'epay.etc.core.api' NLog.Layouts.Layout
+2023-08-11 15:01:15.5254 Trace       Scanning SimpleLayout 'epay.etc.core.api'
+2023-08-11 15:01:15.5254 Trace        Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.5404 Trace        Scanning LiteralLayoutRenderer 'Layout Renderer: ${literal}'
+2023-08-11 15:01:15.5404 Trace       Scanning Property DefaultValue 'null' NLog.Layouts.Layout
+2023-08-11 15:01:15.5404 Trace       Scanning Layout`1 'null'
+2023-08-11 15:01:15.5404 Trace      Scanning JsonAttribute 'NLog.Layouts.JsonAttribute'
+2023-08-11 15:01:15.5404 Trace       Scanning Property Layout 'Development' NLog.Layouts.Layout
+2023-08-11 15:01:15.5404 Trace       Scanning SimpleLayout 'Development'
+2023-08-11 15:01:15.5404 Trace        Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.5404 Trace        Scanning LiteralLayoutRenderer 'Layout Renderer: ${literal}'
+2023-08-11 15:01:15.5404 Trace       Scanning Property DefaultValue 'null' NLog.Layouts.Layout
+2023-08-11 15:01:15.5404 Trace       Scanning Layout`1 'null'
+2023-08-11 15:01:15.5404 Trace      Scanning JsonAttribute 'NLog.Layouts.JsonAttribute'
+2023-08-11 15:01:15.5404 Trace       Scanning Property Layout '${logger}' NLog.Layouts.Layout
+2023-08-11 15:01:15.5404 Trace       Scanning SimpleLayout '${logger}'
+2023-08-11 15:01:15.5404 Trace        Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.5404 Trace        Scanning LoggerNameLayoutRenderer 'Layout Renderer: ${loggername}'
+2023-08-11 15:01:15.5404 Trace       Scanning Property DefaultValue 'null' NLog.Layouts.Layout
+2023-08-11 15:01:15.5404 Trace       Scanning Layout`1 'null'
+2023-08-11 15:01:15.5404 Trace      Scanning JsonAttribute 'NLog.Layouts.JsonAttribute'
+2023-08-11 15:01:15.5404 Trace       Scanning Property Layout '${aspnet-request-url}' NLog.Layouts.Layout
+2023-08-11 15:01:15.5404 Trace       Scanning SimpleLayout '${aspnet-request-url}'
+2023-08-11 15:01:15.5404 Trace        Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.5404 Trace        Scanning AspNetRequestUrlRenderer 'Layout Renderer: ${aspnet-request-url}'
+2023-08-11 15:01:15.5404 Trace       Scanning Property DefaultValue 'null' NLog.Layouts.Layout
+2023-08-11 15:01:15.5404 Trace       Scanning Layout`1 'null'
+2023-08-11 15:01:15.5404 Trace      Scanning JsonAttribute 'NLog.Layouts.JsonAttribute'
+2023-08-11 15:01:15.5404 Trace       Scanning Property Layout '${aspnet-mvc-action}' NLog.Layouts.Layout
+2023-08-11 15:01:15.5404 Trace       Scanning SimpleLayout '${aspnet-mvc-action}'
+2023-08-11 15:01:15.5404 Trace        Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.5404 Trace        Scanning AspNetMvcActionRenderer 'Layout Renderer: ${aspnet-mvc-action}'
+2023-08-11 15:01:15.5404 Trace       Scanning Property DefaultValue 'null' NLog.Layouts.Layout
+2023-08-11 15:01:15.5404 Trace       Scanning Layout`1 'null'
+2023-08-11 15:01:15.5404 Trace      Scanning JsonAttribute 'NLog.Layouts.JsonAttribute'
+2023-08-11 15:01:15.5404 Trace       Scanning Property Layout '${level:upperCase=true}' NLog.Layouts.Layout
+2023-08-11 15:01:15.5404 Trace       Scanning SimpleLayout '${level:upperCase=true}'
+2023-08-11 15:01:15.5404 Trace        Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.5404 Trace        Scanning LevelLayoutRenderer 'Layout Renderer: ${level}'
+2023-08-11 15:01:15.5404 Trace       Scanning Property DefaultValue 'null' NLog.Layouts.Layout
+2023-08-11 15:01:15.5404 Trace       Scanning Layout`1 'null'
+2023-08-11 15:01:15.5404 Trace      Scanning JsonAttribute 'NLog.Layouts.JsonAttribute'
+2023-08-11 15:01:15.5404 Trace       Scanning Property Layout '${message}' NLog.Layouts.Layout
+2023-08-11 15:01:15.5404 Trace       Scanning SimpleLayout '${message}'
+2023-08-11 15:01:15.5404 Trace        Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.5404 Trace        Scanning MessageLayoutRenderer 'Layout Renderer: ${message}'
+2023-08-11 15:01:15.5404 Trace       Scanning Property DefaultValue 'null' NLog.Layouts.Layout
+2023-08-11 15:01:15.5404 Trace       Scanning Layout`1 'null'
+2023-08-11 15:01:15.5404 Trace      Scanning JsonAttribute 'NLog.Layouts.JsonAttribute'
+2023-08-11 15:01:15.5404 Trace       Scanning Property Layout '${exception}' NLog.Layouts.Layout
+2023-08-11 15:01:15.5404 Trace       Scanning SimpleLayout '${exception}'
+2023-08-11 15:01:15.5404 Trace        Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.5404 Trace        Scanning ExceptionLayoutRenderer 'Layout Renderer: ${exception}'
+2023-08-11 15:01:15.5404 Trace         Scanning Property Formats 'System.Collections.Generic.List`1[NLog.Config.ExceptionRenderingFormat]' System.Collections.Generic.List`1[NLog.Config.ExceptionRenderingFormat]
+2023-08-11 15:01:15.5404 Trace       Scanning Property DefaultValue 'null' NLog.Layouts.Layout
+2023-08-11 15:01:15.5404 Trace       Scanning Layout`1 'null'
+2023-08-11 15:01:15.5404 Trace      Scanning Property Attributes 'System.Collections.Generic.List`1[NLog.Layouts.JsonAttribute]' System.Collections.Generic.IList`1[NLog.Layouts.JsonAttribute]
+2023-08-11 15:01:15.5404 Trace      Scanning Property ExcludeProperties 'System.Collections.Generic.HashSet`1[System.String]' System.Collections.Generic.ISet`1[System.String]
+2023-08-11 15:01:15.5566 Trace  Scanning Property ChildRules 'System.Collections.Generic.List`1[NLog.Config.LoggingRule]' System.Collections.Generic.IList`1[NLog.Config.LoggingRule]
+2023-08-11 15:01:15.5566 Trace  Scanning Property Filters 'System.Collections.Generic.List`1[NLog.Filters.Filter]' System.Collections.Generic.IList`1[NLog.Filters.Filter]
+2023-08-11 15:01:15.5566 Info Validating config: TargetNames=logfile, elastic, ConfigItems=82, FilePath=D:\Project\Epay Message queue\epay.etc.core.api\src\EPAY.ETC.Core.API\bin\Debug\net6.0\NLog.config
+2023-08-11 15:01:15.5566 Debug Unused target checking is started... Rule Count: 3, Target Count: 3
+2023-08-11 15:01:15.5566 Debug Unused target checking is completed. Total Rule Count: 3, Total Target Count: 3, Unused Target Count: 0
+2023-08-11 15:01:15.5566 Trace Initializing null
+2023-08-11 15:01:15.5566 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2023-08-11 15:01:15.5566 Trace Scanning Layout`1 'null'
+2023-08-11 15:01:15.5737 Trace Initializing Layout Renderer: ${exception}
+2023-08-11 15:01:15.5737 Trace Initializing ${exception}
+2023-08-11 15:01:15.5737 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2023-08-11 15:01:15.5737 Trace Scanning SimpleLayout '${exception}'
+2023-08-11 15:01:15.5737 Trace  Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.5737 Trace  Scanning ExceptionLayoutRenderer 'Layout Renderer: ${exception}'
+2023-08-11 15:01:15.5737 Trace   Scanning Property Formats 'System.Collections.Generic.List`1[NLog.Config.ExceptionRenderingFormat]' System.Collections.Generic.List`1[NLog.Config.ExceptionRenderingFormat]
+2023-08-11 15:01:15.5737 Trace Initializing null
+2023-08-11 15:01:15.5737 Trace Initializing Layout Renderer: ${message}
+2023-08-11 15:01:15.5737 Trace Initializing ${message}
+2023-08-11 15:01:15.5737 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2023-08-11 15:01:15.5737 Trace Scanning SimpleLayout '${message}'
+2023-08-11 15:01:15.5737 Trace  Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.5737 Trace  Scanning MessageLayoutRenderer 'Layout Renderer: ${message}'
+2023-08-11 15:01:15.5737 Trace Initializing null
+2023-08-11 15:01:15.5737 Trace Initializing Layout Renderer: ${level}
+2023-08-11 15:01:15.5737 Trace Initializing ${level:upperCase=true}
+2023-08-11 15:01:15.5737 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2023-08-11 15:01:15.5737 Trace Scanning SimpleLayout '${level:upperCase=true}'
+2023-08-11 15:01:15.5737 Trace  Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.5737 Trace  Scanning LevelLayoutRenderer 'Layout Renderer: ${level}'
+2023-08-11 15:01:15.5737 Trace Initializing null
+2023-08-11 15:01:15.5737 Trace Initializing Layout Renderer: ${aspnet-mvc-action}
+2023-08-11 15:01:15.5737 Trace Initializing ${aspnet-mvc-action}
+2023-08-11 15:01:15.5737 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2023-08-11 15:01:15.5737 Trace Scanning SimpleLayout '${aspnet-mvc-action}'
+2023-08-11 15:01:15.5737 Trace  Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.5737 Trace  Scanning AspNetMvcActionRenderer 'Layout Renderer: ${aspnet-mvc-action}'
+2023-08-11 15:01:15.5737 Trace Initializing null
+2023-08-11 15:01:15.5737 Trace Initializing Layout Renderer: ${aspnet-request-url}
+2023-08-11 15:01:15.5737 Trace Initializing ${aspnet-request-url}
+2023-08-11 15:01:15.5737 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2023-08-11 15:01:15.5737 Trace Scanning SimpleLayout '${aspnet-request-url}'
+2023-08-11 15:01:15.5737 Trace  Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.5737 Trace  Scanning AspNetRequestUrlRenderer 'Layout Renderer: ${aspnet-request-url}'
+2023-08-11 15:01:15.5737 Trace Initializing null
+2023-08-11 15:01:15.5737 Trace Initializing Layout Renderer: ${loggername}
+2023-08-11 15:01:15.5737 Trace Initializing ${logger}
+2023-08-11 15:01:15.5737 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2023-08-11 15:01:15.5737 Trace Scanning SimpleLayout '${logger}'
+2023-08-11 15:01:15.5737 Trace  Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.5737 Trace  Scanning LoggerNameLayoutRenderer 'Layout Renderer: ${loggername}'
+2023-08-11 15:01:15.5737 Trace Initializing null
+2023-08-11 15:01:15.5737 Trace Initializing Layout Renderer: ${literal}
+2023-08-11 15:01:15.5737 Trace Initializing Development
+2023-08-11 15:01:15.5737 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2023-08-11 15:01:15.5737 Trace Scanning SimpleLayout 'Development'
+2023-08-11 15:01:15.5737 Trace  Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.5875 Trace  Scanning LiteralLayoutRenderer 'Layout Renderer: ${literal}'
+2023-08-11 15:01:15.5875 Trace Initializing null
+2023-08-11 15:01:15.5875 Trace Initializing Layout Renderer: ${literal}
+2023-08-11 15:01:15.5875 Trace Initializing epay.etc.core.api
+2023-08-11 15:01:15.5875 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2023-08-11 15:01:15.5875 Trace Scanning SimpleLayout 'epay.etc.core.api'
+2023-08-11 15:01:15.5875 Trace  Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.5875 Trace  Scanning LiteralLayoutRenderer 'Layout Renderer: ${literal}'
+2023-08-11 15:01:15.5875 Trace Initializing null
+2023-08-11 15:01:15.5875 Trace Initializing Layout Renderer: ${longdate}
+2023-08-11 15:01:15.5875 Trace Initializing ${longdate}
+2023-08-11 15:01:15.5875 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2023-08-11 15:01:15.5875 Trace Scanning SimpleLayout '${longdate}'
+2023-08-11 15:01:15.5875 Trace  Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.5875 Trace  Scanning LongDateLayoutRenderer 'Layout Renderer: ${longdate}'
+2023-08-11 15:01:15.5875 Trace Initializing JsonLayout=time-${longdate}|sourceCategory-epay.etc.core.api|environment-Development|logger-${logger}|requestUrl-${aspnet-request-url}|action-${aspnet-mvc-action}|level-${level:upperCase=true}|message-${message}|exception-${exception}
+2023-08-11 15:01:15.5875 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2023-08-11 15:01:15.5875 Trace Scanning JsonLayout 'JsonLayout=time-${longdate}|sourceCategory-epay.etc.core.api|environment-Development|logger-${logger}|requestUrl-${aspnet-request-url}|action-${aspnet-mvc-action}|level-${level:upperCase=true}|message-${message}|exception-${exception}'
+2023-08-11 15:01:15.5875 Trace  Scanning Property Attributes 'System.Collections.Generic.List`1[NLog.Layouts.JsonAttribute]' System.Collections.Generic.IList`1[NLog.Layouts.JsonAttribute]
+2023-08-11 15:01:15.5875 Trace  Scanning JsonAttribute 'NLog.Layouts.JsonAttribute'
+2023-08-11 15:01:15.5875 Trace   Scanning Property Layout '${longdate}' NLog.Layouts.Layout
+2023-08-11 15:01:15.5875 Trace   Scanning SimpleLayout '${longdate}'
+2023-08-11 15:01:15.5875 Trace    Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.5875 Trace    Scanning LongDateLayoutRenderer 'Layout Renderer: ${longdate}'
+2023-08-11 15:01:15.5875 Trace   Scanning Property DefaultValue 'null' NLog.Layouts.Layout
+2023-08-11 15:01:15.5875 Trace   Scanning Layout`1 'null'
+2023-08-11 15:01:15.5875 Trace  Scanning JsonAttribute 'NLog.Layouts.JsonAttribute'
+2023-08-11 15:01:15.5875 Trace   Scanning Property Layout 'epay.etc.core.api' NLog.Layouts.Layout
+2023-08-11 15:01:15.5875 Trace   Scanning SimpleLayout 'epay.etc.core.api'
+2023-08-11 15:01:15.5875 Trace    Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.5875 Trace    Scanning LiteralLayoutRenderer 'Layout Renderer: ${literal}'
+2023-08-11 15:01:15.5875 Trace   Scanning Property DefaultValue 'null' NLog.Layouts.Layout
+2023-08-11 15:01:15.5875 Trace   Scanning Layout`1 'null'
+2023-08-11 15:01:15.5875 Trace  Scanning JsonAttribute 'NLog.Layouts.JsonAttribute'
+2023-08-11 15:01:15.5875 Trace   Scanning Property Layout 'Development' NLog.Layouts.Layout
+2023-08-11 15:01:15.5875 Trace   Scanning SimpleLayout 'Development'
+2023-08-11 15:01:15.5875 Trace    Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.5875 Trace    Scanning LiteralLayoutRenderer 'Layout Renderer: ${literal}'
+2023-08-11 15:01:15.5875 Trace   Scanning Property DefaultValue 'null' NLog.Layouts.Layout
+2023-08-11 15:01:15.5875 Trace   Scanning Layout`1 'null'
+2023-08-11 15:01:15.5875 Trace  Scanning JsonAttribute 'NLog.Layouts.JsonAttribute'
+2023-08-11 15:01:15.5875 Trace   Scanning Property Layout '${logger}' NLog.Layouts.Layout
+2023-08-11 15:01:15.5875 Trace   Scanning SimpleLayout '${logger}'
+2023-08-11 15:01:15.5875 Trace    Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.5875 Trace    Scanning LoggerNameLayoutRenderer 'Layout Renderer: ${loggername}'
+2023-08-11 15:01:15.5875 Trace   Scanning Property DefaultValue 'null' NLog.Layouts.Layout
+2023-08-11 15:01:15.5875 Trace   Scanning Layout`1 'null'
+2023-08-11 15:01:15.5875 Trace  Scanning JsonAttribute 'NLog.Layouts.JsonAttribute'
+2023-08-11 15:01:15.5875 Trace   Scanning Property Layout '${aspnet-request-url}' NLog.Layouts.Layout
+2023-08-11 15:01:15.5875 Trace   Scanning SimpleLayout '${aspnet-request-url}'
+2023-08-11 15:01:15.5875 Trace    Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.5875 Trace    Scanning AspNetRequestUrlRenderer 'Layout Renderer: ${aspnet-request-url}'
+2023-08-11 15:01:15.5875 Trace   Scanning Property DefaultValue 'null' NLog.Layouts.Layout
+2023-08-11 15:01:15.5875 Trace   Scanning Layout`1 'null'
+2023-08-11 15:01:15.5875 Trace  Scanning JsonAttribute 'NLog.Layouts.JsonAttribute'
+2023-08-11 15:01:15.6034 Trace   Scanning Property Layout '${aspnet-mvc-action}' NLog.Layouts.Layout
+2023-08-11 15:01:15.6034 Trace   Scanning SimpleLayout '${aspnet-mvc-action}'
+2023-08-11 15:01:15.6034 Trace    Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.6034 Trace    Scanning AspNetMvcActionRenderer 'Layout Renderer: ${aspnet-mvc-action}'
+2023-08-11 15:01:15.6034 Trace   Scanning Property DefaultValue 'null' NLog.Layouts.Layout
+2023-08-11 15:01:15.6034 Trace   Scanning Layout`1 'null'
+2023-08-11 15:01:15.6034 Trace  Scanning JsonAttribute 'NLog.Layouts.JsonAttribute'
+2023-08-11 15:01:15.6034 Trace   Scanning Property Layout '${level:upperCase=true}' NLog.Layouts.Layout
+2023-08-11 15:01:15.6034 Trace   Scanning SimpleLayout '${level:upperCase=true}'
+2023-08-11 15:01:15.6034 Trace    Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.6034 Trace    Scanning LevelLayoutRenderer 'Layout Renderer: ${level}'
+2023-08-11 15:01:15.6034 Trace   Scanning Property DefaultValue 'null' NLog.Layouts.Layout
+2023-08-11 15:01:15.6034 Trace   Scanning Layout`1 'null'
+2023-08-11 15:01:15.6034 Trace  Scanning JsonAttribute 'NLog.Layouts.JsonAttribute'
+2023-08-11 15:01:15.6034 Trace   Scanning Property Layout '${message}' NLog.Layouts.Layout
+2023-08-11 15:01:15.6034 Trace   Scanning SimpleLayout '${message}'
+2023-08-11 15:01:15.6034 Trace    Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.6034 Trace    Scanning MessageLayoutRenderer 'Layout Renderer: ${message}'
+2023-08-11 15:01:15.6034 Trace   Scanning Property DefaultValue 'null' NLog.Layouts.Layout
+2023-08-11 15:01:15.6034 Trace   Scanning Layout`1 'null'
+2023-08-11 15:01:15.6034 Trace  Scanning JsonAttribute 'NLog.Layouts.JsonAttribute'
+2023-08-11 15:01:15.6034 Trace   Scanning Property Layout '${exception}' NLog.Layouts.Layout
+2023-08-11 15:01:15.6034 Trace   Scanning SimpleLayout '${exception}'
+2023-08-11 15:01:15.6034 Trace    Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.6034 Trace    Scanning ExceptionLayoutRenderer 'Layout Renderer: ${exception}'
+2023-08-11 15:01:15.6034 Trace     Scanning Property Formats 'System.Collections.Generic.List`1[NLog.Config.ExceptionRenderingFormat]' System.Collections.Generic.List`1[NLog.Config.ExceptionRenderingFormat]
+2023-08-11 15:01:15.6034 Trace   Scanning Property DefaultValue 'null' NLog.Layouts.Layout
+2023-08-11 15:01:15.6034 Trace   Scanning Layout`1 'null'
+2023-08-11 15:01:15.6034 Trace  Scanning Property Attributes 'System.Collections.Generic.List`1[NLog.Layouts.JsonAttribute]' System.Collections.Generic.IList`1[NLog.Layouts.JsonAttribute]
+2023-08-11 15:01:15.6034 Trace  Scanning Property ExcludeProperties 'System.Collections.Generic.HashSet`1[System.String]' System.Collections.Generic.ISet`1[System.String]
+2023-08-11 15:01:15.6034 Trace Initializing Layout Renderer: ${literal}
+2023-08-11 15:01:15.6034 Trace Initializing 
+2023-08-11 15:01:15.6034 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2023-08-11 15:01:15.6034 Trace Scanning SimpleLayout ''
+2023-08-11 15:01:15.6034 Trace  Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.6034 Trace  Scanning LiteralLayoutRenderer 'Layout Renderer: ${literal}'
+2023-08-11 15:01:15.6034 Trace Initializing Layout Renderer: ${shortdate}
+2023-08-11 15:01:15.6034 Trace Initializing Layout Renderer: ${literal}
+2023-08-11 15:01:15.6034 Trace Initializing epay.etc.core.api-${shortdate}
+2023-08-11 15:01:15.6190 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2023-08-11 15:01:15.6190 Trace Scanning SimpleLayout 'epay.etc.core.api-${shortdate}'
+2023-08-11 15:01:15.6190 Trace  Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.6190 Trace  Scanning LiteralLayoutRenderer 'Layout Renderer: ${literal}'
+2023-08-11 15:01:15.6190 Trace  Scanning ShortDateLayoutRenderer 'Layout Renderer: ${shortdate}'
+2023-08-11 15:01:15.6190 Trace Initializing ElasticSearchTarget(Name=ElasticSearch)
+2023-08-11 15:01:15.6543 Trace FindReachableObject<NLog.Layouts.Layout>:
+2023-08-11 15:01:15.6543 Trace Scanning ElasticSearchTarget 'ElasticSearchTarget(Name=ElasticSearch)'
+2023-08-11 15:01:15.6543 Trace  Scanning Property Index 'epay.etc.core.api-${shortdate}' NLog.Layouts.Layout
+2023-08-11 15:01:15.6543 Trace  Scanning Property DocumentType '' NLog.Layouts.Layout
+2023-08-11 15:01:15.6543 Trace  Scanning Property Fields 'System.Collections.Generic.List`1[NLog.Targets.ElasticSearch.Field]' System.Collections.Generic.IList`1[NLog.Targets.ElasticSearch.Field]
+2023-08-11 15:01:15.6543 Trace  Scanning Property Fields 'System.Collections.Generic.List`1[NLog.Targets.ElasticSearch.Field]' System.Collections.Generic.IList`1[NLog.Targets.ElasticSearch.Field]
+2023-08-11 15:01:15.6543 Trace  Scanning Property ObjectTypeConverters 'System.Collections.Generic.List`1[NLog.Targets.ElasticSearch.ObjectTypeConvert]' System.Collections.Generic.IList`1[NLog.Targets.ElasticSearch.ObjectTypeConvert]
+2023-08-11 15:01:15.6543 Trace  Scanning ObjectTypeConvert 'NLog.Targets.ElasticSearch.ObjectTypeConvert'
+2023-08-11 15:01:15.6543 Trace  Scanning ObjectTypeConvert 'NLog.Targets.ElasticSearch.ObjectTypeConvert'
+2023-08-11 15:01:15.6543 Trace  Scanning ObjectTypeConvert 'NLog.Targets.ElasticSearch.ObjectTypeConvert'
+2023-08-11 15:01:15.6543 Trace  Scanning ObjectTypeConvert 'NLog.Targets.ElasticSearch.ObjectTypeConvert'
+2023-08-11 15:01:15.6543 Trace  Scanning ObjectTypeConvert 'NLog.Targets.ElasticSearch.ObjectTypeConvert'
+2023-08-11 15:01:15.6543 Trace  Scanning Property ObjectTypeConverters 'System.Collections.Generic.List`1[NLog.Targets.ElasticSearch.ObjectTypeConvert]' System.Collections.Generic.IList`1[NLog.Targets.ElasticSearch.ObjectTypeConvert]
+2023-08-11 15:01:15.6543 Trace  Scanning Property Layout 'JsonLayout=time-${longdate}|sourceCategory-epay.etc.core.api|environment-Development|logger-${logger}|requestUrl-${aspnet-request-url}|action-${aspnet-mvc-action}|level-${level:upperCase=true}|message-${message}|exception-${exception}' NLog.Layouts.Layout
+2023-08-11 15:01:15.6543 Trace ElasticSearchTarget(Name=ElasticSearch) has 3 layouts
+2023-08-11 15:01:15.6543 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2023-08-11 15:01:15.6543 Trace Scanning SimpleLayout 'elastic'
+2023-08-11 15:01:15.6543 Trace  Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.6543 Trace  Scanning LiteralLayoutRenderer 'Layout Renderer: ${literal}'
+2023-08-11 15:01:15.6543 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2023-08-11 15:01:15.6655 Trace Scanning SimpleLayout 'Pt2018Ng0c11_00'
+2023-08-11 15:01:15.6655 Trace  Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.6655 Trace  Scanning LiteralLayoutRenderer 'Layout Renderer: ${literal}'
+2023-08-11 15:01:15.6655 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2023-08-11 15:01:15.6655 Trace Scanning SimpleLayout 'https://103.122.82.54:9220/'
+2023-08-11 15:01:15.6655 Trace  Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.6655 Trace  Scanning LiteralLayoutRenderer 'Layout Renderer: ${literal}'
+2023-08-11 15:01:15.7427 Trace Initializing 5000
+2023-08-11 15:01:15.7427 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2023-08-11 15:01:15.7436 Trace Scanning Layout`1 '5000'
+2023-08-11 15:01:15.7436 Trace Initializing 100
+2023-08-11 15:01:15.7436 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2023-08-11 15:01:15.7436 Trace Scanning Layout`1 '100'
+2023-08-11 15:01:15.7436 Trace Initializing BufferingWrapper_ElasticSearchTarget(Name=elastic_wrapped)
+2023-08-11 15:01:15.7436 Trace FindReachableObject<NLog.Layouts.Layout>:
+2023-08-11 15:01:15.7436 Trace Scanning BufferingTargetWrapper 'BufferingWrapper_ElasticSearchTarget(Name=elastic_wrapped)'
+2023-08-11 15:01:15.7436 Trace  Scanning Property BufferSize '100' NLog.Layouts.Layout`1[System.Int32]
+2023-08-11 15:01:15.7436 Trace  Scanning Property FlushTimeout '5000' NLog.Layouts.Layout`1[System.Int32]
+2023-08-11 15:01:15.7436 Trace  Scanning Property WrappedTarget 'ElasticSearchTarget(Name=ElasticSearch)' NLog.Targets.Target
+2023-08-11 15:01:15.7436 Trace  Scanning ElasticSearchTarget 'ElasticSearchTarget(Name=ElasticSearch)'
+2023-08-11 15:01:15.7436 Trace   Scanning Property Index 'epay.etc.core.api-${shortdate}' NLog.Layouts.Layout
+2023-08-11 15:01:15.7436 Trace   Scanning Property DocumentType '' NLog.Layouts.Layout
+2023-08-11 15:01:15.7436 Trace   Scanning Property Fields 'System.Collections.Generic.List`1[NLog.Targets.ElasticSearch.Field]' System.Collections.Generic.IList`1[NLog.Targets.ElasticSearch.Field]
+2023-08-11 15:01:15.7436 Trace   Scanning Property Fields 'System.Collections.Generic.List`1[NLog.Targets.ElasticSearch.Field]' System.Collections.Generic.IList`1[NLog.Targets.ElasticSearch.Field]
+2023-08-11 15:01:15.7436 Trace   Scanning Property ObjectTypeConverters 'System.Collections.Generic.List`1[NLog.Targets.ElasticSearch.ObjectTypeConvert]' System.Collections.Generic.IList`1[NLog.Targets.ElasticSearch.ObjectTypeConvert]
+2023-08-11 15:01:15.7436 Trace   Scanning ObjectTypeConvert 'NLog.Targets.ElasticSearch.ObjectTypeConvert'
+2023-08-11 15:01:15.7436 Trace   Scanning ObjectTypeConvert 'NLog.Targets.ElasticSearch.ObjectTypeConvert'
+2023-08-11 15:01:15.7436 Trace   Scanning ObjectTypeConvert 'NLog.Targets.ElasticSearch.ObjectTypeConvert'
+2023-08-11 15:01:15.7436 Trace   Scanning ObjectTypeConvert 'NLog.Targets.ElasticSearch.ObjectTypeConvert'
+2023-08-11 15:01:15.7436 Trace   Scanning ObjectTypeConvert 'NLog.Targets.ElasticSearch.ObjectTypeConvert'
+2023-08-11 15:01:15.7436 Trace   Scanning Property ObjectTypeConverters 'System.Collections.Generic.List`1[NLog.Targets.ElasticSearch.ObjectTypeConvert]' System.Collections.Generic.IList`1[NLog.Targets.ElasticSearch.ObjectTypeConvert]
+2023-08-11 15:01:15.7436 Trace   Scanning Property Layout 'JsonLayout=time-${longdate}|sourceCategory-epay.etc.core.api|environment-Development|logger-${logger}|requestUrl-${aspnet-request-url}|action-${aspnet-mvc-action}|level-${level:upperCase=true}|message-${message}|exception-${exception}' NLog.Layouts.Layout
+2023-08-11 15:01:15.7436 Trace BufferingWrapper_ElasticSearchTarget(Name=elastic_wrapped) has 5 layouts
+2023-08-11 15:01:15.7436 Trace BufferingWrapper_ElasticSearchTarget(Name=elastic_wrapped): Create Timer
+2023-08-11 15:01:15.7436 Trace Initializing AsyncWrapper_BufferingWrapper(Name=elastic)
+2023-08-11 15:01:15.7436 Trace FindReachableObject<NLog.Layouts.Layout>:
+2023-08-11 15:01:15.7436 Trace Scanning AsyncTargetWrapper 'AsyncWrapper_BufferingWrapper(Name=elastic)'
+2023-08-11 15:01:15.7436 Trace  Scanning Property WrappedTarget 'BufferingWrapper_ElasticSearchTarget(Name=elastic_wrapped)' NLog.Targets.Target
+2023-08-11 15:01:15.7436 Trace  Scanning BufferingTargetWrapper 'BufferingWrapper_ElasticSearchTarget(Name=elastic_wrapped)'
+2023-08-11 15:01:15.7436 Trace   Scanning Property BufferSize '100' NLog.Layouts.Layout`1[System.Int32]
+2023-08-11 15:01:15.7436 Trace   Scanning Property FlushTimeout '5000' NLog.Layouts.Layout`1[System.Int32]
+2023-08-11 15:01:15.7436 Trace   Scanning Property WrappedTarget 'ElasticSearchTarget(Name=ElasticSearch)' NLog.Targets.Target
+2023-08-11 15:01:15.7436 Trace   Scanning ElasticSearchTarget 'ElasticSearchTarget(Name=ElasticSearch)'
+2023-08-11 15:01:15.7436 Trace    Scanning Property Index 'epay.etc.core.api-${shortdate}' NLog.Layouts.Layout
+2023-08-11 15:01:15.7436 Trace    Scanning Property DocumentType '' NLog.Layouts.Layout
+2023-08-11 15:01:15.7606 Trace    Scanning Property Fields 'System.Collections.Generic.List`1[NLog.Targets.ElasticSearch.Field]' System.Collections.Generic.IList`1[NLog.Targets.ElasticSearch.Field]
+2023-08-11 15:01:15.7606 Trace    Scanning Property Fields 'System.Collections.Generic.List`1[NLog.Targets.ElasticSearch.Field]' System.Collections.Generic.IList`1[NLog.Targets.ElasticSearch.Field]
+2023-08-11 15:01:15.7606 Trace    Scanning Property ObjectTypeConverters 'System.Collections.Generic.List`1[NLog.Targets.ElasticSearch.ObjectTypeConvert]' System.Collections.Generic.IList`1[NLog.Targets.ElasticSearch.ObjectTypeConvert]
+2023-08-11 15:01:15.7606 Trace    Scanning ObjectTypeConvert 'NLog.Targets.ElasticSearch.ObjectTypeConvert'
+2023-08-11 15:01:15.7606 Trace    Scanning ObjectTypeConvert 'NLog.Targets.ElasticSearch.ObjectTypeConvert'
+2023-08-11 15:01:15.7606 Trace    Scanning ObjectTypeConvert 'NLog.Targets.ElasticSearch.ObjectTypeConvert'
+2023-08-11 15:01:15.7606 Trace    Scanning ObjectTypeConvert 'NLog.Targets.ElasticSearch.ObjectTypeConvert'
+2023-08-11 15:01:15.7606 Trace    Scanning ObjectTypeConvert 'NLog.Targets.ElasticSearch.ObjectTypeConvert'
+2023-08-11 15:01:15.7606 Trace    Scanning Property ObjectTypeConverters 'System.Collections.Generic.List`1[NLog.Targets.ElasticSearch.ObjectTypeConvert]' System.Collections.Generic.IList`1[NLog.Targets.ElasticSearch.ObjectTypeConvert]
+2023-08-11 15:01:15.7606 Trace    Scanning Property Layout 'JsonLayout=time-${longdate}|sourceCategory-epay.etc.core.api|environment-Development|logger-${logger}|requestUrl-${aspnet-request-url}|action-${aspnet-mvc-action}|level-${level:upperCase=true}|message-${message}|exception-${exception}' NLog.Layouts.Layout
+2023-08-11 15:01:15.7606 Trace AsyncWrapper_BufferingWrapper(Name=elastic) has 5 layouts
+2023-08-11 15:01:15.7606 Trace AsyncWrapper_BufferingWrapper(Name=elastic): Start Timer
+2023-08-11 15:01:15.7606 Trace AsyncWrapper_BufferingWrapper(Name=elastic): Timer scheduled throttled
+2023-08-11 15:01:15.7789 Trace Initializing null
+2023-08-11 15:01:15.7789 Trace Initializing Layout Renderer: ${exception}
+2023-08-11 15:01:15.7789 Trace Initializing ${exception}
+2023-08-11 15:01:15.7789 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2023-08-11 15:01:15.7789 Trace Scanning SimpleLayout '${exception}'
+2023-08-11 15:01:15.7789 Trace  Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.7789 Trace  Scanning ExceptionLayoutRenderer 'Layout Renderer: ${exception}'
+2023-08-11 15:01:15.7789 Trace   Scanning Property Formats 'System.Collections.Generic.List`1[NLog.Config.ExceptionRenderingFormat]' System.Collections.Generic.List`1[NLog.Config.ExceptionRenderingFormat]
+2023-08-11 15:01:15.7789 Trace Initializing null
+2023-08-11 15:01:15.7789 Trace Initializing Layout Renderer: ${message}
+2023-08-11 15:01:15.7789 Trace Initializing ${message}
+2023-08-11 15:01:15.7789 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2023-08-11 15:01:15.7789 Trace Scanning SimpleLayout '${message}'
+2023-08-11 15:01:15.7789 Trace  Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.7789 Trace  Scanning MessageLayoutRenderer 'Layout Renderer: ${message}'
+2023-08-11 15:01:15.7789 Trace Initializing null
+2023-08-11 15:01:15.7789 Trace Initializing Layout Renderer: ${level}
+2023-08-11 15:01:15.7789 Trace Initializing ${level:upperCase=true}
+2023-08-11 15:01:15.7789 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2023-08-11 15:01:15.7789 Trace Scanning SimpleLayout '${level:upperCase=true}'
+2023-08-11 15:01:15.7789 Trace  Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.7789 Trace  Scanning LevelLayoutRenderer 'Layout Renderer: ${level}'
+2023-08-11 15:01:15.7789 Trace Initializing null
+2023-08-11 15:01:15.7789 Trace Initializing Layout Renderer: ${loggername}
+2023-08-11 15:01:15.7789 Trace Initializing ${logger}
+2023-08-11 15:01:15.7789 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2023-08-11 15:01:15.7789 Trace Scanning SimpleLayout '${logger}'
+2023-08-11 15:01:15.7789 Trace  Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.7789 Trace  Scanning LoggerNameLayoutRenderer 'Layout Renderer: ${loggername}'
+2023-08-11 15:01:15.7789 Trace Initializing null
+2023-08-11 15:01:15.7789 Trace Initializing Layout Renderer: ${longdate}
+2023-08-11 15:01:15.7789 Trace Initializing ${longdate}
+2023-08-11 15:01:15.7789 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2023-08-11 15:01:15.7789 Trace Scanning SimpleLayout '${longdate}'
+2023-08-11 15:01:15.7789 Trace  Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.7789 Trace  Scanning LongDateLayoutRenderer 'Layout Renderer: ${longdate}'
+2023-08-11 15:01:15.7789 Trace Initializing JsonLayout=time-${longdate}|logger-${logger}|level-${level:upperCase=true}|message-${message}|exception-${exception}
+2023-08-11 15:01:15.7789 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2023-08-11 15:01:15.7904 Trace Scanning JsonLayout 'JsonLayout=time-${longdate}|logger-${logger}|level-${level:upperCase=true}|message-${message}|exception-${exception}'
+2023-08-11 15:01:15.7904 Trace  Scanning Property Attributes 'System.Collections.Generic.List`1[NLog.Layouts.JsonAttribute]' System.Collections.Generic.IList`1[NLog.Layouts.JsonAttribute]
+2023-08-11 15:01:15.7904 Trace  Scanning JsonAttribute 'NLog.Layouts.JsonAttribute'
+2023-08-11 15:01:15.7904 Trace   Scanning Property Layout '${longdate}' NLog.Layouts.Layout
+2023-08-11 15:01:15.7904 Trace   Scanning SimpleLayout '${longdate}'
+2023-08-11 15:01:15.7904 Trace    Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.7904 Trace    Scanning LongDateLayoutRenderer 'Layout Renderer: ${longdate}'
+2023-08-11 15:01:15.7904 Trace   Scanning Property DefaultValue 'null' NLog.Layouts.Layout
+2023-08-11 15:01:15.7904 Trace   Scanning Layout`1 'null'
+2023-08-11 15:01:15.7904 Trace  Scanning JsonAttribute 'NLog.Layouts.JsonAttribute'
+2023-08-11 15:01:15.7904 Trace   Scanning Property Layout '${logger}' NLog.Layouts.Layout
+2023-08-11 15:01:15.7904 Trace   Scanning SimpleLayout '${logger}'
+2023-08-11 15:01:15.7904 Trace    Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.7904 Trace    Scanning LoggerNameLayoutRenderer 'Layout Renderer: ${loggername}'
+2023-08-11 15:01:15.7904 Trace   Scanning Property DefaultValue 'null' NLog.Layouts.Layout
+2023-08-11 15:01:15.7904 Trace   Scanning Layout`1 'null'
+2023-08-11 15:01:15.7904 Trace  Scanning JsonAttribute 'NLog.Layouts.JsonAttribute'
+2023-08-11 15:01:15.7904 Trace   Scanning Property Layout '${level:upperCase=true}' NLog.Layouts.Layout
+2023-08-11 15:01:15.7904 Trace   Scanning SimpleLayout '${level:upperCase=true}'
+2023-08-11 15:01:15.7904 Trace    Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.7904 Trace    Scanning LevelLayoutRenderer 'Layout Renderer: ${level}'
+2023-08-11 15:01:15.7904 Trace   Scanning Property DefaultValue 'null' NLog.Layouts.Layout
+2023-08-11 15:01:15.7904 Trace   Scanning Layout`1 'null'
+2023-08-11 15:01:15.7904 Trace  Scanning JsonAttribute 'NLog.Layouts.JsonAttribute'
+2023-08-11 15:01:15.7904 Trace   Scanning Property Layout '${message}' NLog.Layouts.Layout
+2023-08-11 15:01:15.7904 Trace   Scanning SimpleLayout '${message}'
+2023-08-11 15:01:15.7904 Trace    Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.7904 Trace    Scanning MessageLayoutRenderer 'Layout Renderer: ${message}'
+2023-08-11 15:01:15.7904 Trace   Scanning Property DefaultValue 'null' NLog.Layouts.Layout
+2023-08-11 15:01:15.7904 Trace   Scanning Layout`1 'null'
+2023-08-11 15:01:15.7904 Trace AsyncWrapper_BufferingWrapper(Name=elastic): Timer not scheduled, since queue empty
+2023-08-11 15:01:15.7904 Trace  Scanning JsonAttribute 'NLog.Layouts.JsonAttribute'
+2023-08-11 15:01:15.7904 Trace   Scanning Property Layout '${exception}' NLog.Layouts.Layout
+2023-08-11 15:01:15.7904 Trace   Scanning SimpleLayout '${exception}'
+2023-08-11 15:01:15.7904 Trace    Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.7904 Trace    Scanning ExceptionLayoutRenderer 'Layout Renderer: ${exception}'
+2023-08-11 15:01:15.7904 Trace     Scanning Property Formats 'System.Collections.Generic.List`1[NLog.Config.ExceptionRenderingFormat]' System.Collections.Generic.List`1[NLog.Config.ExceptionRenderingFormat]
+2023-08-11 15:01:15.7904 Trace   Scanning Property DefaultValue 'null' NLog.Layouts.Layout
+2023-08-11 15:01:15.7904 Trace   Scanning Layout`1 'null'
+2023-08-11 15:01:15.7904 Trace  Scanning Property Attributes 'System.Collections.Generic.List`1[NLog.Layouts.JsonAttribute]' System.Collections.Generic.IList`1[NLog.Layouts.JsonAttribute]
+2023-08-11 15:01:15.7904 Trace  Scanning Property ExcludeProperties 'System.Collections.Generic.HashSet`1[System.String]' System.Collections.Generic.ISet`1[System.String]
+2023-08-11 15:01:15.7904 Trace Initializing Layout Renderer: ${literal}
+2023-08-11 15:01:15.8067 Trace Initializing Layout Renderer: ${shortdate}
+2023-08-11 15:01:15.8067 Trace Initializing Layout Renderer: ${literal}
+2023-08-11 15:01:15.8067 Trace Initializing logs/log-${shortdate}.txt
+2023-08-11 15:01:15.8067 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2023-08-11 15:01:15.8067 Trace Scanning SimpleLayout 'logs/log-${shortdate}.txt'
+2023-08-11 15:01:15.8067 Trace  Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.8067 Trace  Scanning LiteralLayoutRenderer 'Layout Renderer: ${literal}'
+2023-08-11 15:01:15.8067 Trace  Scanning ShortDateLayoutRenderer 'Layout Renderer: ${shortdate}'
+2023-08-11 15:01:15.8067 Trace  Scanning LiteralLayoutRenderer 'Layout Renderer: ${literal}'
+2023-08-11 15:01:15.8067 Trace Initializing FileTarget(Name=logfile_wrapped)
+2023-08-11 15:01:15.8067 Trace FindReachableObject<NLog.Layouts.Layout>:
+2023-08-11 15:01:15.8067 Trace Scanning FileTarget 'FileTarget(Name=logfile_wrapped)'
+2023-08-11 15:01:15.8067 Trace  Scanning Property FileName 'logs/log-${shortdate}.txt' NLog.Layouts.Layout
+2023-08-11 15:01:15.8067 Trace  Scanning Property Layout 'JsonLayout=time-${longdate}|logger-${logger}|level-${level:upperCase=true}|message-${message}|exception-${exception}' NLog.Layouts.Layout
+2023-08-11 15:01:15.8067 Trace FileTarget(Name=logfile_wrapped) has 2 layouts
+2023-08-11 15:01:15.8067 Trace FileTarget(Name=logfile_wrapped): Using appenderFactory: NLog.Internal.FileAppenders.SingleProcessFileAppender+Factory
+2023-08-11 15:01:15.8067 Trace Initializing AsyncWrapper_FileTarget(Name=logfile)
+2023-08-11 15:01:15.8067 Trace FindReachableObject<NLog.Layouts.Layout>:
+2023-08-11 15:01:15.8067 Trace Scanning AsyncTargetWrapper 'AsyncWrapper_FileTarget(Name=logfile)'
+2023-08-11 15:01:15.8067 Trace  Scanning Property WrappedTarget 'FileTarget(Name=logfile_wrapped)' NLog.Targets.Target
+2023-08-11 15:01:15.8067 Trace  Scanning FileTarget 'FileTarget(Name=logfile_wrapped)'
+2023-08-11 15:01:15.8067 Trace   Scanning Property FileName 'logs/log-${shortdate}.txt' NLog.Layouts.Layout
+2023-08-11 15:01:15.8067 Trace   Scanning Property Layout 'JsonLayout=time-${longdate}|logger-${logger}|level-${level:upperCase=true}|message-${message}|exception-${exception}' NLog.Layouts.Layout
+2023-08-11 15:01:15.8067 Trace AsyncWrapper_FileTarget(Name=logfile) has 2 layouts
+2023-08-11 15:01:15.8067 Trace AsyncWrapper_FileTarget(Name=logfile): Start Timer
+2023-08-11 15:01:15.8067 Trace AsyncWrapper_FileTarget(Name=logfile): Timer scheduled throttled
+2023-08-11 15:01:15.8067 Info Configuration initialized.
+2023-08-11 15:01:15.8067 Trace FindReachableObject<System.Object>:
+2023-08-11 15:01:15.8067 Trace Scanning LoggingRule 'logNamePattern: (Microsoft.:StartsWith) levels: [ Trace Debug Info Warn Error Fatal ] writeTo: [ ]'
+2023-08-11 15:01:15.8067 Trace  Scanning Property Targets 'System.Collections.Generic.List`1[NLog.Targets.Target]' System.Collections.Generic.IList`1[NLog.Targets.Target]
+2023-08-11 15:01:15.8067 Trace  Scanning Property ChildRules 'System.Collections.Generic.List`1[NLog.Config.LoggingRule]' System.Collections.Generic.IList`1[NLog.Config.LoggingRule]
+2023-08-11 15:01:15.8067 Trace  Scanning Property Filters 'System.Collections.Generic.List`1[NLog.Filters.Filter]' System.Collections.Generic.IList`1[NLog.Filters.Filter]
+2023-08-11 15:01:15.8067 Trace Scanning LoggingRule 'logNamePattern: (:All) levels: [ Info Warn Error Fatal ] writeTo: [ logfile ]'
+2023-08-11 15:01:15.8067 Trace  Scanning Property Targets 'System.Collections.Generic.List`1[NLog.Targets.Target]' System.Collections.Generic.IList`1[NLog.Targets.Target]
+2023-08-11 15:01:15.8067 Trace  Scanning AsyncTargetWrapper 'AsyncWrapper_FileTarget(Name=logfile)'
+2023-08-11 15:01:15.8067 Trace   Scanning Property WrappedTarget 'FileTarget(Name=logfile_wrapped)' NLog.Targets.Target
+2023-08-11 15:01:15.8067 Trace   Scanning FileTarget 'FileTarget(Name=logfile_wrapped)'
+2023-08-11 15:01:15.8067 Trace    Scanning Property FileName 'logs/log-${shortdate}.txt' NLog.Layouts.Layout
+2023-08-11 15:01:15.8067 Trace    Scanning SimpleLayout 'logs/log-${shortdate}.txt'
+2023-08-11 15:01:15.8067 Trace     Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.8067 Trace     Scanning LiteralLayoutRenderer 'Layout Renderer: ${literal}'
+2023-08-11 15:01:15.8067 Trace     Scanning ShortDateLayoutRenderer 'Layout Renderer: ${shortdate}'
+2023-08-11 15:01:15.8067 Trace     Scanning LiteralLayoutRenderer 'Layout Renderer: ${literal}'
+2023-08-11 15:01:15.8067 Trace    Scanning Property Layout 'JsonLayout=time-${longdate}|logger-${logger}|level-${level:upperCase=true}|message-${message}|exception-${exception}' NLog.Layouts.Layout
+2023-08-11 15:01:15.8067 Trace    Scanning JsonLayout 'JsonLayout=time-${longdate}|logger-${logger}|level-${level:upperCase=true}|message-${message}|exception-${exception}'
+2023-08-11 15:01:15.8067 Trace     Scanning Property Attributes 'System.Collections.Generic.List`1[NLog.Layouts.JsonAttribute]' System.Collections.Generic.IList`1[NLog.Layouts.JsonAttribute]
+2023-08-11 15:01:15.8067 Trace     Scanning JsonAttribute 'NLog.Layouts.JsonAttribute'
+2023-08-11 15:01:15.8067 Trace      Scanning Property Layout '${longdate}' NLog.Layouts.Layout
+2023-08-11 15:01:15.8067 Trace      Scanning SimpleLayout '${longdate}'
+2023-08-11 15:01:15.8067 Trace       Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.8067 Trace       Scanning LongDateLayoutRenderer 'Layout Renderer: ${longdate}'
+2023-08-11 15:01:15.8067 Trace      Scanning Property DefaultValue 'null' NLog.Layouts.Layout
+2023-08-11 15:01:15.8223 Trace      Scanning Layout`1 'null'
+2023-08-11 15:01:15.8223 Trace     Scanning JsonAttribute 'NLog.Layouts.JsonAttribute'
+2023-08-11 15:01:15.8223 Trace      Scanning Property Layout '${logger}' NLog.Layouts.Layout
+2023-08-11 15:01:15.8223 Trace      Scanning SimpleLayout '${logger}'
+2023-08-11 15:01:15.8223 Trace       Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.8223 Trace AsyncWrapper_FileTarget(Name=logfile): Timer not scheduled, since queue empty
+2023-08-11 15:01:15.8223 Trace       Scanning LoggerNameLayoutRenderer 'Layout Renderer: ${loggername}'
+2023-08-11 15:01:15.8223 Trace      Scanning Property DefaultValue 'null' NLog.Layouts.Layout
+2023-08-11 15:01:15.8223 Trace      Scanning Layout`1 'null'
+2023-08-11 15:01:15.8223 Trace     Scanning JsonAttribute 'NLog.Layouts.JsonAttribute'
+2023-08-11 15:01:15.8223 Trace      Scanning Property Layout '${level:upperCase=true}' NLog.Layouts.Layout
+2023-08-11 15:01:15.8223 Trace      Scanning SimpleLayout '${level:upperCase=true}'
+2023-08-11 15:01:15.8223 Trace       Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.8223 Trace       Scanning LevelLayoutRenderer 'Layout Renderer: ${level}'
+2023-08-11 15:01:15.8223 Trace      Scanning Property DefaultValue 'null' NLog.Layouts.Layout
+2023-08-11 15:01:15.8223 Trace      Scanning Layout`1 'null'
+2023-08-11 15:01:15.8223 Trace     Scanning JsonAttribute 'NLog.Layouts.JsonAttribute'
+2023-08-11 15:01:15.8223 Trace      Scanning Property Layout '${message}' NLog.Layouts.Layout
+2023-08-11 15:01:15.8223 Trace      Scanning SimpleLayout '${message}'
+2023-08-11 15:01:15.8223 Trace       Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.8223 Trace       Scanning MessageLayoutRenderer 'Layout Renderer: ${message}'
+2023-08-11 15:01:15.8223 Trace      Scanning Property DefaultValue 'null' NLog.Layouts.Layout
+2023-08-11 15:01:15.8223 Trace      Scanning Layout`1 'null'
+2023-08-11 15:01:15.8223 Trace     Scanning JsonAttribute 'NLog.Layouts.JsonAttribute'
+2023-08-11 15:01:15.8223 Trace      Scanning Property Layout '${exception}' NLog.Layouts.Layout
+2023-08-11 15:01:15.8223 Trace      Scanning SimpleLayout '${exception}'
+2023-08-11 15:01:15.8223 Trace       Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.8223 Trace       Scanning ExceptionLayoutRenderer 'Layout Renderer: ${exception}'
+2023-08-11 15:01:15.8223 Trace        Scanning Property Formats 'System.Collections.Generic.List`1[NLog.Config.ExceptionRenderingFormat]' System.Collections.Generic.List`1[NLog.Config.ExceptionRenderingFormat]
+2023-08-11 15:01:15.8223 Trace      Scanning Property DefaultValue 'null' NLog.Layouts.Layout
+2023-08-11 15:01:15.8223 Trace      Scanning Layout`1 'null'
+2023-08-11 15:01:15.8223 Trace     Scanning Property Attributes 'System.Collections.Generic.List`1[NLog.Layouts.JsonAttribute]' System.Collections.Generic.IList`1[NLog.Layouts.JsonAttribute]
+2023-08-11 15:01:15.8223 Trace     Scanning Property ExcludeProperties 'System.Collections.Generic.HashSet`1[System.String]' System.Collections.Generic.ISet`1[System.String]
+2023-08-11 15:01:15.8223 Trace  Scanning Property ChildRules 'System.Collections.Generic.List`1[NLog.Config.LoggingRule]' System.Collections.Generic.IList`1[NLog.Config.LoggingRule]
+2023-08-11 15:01:15.8223 Trace  Scanning Property Filters 'System.Collections.Generic.List`1[NLog.Filters.Filter]' System.Collections.Generic.IList`1[NLog.Filters.Filter]
+2023-08-11 15:01:15.8223 Trace Scanning LoggingRule 'logNamePattern: (:All) levels: [ Debug Info Warn Error Fatal ] writeTo: [ elastic ]'
+2023-08-11 15:01:15.8223 Trace  Scanning Property Targets 'System.Collections.Generic.List`1[NLog.Targets.Target]' System.Collections.Generic.IList`1[NLog.Targets.Target]
+2023-08-11 15:01:15.8223 Trace  Scanning AsyncTargetWrapper 'AsyncWrapper_BufferingWrapper(Name=elastic)'
+2023-08-11 15:01:15.8223 Trace   Scanning Property WrappedTarget 'BufferingWrapper_ElasticSearchTarget(Name=elastic_wrapped)' NLog.Targets.Target
+2023-08-11 15:01:15.8223 Trace   Scanning BufferingTargetWrapper 'BufferingWrapper_ElasticSearchTarget(Name=elastic_wrapped)'
+2023-08-11 15:01:15.8223 Trace    Scanning Property BufferSize '100' NLog.Layouts.Layout`1[System.Int32]
+2023-08-11 15:01:15.8223 Trace    Scanning Layout`1 '100'
+2023-08-11 15:01:15.8223 Trace    Scanning Property FlushTimeout '5000' NLog.Layouts.Layout`1[System.Int32]
+2023-08-11 15:01:15.8223 Trace    Scanning Layout`1 '5000'
+2023-08-11 15:01:15.8223 Trace    Scanning Property WrappedTarget 'ElasticSearchTarget(Name=ElasticSearch)' NLog.Targets.Target
+2023-08-11 15:01:15.8223 Trace    Scanning ElasticSearchTarget 'ElasticSearchTarget(Name=ElasticSearch)'
+2023-08-11 15:01:15.8223 Trace     Scanning Property Index 'epay.etc.core.api-${shortdate}' NLog.Layouts.Layout
+2023-08-11 15:01:15.8223 Trace     Scanning SimpleLayout 'epay.etc.core.api-${shortdate}'
+2023-08-11 15:01:15.8223 Trace      Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.8223 Trace      Scanning LiteralLayoutRenderer 'Layout Renderer: ${literal}'
+2023-08-11 15:01:15.8223 Trace      Scanning ShortDateLayoutRenderer 'Layout Renderer: ${shortdate}'
+2023-08-11 15:01:15.8223 Trace     Scanning Property DocumentType '' NLog.Layouts.Layout
+2023-08-11 15:01:15.8223 Trace     Scanning SimpleLayout ''
+2023-08-11 15:01:15.8223 Trace      Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.8223 Trace      Scanning LiteralLayoutRenderer 'Layout Renderer: ${literal}'
+2023-08-11 15:01:15.8223 Trace     Scanning Property Fields 'System.Collections.Generic.List`1[NLog.Targets.ElasticSearch.Field]' System.Collections.Generic.IList`1[NLog.Targets.ElasticSearch.Field]
+2023-08-11 15:01:15.8223 Trace     Scanning Property Fields 'System.Collections.Generic.List`1[NLog.Targets.ElasticSearch.Field]' System.Collections.Generic.IList`1[NLog.Targets.ElasticSearch.Field]
+2023-08-11 15:01:15.8223 Trace     Scanning Property ObjectTypeConverters 'System.Collections.Generic.List`1[NLog.Targets.ElasticSearch.ObjectTypeConvert]' System.Collections.Generic.IList`1[NLog.Targets.ElasticSearch.ObjectTypeConvert]
+2023-08-11 15:01:15.8376 Trace     Scanning ObjectTypeConvert 'NLog.Targets.ElasticSearch.ObjectTypeConvert'
+2023-08-11 15:01:15.8376 Trace     Scanning ObjectTypeConvert 'NLog.Targets.ElasticSearch.ObjectTypeConvert'
+2023-08-11 15:01:15.8376 Trace     Scanning ObjectTypeConvert 'NLog.Targets.ElasticSearch.ObjectTypeConvert'
+2023-08-11 15:01:15.8376 Trace     Scanning ObjectTypeConvert 'NLog.Targets.ElasticSearch.ObjectTypeConvert'
+2023-08-11 15:01:15.8376 Trace     Scanning ObjectTypeConvert 'NLog.Targets.ElasticSearch.ObjectTypeConvert'
+2023-08-11 15:01:15.8376 Trace     Scanning Property ObjectTypeConverters 'System.Collections.Generic.List`1[NLog.Targets.ElasticSearch.ObjectTypeConvert]' System.Collections.Generic.IList`1[NLog.Targets.ElasticSearch.ObjectTypeConvert]
+2023-08-11 15:01:15.8376 Trace     Scanning Property Layout 'JsonLayout=time-${longdate}|sourceCategory-epay.etc.core.api|environment-Development|logger-${logger}|requestUrl-${aspnet-request-url}|action-${aspnet-mvc-action}|level-${level:upperCase=true}|message-${message}|exception-${exception}' NLog.Layouts.Layout
+2023-08-11 15:01:15.8376 Trace     Scanning JsonLayout 'JsonLayout=time-${longdate}|sourceCategory-epay.etc.core.api|environment-Development|logger-${logger}|requestUrl-${aspnet-request-url}|action-${aspnet-mvc-action}|level-${level:upperCase=true}|message-${message}|exception-${exception}'
+2023-08-11 15:01:15.8376 Trace      Scanning Property Attributes 'System.Collections.Generic.List`1[NLog.Layouts.JsonAttribute]' System.Collections.Generic.IList`1[NLog.Layouts.JsonAttribute]
+2023-08-11 15:01:15.8376 Trace      Scanning JsonAttribute 'NLog.Layouts.JsonAttribute'
+2023-08-11 15:01:15.8376 Trace       Scanning Property Layout '${longdate}' NLog.Layouts.Layout
+2023-08-11 15:01:15.8376 Trace       Scanning SimpleLayout '${longdate}'
+2023-08-11 15:01:15.8376 Trace        Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.8376 Trace        Scanning LongDateLayoutRenderer 'Layout Renderer: ${longdate}'
+2023-08-11 15:01:15.8376 Trace       Scanning Property DefaultValue 'null' NLog.Layouts.Layout
+2023-08-11 15:01:15.8376 Trace       Scanning Layout`1 'null'
+2023-08-11 15:01:15.8376 Trace      Scanning JsonAttribute 'NLog.Layouts.JsonAttribute'
+2023-08-11 15:01:15.8376 Trace       Scanning Property Layout 'epay.etc.core.api' NLog.Layouts.Layout
+2023-08-11 15:01:15.8376 Trace       Scanning SimpleLayout 'epay.etc.core.api'
+2023-08-11 15:01:15.8376 Trace        Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.8376 Trace        Scanning LiteralLayoutRenderer 'Layout Renderer: ${literal}'
+2023-08-11 15:01:15.8376 Trace       Scanning Property DefaultValue 'null' NLog.Layouts.Layout
+2023-08-11 15:01:15.8376 Trace       Scanning Layout`1 'null'
+2023-08-11 15:01:15.8376 Trace      Scanning JsonAttribute 'NLog.Layouts.JsonAttribute'
+2023-08-11 15:01:15.8376 Trace       Scanning Property Layout 'Development' NLog.Layouts.Layout
+2023-08-11 15:01:15.8376 Trace       Scanning SimpleLayout 'Development'
+2023-08-11 15:01:15.8376 Trace        Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.8376 Trace        Scanning LiteralLayoutRenderer 'Layout Renderer: ${literal}'
+2023-08-11 15:01:15.8376 Trace       Scanning Property DefaultValue 'null' NLog.Layouts.Layout
+2023-08-11 15:01:15.8376 Trace       Scanning Layout`1 'null'
+2023-08-11 15:01:15.8376 Trace      Scanning JsonAttribute 'NLog.Layouts.JsonAttribute'
+2023-08-11 15:01:15.8376 Trace       Scanning Property Layout '${logger}' NLog.Layouts.Layout
+2023-08-11 15:01:15.8376 Trace       Scanning SimpleLayout '${logger}'
+2023-08-11 15:01:15.8376 Trace        Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.8376 Trace        Scanning LoggerNameLayoutRenderer 'Layout Renderer: ${loggername}'
+2023-08-11 15:01:15.8376 Trace       Scanning Property DefaultValue 'null' NLog.Layouts.Layout
+2023-08-11 15:01:15.8376 Trace       Scanning Layout`1 'null'
+2023-08-11 15:01:15.8376 Trace      Scanning JsonAttribute 'NLog.Layouts.JsonAttribute'
+2023-08-11 15:01:15.8376 Trace       Scanning Property Layout '${aspnet-request-url}' NLog.Layouts.Layout
+2023-08-11 15:01:15.8376 Trace       Scanning SimpleLayout '${aspnet-request-url}'
+2023-08-11 15:01:15.8376 Trace        Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.8376 Trace        Scanning AspNetRequestUrlRenderer 'Layout Renderer: ${aspnet-request-url}'
+2023-08-11 15:01:15.8376 Trace       Scanning Property DefaultValue 'null' NLog.Layouts.Layout
+2023-08-11 15:01:15.8376 Trace       Scanning Layout`1 'null'
+2023-08-11 15:01:15.8376 Trace      Scanning JsonAttribute 'NLog.Layouts.JsonAttribute'
+2023-08-11 15:01:15.8376 Trace       Scanning Property Layout '${aspnet-mvc-action}' NLog.Layouts.Layout
+2023-08-11 15:01:15.8376 Trace       Scanning SimpleLayout '${aspnet-mvc-action}'
+2023-08-11 15:01:15.8376 Trace        Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.8376 Trace        Scanning AspNetMvcActionRenderer 'Layout Renderer: ${aspnet-mvc-action}'
+2023-08-11 15:01:15.8376 Trace       Scanning Property DefaultValue 'null' NLog.Layouts.Layout
+2023-08-11 15:01:15.8376 Trace       Scanning Layout`1 'null'
+2023-08-11 15:01:15.8376 Trace      Scanning JsonAttribute 'NLog.Layouts.JsonAttribute'
+2023-08-11 15:01:15.8376 Trace       Scanning Property Layout '${level:upperCase=true}' NLog.Layouts.Layout
+2023-08-11 15:01:15.8376 Trace       Scanning SimpleLayout '${level:upperCase=true}'
+2023-08-11 15:01:15.8376 Trace        Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.8376 Trace        Scanning LevelLayoutRenderer 'Layout Renderer: ${level}'
+2023-08-11 15:01:15.8376 Trace       Scanning Property DefaultValue 'null' NLog.Layouts.Layout
+2023-08-11 15:01:15.8376 Trace       Scanning Layout`1 'null'
+2023-08-11 15:01:15.8376 Trace      Scanning JsonAttribute 'NLog.Layouts.JsonAttribute'
+2023-08-11 15:01:15.8376 Trace       Scanning Property Layout '${message}' NLog.Layouts.Layout
+2023-08-11 15:01:15.8536 Trace       Scanning SimpleLayout '${message}'
+2023-08-11 15:01:15.8536 Trace        Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.8536 Trace        Scanning MessageLayoutRenderer 'Layout Renderer: ${message}'
+2023-08-11 15:01:15.8536 Trace       Scanning Property DefaultValue 'null' NLog.Layouts.Layout
+2023-08-11 15:01:15.8536 Trace       Scanning Layout`1 'null'
+2023-08-11 15:01:15.8536 Trace      Scanning JsonAttribute 'NLog.Layouts.JsonAttribute'
+2023-08-11 15:01:15.8536 Trace       Scanning Property Layout '${exception}' NLog.Layouts.Layout
+2023-08-11 15:01:15.8536 Trace       Scanning SimpleLayout '${exception}'
+2023-08-11 15:01:15.8536 Trace        Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:15.8536 Trace        Scanning ExceptionLayoutRenderer 'Layout Renderer: ${exception}'
+2023-08-11 15:01:15.8536 Trace         Scanning Property Formats 'System.Collections.Generic.List`1[NLog.Config.ExceptionRenderingFormat]' System.Collections.Generic.List`1[NLog.Config.ExceptionRenderingFormat]
+2023-08-11 15:01:15.8536 Trace       Scanning Property DefaultValue 'null' NLog.Layouts.Layout
+2023-08-11 15:01:15.8536 Trace       Scanning Layout`1 'null'
+2023-08-11 15:01:15.8536 Trace      Scanning Property Attributes 'System.Collections.Generic.List`1[NLog.Layouts.JsonAttribute]' System.Collections.Generic.IList`1[NLog.Layouts.JsonAttribute]
+2023-08-11 15:01:15.8536 Trace      Scanning Property ExcludeProperties 'System.Collections.Generic.HashSet`1[System.String]' System.Collections.Generic.ISet`1[System.String]
+2023-08-11 15:01:15.8536 Trace  Scanning Property ChildRules 'System.Collections.Generic.List`1[NLog.Config.LoggingRule]' System.Collections.Generic.IList`1[NLog.Config.LoggingRule]
+2023-08-11 15:01:15.8536 Trace  Scanning Property Filters 'System.Collections.Generic.List`1[NLog.Filters.Filter]' System.Collections.Generic.IList`1[NLog.Filters.Filter]
+2023-08-11 15:01:15.8536 Info Validating config: TargetNames=logfile, elastic, ConfigItems=82, FilePath=D:\Project\Epay Message queue\epay.etc.core.api\src\EPAY.ETC.Core.API\bin\Debug\net6.0\NLog.config
+2023-08-11 15:01:15.8536 Trace Initializing null
+2023-08-11 15:01:15.8536 Trace Initializing Layout Renderer: ${exception}
+2023-08-11 15:01:15.8536 Trace Initializing ${exception}
+2023-08-11 15:01:15.8536 Trace Initializing null
+2023-08-11 15:01:15.8536 Trace Initializing Layout Renderer: ${message}
+2023-08-11 15:01:15.8536 Trace Initializing ${message}
+2023-08-11 15:01:15.8536 Trace Initializing null
+2023-08-11 15:01:15.8536 Trace Initializing Layout Renderer: ${level}
+2023-08-11 15:01:15.8536 Trace Initializing ${level:upperCase=true}
+2023-08-11 15:01:15.8536 Trace Initializing null
+2023-08-11 15:01:15.8536 Trace Initializing Layout Renderer: ${aspnet-mvc-action}
+2023-08-11 15:01:15.8536 Trace Initializing ${aspnet-mvc-action}
+2023-08-11 15:01:15.8536 Trace Initializing null
+2023-08-11 15:01:15.8536 Trace Initializing Layout Renderer: ${aspnet-request-url}
+2023-08-11 15:01:15.8536 Trace Initializing ${aspnet-request-url}
+2023-08-11 15:01:15.8536 Trace Initializing null
+2023-08-11 15:01:15.8536 Trace Initializing Layout Renderer: ${loggername}
+2023-08-11 15:01:15.8536 Trace Initializing ${logger}
+2023-08-11 15:01:15.8536 Trace Initializing null
+2023-08-11 15:01:15.8536 Trace Initializing Layout Renderer: ${literal}
+2023-08-11 15:01:15.8536 Trace Initializing Development
+2023-08-11 15:01:15.8536 Trace Initializing null
+2023-08-11 15:01:15.8536 Trace Initializing Layout Renderer: ${literal}
+2023-08-11 15:01:15.8536 Trace Initializing epay.etc.core.api
+2023-08-11 15:01:15.8536 Trace Initializing null
+2023-08-11 15:01:15.8536 Trace Initializing Layout Renderer: ${longdate}
+2023-08-11 15:01:15.8536 Trace Initializing ${longdate}
+2023-08-11 15:01:15.8536 Trace Initializing JsonLayout=time-${longdate}|sourceCategory-epay.etc.core.api|environment-Development|logger-${logger}|requestUrl-${aspnet-request-url}|action-${aspnet-mvc-action}|level-${level:upperCase=true}|message-${message}|exception-${exception}
+2023-08-11 15:01:15.8536 Trace Initializing Layout Renderer: ${literal}
+2023-08-11 15:01:15.8536 Trace Initializing 
+2023-08-11 15:01:15.8536 Trace Initializing Layout Renderer: ${shortdate}
+2023-08-11 15:01:15.8536 Trace Initializing Layout Renderer: ${literal}
+2023-08-11 15:01:15.8536 Trace Initializing epay.etc.core.api-${shortdate}
+2023-08-11 15:01:15.8536 Trace Initializing ElasticSearchTarget(Name=ElasticSearch)
+2023-08-11 15:01:15.8536 Trace FindReachableObject<NLog.Layouts.Layout>:
+2023-08-11 15:01:15.8536 Trace Scanning ElasticSearchTarget 'ElasticSearchTarget(Name=ElasticSearch)'
+2023-08-11 15:01:15.8536 Trace  Scanning Property Index 'epay.etc.core.api-${shortdate}' NLog.Layouts.Layout
+2023-08-11 15:01:15.8536 Trace  Scanning Property DocumentType '' NLog.Layouts.Layout
+2023-08-11 15:01:15.8683 Trace  Scanning Property Fields 'System.Collections.Generic.List`1[NLog.Targets.ElasticSearch.Field]' System.Collections.Generic.IList`1[NLog.Targets.ElasticSearch.Field]
+2023-08-11 15:01:15.8683 Trace  Scanning Property Fields 'System.Collections.Generic.List`1[NLog.Targets.ElasticSearch.Field]' System.Collections.Generic.IList`1[NLog.Targets.ElasticSearch.Field]
+2023-08-11 15:01:15.8683 Trace  Scanning Property ObjectTypeConverters 'System.Collections.Generic.List`1[NLog.Targets.ElasticSearch.ObjectTypeConvert]' System.Collections.Generic.IList`1[NLog.Targets.ElasticSearch.ObjectTypeConvert]
+2023-08-11 15:01:15.8683 Trace  Scanning ObjectTypeConvert 'NLog.Targets.ElasticSearch.ObjectTypeConvert'
+2023-08-11 15:01:15.8683 Trace  Scanning ObjectTypeConvert 'NLog.Targets.ElasticSearch.ObjectTypeConvert'
+2023-08-11 15:01:15.8683 Trace  Scanning ObjectTypeConvert 'NLog.Targets.ElasticSearch.ObjectTypeConvert'
+2023-08-11 15:01:15.8683 Trace  Scanning ObjectTypeConvert 'NLog.Targets.ElasticSearch.ObjectTypeConvert'
+2023-08-11 15:01:15.8683 Trace  Scanning ObjectTypeConvert 'NLog.Targets.ElasticSearch.ObjectTypeConvert'
+2023-08-11 15:01:15.8683 Trace  Scanning Property ObjectTypeConverters 'System.Collections.Generic.List`1[NLog.Targets.ElasticSearch.ObjectTypeConvert]' System.Collections.Generic.IList`1[NLog.Targets.ElasticSearch.ObjectTypeConvert]
+2023-08-11 15:01:15.8683 Trace  Scanning Property Layout 'JsonLayout=time-${longdate}|sourceCategory-epay.etc.core.api|environment-Development|logger-${logger}|requestUrl-${aspnet-request-url}|action-${aspnet-mvc-action}|level-${level:upperCase=true}|message-${message}|exception-${exception}' NLog.Layouts.Layout
+2023-08-11 15:01:15.8683 Trace ElasticSearchTarget(Name=ElasticSearch) has 3 layouts
+2023-08-11 15:01:15.8683 Trace Initializing 5000
+2023-08-11 15:01:15.8683 Trace Initializing 100
+2023-08-11 15:01:15.8683 Trace Initializing BufferingWrapper_ElasticSearchTarget(Name=elastic_wrapped)
+2023-08-11 15:01:15.8683 Trace FindReachableObject<NLog.Layouts.Layout>:
+2023-08-11 15:01:15.8683 Trace Scanning BufferingTargetWrapper 'BufferingWrapper_ElasticSearchTarget(Name=elastic_wrapped)'
+2023-08-11 15:01:15.8683 Trace  Scanning Property BufferSize '100' NLog.Layouts.Layout`1[System.Int32]
+2023-08-11 15:01:15.8683 Trace  Scanning Property FlushTimeout '5000' NLog.Layouts.Layout`1[System.Int32]
+2023-08-11 15:01:15.8683 Trace  Scanning Property WrappedTarget 'ElasticSearchTarget(Name=ElasticSearch)' NLog.Targets.Target
+2023-08-11 15:01:15.8683 Trace  Scanning ElasticSearchTarget 'ElasticSearchTarget(Name=ElasticSearch)'
+2023-08-11 15:01:15.8683 Trace   Scanning Property Index 'epay.etc.core.api-${shortdate}' NLog.Layouts.Layout
+2023-08-11 15:01:15.8683 Trace   Scanning Property DocumentType '' NLog.Layouts.Layout
+2023-08-11 15:01:15.8683 Trace   Scanning Property Fields 'System.Collections.Generic.List`1[NLog.Targets.ElasticSearch.Field]' System.Collections.Generic.IList`1[NLog.Targets.ElasticSearch.Field]
+2023-08-11 15:01:15.8683 Trace   Scanning Property Fields 'System.Collections.Generic.List`1[NLog.Targets.ElasticSearch.Field]' System.Collections.Generic.IList`1[NLog.Targets.ElasticSearch.Field]
+2023-08-11 15:01:15.8683 Trace   Scanning Property ObjectTypeConverters 'System.Collections.Generic.List`1[NLog.Targets.ElasticSearch.ObjectTypeConvert]' System.Collections.Generic.IList`1[NLog.Targets.ElasticSearch.ObjectTypeConvert]
+2023-08-11 15:01:15.8683 Trace   Scanning ObjectTypeConvert 'NLog.Targets.ElasticSearch.ObjectTypeConvert'
+2023-08-11 15:01:15.8683 Trace   Scanning ObjectTypeConvert 'NLog.Targets.ElasticSearch.ObjectTypeConvert'
+2023-08-11 15:01:15.8683 Trace   Scanning ObjectTypeConvert 'NLog.Targets.ElasticSearch.ObjectTypeConvert'
+2023-08-11 15:01:15.8683 Trace   Scanning ObjectTypeConvert 'NLog.Targets.ElasticSearch.ObjectTypeConvert'
+2023-08-11 15:01:15.8683 Trace   Scanning ObjectTypeConvert 'NLog.Targets.ElasticSearch.ObjectTypeConvert'
+2023-08-11 15:01:15.8683 Trace   Scanning Property ObjectTypeConverters 'System.Collections.Generic.List`1[NLog.Targets.ElasticSearch.ObjectTypeConvert]' System.Collections.Generic.IList`1[NLog.Targets.ElasticSearch.ObjectTypeConvert]
+2023-08-11 15:01:15.8683 Trace   Scanning Property Layout 'JsonLayout=time-${longdate}|sourceCategory-epay.etc.core.api|environment-Development|logger-${logger}|requestUrl-${aspnet-request-url}|action-${aspnet-mvc-action}|level-${level:upperCase=true}|message-${message}|exception-${exception}' NLog.Layouts.Layout
+2023-08-11 15:01:15.8683 Trace BufferingWrapper_ElasticSearchTarget(Name=elastic_wrapped) has 5 layouts
+2023-08-11 15:01:15.8683 Trace Initializing AsyncWrapper_BufferingWrapper(Name=elastic)
+2023-08-11 15:01:15.8683 Trace FindReachableObject<NLog.Layouts.Layout>:
+2023-08-11 15:01:15.8683 Trace Scanning AsyncTargetWrapper 'AsyncWrapper_BufferingWrapper(Name=elastic)'
+2023-08-11 15:01:15.8683 Trace  Scanning Property WrappedTarget 'BufferingWrapper_ElasticSearchTarget(Name=elastic_wrapped)' NLog.Targets.Target
+2023-08-11 15:01:15.8683 Trace  Scanning BufferingTargetWrapper 'BufferingWrapper_ElasticSearchTarget(Name=elastic_wrapped)'
+2023-08-11 15:01:15.8683 Trace   Scanning Property BufferSize '100' NLog.Layouts.Layout`1[System.Int32]
+2023-08-11 15:01:15.8683 Trace   Scanning Property FlushTimeout '5000' NLog.Layouts.Layout`1[System.Int32]
+2023-08-11 15:01:15.8683 Trace   Scanning Property WrappedTarget 'ElasticSearchTarget(Name=ElasticSearch)' NLog.Targets.Target
+2023-08-11 15:01:15.8683 Trace   Scanning ElasticSearchTarget 'ElasticSearchTarget(Name=ElasticSearch)'
+2023-08-11 15:01:15.8683 Trace    Scanning Property Index 'epay.etc.core.api-${shortdate}' NLog.Layouts.Layout
+2023-08-11 15:01:15.8683 Trace    Scanning Property DocumentType '' NLog.Layouts.Layout
+2023-08-11 15:01:15.8683 Trace    Scanning Property Fields 'System.Collections.Generic.List`1[NLog.Targets.ElasticSearch.Field]' System.Collections.Generic.IList`1[NLog.Targets.ElasticSearch.Field]
+2023-08-11 15:01:15.8683 Trace    Scanning Property Fields 'System.Collections.Generic.List`1[NLog.Targets.ElasticSearch.Field]' System.Collections.Generic.IList`1[NLog.Targets.ElasticSearch.Field]
+2023-08-11 15:01:15.8683 Trace    Scanning Property ObjectTypeConverters 'System.Collections.Generic.List`1[NLog.Targets.ElasticSearch.ObjectTypeConvert]' System.Collections.Generic.IList`1[NLog.Targets.ElasticSearch.ObjectTypeConvert]
+2023-08-11 15:01:15.8683 Trace    Scanning ObjectTypeConvert 'NLog.Targets.ElasticSearch.ObjectTypeConvert'
+2023-08-11 15:01:15.8683 Trace    Scanning ObjectTypeConvert 'NLog.Targets.ElasticSearch.ObjectTypeConvert'
+2023-08-11 15:01:15.8683 Trace    Scanning ObjectTypeConvert 'NLog.Targets.ElasticSearch.ObjectTypeConvert'
+2023-08-11 15:01:15.8683 Trace    Scanning ObjectTypeConvert 'NLog.Targets.ElasticSearch.ObjectTypeConvert'
+2023-08-11 15:01:15.8683 Trace    Scanning ObjectTypeConvert 'NLog.Targets.ElasticSearch.ObjectTypeConvert'
+2023-08-11 15:01:15.8683 Trace    Scanning Property ObjectTypeConverters 'System.Collections.Generic.List`1[NLog.Targets.ElasticSearch.ObjectTypeConvert]' System.Collections.Generic.IList`1[NLog.Targets.ElasticSearch.ObjectTypeConvert]
+2023-08-11 15:01:15.8683 Trace    Scanning Property Layout 'JsonLayout=time-${longdate}|sourceCategory-epay.etc.core.api|environment-Development|logger-${logger}|requestUrl-${aspnet-request-url}|action-${aspnet-mvc-action}|level-${level:upperCase=true}|message-${message}|exception-${exception}' NLog.Layouts.Layout
+2023-08-11 15:01:15.8683 Trace AsyncWrapper_BufferingWrapper(Name=elastic) has 5 layouts
+2023-08-11 15:01:15.8683 Trace Initializing null
+2023-08-11 15:01:15.8845 Trace Initializing Layout Renderer: ${exception}
+2023-08-11 15:01:15.8845 Trace Initializing ${exception}
+2023-08-11 15:01:15.8845 Trace Initializing null
+2023-08-11 15:01:15.8845 Trace Initializing Layout Renderer: ${message}
+2023-08-11 15:01:15.8845 Trace Initializing ${message}
+2023-08-11 15:01:15.8845 Trace Initializing null
+2023-08-11 15:01:15.8845 Trace Initializing Layout Renderer: ${level}
+2023-08-11 15:01:15.8845 Trace Initializing ${level:upperCase=true}
+2023-08-11 15:01:15.8845 Trace Initializing null
+2023-08-11 15:01:15.8845 Trace Initializing Layout Renderer: ${loggername}
+2023-08-11 15:01:15.8845 Trace Initializing ${logger}
+2023-08-11 15:01:15.8845 Trace Initializing null
+2023-08-11 15:01:15.8845 Trace Initializing Layout Renderer: ${longdate}
+2023-08-11 15:01:15.8845 Trace Initializing ${longdate}
+2023-08-11 15:01:15.8845 Trace Initializing JsonLayout=time-${longdate}|logger-${logger}|level-${level:upperCase=true}|message-${message}|exception-${exception}
+2023-08-11 15:01:15.8845 Trace Initializing Layout Renderer: ${literal}
+2023-08-11 15:01:15.8845 Trace Initializing Layout Renderer: ${shortdate}
+2023-08-11 15:01:15.8845 Trace Initializing Layout Renderer: ${literal}
+2023-08-11 15:01:15.8845 Trace Initializing logs/log-${shortdate}.txt
+2023-08-11 15:01:15.8845 Trace Initializing FileTarget(Name=logfile_wrapped)
+2023-08-11 15:01:15.8845 Trace FindReachableObject<NLog.Layouts.Layout>:
+2023-08-11 15:01:15.8845 Trace Scanning FileTarget 'FileTarget(Name=logfile_wrapped)'
+2023-08-11 15:01:15.8845 Trace  Scanning Property FileName 'logs/log-${shortdate}.txt' NLog.Layouts.Layout
+2023-08-11 15:01:15.8845 Trace  Scanning Property Layout 'JsonLayout=time-${longdate}|logger-${logger}|level-${level:upperCase=true}|message-${message}|exception-${exception}' NLog.Layouts.Layout
+2023-08-11 15:01:15.8845 Trace FileTarget(Name=logfile_wrapped) has 2 layouts
+2023-08-11 15:01:15.8845 Trace Initializing AsyncWrapper_FileTarget(Name=logfile)
+2023-08-11 15:01:15.8845 Trace FindReachableObject<NLog.Layouts.Layout>:
+2023-08-11 15:01:15.8845 Trace Scanning AsyncTargetWrapper 'AsyncWrapper_FileTarget(Name=logfile)'
+2023-08-11 15:01:15.8845 Trace  Scanning Property WrappedTarget 'FileTarget(Name=logfile_wrapped)' NLog.Targets.Target
+2023-08-11 15:01:15.8845 Trace  Scanning FileTarget 'FileTarget(Name=logfile_wrapped)'
+2023-08-11 15:01:15.8845 Trace   Scanning Property FileName 'logs/log-${shortdate}.txt' NLog.Layouts.Layout
+2023-08-11 15:01:15.8845 Trace   Scanning Property Layout 'JsonLayout=time-${longdate}|logger-${logger}|level-${level:upperCase=true}|message-${message}|exception-${exception}' NLog.Layouts.Layout
+2023-08-11 15:01:15.8845 Trace AsyncWrapper_FileTarget(Name=logfile) has 2 layouts
+2023-08-11 15:01:15.9084 Debug Targets not configured for Logger: Microsoft.Extensions.Hosting.Internal.ApplicationLifetime
+2023-08-11 15:01:15.9084 Debug Targets not configured for Logger: Microsoft.Extensions.Hosting.Internal.Host
+2023-08-11 15:01:15.9084 Debug Targets not configured for Logger: Microsoft.Hosting.Lifetime
+2023-08-11 15:01:15.9378 Debug Targets not configured for Logger: Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServer
+2023-08-11 15:01:15.9378 Debug Targets not configured for Logger: Microsoft.AspNetCore.Server.Kestrel.Https.Internal.HttpsConnectionMiddleware
+2023-08-11 15:01:15.9378 Debug Targets not configured for Logger: Microsoft.AspNetCore.Server.Kestrel
+2023-08-11 15:01:15.9378 Debug Targets not configured for Logger: Microsoft.AspNetCore.Server.Kestrel.BadRequests
+2023-08-11 15:01:15.9378 Debug Targets not configured for Logger: Microsoft.AspNetCore.Server.Kestrel.Connections
+2023-08-11 15:01:15.9378 Debug Targets not configured for Logger: Microsoft.AspNetCore.Server.Kestrel.Http2
+2023-08-11 15:01:15.9378 Debug Targets not configured for Logger: Microsoft.AspNetCore.Server.Kestrel.Http3
+2023-08-11 15:01:15.9585 Debug Targets configured when LogLevel >= Debug for Logger: EPAY.ETC.Core.API
+2023-08-11 15:01:15.9585 Debug Logger EPAY.ETC.Core.API [Debug] => elastic
+2023-08-11 15:01:15.9585 Debug Logger EPAY.ETC.Core.API [Info] => logfile elastic
+2023-08-11 15:01:15.9585 Debug Logger EPAY.ETC.Core.API [Warn] => logfile elastic
+2023-08-11 15:01:15.9585 Debug Logger EPAY.ETC.Core.API [Error] => logfile elastic
+2023-08-11 15:01:15.9585 Debug Logger EPAY.ETC.Core.API [Fatal] => logfile elastic
+2023-08-11 15:01:15.9585 Debug Reading config from XML file: D:\Project\Epay Message queue\epay.etc.core.api\src\EPAY.ETC.Core.API\bin\Debug\net6.0\nlog.Development.config
+2023-08-11 15:01:15.9585 Info Loading NLog config from XML file: D:\Project\Epay Message queue\epay.etc.core.api\src\EPAY.ETC.Core.API\bin\Debug\net6.0\nlog.Development.config
+2023-08-11 15:01:15.9672 Trace ParseNLogElement
+2023-08-11 15:01:15.9672 Trace ParseNLogConfig
+2023-08-11 15:01:15.9672 Debug Message Template Auto Format enabled
+2023-08-11 15:01:15.9672 Debug Skipped already loaded assembly name: NLog.Web.AspNetCore
+2023-08-11 15:01:15.9672 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2023-08-11 15:01:15.9672 Trace Scanning ShortDateLayoutRenderer 'Layout Renderer: ${shortdate}'
+2023-08-11 15:01:15.9672 Debug FileTarget FilePathLayout with FilePathKind.Relative using AppDomain.BaseDirectory: D:\Project\Epay Message queue\epay.etc.core.api\src\EPAY.ETC.Core.API\bin\Debug\net6.0\
+2023-08-11 15:01:15.9672 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2023-08-11 15:01:15.9672 Trace Scanning LongDateLayoutRenderer 'Layout Renderer: ${longdate}'
+2023-08-11 15:01:15.9672 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2023-08-11 15:01:15.9672 Trace Scanning LoggerNameLayoutRenderer 'Layout Renderer: ${loggername}'
+2023-08-11 15:01:15.9672 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2023-08-11 15:01:15.9672 Trace Scanning LevelLayoutRenderer 'Layout Renderer: ${level}'
+2023-08-11 15:01:15.9672 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2023-08-11 15:01:15.9672 Trace Scanning MessageLayoutRenderer 'Layout Renderer: ${message}'
+2023-08-11 15:01:15.9672 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2023-08-11 15:01:15.9672 Trace Scanning ExceptionLayoutRenderer 'Layout Renderer: ${exception}'
+2023-08-11 15:01:15.9833 Trace  Scanning Property Formats 'System.Collections.Generic.List`1[NLog.Config.ExceptionRenderingFormat]' System.Collections.Generic.List`1[NLog.Config.ExceptionRenderingFormat]
+2023-08-11 15:01:15.9833 Debug Adding target NLog.Targets.FileTarget(Name=logfile)
+2023-08-11 15:01:15.9833 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2023-08-11 15:01:15.9833 Trace ParseRulesElement
+2023-08-11 15:01:15.9833 Info Closing old configuration.
+2023-08-11 15:01:15.9833 Debug LogFactory Flush with timeout=15 secs
+2023-08-11 15:01:15.9833 Trace Flushing all 2 targets...
+2023-08-11 15:01:15.9833 Trace ForEachItemInParallel() 2 items
+2023-08-11 15:01:15.9938 Trace FileTarget(Name=logfile_wrapped): FlushAsync
+2023-08-11 15:01:15.9938 Trace Continuation invoked: 
+2023-08-11 15:01:15.9938 Trace Continuation invoked: 
+2023-08-11 15:01:15.9938 Trace Parallel task completed. 1 items remaining
+2023-08-11 15:01:15.9938 Trace Parallel task completed. 0 items remaining
+2023-08-11 15:01:15.9938 Trace FileTarget(Name=logfile_wrapped): FlushAsync Done
+2023-08-11 15:01:15.9938 Debug Flush completed
+2023-08-11 15:01:15.9938 Debug Closing logging configuration...
+2023-08-11 15:01:15.9938 Trace Closing AsyncWrapper_FileTarget(Name=logfile)
+2023-08-11 15:01:15.9938 Debug AsyncWrapper_FileTarget(Name=logfile): Closing...
+2023-08-11 15:01:15.9938 Debug AsyncWrapper_FileTarget(Name=logfile): Closed.
+2023-08-11 15:01:15.9938 Trace Closing FileTarget(Name=logfile_wrapped)
+2023-08-11 15:01:15.9938 Debug FileTarget(Name=logfile_wrapped): Closing...
+2023-08-11 15:01:16.0108 Debug FileTarget(Name=logfile_wrapped): Closed.
+2023-08-11 15:01:16.0108 Trace Closing logs/log-${shortdate}.txt
+2023-08-11 15:01:16.0108 Trace Closing Layout Renderer: ${literal}
+2023-08-11 15:01:16.0108 Trace Closing Layout Renderer: ${shortdate}
+2023-08-11 15:01:16.0108 Trace Closing Layout Renderer: ${literal}
+2023-08-11 15:01:16.0108 Trace Closing JsonLayout=time-${longdate}|logger-${logger}|level-${level:upperCase=true}|message-${message}|exception-${exception}
+2023-08-11 15:01:16.0108 Trace Closing ${longdate}
+2023-08-11 15:01:16.0108 Trace Closing Layout Renderer: ${longdate}
+2023-08-11 15:01:16.0108 Trace Closing null
+2023-08-11 15:01:16.0108 Trace Closing ${logger}
+2023-08-11 15:01:16.0108 Trace Closing Layout Renderer: ${loggername}
+2023-08-11 15:01:16.0108 Trace Closing null
+2023-08-11 15:01:16.0108 Trace Closing ${level:upperCase=true}
+2023-08-11 15:01:16.0108 Trace Closing Layout Renderer: ${level}
+2023-08-11 15:01:16.0108 Trace Closing null
+2023-08-11 15:01:16.0108 Trace Closing ${message}
+2023-08-11 15:01:16.0108 Trace Closing Layout Renderer: ${message}
+2023-08-11 15:01:16.0108 Trace Closing null
+2023-08-11 15:01:16.0108 Trace Closing ${exception}
+2023-08-11 15:01:16.0108 Trace Closing Layout Renderer: ${exception}
+2023-08-11 15:01:16.0108 Trace Closing null
+2023-08-11 15:01:16.0108 Trace Closing AsyncWrapper_BufferingWrapper(Name=elastic)
+2023-08-11 15:01:16.0108 Debug AsyncWrapper_BufferingWrapper(Name=elastic): Closing...
+2023-08-11 15:01:16.0108 Debug AsyncWrapper_BufferingWrapper(Name=elastic): Closed.
+2023-08-11 15:01:16.0108 Trace Closing BufferingWrapper_ElasticSearchTarget(Name=elastic_wrapped)
+2023-08-11 15:01:16.0108 Debug BufferingWrapper_ElasticSearchTarget(Name=elastic_wrapped): Closing...
+2023-08-11 15:01:16.0108 Debug BufferingWrapper_ElasticSearchTarget(Name=elastic_wrapped): Closed.
+2023-08-11 15:01:16.0108 Trace Closing 100
+2023-08-11 15:01:16.0108 Trace Closing 5000
+2023-08-11 15:01:16.0108 Trace Closing ElasticSearchTarget(Name=ElasticSearch)
+2023-08-11 15:01:16.0108 Debug ElasticSearchTarget(Name=ElasticSearch): Closing...
+2023-08-11 15:01:16.0108 Debug ElasticSearchTarget(Name=ElasticSearch): Closed.
+2023-08-11 15:01:16.0108 Trace Closing epay.etc.core.api-${shortdate}
+2023-08-11 15:01:16.0108 Trace Closing Layout Renderer: ${literal}
+2023-08-11 15:01:16.0108 Trace Closing Layout Renderer: ${shortdate}
+2023-08-11 15:01:16.0108 Trace Closing 
+2023-08-11 15:01:16.0108 Trace Closing Layout Renderer: ${literal}
+2023-08-11 15:01:16.0108 Trace Closing JsonLayout=time-${longdate}|sourceCategory-epay.etc.core.api|environment-Development|logger-${logger}|requestUrl-${aspnet-request-url}|action-${aspnet-mvc-action}|level-${level:upperCase=true}|message-${message}|exception-${exception}
+2023-08-11 15:01:16.0108 Trace Closing ${longdate}
+2023-08-11 15:01:16.0108 Trace Closing Layout Renderer: ${longdate}
+2023-08-11 15:01:16.0108 Trace Closing null
+2023-08-11 15:01:16.0108 Trace Closing epay.etc.core.api
+2023-08-11 15:01:16.0108 Trace Closing Layout Renderer: ${literal}
+2023-08-11 15:01:16.0108 Trace Closing null
+2023-08-11 15:01:16.0108 Trace Closing Development
+2023-08-11 15:01:16.0108 Trace Closing Layout Renderer: ${literal}
+2023-08-11 15:01:16.0108 Trace Closing null
+2023-08-11 15:01:16.0108 Trace Closing ${logger}
+2023-08-11 15:01:16.0108 Trace Closing Layout Renderer: ${loggername}
+2023-08-11 15:01:16.0108 Trace Closing null
+2023-08-11 15:01:16.0246 Trace Closing ${aspnet-request-url}
+2023-08-11 15:01:16.0246 Trace Closing Layout Renderer: ${aspnet-request-url}
+2023-08-11 15:01:16.0246 Trace Closing null
+2023-08-11 15:01:16.0246 Trace Closing ${aspnet-mvc-action}
+2023-08-11 15:01:16.0246 Trace Closing Layout Renderer: ${aspnet-mvc-action}
+2023-08-11 15:01:16.0246 Trace Closing null
+2023-08-11 15:01:16.0246 Trace Closing ${level:upperCase=true}
+2023-08-11 15:01:16.0246 Trace Closing Layout Renderer: ${level}
+2023-08-11 15:01:16.0246 Trace Closing null
+2023-08-11 15:01:16.0246 Trace Closing ${message}
+2023-08-11 15:01:16.0246 Trace Closing Layout Renderer: ${message}
+2023-08-11 15:01:16.0246 Trace Closing null
+2023-08-11 15:01:16.0246 Trace Closing ${exception}
+2023-08-11 15:01:16.0246 Trace Closing Layout Renderer: ${exception}
+2023-08-11 15:01:16.0246 Trace Closing null
+2023-08-11 15:01:16.0246 Debug Finished closing logging configuration.
+2023-08-11 15:01:16.0246 Debug Stopping file watching for path 'D:\Project\Epay Message queue\epay.etc.core.api\src\EPAY.ETC.Core.API\bin\Debug\net6.0' filter 'NLog.config'
+2023-08-11 15:01:16.0246 Debug Watching file-filter 'nlog.Development.config' in directory: D:\Project\Epay Message queue\epay.etc.core.api\src\EPAY.ETC.Core.API\bin\Debug\net6.0
+2023-08-11 15:01:16.0246 Debug --- NLog configuration dump ---
+2023-08-11 15:01:16.0246 Debug Targets:
+2023-08-11 15:01:16.0246 Debug FileTarget(Name=logfile)
+2023-08-11 15:01:16.0246 Debug Rules:
+2023-08-11 15:01:16.0246 Debug logNamePattern: (:All) levels: [ Info Warn Error Fatal ] writeTo: [ logfile ]
+2023-08-11 15:01:16.0246 Debug --- End of NLog configuration dump ---
+2023-08-11 15:01:16.0246 Trace FindReachableObject<System.Object>:
+2023-08-11 15:01:16.0246 Trace Scanning LoggingRule 'logNamePattern: (:All) levels: [ Info Warn Error Fatal ] writeTo: [ logfile ]'
+2023-08-11 15:01:16.0246 Trace  Scanning Property Targets 'System.Collections.Generic.List`1[NLog.Targets.Target]' System.Collections.Generic.IList`1[NLog.Targets.Target]
+2023-08-11 15:01:16.0246 Trace  Scanning FileTarget 'FileTarget(Name=logfile)'
+2023-08-11 15:01:16.0246 Trace   Scanning Property FileName 'logs/log-${shortdate}.txt' NLog.Layouts.Layout
+2023-08-11 15:01:16.0246 Trace   Scanning SimpleLayout 'logs/log-${shortdate}.txt'
+2023-08-11 15:01:16.0246 Trace    Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:16.0246 Trace    Scanning LiteralLayoutRenderer 'Layout Renderer: ${literal}'
+2023-08-11 15:01:16.0246 Trace    Scanning ShortDateLayoutRenderer 'Layout Renderer: ${shortdate}'
+2023-08-11 15:01:16.0246 Trace    Scanning LiteralLayoutRenderer 'Layout Renderer: ${literal}'
+2023-08-11 15:01:16.0246 Trace   Scanning Property Layout 'JsonLayout=time-${longdate}|logger-${logger}|level-${level:upperCase=true}|message-${message}|exception-${exception}' NLog.Layouts.Layout
+2023-08-11 15:01:16.0246 Trace   Scanning JsonLayout 'JsonLayout=time-${longdate}|logger-${logger}|level-${level:upperCase=true}|message-${message}|exception-${exception}'
+2023-08-11 15:01:16.0246 Trace    Scanning Property Attributes 'System.Collections.Generic.List`1[NLog.Layouts.JsonAttribute]' System.Collections.Generic.IList`1[NLog.Layouts.JsonAttribute]
+2023-08-11 15:01:16.0246 Trace    Scanning JsonAttribute 'NLog.Layouts.JsonAttribute'
+2023-08-11 15:01:16.0246 Trace     Scanning Property Layout '${longdate}' NLog.Layouts.Layout
+2023-08-11 15:01:16.0246 Trace     Scanning SimpleLayout '${longdate}'
+2023-08-11 15:01:16.0246 Trace      Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:16.0246 Trace      Scanning LongDateLayoutRenderer 'Layout Renderer: ${longdate}'
+2023-08-11 15:01:16.0246 Trace     Scanning Property DefaultValue 'null' NLog.Layouts.Layout
+2023-08-11 15:01:16.0246 Trace     Scanning Layout`1 'null'
+2023-08-11 15:01:16.0246 Trace    Scanning JsonAttribute 'NLog.Layouts.JsonAttribute'
+2023-08-11 15:01:16.0246 Trace     Scanning Property Layout '${logger}' NLog.Layouts.Layout
+2023-08-11 15:01:16.0246 Trace     Scanning SimpleLayout '${logger}'
+2023-08-11 15:01:16.0246 Trace      Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:16.0246 Trace      Scanning LoggerNameLayoutRenderer 'Layout Renderer: ${loggername}'
+2023-08-11 15:01:16.0246 Trace     Scanning Property DefaultValue 'null' NLog.Layouts.Layout
+2023-08-11 15:01:16.0246 Trace     Scanning Layout`1 'null'
+2023-08-11 15:01:16.0246 Trace    Scanning JsonAttribute 'NLog.Layouts.JsonAttribute'
+2023-08-11 15:01:16.0246 Trace     Scanning Property Layout '${level:upperCase=true}' NLog.Layouts.Layout
+2023-08-11 15:01:16.0246 Trace     Scanning SimpleLayout '${level:upperCase=true}'
+2023-08-11 15:01:16.0246 Trace      Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:16.0246 Trace      Scanning LevelLayoutRenderer 'Layout Renderer: ${level}'
+2023-08-11 15:01:16.0246 Trace     Scanning Property DefaultValue 'null' NLog.Layouts.Layout
+2023-08-11 15:01:16.0408 Trace     Scanning Layout`1 'null'
+2023-08-11 15:01:16.0408 Trace    Scanning JsonAttribute 'NLog.Layouts.JsonAttribute'
+2023-08-11 15:01:16.0408 Trace     Scanning Property Layout '${message}' NLog.Layouts.Layout
+2023-08-11 15:01:16.0408 Trace     Scanning SimpleLayout '${message}'
+2023-08-11 15:01:16.0408 Trace      Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:16.0408 Trace      Scanning MessageLayoutRenderer 'Layout Renderer: ${message}'
+2023-08-11 15:01:16.0408 Trace     Scanning Property DefaultValue 'null' NLog.Layouts.Layout
+2023-08-11 15:01:16.0408 Trace     Scanning Layout`1 'null'
+2023-08-11 15:01:16.0408 Trace    Scanning JsonAttribute 'NLog.Layouts.JsonAttribute'
+2023-08-11 15:01:16.0408 Trace     Scanning Property Layout '${exception}' NLog.Layouts.Layout
+2023-08-11 15:01:16.0408 Trace     Scanning SimpleLayout '${exception}'
+2023-08-11 15:01:16.0408 Trace      Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:16.0408 Trace      Scanning ExceptionLayoutRenderer 'Layout Renderer: ${exception}'
+2023-08-11 15:01:16.0408 Trace       Scanning Property Formats 'System.Collections.Generic.List`1[NLog.Config.ExceptionRenderingFormat]' System.Collections.Generic.List`1[NLog.Config.ExceptionRenderingFormat]
+2023-08-11 15:01:16.0408 Trace     Scanning Property DefaultValue 'null' NLog.Layouts.Layout
+2023-08-11 15:01:16.0408 Trace     Scanning Layout`1 'null'
+2023-08-11 15:01:16.0408 Trace    Scanning Property Attributes 'System.Collections.Generic.List`1[NLog.Layouts.JsonAttribute]' System.Collections.Generic.IList`1[NLog.Layouts.JsonAttribute]
+2023-08-11 15:01:16.0408 Trace    Scanning Property ExcludeProperties 'System.Collections.Generic.HashSet`1[System.String]' System.Collections.Generic.ISet`1[System.String]
+2023-08-11 15:01:16.0408 Trace  Scanning Property ChildRules 'System.Collections.Generic.List`1[NLog.Config.LoggingRule]' System.Collections.Generic.IList`1[NLog.Config.LoggingRule]
+2023-08-11 15:01:16.0408 Trace  Scanning Property Filters 'System.Collections.Generic.List`1[NLog.Filters.Filter]' System.Collections.Generic.IList`1[NLog.Filters.Filter]
+2023-08-11 15:01:16.0408 Info Validating config: TargetNames=logfile, ConfigItems=27, FilePath=D:\Project\Epay Message queue\epay.etc.core.api\src\EPAY.ETC.Core.API\bin\Debug\net6.0\nlog.Development.config
+2023-08-11 15:01:16.0408 Debug Unused target checking is started... Rule Count: 1, Target Count: 1
+2023-08-11 15:01:16.0408 Debug Unused target checking is completed. Total Rule Count: 1, Total Target Count: 1, Unused Target Count: 0
+2023-08-11 15:01:16.0408 Trace Initializing null
+2023-08-11 15:01:16.0408 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2023-08-11 15:01:16.0408 Trace Scanning Layout`1 'null'
+2023-08-11 15:01:16.0408 Trace Initializing Layout Renderer: ${exception}
+2023-08-11 15:01:16.0408 Trace Initializing ${exception}
+2023-08-11 15:01:16.0408 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2023-08-11 15:01:16.0408 Trace Scanning SimpleLayout '${exception}'
+2023-08-11 15:01:16.0408 Trace  Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:16.0408 Trace  Scanning ExceptionLayoutRenderer 'Layout Renderer: ${exception}'
+2023-08-11 15:01:16.0408 Trace   Scanning Property Formats 'System.Collections.Generic.List`1[NLog.Config.ExceptionRenderingFormat]' System.Collections.Generic.List`1[NLog.Config.ExceptionRenderingFormat]
+2023-08-11 15:01:16.0408 Trace Initializing null
+2023-08-11 15:01:16.0408 Trace Initializing Layout Renderer: ${message}
+2023-08-11 15:01:16.0408 Trace Initializing ${message}
+2023-08-11 15:01:16.0408 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2023-08-11 15:01:16.0408 Trace Scanning SimpleLayout '${message}'
+2023-08-11 15:01:16.0408 Trace  Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:16.0408 Trace  Scanning MessageLayoutRenderer 'Layout Renderer: ${message}'
+2023-08-11 15:01:16.0408 Trace Initializing null
+2023-08-11 15:01:16.0408 Trace Initializing Layout Renderer: ${level}
+2023-08-11 15:01:16.0408 Trace Initializing ${level:upperCase=true}
+2023-08-11 15:01:16.0408 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2023-08-11 15:01:16.0408 Trace Scanning SimpleLayout '${level:upperCase=true}'
+2023-08-11 15:01:16.0408 Trace  Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:16.0408 Trace  Scanning LevelLayoutRenderer 'Layout Renderer: ${level}'
+2023-08-11 15:01:16.0408 Trace Initializing null
+2023-08-11 15:01:16.0408 Trace Initializing Layout Renderer: ${loggername}
+2023-08-11 15:01:16.0408 Trace Initializing ${logger}
+2023-08-11 15:01:16.0408 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2023-08-11 15:01:16.0408 Trace Scanning SimpleLayout '${logger}'
+2023-08-11 15:01:16.0408 Trace  Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:16.0408 Trace  Scanning LoggerNameLayoutRenderer 'Layout Renderer: ${loggername}'
+2023-08-11 15:01:16.0408 Trace Initializing null
+2023-08-11 15:01:16.0408 Trace Initializing Layout Renderer: ${longdate}
+2023-08-11 15:01:16.0408 Trace Initializing ${longdate}
+2023-08-11 15:01:16.0408 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2023-08-11 15:01:16.0408 Trace Scanning SimpleLayout '${longdate}'
+2023-08-11 15:01:16.0408 Trace  Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:16.0408 Trace  Scanning LongDateLayoutRenderer 'Layout Renderer: ${longdate}'
+2023-08-11 15:01:16.0408 Trace Initializing JsonLayout=time-${longdate}|logger-${logger}|level-${level:upperCase=true}|message-${message}|exception-${exception}
+2023-08-11 15:01:16.0567 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2023-08-11 15:01:16.0567 Trace Scanning JsonLayout 'JsonLayout=time-${longdate}|logger-${logger}|level-${level:upperCase=true}|message-${message}|exception-${exception}'
+2023-08-11 15:01:16.0567 Trace  Scanning Property Attributes 'System.Collections.Generic.List`1[NLog.Layouts.JsonAttribute]' System.Collections.Generic.IList`1[NLog.Layouts.JsonAttribute]
+2023-08-11 15:01:16.0567 Trace  Scanning JsonAttribute 'NLog.Layouts.JsonAttribute'
+2023-08-11 15:01:16.0567 Trace   Scanning Property Layout '${longdate}' NLog.Layouts.Layout
+2023-08-11 15:01:16.0567 Trace   Scanning SimpleLayout '${longdate}'
+2023-08-11 15:01:16.0567 Trace    Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:16.0567 Trace    Scanning LongDateLayoutRenderer 'Layout Renderer: ${longdate}'
+2023-08-11 15:01:16.0567 Trace   Scanning Property DefaultValue 'null' NLog.Layouts.Layout
+2023-08-11 15:01:16.0567 Trace   Scanning Layout`1 'null'
+2023-08-11 15:01:16.0567 Trace  Scanning JsonAttribute 'NLog.Layouts.JsonAttribute'
+2023-08-11 15:01:16.0567 Trace   Scanning Property Layout '${logger}' NLog.Layouts.Layout
+2023-08-11 15:01:16.0567 Trace   Scanning SimpleLayout '${logger}'
+2023-08-11 15:01:16.0567 Trace    Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:16.0567 Trace    Scanning LoggerNameLayoutRenderer 'Layout Renderer: ${loggername}'
+2023-08-11 15:01:16.0567 Trace   Scanning Property DefaultValue 'null' NLog.Layouts.Layout
+2023-08-11 15:01:16.0567 Trace   Scanning Layout`1 'null'
+2023-08-11 15:01:16.0567 Trace  Scanning JsonAttribute 'NLog.Layouts.JsonAttribute'
+2023-08-11 15:01:16.0567 Trace   Scanning Property Layout '${level:upperCase=true}' NLog.Layouts.Layout
+2023-08-11 15:01:16.0567 Trace   Scanning SimpleLayout '${level:upperCase=true}'
+2023-08-11 15:01:16.0567 Trace    Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:16.0567 Trace    Scanning LevelLayoutRenderer 'Layout Renderer: ${level}'
+2023-08-11 15:01:16.0567 Trace   Scanning Property DefaultValue 'null' NLog.Layouts.Layout
+2023-08-11 15:01:16.0567 Trace   Scanning Layout`1 'null'
+2023-08-11 15:01:16.0567 Trace  Scanning JsonAttribute 'NLog.Layouts.JsonAttribute'
+2023-08-11 15:01:16.0567 Trace   Scanning Property Layout '${message}' NLog.Layouts.Layout
+2023-08-11 15:01:16.0567 Trace   Scanning SimpleLayout '${message}'
+2023-08-11 15:01:16.0567 Trace    Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:16.0567 Trace    Scanning MessageLayoutRenderer 'Layout Renderer: ${message}'
+2023-08-11 15:01:16.0567 Trace   Scanning Property DefaultValue 'null' NLog.Layouts.Layout
+2023-08-11 15:01:16.0567 Trace   Scanning Layout`1 'null'
+2023-08-11 15:01:16.0567 Trace  Scanning JsonAttribute 'NLog.Layouts.JsonAttribute'
+2023-08-11 15:01:16.0567 Trace   Scanning Property Layout '${exception}' NLog.Layouts.Layout
+2023-08-11 15:01:16.0567 Trace   Scanning SimpleLayout '${exception}'
+2023-08-11 15:01:16.0567 Trace    Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:16.0567 Trace    Scanning ExceptionLayoutRenderer 'Layout Renderer: ${exception}'
+2023-08-11 15:01:16.0567 Trace     Scanning Property Formats 'System.Collections.Generic.List`1[NLog.Config.ExceptionRenderingFormat]' System.Collections.Generic.List`1[NLog.Config.ExceptionRenderingFormat]
+2023-08-11 15:01:16.0567 Trace   Scanning Property DefaultValue 'null' NLog.Layouts.Layout
+2023-08-11 15:01:16.0567 Trace   Scanning Layout`1 'null'
+2023-08-11 15:01:16.0567 Trace  Scanning Property Attributes 'System.Collections.Generic.List`1[NLog.Layouts.JsonAttribute]' System.Collections.Generic.IList`1[NLog.Layouts.JsonAttribute]
+2023-08-11 15:01:16.0567 Trace  Scanning Property ExcludeProperties 'System.Collections.Generic.HashSet`1[System.String]' System.Collections.Generic.ISet`1[System.String]
+2023-08-11 15:01:16.0567 Trace Initializing Layout Renderer: ${literal}
+2023-08-11 15:01:16.0567 Trace Initializing Layout Renderer: ${shortdate}
+2023-08-11 15:01:16.0567 Trace Initializing Layout Renderer: ${literal}
+2023-08-11 15:01:16.0567 Trace Initializing logs/log-${shortdate}.txt
+2023-08-11 15:01:16.0567 Trace FindReachableObject<NLog.Internal.IRenderable>:
+2023-08-11 15:01:16.0567 Trace Scanning SimpleLayout 'logs/log-${shortdate}.txt'
+2023-08-11 15:01:16.0567 Trace  Scanning Property LayoutRenderers 'NLog.LayoutRenderers.LayoutRenderer[]' System.Collections.Generic.IEnumerable`1[NLog.LayoutRenderers.LayoutRenderer]
+2023-08-11 15:01:16.0567 Trace  Scanning LiteralLayoutRenderer 'Layout Renderer: ${literal}'
+2023-08-11 15:01:16.0567 Trace  Scanning ShortDateLayoutRenderer 'Layout Renderer: ${shortdate}'
+2023-08-11 15:01:16.0567 Trace  Scanning LiteralLayoutRenderer 'Layout Renderer: ${literal}'
+2023-08-11 15:01:16.0567 Trace Initializing FileTarget(Name=logfile)
+2023-08-11 15:01:16.0567 Trace FindReachableObject<NLog.Layouts.Layout>:
+2023-08-11 15:01:16.0567 Trace Scanning FileTarget 'FileTarget(Name=logfile)'
+2023-08-11 15:01:16.0567 Trace  Scanning Property FileName 'logs/log-${shortdate}.txt' NLog.Layouts.Layout
+2023-08-11 15:01:16.0567 Trace  Scanning Property Layout 'JsonLayout=time-${longdate}|logger-${logger}|level-${level:upperCase=true}|message-${message}|exception-${exception}' NLog.Layouts.Layout
+2023-08-11 15:01:16.0567 Trace FileTarget(Name=logfile) has 2 layouts
+2023-08-11 15:01:16.0567 Trace FileTarget(Name=logfile): Using appenderFactory: NLog.Internal.FileAppenders.SingleProcessFileAppender+Factory
+2023-08-11 15:01:16.0567 Debug Targets configured when LogLevel >= Info for Logger: Microsoft.Extensions.Hosting.Internal.ApplicationLifetime
+2023-08-11 15:01:16.0567 Debug Logger Microsoft.Extensions.Hosting.Internal.ApplicationLifetime [Info] => logfile
+2023-08-11 15:01:16.0567 Debug Logger Microsoft.Extensions.Hosting.Internal.ApplicationLifetime [Warn] => logfile
+2023-08-11 15:01:16.0719 Debug Logger Microsoft.Extensions.Hosting.Internal.ApplicationLifetime [Error] => logfile
+2023-08-11 15:01:16.0719 Debug Logger Microsoft.Extensions.Hosting.Internal.ApplicationLifetime [Fatal] => logfile
+2023-08-11 15:01:16.0719 Debug Targets configured when LogLevel >= Info for Logger: Microsoft.Extensions.Hosting.Internal.Host
+2023-08-11 15:01:16.0719 Debug Logger Microsoft.Extensions.Hosting.Internal.Host [Info] => logfile
+2023-08-11 15:01:16.0719 Debug Logger Microsoft.Extensions.Hosting.Internal.Host [Warn] => logfile
+2023-08-11 15:01:16.0719 Debug Logger Microsoft.Extensions.Hosting.Internal.Host [Error] => logfile
+2023-08-11 15:01:16.0719 Debug Logger Microsoft.Extensions.Hosting.Internal.Host [Fatal] => logfile
+2023-08-11 15:01:16.0719 Debug Targets configured when LogLevel >= Info for Logger: Microsoft.Hosting.Lifetime
+2023-08-11 15:01:16.0719 Debug Logger Microsoft.Hosting.Lifetime [Info] => logfile
+2023-08-11 15:01:16.0719 Debug Logger Microsoft.Hosting.Lifetime [Warn] => logfile
+2023-08-11 15:01:16.0719 Debug Logger Microsoft.Hosting.Lifetime [Error] => logfile
+2023-08-11 15:01:16.0719 Debug Logger Microsoft.Hosting.Lifetime [Fatal] => logfile
+2023-08-11 15:01:16.0719 Debug Targets configured when LogLevel >= Info for Logger: Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServer
+2023-08-11 15:01:16.0719 Debug Logger Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServer [Info] => logfile
+2023-08-11 15:01:16.0719 Debug Logger Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServer [Warn] => logfile
+2023-08-11 15:01:16.0719 Debug Logger Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServer [Error] => logfile
+2023-08-11 15:01:16.0719 Debug Logger Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServer [Fatal] => logfile
+2023-08-11 15:01:16.0719 Debug Targets configured when LogLevel >= Info for Logger: Microsoft.AspNetCore.Server.Kestrel.Https.Internal.HttpsConnectionMiddleware
+2023-08-11 15:01:16.0719 Debug Logger Microsoft.AspNetCore.Server.Kestrel.Https.Internal.HttpsConnectionMiddleware [Info] => logfile
+2023-08-11 15:01:16.0719 Debug Logger Microsoft.AspNetCore.Server.Kestrel.Https.Internal.HttpsConnectionMiddleware [Warn] => logfile
+2023-08-11 15:01:16.0719 Debug Logger Microsoft.AspNetCore.Server.Kestrel.Https.Internal.HttpsConnectionMiddleware [Error] => logfile
+2023-08-11 15:01:16.0719 Debug Logger Microsoft.AspNetCore.Server.Kestrel.Https.Internal.HttpsConnectionMiddleware [Fatal] => logfile
+2023-08-11 15:01:16.0719 Debug Targets configured when LogLevel >= Info for Logger: Microsoft.AspNetCore.Server.Kestrel
+2023-08-11 15:01:16.0719 Debug Logger Microsoft.AspNetCore.Server.Kestrel [Info] => logfile
+2023-08-11 15:01:16.0719 Debug Logger Microsoft.AspNetCore.Server.Kestrel [Warn] => logfile
+2023-08-11 15:01:16.0719 Debug Logger Microsoft.AspNetCore.Server.Kestrel [Error] => logfile
+2023-08-11 15:01:16.0719 Debug Logger Microsoft.AspNetCore.Server.Kestrel [Fatal] => logfile
+2023-08-11 15:01:16.0719 Debug Targets configured when LogLevel >= Info for Logger: Microsoft.AspNetCore.Server.Kestrel.BadRequests
+2023-08-11 15:01:16.0719 Debug Logger Microsoft.AspNetCore.Server.Kestrel.BadRequests [Info] => logfile
+2023-08-11 15:01:16.0719 Debug Logger Microsoft.AspNetCore.Server.Kestrel.BadRequests [Warn] => logfile
+2023-08-11 15:01:16.0719 Debug Logger Microsoft.AspNetCore.Server.Kestrel.BadRequests [Error] => logfile
+2023-08-11 15:01:16.0719 Debug Logger Microsoft.AspNetCore.Server.Kestrel.BadRequests [Fatal] => logfile
+2023-08-11 15:01:16.0719 Debug Targets configured when LogLevel >= Info for Logger: Microsoft.AspNetCore.Server.Kestrel.Connections
+2023-08-11 15:01:16.0719 Debug Logger Microsoft.AspNetCore.Server.Kestrel.Connections [Info] => logfile
+2023-08-11 15:01:16.0719 Debug Logger Microsoft.AspNetCore.Server.Kestrel.Connections [Warn] => logfile
+2023-08-11 15:01:16.0719 Debug Logger Microsoft.AspNetCore.Server.Kestrel.Connections [Error] => logfile
+2023-08-11 15:01:16.0719 Debug Logger Microsoft.AspNetCore.Server.Kestrel.Connections [Fatal] => logfile
+2023-08-11 15:01:16.0719 Debug Targets configured when LogLevel >= Info for Logger: Microsoft.AspNetCore.Server.Kestrel.Http2
+2023-08-11 15:01:16.0719 Debug Logger Microsoft.AspNetCore.Server.Kestrel.Http2 [Info] => logfile
+2023-08-11 15:01:16.0719 Debug Logger Microsoft.AspNetCore.Server.Kestrel.Http2 [Warn] => logfile
+2023-08-11 15:01:16.0719 Debug Logger Microsoft.AspNetCore.Server.Kestrel.Http2 [Error] => logfile
+2023-08-11 15:01:16.0719 Debug Logger Microsoft.AspNetCore.Server.Kestrel.Http2 [Fatal] => logfile
+2023-08-11 15:01:16.0719 Debug Targets configured when LogLevel >= Info for Logger: Microsoft.AspNetCore.Server.Kestrel.Http3
+2023-08-11 15:01:16.0719 Debug Logger Microsoft.AspNetCore.Server.Kestrel.Http3 [Info] => logfile
+2023-08-11 15:01:16.0719 Debug Logger Microsoft.AspNetCore.Server.Kestrel.Http3 [Warn] => logfile
+2023-08-11 15:01:16.0719 Debug Logger Microsoft.AspNetCore.Server.Kestrel.Http3 [Error] => logfile
+2023-08-11 15:01:16.0719 Debug Logger Microsoft.AspNetCore.Server.Kestrel.Http3 [Fatal] => logfile
+2023-08-11 15:01:16.0719 Debug Targets configured when LogLevel >= Info for Logger: EPAY.ETC.Core.API
+2023-08-11 15:01:16.0719 Debug Logger EPAY.ETC.Core.API [Info] => logfile
+2023-08-11 15:01:16.0719 Debug Logger EPAY.ETC.Core.API [Warn] => logfile
+2023-08-11 15:01:16.0719 Debug Logger EPAY.ETC.Core.API [Error] => logfile
+2023-08-11 15:01:16.0719 Debug Logger EPAY.ETC.Core.API [Fatal] => logfile
+2023-08-11 15:01:16.0719 Info Configuration initialized.
+2023-08-11 15:01:16.1219 Debug Targets configured when LogLevel >= Info for Logger: Microsoft.AspNetCore.Mvc.Formatters.SystemTextJsonInputFormatter
+2023-08-11 15:01:16.1219 Debug Logger Microsoft.AspNetCore.Mvc.Formatters.SystemTextJsonInputFormatter [Info] => logfile
+2023-08-11 15:01:16.1219 Debug Logger Microsoft.AspNetCore.Mvc.Formatters.SystemTextJsonInputFormatter [Warn] => logfile
+2023-08-11 15:01:16.1219 Debug Logger Microsoft.AspNetCore.Mvc.Formatters.SystemTextJsonInputFormatter [Error] => logfile
+2023-08-11 15:01:16.1219 Debug Logger Microsoft.AspNetCore.Mvc.Formatters.SystemTextJsonInputFormatter [Fatal] => logfile
+2023-08-11 15:01:16.1739 Debug Targets configured when LogLevel >= Info for Logger: Microsoft.AspNetCore.Mvc.ModelBinding.ModelBinderFactory
+2023-08-11 15:01:16.1739 Debug Logger Microsoft.AspNetCore.Mvc.ModelBinding.ModelBinderFactory [Info] => logfile
+2023-08-11 15:01:16.1739 Debug Logger Microsoft.AspNetCore.Mvc.ModelBinding.ModelBinderFactory [Warn] => logfile
+2023-08-11 15:01:16.1739 Debug Logger Microsoft.AspNetCore.Mvc.ModelBinding.ModelBinderFactory [Error] => logfile
+2023-08-11 15:01:16.1739 Debug Logger Microsoft.AspNetCore.Mvc.ModelBinding.ModelBinderFactory [Fatal] => logfile
+2023-08-11 15:01:16.1739 Debug Targets configured when LogLevel >= Info for Logger: Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder
+2023-08-11 15:01:16.1739 Debug Logger Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder [Info] => logfile
+2023-08-11 15:01:16.1739 Debug Logger Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder [Warn] => logfile
+2023-08-11 15:01:16.1820 Debug Logger Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder [Error] => logfile
+2023-08-11 15:01:16.1820 Debug Logger Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder [Fatal] => logfile
+2023-08-11 15:01:16.1820 Debug Targets configured when LogLevel >= Info for Logger: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker
+2023-08-11 15:01:16.1820 Debug Logger Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker [Info] => logfile
+2023-08-11 15:01:16.1820 Debug Logger Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker [Warn] => logfile
+2023-08-11 15:01:16.1820 Debug Logger Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker [Error] => logfile
+2023-08-11 15:01:16.1820 Debug Logger Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker [Fatal] => logfile
+2023-08-11 15:01:16.4421 Debug Targets configured when LogLevel >= Info for Logger: Microsoft.AspNetCore.DataProtection.TypeForwardingActivator
+2023-08-11 15:01:16.4421 Debug Logger Microsoft.AspNetCore.DataProtection.TypeForwardingActivator [Info] => logfile
+2023-08-11 15:01:16.4421 Debug Logger Microsoft.AspNetCore.DataProtection.TypeForwardingActivator [Warn] => logfile
+2023-08-11 15:01:16.4421 Debug Logger Microsoft.AspNetCore.DataProtection.TypeForwardingActivator [Error] => logfile
+2023-08-11 15:01:16.4421 Debug Logger Microsoft.AspNetCore.DataProtection.TypeForwardingActivator [Fatal] => logfile
+2023-08-11 15:01:16.4520 Debug Targets configured when LogLevel >= Info for Logger: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager
+2023-08-11 15:01:16.4520 Debug Logger Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager [Info] => logfile
+2023-08-11 15:01:16.4520 Debug Logger Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager [Warn] => logfile
+2023-08-11 15:01:16.4520 Debug Logger Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager [Error] => logfile
+2023-08-11 15:01:16.4520 Debug Logger Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager [Fatal] => logfile
+2023-08-11 15:01:16.4520 Debug Targets configured when LogLevel >= Info for Logger: Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.CngGcmAuthenticatedEncryptorFactory
+2023-08-11 15:01:16.4520 Debug Logger Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.CngGcmAuthenticatedEncryptorFactory [Info] => logfile
+2023-08-11 15:01:16.4520 Debug Logger Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.CngGcmAuthenticatedEncryptorFactory [Warn] => logfile
+2023-08-11 15:01:16.4520 Debug Logger Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.CngGcmAuthenticatedEncryptorFactory [Error] => logfile
+2023-08-11 15:01:16.4520 Debug Logger Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.CngGcmAuthenticatedEncryptorFactory [Fatal] => logfile
+2023-08-11 15:01:16.4520 Debug Targets configured when LogLevel >= Info for Logger: Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.CngCbcAuthenticatedEncryptorFactory
+2023-08-11 15:01:16.4520 Debug Logger Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.CngCbcAuthenticatedEncryptorFactory [Info] => logfile
+2023-08-11 15:01:16.4520 Debug Logger Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.CngCbcAuthenticatedEncryptorFactory [Warn] => logfile
+2023-08-11 15:01:16.4520 Debug Logger Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.CngCbcAuthenticatedEncryptorFactory [Error] => logfile
+2023-08-11 15:01:16.4520 Debug Logger Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.CngCbcAuthenticatedEncryptorFactory [Fatal] => logfile
+2023-08-11 15:01:16.4520 Debug Targets configured when LogLevel >= Info for Logger: Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ManagedAuthenticatedEncryptorFactory
+2023-08-11 15:01:16.4520 Debug Logger Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ManagedAuthenticatedEncryptorFactory [Info] => logfile
+2023-08-11 15:01:16.4520 Debug Logger Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ManagedAuthenticatedEncryptorFactory [Warn] => logfile
+2023-08-11 15:01:16.4520 Debug Logger Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ManagedAuthenticatedEncryptorFactory [Error] => logfile
+2023-08-11 15:01:16.4520 Debug Logger Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ManagedAuthenticatedEncryptorFactory [Fatal] => logfile
+2023-08-11 15:01:16.4674 Debug Targets configured when LogLevel >= Info for Logger: Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlEncryptor
+2023-08-11 15:01:16.4674 Debug Logger Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlEncryptor [Info] => logfile
+2023-08-11 15:01:16.4674 Debug Logger Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlEncryptor [Warn] => logfile
+2023-08-11 15:01:16.4674 Debug Logger Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlEncryptor [Error] => logfile
+2023-08-11 15:01:16.4674 Debug Logger Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlEncryptor [Fatal] => logfile
+2023-08-11 15:01:16.4674 Debug Targets configured when LogLevel >= Info for Logger: Microsoft.AspNetCore.DataProtection.Repositories.FileSystemXmlRepository
+2023-08-11 15:01:16.4674 Debug Logger Microsoft.AspNetCore.DataProtection.Repositories.FileSystemXmlRepository [Info] => logfile
+2023-08-11 15:01:16.4674 Debug Logger Microsoft.AspNetCore.DataProtection.Repositories.FileSystemXmlRepository [Warn] => logfile
+2023-08-11 15:01:16.4674 Debug Logger Microsoft.AspNetCore.DataProtection.Repositories.FileSystemXmlRepository [Error] => logfile
+2023-08-11 15:01:16.4674 Debug Logger Microsoft.AspNetCore.DataProtection.Repositories.FileSystemXmlRepository [Fatal] => logfile
+2023-08-11 15:01:16.5412 Debug FileTarget(Name=logfile): Preparing for new file: 'D:\Project\Epay Message queue\epay.etc.core.api\src\EPAY.ETC.Core.API\bin\Debug\net6.0\logs/log-2023-08-11.txt'
+2023-08-11 15:01:16.5412 Debug FileTarget(Name=logfile): Creating file appender: 'D:\Project\Epay Message queue\epay.etc.core.api\src\EPAY.ETC.Core.API\bin\Debug\net6.0\logs/log-2023-08-11.txt'
+2023-08-11 15:01:16.5412 Trace FileTarget(Name=logfile): Opening D:\Project\Epay Message queue\epay.etc.core.api\src\EPAY.ETC.Core.API\bin\Debug\net6.0\logs/log-2023-08-11.txt with allowFileSharedWriting=False
+2023-08-11 15:01:16.5624 Debug FileTarget(Name=logfile): Failed to retrieve FileInfo.CreationTimeUtc from FileName: D:\Project\Epay Message queue\epay.etc.core.api\src\EPAY.ETC.Core.API\bin\Debug\net6.0\logs/log-2023-08-11.txt Exception: System.IO.DirectoryNotFoundException: Could not find a part of the path 'D:\Project\Epay Message queue\epay.etc.core.api\src\EPAY.ETC.Core.API\bin\Debug\net6.0\logs\log-2023-08-11.txt'.
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize)
+   at NLog.Internal.FileAppenders.BaseFileAppender.UpdateCreationTime()
+2023-08-11 15:01:16.6729 Debug FileTarget(Name=logfile): DirectoryNotFoundException - Attempting to create directory for FileName: D:\Project\Epay Message queue\epay.etc.core.api\src\EPAY.ETC.Core.API\bin\Debug\net6.0\logs/log-2023-08-11.txt
+2023-08-11 15:01:16.6729 Debug Targets configured when LogLevel >= Info for Logger: Microsoft.AspNetCore.DataProtection.KeyManagement.DefaultKeyResolver
+2023-08-11 15:01:16.6835 Debug Logger Microsoft.AspNetCore.DataProtection.KeyManagement.DefaultKeyResolver [Info] => logfile
+2023-08-11 15:01:16.6835 Debug Logger Microsoft.AspNetCore.DataProtection.KeyManagement.DefaultKeyResolver [Warn] => logfile
+2023-08-11 15:01:16.6835 Debug Logger Microsoft.AspNetCore.DataProtection.KeyManagement.DefaultKeyResolver [Error] => logfile
+2023-08-11 15:01:16.6835 Debug Logger Microsoft.AspNetCore.DataProtection.KeyManagement.DefaultKeyResolver [Fatal] => logfile
+2023-08-11 15:01:16.6835 Debug Targets configured when LogLevel >= Info for Logger: Microsoft.AspNetCore.DataProtection.KeyManagement.KeyRingProvider
+2023-08-11 15:01:16.6835 Debug Logger Microsoft.AspNetCore.DataProtection.KeyManagement.KeyRingProvider [Info] => logfile
+2023-08-11 15:01:16.6835 Debug Logger Microsoft.AspNetCore.DataProtection.KeyManagement.KeyRingProvider [Warn] => logfile
+2023-08-11 15:01:16.6835 Debug Logger Microsoft.AspNetCore.DataProtection.KeyManagement.KeyRingProvider [Error] => logfile
+2023-08-11 15:01:16.6835 Debug Logger Microsoft.AspNetCore.DataProtection.KeyManagement.KeyRingProvider [Fatal] => logfile
+2023-08-11 15:01:16.6835 Debug Targets configured when LogLevel >= Info for Logger: Microsoft.AspNetCore.DataProtection.Internal.DataProtectionHostedService
+2023-08-11 15:01:16.6835 Debug Logger Microsoft.AspNetCore.DataProtection.Internal.DataProtectionHostedService [Info] => logfile
+2023-08-11 15:01:16.6835 Debug Logger Microsoft.AspNetCore.DataProtection.Internal.DataProtectionHostedService [Warn] => logfile
+2023-08-11 15:01:16.6835 Debug Logger Microsoft.AspNetCore.DataProtection.Internal.DataProtectionHostedService [Error] => logfile
+2023-08-11 15:01:16.6835 Debug Logger Microsoft.AspNetCore.DataProtection.Internal.DataProtectionHostedService [Fatal] => logfile
+2023-08-11 15:01:16.6835 Debug Targets configured when LogLevel >= Info for Logger: Microsoft.AspNetCore.Hosting.Diagnostics
+2023-08-11 15:01:16.6835 Debug Logger Microsoft.AspNetCore.Hosting.Diagnostics [Info] => logfile
+2023-08-11 15:01:16.6835 Debug Logger Microsoft.AspNetCore.Hosting.Diagnostics [Warn] => logfile
+2023-08-11 15:01:16.6835 Debug Logger Microsoft.AspNetCore.Hosting.Diagnostics [Error] => logfile
+2023-08-11 15:01:16.6835 Debug Logger Microsoft.AspNetCore.Hosting.Diagnostics [Fatal] => logfile
+2023-08-11 15:01:16.7217 Debug Targets configured when LogLevel >= Info for Logger: Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor
+2023-08-11 15:01:16.7217 Debug Logger Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor [Info] => logfile
+2023-08-11 15:01:16.7217 Debug Logger Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor [Warn] => logfile
+2023-08-11 15:01:16.7217 Debug Logger Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor [Error] => logfile
+2023-08-11 15:01:16.7217 Debug Logger Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor [Fatal] => logfile
+2023-08-11 15:01:16.7952 Debug Targets configured when LogLevel >= Info for Logger: Microsoft.AspNetCore.Routing.EndpointMiddleware
+2023-08-11 15:01:16.7952 Debug Logger Microsoft.AspNetCore.Routing.EndpointMiddleware [Info] => logfile
+2023-08-11 15:01:16.7952 Debug Logger Microsoft.AspNetCore.Routing.EndpointMiddleware [Warn] => logfile
+2023-08-11 15:01:16.7952 Debug Logger Microsoft.AspNetCore.Routing.EndpointMiddleware [Error] => logfile
+2023-08-11 15:01:16.7952 Debug Logger Microsoft.AspNetCore.Routing.EndpointMiddleware [Fatal] => logfile
+2023-08-11 15:01:16.7952 Debug Targets configured when LogLevel >= Info for Logger: Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware
+2023-08-11 15:01:16.7952 Debug Logger Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware [Info] => logfile
+2023-08-11 15:01:16.7952 Debug Logger Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware [Warn] => logfile
+2023-08-11 15:01:16.7952 Debug Logger Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware [Error] => logfile
+2023-08-11 15:01:16.7952 Debug Logger Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware [Fatal] => logfile
+2023-08-11 15:01:16.8235 Debug Targets configured when LogLevel >= Info for Logger: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware
+2023-08-11 15:01:16.8235 Debug Logger Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware [Info] => logfile
+2023-08-11 15:01:16.8235 Debug Logger Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware [Warn] => logfile
+2023-08-11 15:01:16.8235 Debug Logger Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware [Error] => logfile
+2023-08-11 15:01:16.8235 Debug Logger Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware [Fatal] => logfile
+2023-08-11 15:01:16.8752 Debug Targets configured when LogLevel >= Info for Logger: Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware
+2023-08-11 15:01:16.8752 Debug Logger Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware [Info] => logfile
+2023-08-11 15:01:16.8752 Debug Logger Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware [Warn] => logfile
+2023-08-11 15:01:16.8752 Debug Logger Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware [Error] => logfile
+2023-08-11 15:01:16.8752 Debug Logger Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware [Fatal] => logfile
+2023-08-11 15:01:16.8752 Debug Targets configured when LogLevel >= Info for Logger: Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware
+2023-08-11 15:01:16.8841 Debug Logger Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware [Info] => logfile
+2023-08-11 15:01:16.8841 Debug Logger Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware [Warn] => logfile
+2023-08-11 15:01:16.8841 Debug Logger Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware [Error] => logfile
+2023-08-11 15:01:16.8841 Debug Logger Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware [Fatal] => logfile
+2023-08-11 15:01:16.8841 Debug Targets configured when LogLevel >= Info for Logger: Microsoft.AspNetCore.HostFiltering.HostFilteringMiddleware
+2023-08-11 15:01:16.8841 Debug Logger Microsoft.AspNetCore.HostFiltering.HostFilteringMiddleware [Info] => logfile
+2023-08-11 15:01:16.8841 Debug Logger Microsoft.AspNetCore.HostFiltering.HostFilteringMiddleware [Warn] => logfile
+2023-08-11 15:01:16.8841 Debug Logger Microsoft.AspNetCore.HostFiltering.HostFilteringMiddleware [Error] => logfile
+2023-08-11 15:01:16.8841 Debug Logger Microsoft.AspNetCore.HostFiltering.HostFilteringMiddleware [Fatal] => logfile
+2023-08-11 15:01:16.8841 Debug Targets configured when LogLevel >= Info for Logger: Microsoft.AspNetCore.Watch.BrowserRefresh.BrowserRefreshMiddleware
+2023-08-11 15:01:16.8841 Debug Logger Microsoft.AspNetCore.Watch.BrowserRefresh.BrowserRefreshMiddleware [Info] => logfile
+2023-08-11 15:01:16.8841 Debug Logger Microsoft.AspNetCore.Watch.BrowserRefresh.BrowserRefreshMiddleware [Warn] => logfile
+2023-08-11 15:01:16.8841 Debug Logger Microsoft.AspNetCore.Watch.BrowserRefresh.BrowserRefreshMiddleware [Error] => logfile
+2023-08-11 15:01:16.8841 Debug Logger Microsoft.AspNetCore.Watch.BrowserRefresh.BrowserRefreshMiddleware [Fatal] => logfile
+2023-08-11 15:01:16.9942 Debug Targets configured when LogLevel >= Info for Logger: Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets
+2023-08-11 15:01:16.9942 Debug Logger Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets [Info] => logfile
+2023-08-11 15:01:16.9942 Debug Logger Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets [Warn] => logfile
+2023-08-11 15:01:16.9942 Debug Logger Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets [Error] => logfile
+2023-08-11 15:01:16.9942 Debug Logger Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets [Fatal] => logfile
+2023-08-11 15:01:18.7922 Debug Targets configured when LogLevel >= Info for Logger: Microsoft.AspNetCore.Routing.Matching.DfaMatcher
+2023-08-11 15:01:18.7922 Debug Logger Microsoft.AspNetCore.Routing.Matching.DfaMatcher [Info] => logfile
+2023-08-11 15:01:18.7932 Debug Logger Microsoft.AspNetCore.Routing.Matching.DfaMatcher [Warn] => logfile
+2023-08-11 15:01:18.7932 Debug Logger Microsoft.AspNetCore.Routing.Matching.DfaMatcher [Error] => logfile
+2023-08-11 15:01:18.7932 Debug Logger Microsoft.AspNetCore.Routing.Matching.DfaMatcher [Fatal] => logfile
