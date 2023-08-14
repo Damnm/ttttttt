@@ -1,22 +1,20 @@
-#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
-WORKDIR /app
-EXPOSE 80
-EXPOSE 443
-
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
-WORKDIR /src
-COPY ["EPAY.ETC.Core.API/EPAY.ETC.Core.API.csproj", "EPAY.ETC.Core.API/"]
-RUN dotnet restore "EPAY.ETC.Core.API/EPAY.ETC.Core.API.csproj"
-COPY . .
-WORKDIR "/src/EPAY.ETC.Core.API"
-RUN dotnet build "EPAY.ETC.Core.API.csproj" -c Release -o /app/build
+ADD ./src /code
+WORKDIR /code
 
-FROM build AS publish
-RUN dotnet publish "EPAY.ETC.Core.API.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN mkdir /artifacts
 
-FROM base AS final
+RUN dotnet restore
+
+RUN dotnet publish -c Release -o /artifacts
+
+# Build runtime image
+FROM mcr.microsoft.com/dotnet/aspnet:6.0
+# RUN apt-get update && apt-get -y install ca-certificates && update-ca-certificates
+RUN apt-get update && apt-get install -y vim
+RUN apt install -y grep mlocate
 WORKDIR /app
-COPY --from=publish /app/publish .
+# EXPOSE 80
+# EXPOSE 443
+COPY --from=build /artifacts .
 ENTRYPOINT ["dotnet", "EPAY.ETC.Core.API.dll"]

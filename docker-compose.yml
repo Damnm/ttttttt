@@ -1,0 +1,22 @@
+version: "3.9"
+x-volumes:
+  &code-volumes
+  - ./src:/code/src:cached
+  - ./coverage:/code/coverage:delegated
+
+services:
+  sdk:
+    build: ./docker/sdk
+    image: net_sdk
+
+  postgreSQL:
+    image: postgres:15.3-alpine
+    environment:
+      - POSTGRES_DB=MainDB
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - '5432:5432'
+    volumes:
+          # copy the sql script to create tables
+          - ./docker/sql:/docker-entrypoint-initdb.d
