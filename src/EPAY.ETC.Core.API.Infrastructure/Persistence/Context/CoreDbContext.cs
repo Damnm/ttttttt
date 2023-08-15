@@ -1,4 +1,5 @@
-﻿using EPAY.ETC.Core.API.Core.Models.Vehicle;
+﻿using EPAY.ETC.Core.API.Core.Entities;
+using EPAY.ETC.Core.API.Core.Models.Vehicle;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -20,7 +21,12 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
             base.OnModelCreating(modelBuilder);
+            // The property Name does not exist in the schema therefore it needs this call to ignore the binding
+            modelBuilder
+                .Entity<VehicleInfromation>()
+                .Ignore(x => x.Id);
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
