@@ -1,4 +1,6 @@
 using EPAY.ETC.Core.API.Infrastructure.Persistence;
+using EPAY.ETC.Core.API.Infrastructure.Persistence.Context;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using NLog;
 using NLog.Web;
@@ -7,6 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
 ConfigurationManager config = builder.Configuration;
 
 // Add services to the container.
+var conn = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<CoreDbContext>(options => options.UseNpgsql(conn));
+
 //builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 //    .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
 
