@@ -8,8 +8,8 @@ namespace EPAY.ETC.Core.API.Core.Models.Vehicle
         public string? PlateNumber { get; set; }
         public string? PlateColor { get; set; }
         public string? Make { get; set; }
-        public int Seat { get; set; }
-        public int Weight { get; set; }
+        public int? Seat { get; set; }
+        public int? Weight { get; set; }
         /// <summary>
         /// TODO: Check data type: use enum instead of string
         /// </summary>

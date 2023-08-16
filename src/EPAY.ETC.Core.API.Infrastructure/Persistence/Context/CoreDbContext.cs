@@ -24,9 +24,9 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
             modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
             base.OnModelCreating(modelBuilder);
             // The property Name does not exist in the schema therefore it needs this call to ignore the binding
-            modelBuilder
-                .Entity<VehicleInfromation>()
-                .Ignore(x => x.Id);
+            //modelBuilder
+            //    .Entity<VehicleInfromation>()
+            //    .Ignore(x => x.Id);
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
