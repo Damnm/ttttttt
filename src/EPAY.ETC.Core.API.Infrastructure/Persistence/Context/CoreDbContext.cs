@@ -1,4 +1,6 @@
 ﻿using EPAY.ETC.Core.API.Core.Entities;
+using EPAY.ETC.Core.API.Core.Models.Transaction;
+using EPAY.ETC.Core.API.Core.Models.TransactionLog;
 using EPAY.ETC.Core.API.Core.Models.Vehicle;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -18,15 +20,16 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
         }
 
         public virtual DbSet<VehicleModel> Vehicles { get; set; }
+        public virtual DbSet<VehiclePaymentTransaction> VehiclePaymentTransactions { get; set; }
+        public virtual DbSet<VehicleTransactionModel> VehicleTransactionModels { get; set; }
+        public virtual DbSet<LaneInCameraTransactionLog> LaneInCameraTransactionLogs { get; set; }
+        public virtual DbSet<LaneInRFIDTransactionLog> LaneInRFIDTransactionLogs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
             base.OnModelCreating(modelBuilder);
-            // The property Name does not exist in the schema therefore it needs this call to ignore the binding
-            //modelBuilder
-            //    .Entity<VehicleInfromation>()
-            //    .Ignore(x => x.Id);
+            
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

@@ -15,7 +15,7 @@ namespace EPAY.ETC.Core.API.Core.Entities
             CreatedDate = DateTime.Now.ConvertToAsianTime(DateTimeKind.Local);
         }
 
-        [Key]
+        
         [StringLength(50)]
         public string RFID { get; set; }
         [StringLength(30)]
