@@ -152,7 +152,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                     b.Property<string>("RFID")
                         .HasColumnType("text");
 
-                    b.Property<int>("Seat")
+                    b.Property<int?>("Seat")
                         .HasColumnType("integer");
 
                     b.Property<string>("VehiclePhotoUrl")
@@ -161,7 +161,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                     b.Property<string>("VehicleType")
                         .HasColumnType("text");
 
-                    b.Property<int>("Weight")
+                    b.Property<int?>("Weight")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");

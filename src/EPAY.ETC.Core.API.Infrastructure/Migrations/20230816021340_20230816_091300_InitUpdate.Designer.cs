@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EPAY.ETC.Core.API.Infrastructure.Migrations
 {
     [DbContext(typeof(CoreDbContext))]
-    [Migration("20230816014103_20230816_084000_Init-VehicleInformation")]
-    partial class _20230816_084000_InitVehicleInformation
+    [Migration("20230816021340_20230816_091300_InitUpdate")]
+    partial class _20230816_091300_InitUpdate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -155,7 +155,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                     b.Property<string>("RFID")
                         .HasColumnType("text");
 
-                    b.Property<int>("Seat")
+                    b.Property<int?>("Seat")
                         .HasColumnType("integer");
 
                     b.Property<string>("VehiclePhotoUrl")
@@ -164,7 +164,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                     b.Property<string>("VehicleType")
                         .HasColumnType("text");
 
-                    b.Property<int>("Weight")
+                    b.Property<int?>("Weight")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");

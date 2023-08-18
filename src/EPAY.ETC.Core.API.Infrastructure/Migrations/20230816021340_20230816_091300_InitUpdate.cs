@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace EPAY.ETC.Core.API.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class _20230816_084000_InitVehicleInformation : Migration
+    public partial class _20230816_091300_InitUpdate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -26,8 +26,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                     PlateNumber = table.Column<string>(type: "text", nullable: true),
                     PlateColour = table.Column<string>(type: "text", nullable: true),
                     VehicleType = table.Column<string>(type: "text", nullable: true),
-                    Seat = table.Column<int>(type: "integer", nullable: false),
-                    Weight = table.Column<int>(type: "integer", nullable: false),
+                    Seat = table.Column<int>(type: "integer", nullable: true),
+                    Weight = table.Column<int>(type: "integer", nullable: true),
                     PlateNumberPhotoUrl = table.Column<string>(type: "text", nullable: true),
                     VehiclePhotoUrl = table.Column<string>(type: "text", nullable: true),
                     ConfidenceScore = table.Column<double>(type: "double precision", nullable: false),
@@ -81,6 +81,25 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Vehicles",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    RFID = table.Column<string>(type: "text", nullable: true),
+                    PlateNumber = table.Column<string>(type: "text", nullable: true),
+                    PlateColor = table.Column<string>(type: "text", nullable: true),
+                    Make = table.Column<string>(type: "text", nullable: true),
+                    Seat = table.Column<int>(type: "integer", nullable: true),
+                    Weight = table.Column<int>(type: "integer", nullable: true),
+                    VehicleType = table.Column<string>(type: "text", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Vehicles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "VehicleTransactionModels",
                 columns: table => new
                 {
@@ -121,6 +140,9 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "VehiclePaymentTransactions");
+
+            migrationBuilder.DropTable(
+                name: "Vehicles");
 
             migrationBuilder.DropTable(
                 name: "VehicleTransactionModels");

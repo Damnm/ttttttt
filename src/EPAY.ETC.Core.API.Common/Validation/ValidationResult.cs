@@ -52,6 +52,16 @@
             return new ValidationResult<T>(data);
         }
 
+        public static ValidationResult<T> Failed<T>(ValidationError notFound)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static ValidationResult<T> Failed<T>(string v)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
     }
 }

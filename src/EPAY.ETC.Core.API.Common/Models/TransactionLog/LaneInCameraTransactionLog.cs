@@ -19,8 +19,8 @@ namespace EPAY.ETC.Core.API.Core.Models.TransactionLog
         public string? PlateNumber { get; set; }
         public string? PlateColour { get; set; }
         public string? VehicleType { get; set; }
-        public int Seat { get; set; }
-        public int Weight { get; set; }
+        public int? Seat { get; set; }
+        public int? Weight { get; set; }
         public string? PlateNumberPhotoUrl { get; set; }
         public string? VehiclePhotoUrl { get; set; }
         public Double ConfidenceScore { get; set; }

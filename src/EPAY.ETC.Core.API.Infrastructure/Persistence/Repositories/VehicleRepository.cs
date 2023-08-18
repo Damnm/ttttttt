@@ -2,7 +2,9 @@
 using EPAY.ETC.Core.API.Core.Interfaces.Repositories;
 using EPAY.ETC.Core.API.Core.Models.Vehicle;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Context;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Linq.Expressions;
 
 namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories
 {
@@ -21,6 +23,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories
         }
         #endregion
 
+        #region Addsync
         public async Task<VehicleModel> AddAsync(VehicleModel entity)
         {
             _logger.LogInformation($"Executing EmployeeRepository {nameof(AddAsync)} method...");
@@ -36,5 +39,58 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories
                 throw;
             }
         }
+        #endregion
+
+        #region GetAsync
+        public async Task<IEnumerable<VehicleModel>> GetAllAsync()
+        {
+            _logger.LogInformation($"Executing {nameof(GetAllAsync)} method...");
+
+            try
+            {
+                var vehicles = await _dbContext.Vehicles.ToListAsync();
+                return vehicles;
+            }
+            catch (ETCEPAYCoreAPIException ex)
+            {
+                _logger.LogError($"An error occurred when calling {nameof(GetAllAsync)} method. Details: {ex.Message}. Stack trace: {ex.StackTrace}");
+                throw;
+            }
+        }
+
+        public async Task<VehicleModel?> GetByIdAsync(Guid id)
+        {
+            _logger.LogInformation($"Executing {nameof(GetByIdAsync)} method...");
+
+            try
+            {
+                var vehicle = await _dbContext.Vehicles.FindAsync(id);
+                return vehicle;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"An error occurred when calling {nameof(GetByIdAsync)} method. Details: {ex.Message}. Stack trace: {ex.StackTrace}");
+                throw;
+            }
+        }
+        #endregion
+        #region UpdateAsync
+        public async Task<VehicleModel> UpdateAsync(VehicleModel entity)
+        {
+            _logger.LogInformation($"Executing {nameof(UpdateAsync)} method...");
+
+            try
+            {
+                _dbContext.Vehicles.Update(entity);
+                await _dbContext.SaveChangesAsync();
+                return entity;
+            }
+            catch (ETCEPAYCoreAPIException ex)
+            {
+                _logger.LogError($"An error occurred when calling {nameof(UpdateAsync)} method. Details: {ex.Message}. Stack trace: {ex.StackTrace}");
+                throw;
+            }
+        }
+        #endregion
     }
 }
