@@ -10,7 +10,7 @@ namespace EPAY.ETC.Core.API.Core.Interfaces.Services.Vehicles
 {
     public interface IVehicleHistoryService
     {
-        //Task<ValidationResult<VehicleHistoryModel>> Addsync(VehicleHistoryModel model);
-        
+        Task<ValidationResult<VehicleHistoryModel>> Addsync(VehicleHistoryModel model);
+
     }
 }

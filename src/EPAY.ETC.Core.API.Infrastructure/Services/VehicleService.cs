@@ -1,15 +1,13 @@
-﻿using EPAY.ETC.Core.API.Core.Exceptions;
-using EPAY.ETC.Core.API.Core.Interfaces.Repositories;
+﻿using AutoMapper;
+using EPAY.ETC.Core.API.Core.Extensions;
+using EPAY.ETC.Core.API.Core.Interfaces.Services.Vehicles;
+using EPAY.ETC.Core.API.Core.Models.Common;
+using EPAY.ETC.Core.API.Core.Models.Enum;
 using EPAY.ETC.Core.API.Core.Models.Vehicle;
 using EPAY.ETC.Core.API.Core.Validation;
+using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Vehicle;
 using Microsoft.Extensions.Logging;
 using System.Linq.Expressions;
-using AutoMapper;
-using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Vehicle;
-using EPAY.ETC.Core.API.Core.Extensions;
-using EPAY.ETC.Core.API.Core.Models.Enum;
-using EPAY.ETC.Core.API.Core.Models.Common;
-using EPAY.ETC.Core.API.Core.Interfaces.Services.Vehicles;
 
 namespace EPAY.ETC.Core.API.Infrastructure.Services
 {
@@ -24,10 +22,12 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services
         #endregion
 
         #region Constructor
-        public VehicleService(ILogger<VehicleService> logger, IVehicleRepository vehicleRepository)
+        public VehicleService(ILogger<VehicleService> logger, IVehicleRepository vehicleRepository, IVehicleHistoryRepository vehicleHistoryRepository ,IMapper mapper)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _repository = vehicleRepository ?? throw new ArgumentNullException(nameof(vehicleRepository));
+            _vehicleHistoryRepository = vehicleHistoryRepository ?? throw new ArgumentNullException(nameof(vehicleHistoryRepository));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
         #endregion
         public async Task<ValidationResult<VehicleModel>> AddAsync(VehicleModel input)

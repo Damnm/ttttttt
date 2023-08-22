@@ -44,14 +44,14 @@ namespace EPAY.ETC.Core.API.Controllers
                 _logger.LogInformation($"Executing {nameof(AddAsync)}...");
 
 
-                var priorityVehicleResult = await _vehicleService.AddAsync(request);
+                var vehicleResult = await _vehicleService.AddAsync(request);
 
-                if (!priorityVehicleResult.Succeeded && priorityVehicleResult.Errors.Any(x => x.Code == StatusCodes.Status409Conflict))
+                if (!vehicleResult.Succeeded && vehicleResult.Errors.Any(x => x.Code == StatusCodes.Status409Conflict))
                 {
-                    return Conflict(priorityVehicleResult);
+                    return Conflict(vehicleResult);
                 }
 
-                return new ObjectResult(priorityVehicleResult)
+                return new ObjectResult(vehicleResult)
                 {
                     StatusCode = StatusCodes.Status201Created
                 };

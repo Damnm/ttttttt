@@ -22,19 +22,20 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services
             _vehicleHistoryRepository = VehicleHistoryRepository;
         }
 
-        //public async Task<ValidationResult<VehicleHistoryModel>> AddAsync(VehicleHistoryModel model)
-        //{
-        //    _logger.LogInformation($"Executing {nameof(AddAsync)} method...");
-        //    try
-        //    {
-        //        var result = await _vehicleHistoryRepository.AddAsync(model);
-        //        return ValidationResult.Success(result);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError($"Failed to run {nameof(AddAsync)} method. Error: {ex.Message}");
-        //        throw;
-        //    }
-        //}
+        public async Task<ValidationResult<VehicleHistoryModel>> Addsync(VehicleHistoryModel model)
+        {
+            _logger.LogInformation($"Executing {nameof(Addsync)} method...");
+            try
+            {
+                var result = await _vehicleHistoryRepository.AddAsync(model);
+                return ValidationResult.Success(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed to run {nameof(Addsync)} method. Error: {ex.Message}");
+                throw;
+            }
+        }
     }
 }
+

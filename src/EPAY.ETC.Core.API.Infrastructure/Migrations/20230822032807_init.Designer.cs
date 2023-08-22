@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EPAY.ETC.Core.API.Infrastructure.Migrations
 {
     [DbContext(typeof(CoreDbContext))]
-    [Migration("20230822014301_init")]
+    [Migration("20230822032807_init")]
     partial class init
     {
         /// <inheritdoc />

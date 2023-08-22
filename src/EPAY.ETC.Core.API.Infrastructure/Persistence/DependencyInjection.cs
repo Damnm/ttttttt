@@ -21,7 +21,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence
             //Add Repositories...
             services.AddScoped<IVehicleRepository, VehicleRepository>();
             services.AddScoped<IVehicleService, VehicleService>();
-            //services.AddScoped<IVehicleHistoryService, VehicleHistoryRepository>();
+            services.AddScoped<IVehicleHistoryService, VehicleHistoryService>();
+            services.AddScoped<IVehicleHistoryRepository, VehicleHistoryRepository>();
             //Add Services
             return services;
         }
