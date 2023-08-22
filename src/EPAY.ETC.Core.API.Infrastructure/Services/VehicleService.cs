@@ -1,36 +1,57 @@
 ﻿using EPAY.ETC.Core.API.Core.Exceptions;
-using EPAY.ETC.Core.API.Core.Interfaces.Services;
+using EPAY.ETC.Core.API.Core.Interfaces.Repositories;
 using EPAY.ETC.Core.API.Core.Models.Vehicle;
 using EPAY.ETC.Core.API.Core.Validation;
-using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories;
 using Microsoft.Extensions.Logging;
 using System.Linq.Expressions;
+using AutoMapper;
+using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Vehicle;
+using EPAY.ETC.Core.API.Core.Extensions;
+using EPAY.ETC.Core.API.Core.Models.Enum;
+using EPAY.ETC.Core.API.Core.Models.Common;
+using EPAY.ETC.Core.API.Core.Interfaces.Services.Vehicles;
 
 namespace EPAY.ETC.Core.API.Infrastructure.Services
 {
-    internal class VehicleService : IVehicleService
+    public class VehicleService : IVehicleService
     {
 
         #region Variables   -
         private readonly ILogger<VehicleService> _logger;
-        private readonly IVehicleRepository _vehicleRepository;
+        private readonly IVehicleRepository _repository;
+        private readonly IVehicleHistoryRepository _vehicleHistoryRepository;
+        private readonly IMapper _mapper;
         #endregion
 
         #region Constructor
         public VehicleService(ILogger<VehicleService> logger, IVehicleRepository vehicleRepository)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _vehicleRepository = vehicleRepository ?? throw new ArgumentNullException(nameof(vehicleRepository));
+            _repository = vehicleRepository ?? throw new ArgumentNullException(nameof(vehicleRepository));
         }
         #endregion
-        public async Task<ValidationResult<VehicleModel>> AddAsync(VehicleModel entity)
+        public async Task<ValidationResult<VehicleModel>> AddAsync(VehicleModel input)
         {
             _logger.LogInformation($"Executing {nameof(AddAsync)} method...");
             try
             {
-                entity.Id = Guid.NewGuid();
-                var res = await _vehicleRepository.AddAsync(entity);
-                return ValidationResult.Success(res);
+                var existVehicle = await CheckExistVehicleInfo(input);
+
+                if (existVehicle)
+                {
+                    return ValidationResult.Failed<VehicleModel>(new List<ValidationError>()
+                    {
+                        new ValidationError("Dữ liệu đã tồn tại trên hệ thống", ValidationError.Conflict.Code)
+                    });
+                }
+
+                input.CreatedDate = DateTime.Now.ConvertToAsianTime(DateTimeKind.Local);
+                
+
+                var result = await _repository.AddAsync(input);
+                await AddHistory(result, ChangeActionEnum.Insert);
+
+                return ValidationResult.Success(result);
             }
             catch (Exception ex)
             {
@@ -42,71 +63,104 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services
         public async Task<ValidationResult<VehicleModel>> GetByIdAsync(Guid id)
         {
             _logger.LogInformation($"Executing {nameof(GetByIdAsync)} method...");
-
             try
             {
-                var vehicle = await _vehicleRepository.GetByIdAsync(id);
-
-                if (vehicle == null)
+                var result = await _repository.GetByIdAsync(id);
+                if (result == null)
                 {
-                    return ValidationResult.Failed<VehicleModel>(ValidationError.NotFound);
+                    return ValidationResult.Failed<VehicleModel>(null, new List<ValidationError>()
+                    {
+                        ValidationError.NotFound
+                    });
                 }
 
-                return ValidationResult.Success(vehicle);
+                return ValidationResult.Success(result);
             }
             catch (Exception ex)
             {
-                _logger.LogError($"An error occurred when calling {nameof(GetByIdAsync)} method. Error: {ex.Message}");
+                _logger.LogError($"Failed to run {nameof(GetByIdAsync)} method. Error: {ex.Message}");
                 throw;
             }
         }
-        public async Task<ValidationResult<IEnumerable<VehicleModel>>> GetAllVehicleAsync()
-        {
-            _logger.LogInformation($"Executing {nameof(GetAllVehicleAsync)} method...");
 
+        public async Task<ValidationResult<Guid>> RemoveAsync(Guid id)
+        {
+            _logger.LogInformation($"Executing {nameof(RemoveAsync)} method...");
             try
             {
-                var vehicles = await _vehicleRepository.GetAllAsync();
-                return ValidationResult.Success(vehicles);
+                var result = await _repository.GetByIdAsync(id);
+                if (result == null)
+                {
+                    return ValidationResult.Failed<Guid>(Guid.Empty, new List<ValidationError>()
+                    {
+                        ValidationError.NotFound
+                    });
+                }
+
+                await _repository.RemoveAsync(result);
+                await AddHistory(result, ChangeActionEnum.Delete);
+
+                return ValidationResult.Success(id);
             }
             catch (Exception ex)
             {
-                string errorMessage = $"An error occurred when calling {nameof(GetAllVehicleAsync)} method: {ex.Message}. InnerException: {ApiExceptionMessages.ExceptionMessages(ex)}. Stack trace: {ex.StackTrace}";
+                _logger.LogError($"Failed to run {nameof(RemoveAsync)} method. Error: {ex.Message}");
                 throw;
             }
         }
 
-        public async Task<ValidationResult<VehicleModel>> UpdateAsync(Guid id, VehicleModel updatedVehicle)
+        public async Task<ValidationResult<VehicleModel>> UpdateAsync(VehicleModel input)
         {
             _logger.LogInformation($"Executing {nameof(UpdateAsync)} method...");
-
             try
             {
-                var existingVehicle = await _vehicleRepository.GetByIdAsync(id);
-
-                if (existingVehicle == null)
+                var oldRecord = await _repository.GetByIdAsync(input.Id);
+                if (oldRecord == null)
                 {
-                    return ValidationResult.Failed<VehicleModel>("Vehicle not found.");
+                    return ValidationResult.Failed<VehicleModel>(null, new List<ValidationError>()
+                    {
+                        ValidationError.NotFound
+                    });
                 }
 
-                // Update the properties of the existing vehicle
-                existingVehicle.RFID = updatedVehicle.RFID;
-                existingVehicle.PlateNumber = updatedVehicle.PlateNumber;
-                existingVehicle.PlateColor = updatedVehicle.PlateColor;
-                existingVehicle.Make = updatedVehicle.Make;
-                existingVehicle.Seat = updatedVehicle.Seat;
-                existingVehicle.Weight = updatedVehicle.Weight;
-                existingVehicle.VehicleType = updatedVehicle.VehicleType;
-                // ... Update other properties as needed ...
+                input.CreatedDate = oldRecord.CreatedDate;
+                
 
-                var updatedResult = await _vehicleRepository.UpdateAsync(existingVehicle);
-                return ValidationResult.Success(updatedResult);
+                await _repository.UpdateAsync(input);
+                await AddHistory(input, ChangeActionEnum.Update);
+
+                return ValidationResult.Success(input);
             }
             catch (Exception ex)
             {
-                string errorMessage = $"An error occurred when calling {nameof(UpdateAsync)} method: {ex.Message}. InnerException: {ApiExceptionMessages.ExceptionMessages(ex)}. Stack trace: {ex.StackTrace}";
+                _logger.LogError($"Failed to run {nameof(UpdateAsync)} method. Error: {ex.Message}");
                 throw;
             }
         }
+
+        #region Private method
+        async Task AddHistory(VehicleModel input, ChangeActionEnum action)
+        {
+            var history = _mapper.Map<VehicleHistoryModel>(input);
+            history.Action = action;
+
+            await _vehicleHistoryRepository.AddAsync(history);
+        }
+        async Task<bool> CheckExistVehicleInfo(VehicleModel input)
+        {
+            Expression<Func<VehicleModel, bool>> expression = s =>
+                s.CreatedDate == input.CreatedDate
+                && s.PlateNumber == input.PlateNumber
+                && s.PlateColor == input.PlateColor
+                && s.RFID == input.RFID
+                && s.Seat == input.Seat
+                && s.Make == input.Make
+                && s.Weight == input.Weight;
+
+            var result = await _repository.GetAllAsync(expression);
+
+            return result.Any();
+        }
+        #endregion
     }
 }

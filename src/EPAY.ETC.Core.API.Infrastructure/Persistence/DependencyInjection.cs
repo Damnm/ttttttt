@@ -1,6 +1,6 @@
-﻿using EPAY.ETC.Core.API.Core.Interfaces.Services;
+﻿using EPAY.ETC.Core.API.Core.Interfaces.Services.Vehicles;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Context;
-using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories;
+using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Vehicle;
 using EPAY.ETC.Core.API.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -21,7 +21,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence
             //Add Repositories...
             services.AddScoped<IVehicleRepository, VehicleRepository>();
             services.AddScoped<IVehicleService, VehicleService>();
-
+            //services.AddScoped<IVehicleHistoryService, VehicleHistoryRepository>();
             //Add Services
             return services;
         }

@@ -1,5 +1,5 @@
 ﻿using EPAY.ETC.Core.API.Core.Exceptions;
-using EPAY.ETC.Core.API.Core.Interfaces.Services;
+using EPAY.ETC.Core.API.Core.Interfaces.Services.Vehicles;
 using EPAY.ETC.Core.API.Core.Models.Vehicle;
 using EPAY.ETC.Core.API.Core.Validation;
 using Microsoft.AspNetCore.Authorization;
@@ -37,126 +37,136 @@ namespace EPAY.ETC.Core.API.Controllers
         [HttpPost("v1/vehicles")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> AddVehiclesAsync(VehicleModel input)
+        public async Task<IActionResult> AddAsync(VehicleModel request)
         {
-            _logger.LogInformation($"Executing {nameof(AddVehiclesAsync)} method...");
             try
             {
-                var vehicle = await _vehicleService.AddAsync(input);
+                _logger.LogInformation($"Executing {nameof(AddAsync)}...");
 
-                // Return 201
-                return new ObjectResult(vehicle)
+
+                var priorityVehicleResult = await _vehicleService.AddAsync(request);
+
+                if (!priorityVehicleResult.Succeeded && priorityVehicleResult.Errors.Any(x => x.Code == StatusCodes.Status409Conflict))
+                {
+                    return Conflict(priorityVehicleResult);
+                }
+
+                return new ObjectResult(priorityVehicleResult)
                 {
                     StatusCode = StatusCodes.Status201Created
                 };
             }
             catch (Exception ex)
             {
-                string errorMessage = $"An error occurred when calling {nameof(AddVehiclesAsync)} method: {ex.Message}. InnerException : {ApiExceptionMessages.ExceptionMessages(ex)}. Stack trace: {ex.StackTrace}";
+                List<ValidationError> validationErrors = new();
+                string errorMessage = $"An error occurred when calling {nameof(AddAsync)} method: {ex.Message}. InnerException : {ApiExceptionMessages.ExceptionMessages(ex)}. Stack trace: {ex.StackTrace}";
                 _logger.LogError(errorMessage);
-                return StatusCode(StatusCodes.Status500InternalServerError, ValidationResult.Failed(errorMessage, new List<ValidationError>() { ValidationError.InternalServerError }));
+                validationErrors.Add(ValidationError.InternalServerError);
+                return StatusCode(StatusCodes.Status500InternalServerError, ValidationResult.Failed(errorMessage, validationErrors));
             }
         }
         #endregion
         #region GetVehiclesDetailAsync
-        [HttpGet("v1/vehicles/{id}")]
+        [HttpGet("v1/vehicles/{vehicleId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetVehicleByIdAsync(Guid id)
+        public async Task<IActionResult> GetByIdAsync(string vehicleId)
         {
-            _logger.LogInformation($"Executing {nameof(GetVehicleByIdAsync)} method...");
             try
             {
-                var vehicle = await _vehicleService.GetByIdAsync(id);
+                _logger.LogInformation($"Executing {nameof(GetByIdAsync)}...");
 
-                if (vehicle == null)
+                Guid _vehicleId;
+                if (!Guid.TryParse(vehicleId, out _vehicleId))
                 {
-                    return NotFound();
+                    return BadRequest(ValidationResult.Failed<VehicleModel>(null, new List<ValidationError>() { ValidationError.BadRequest }));
                 }
 
-                return Ok(vehicle);
+                var priorityVehicleResult = await _vehicleService.GetByIdAsync(_vehicleId);
+
+                return Ok(priorityVehicleResult);
             }
             catch (Exception ex)
             {
-                string errorMessage = $"An error occurred when calling {nameof(GetVehicleByIdAsync)} method: {ex.Message}. InnerException: {ApiExceptionMessages.ExceptionMessages(ex)}. Stack trace: {ex.StackTrace}";
+                List<ValidationError> validationErrors = new();
+                string errorMessage = $"An error occurred when calling {nameof(GetByIdAsync)} method: {ex.Message}. InnerException : {ApiExceptionMessages.ExceptionMessages(ex)}. Stack trace: {ex.StackTrace}";
                 _logger.LogError(errorMessage);
-                return StatusCode(StatusCodes.Status500InternalServerError, ValidationResult.Failed(errorMessage, new List<ValidationError>() { ValidationError.InternalServerError }));
+                validationErrors.Add(ValidationError.InternalServerError);
+                return StatusCode(StatusCodes.Status500InternalServerError, ValidationResult.Failed(errorMessage, validationErrors));
             }
         }
         #endregion
-        #region GetAllVehiclesAsync
-        [HttpGet("v1/vehicles")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetAllVehiclesAsync()
+        #region DeleteVehiclesAsync
+        [HttpDelete("v1/vehicles/{vehicleId}")]
+        public async Task<IActionResult> RemoveAsync(Guid vehicleId)
         {
-            _logger.LogInformation($"Executing {nameof(GetAllVehiclesAsync)} method...");
-
             try
             {
-                var vehiclesResult = await _vehicleService.GetAllVehicleAsync();
+                _logger.LogInformation($"Executing {nameof(RemoveAsync)}...");
 
-                if (vehiclesResult.Succeeded)
+                var data = await _vehicleService.RemoveAsync(vehicleId);
+
+                if (!data.Succeeded && data.Errors.Any(x => x.Code == StatusCodes.Status404NotFound))
                 {
-                    return Ok(vehiclesResult.Data);
+                    return NotFound(data);
                 }
-                else
-                {
-                    return StatusCode(StatusCodes.Status500InternalServerError, vehiclesResult);
-                }
+
+                return Ok(data);
             }
             catch (Exception ex)
             {
-                string errorMessage = $"An error occurred when calling {nameof(GetAllVehiclesAsync)} method: {ex.Message}. InnerException: {ApiExceptionMessages.ExceptionMessages(ex)}. Stack trace: {ex.StackTrace}";
+                List<ValidationError> validationErrors = new();
+                string errorMessage = $"An error occurred when calling {nameof(RemoveAsync)} method: {ex.Message}. InnerException : {ApiExceptionMessages.ExceptionMessages(ex)}. Stack trace: {ex.StackTrace}";
                 _logger.LogError(errorMessage);
-                return StatusCode(StatusCodes.Status500InternalServerError, ValidationResult.Failed(errorMessage, new List<ValidationError>() { ValidationError.InternalServerError }));
+                validationErrors.Add(ValidationError.InternalServerError);
+                return StatusCode(StatusCodes.Status500InternalServerError, ValidationResult.Failed(errorMessage, validationErrors));
             }
         }
         #endregion
-
         #region UpdateAsync
         [HttpPut("v1/vehicles/{vehicleId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> UpdateVehicleAsync(Guid Id, VehicleModel updatedVehicle)
+        public async Task<IActionResult> UpdateAsync(string vehicleId, VehicleModel request)
         {
             try
             {
-                var existingVehicle = await _vehicleService.GetByIdAsync(Id);
-                if (existingVehicle == null)
+                _logger.LogInformation($"Executing {nameof(UpdateAsync)}...");
+               
+
+                Guid _vehicleId;
+                if (!Guid.TryParse(vehicleId, out _vehicleId))
                 {
-                    return NotFound();
+                    return BadRequest(ValidationResult.Failed<VehicleModel>(null, new List<ValidationError>() { ValidationError.BadRequest }));
                 }
 
-                // Update the properties of the existing vehicle
-                existingVehicle.Data.RFID = updatedVehicle.RFID;
-                existingVehicle.Data.PlateNumber = updatedVehicle.PlateNumber;
-                existingVehicle.Data.PlateColor = updatedVehicle.PlateColor;
-                existingVehicle.Data.Make = updatedVehicle.Make;
-                existingVehicle.Data.Seat = updatedVehicle.Seat;
-                existingVehicle.Data.Weight = updatedVehicle.Weight;
-                existingVehicle.Data.VehicleType = updatedVehicle.VehicleType;
-                // ... Update other properties as needed ...
+                request.Id = _vehicleId;
+                var data = await _vehicleService.UpdateAsync(request);
 
-                var updatedResult = await _vehicleService.UpdateAsync(Id, existingVehicle.Data);
-
-
-                if (updatedResult.Succeeded)
+                if (!data.Succeeded)
                 {
-                    return Ok(updatedResult.Data);
+                    if (data.Errors.Any(x => x.Code == StatusCodes.Status404NotFound))
+                    {
+                        return NotFound(data);
+                    }
+
+                    if (data.Errors.Any(x => x.Code == StatusCodes.Status409Conflict))
+                    {
+                        return Conflict(data);
+                    }
                 }
-                else
-                {
-                    return StatusCode(StatusCodes.Status500InternalServerError, updatedResult);
-                }
+
+                return Ok(data);
             }
             catch (Exception ex)
             {
-                string errorMessage = $"An error occurred when calling {nameof(UpdateVehicleAsync)} method: {ex.Message}. InnerException: {ApiExceptionMessages.ExceptionMessages(ex)}. Stack trace: {ex.StackTrace}";
+                List<ValidationError> validationErrors = new();
+                string errorMessage = $"An error occurred when calling {nameof(UpdateAsync)} method: {ex.Message}. InnerException : {ApiExceptionMessages.ExceptionMessages(ex)}. Stack trace: {ex.StackTrace}";
                 _logger.LogError(errorMessage);
-                return StatusCode(StatusCodes.Status500InternalServerError, ValidationResult.Failed(errorMessage, new List<ValidationError>() { ValidationError.InternalServerError }));
-            }
+                validationErrors.Add(ValidationError.InternalServerError);
+                return StatusCode(StatusCodes.Status500InternalServerError, ValidationResult.Failed(errorMessage, validationErrors));
+            }            
         }
-            #endregion
-        }
+        #endregion
+    }
 }

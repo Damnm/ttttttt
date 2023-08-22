@@ -16,7 +16,14 @@ namespace EPAY.ETC.Core.API.Core.Extensions
         public static DateTime ConvertToAsianTime(this DateTime dt, DateTimeKind dateTimeKind)
         {
             dt = DateTime.SpecifyKind(dt, dateTimeKind);
-            return System.TimeZoneInfo.ConvertTime(dt, TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time"));
+
+            TimeZoneInfo asianTimeZone = TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time");
+            DateTime asianTime = TimeZoneInfo.ConvertTime(dt, asianTimeZone);
+
+            // Chuyển đổi múi giờ Asian Time sang UTC
+            DateTime utcTime = asianTime.ToUniversalTime();
+
+            return utcTime;
         }
     }
 }
