@@ -9,9 +9,16 @@ namespace EPAY.ETC.Core.API.Mapping
     {
         public Mappings()
         {
-            CreateMap<VehicleModel, VehicleHistoryModel>()
-                .ForMember(e => e.Id, act => act.MapFrom(src => Guid.NewGuid()))
-                .ForMember(e => e.CreatedDate, act => act.MapFrom(src => DateTime.Now.ConvertToAsianTime(DateTimeKind.Local)));
+          
+
+            CreateMap<VehicleRequestModel, VehicleModel>()
+                .ForMember(e => e.RFID, act => act.MapFrom(src => src.RFID))
+                .ForMember(e => e.PlateNumber, act => act.MapFrom(src => src.PlateNumber))
+                .ForMember(e => e.PlateColor, act => act.MapFrom(src => src.PlateColor))
+                .ForMember(e => e.Seat, act => act.MapFrom(src => src.Seat))
+                .ForMember(e => e.Make, act => act.MapFrom(src => src.Make))
+                .ForMember(e => e.Weight, act => act.MapFrom(src => src.Weight))
+                .ForMember(e => e.VehicleType, act => act.MapFrom(src => src.VehicleType));
         }
     }
 }

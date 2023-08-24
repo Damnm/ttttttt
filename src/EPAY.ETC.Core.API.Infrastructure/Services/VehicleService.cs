@@ -17,16 +17,14 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services
         #region Variables   -
         private readonly ILogger<VehicleService> _logger;
         private readonly IVehicleRepository _repository;
-        private readonly IVehicleHistoryRepository _vehicleHistoryRepository;
         private readonly IMapper _mapper;
         #endregion
 
         #region Constructor
-        public VehicleService(ILogger<VehicleService> logger, IVehicleRepository vehicleRepository, IVehicleHistoryRepository vehicleHistoryRepository ,IMapper mapper)
+        public VehicleService(ILogger<VehicleService> logger, IVehicleRepository vehicleRepository,IMapper mapper)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _repository = vehicleRepository ?? throw new ArgumentNullException(nameof(vehicleRepository));
-            _vehicleHistoryRepository = vehicleHistoryRepository ?? throw new ArgumentNullException(nameof(vehicleHistoryRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
         #endregion
@@ -49,7 +47,6 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services
                 
 
                 var result = await _repository.AddAsync(input);
-                await AddHistory(result, ChangeActionEnum.Insert);
 
                 return ValidationResult.Success(result);
             }
@@ -98,7 +95,6 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services
                 }
 
                 await _repository.RemoveAsync(result);
-                await AddHistory(result, ChangeActionEnum.Delete);
 
                 return ValidationResult.Success(id);
             }
@@ -109,7 +105,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services
             }
         }
 
-        public async Task<ValidationResult<VehicleModel>> UpdateAsync(VehicleModel input)
+        public async Task<ValidationResult<VehicleModel>> UpdateAsync(VehicleRequestModel input)
         {
             _logger.LogInformation($"Executing {nameof(UpdateAsync)} method...");
             try
@@ -123,13 +119,12 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services
                     });
                 }
 
-                input.CreatedDate = oldRecord.CreatedDate;
-                
+                 input.CreatedDate = oldRecord.CreatedDate;
 
-                await _repository.UpdateAsync(input);
-                await AddHistory(input, ChangeActionEnum.Update);
+                var entity = _mapper.Map<VehicleModel>(input);
+                await _repository.UpdateAsync(entity);
 
-                return ValidationResult.Success(input);
+                return ValidationResult.Success(entity);
             }
             catch (Exception ex)
             {
@@ -139,13 +134,6 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services
         }
 
         #region Private method
-        async Task AddHistory(VehicleModel input, ChangeActionEnum action)
-        {
-            var history = _mapper.Map<VehicleHistoryModel>(input);
-            history.Action = action;
-
-            await _vehicleHistoryRepository.AddAsync(history);
-        }
         async Task<bool> CheckExistVehicleInfo(VehicleModel input)
         {
             Expression<Func<VehicleModel, bool>> expression = s =>

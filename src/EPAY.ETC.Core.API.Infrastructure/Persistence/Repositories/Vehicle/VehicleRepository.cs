@@ -69,7 +69,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Vehicle
 
             try
             {
-                var vehicle = await _dbContext.Vehicles.FindAsync(id);
+                var vehicle = await _dbContext.Vehicles.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
                 return vehicle;
             }
             catch (Exception ex)
@@ -113,6 +113,6 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Vehicle
             }
         }
         #endregion
-       
+
     }
 }

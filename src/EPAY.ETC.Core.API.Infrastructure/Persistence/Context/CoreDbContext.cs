@@ -25,15 +25,12 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
         public virtual DbSet<VehicleTransactionModel> VehicleTransactionModels { get; set; }
         public virtual DbSet<LaneInCameraTransactionLog> LaneInCameraTransactionLogs { get; set; }
         public virtual DbSet<LaneInRFIDTransactionLog> LaneInRFIDTransactionLogs { get; set; }
-        public virtual DbSet<VehicleHistoryModel> VehicleHistories { get; set; }
+        public virtual DbSet<VehicleRequestModel> VehicleRequests { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
             base.OnModelCreating(modelBuilder);
-
-           
-
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

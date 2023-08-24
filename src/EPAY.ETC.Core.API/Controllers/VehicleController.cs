@@ -1,5 +1,6 @@
 ﻿using EPAY.ETC.Core.API.Core.Exceptions;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Vehicles;
+using EPAY.ETC.Core.API.Core.Models.Common;
 using EPAY.ETC.Core.API.Core.Models.Vehicle;
 using EPAY.ETC.Core.API.Core.Validation;
 using Microsoft.AspNetCore.Authorization;
@@ -127,7 +128,7 @@ namespace EPAY.ETC.Core.API.Controllers
         [HttpPut("v1/vehicles/{vehicleId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> UpdateAsync(string vehicleId, VehicleModel request)
+        public async Task<IActionResult> UpdateAsync(string vehicleId, VehicleRequestModel request)
         {
             try
             {
