@@ -38,7 +38,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.Vehicle
         {
             new VehicleModel()
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.NewGuid()
             }
 
 
