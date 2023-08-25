@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.OrderBuilder;
 using EPAY.ETC.Core.API.Infrastructure.UnitTests.Common;
+using EPAY.ETC.Core.API.Core.Exceptions;
 
 namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.Vehicle
 {
@@ -53,7 +54,19 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.Vehicle
                 Seat = 7,
                 Weight = 2000,
                 VehicleType = "Loại 1"
-            }
+            },
+            new VehicleModel()
+            {
+                Id = Guid.NewGuid(),
+                RFID = "1245asdasda",
+                CreatedDate = DateTime.Now,
+                PlateNumber = "Some Plate number",
+                PlateColor = "Some Plate colors",
+                Make = "Some make",
+                Seat = 11,
+                Weight = 2000,
+                VehicleType = "Loại 2"
+            },
         };
 
         #region GetByIdAsync
@@ -76,7 +89,120 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.Vehicle
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleRepository.GetByIdAsync)} method...", Times.Once, null);
             _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleRepository.GetByIdAsync)} method", Times.Never, null);
         }
+        [Fact]
+        public async void GivenValidRequestAndVehicleRepositoryIsDown_WhenGetByIdAsyncIsCalled_ThenThowETCEPAYCoreAPIException()
+        {
+            // Arrange
+            var someEx = new ETCEPAYCoreAPIException(99, "Some exception");
+            _dbContextMock.Setup(x => x.Vehicles).Throws(someEx);
 
+            // Act
+            var vehicleRepository = new VehicleRepository(_loggerMock.Object, _dbContextMock.Object, vehicleColumnOrderService.Object);
+            Func<Task> func = async () => await vehicleRepository.GetByIdAsync(It.IsNotNull<Guid>());
+
+            // Assert
+            var ex = await Assert.ThrowsAsync<ETCEPAYCoreAPIException>(func);
+            _dbContextMock.Verify(x => x.Vehicles, Times.Once);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleRepository.GetByIdAsync)} method...", Times.Once, null);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleRepository.GetByIdAsync)} method", Times.Once, null);
+        }
+        #endregion
+
+        #region GetAllAsync
+        [Fact]
+        public async void GivenValidRequest_WhenGetAllAsyncIsCalled_ThenReturnCorrectResult()
+        {
+            // Arrange
+            _dbVehicleSetMock = EFTestHelper.GetMockDbSet(_vehicles);
+            _dbContextMock.Setup(x => x.Vehicles).Returns(_dbVehicleSetMock.Object);
+
+            // Act
+            var vehicleRepository = new VehicleRepository(_loggerMock.Object, _dbContextMock.Object, vehicleColumnOrderService.Object);
+            var result = await vehicleRepository.GetAllAsync();
+
+            // Assert
+            result.Should().NotBeNull().And.HaveCount(1);
+            _dbContextMock.Verify(x => x.Vehicles, Times.Once);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleRepository.GetAllAsync)} method...", Times.Once, null);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleRepository.GetAllAsync)} method", Times.Never, null);
+        }
+        #endregion
+
+        #region AddAsync
+        [Fact]
+        public async void GivenValidEntity_WhenAddAsyncIsCalled_ThenRecordAddedSuccessfullyAndReturnCorrectResult()
+        {
+            // Arrange
+            var data = _vehicles.FirstOrDefault();
+            _dbVehicleSetMock = EFTestHelper.GetMockDbSet(_vehicles);
+            _dbContextMock.Setup(x => x.Vehicles).Returns(_dbVehicleSetMock.Object);
+
+            // Act
+            var vehicleRepository = new VehicleRepository(_loggerMock.Object, _dbContextMock.Object, vehicleColumnOrderService.Object);
+            var result = await vehicleRepository.AddAsync(data!);
+
+            // Assert
+            result.Should().NotBeNull().And.BeEquivalentTo(data);
+            _dbContextMock.Verify(x => x.Vehicles, Times.Once);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleRepository.AddAsync)} method...", Times.Once, null);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleRepository.AddAsync)} method", Times.Never, null);
+        }
+
+        [Fact]
+        public async void GivenValidEntityAndVehicleRepositotyIsDown_WhenAddAsyncIsCalled_ThenThrowETCEPAYCoreAPIException()
+        {
+            // Arrange
+            var someEx = new ETCEPAYCoreAPIException(99, "Some exception");
+            _dbContextMock.Setup(x => x.Vehicles).Throws(someEx);
+
+            // Act
+            var vehicleRepository = new VehicleRepository(_loggerMock.Object, _dbContextMock.Object, vehicleColumnOrderService.Object);
+            Func<Task> func = async () => await vehicleRepository.AddAsync(It.IsAny<VehicleModel>());
+
+            // Assert
+            var ex = await Assert.ThrowsAsync<ETCEPAYCoreAPIException>(func);
+            _dbContextMock.Verify(x => x.Vehicles, Times.Once);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleRepository.AddAsync)} method...", Times.Once, null);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleRepository.AddAsync)} method", Times.Once, null);
+        }
+        #endregion
+
+        #region UpdateAsync
+        [Fact]
+        public async void GivenValidEntity_WhenUpdateAsyncIsCalled_ThenRecordUpdatedSuccessfully()
+        {
+            // Arrange
+            var data = _vehicles.FirstOrDefault();
+            _dbContextMock = EFTestHelper.GetMockDbSet(_vehicles);
+            _dbContextMock.Setup(x => x.Vehicles).Returns(_dbVehicleSetMock.Object);
+
+            // Act
+            var vehicleRepository = new VehicleRepository(_loggerMock.Object, _dbContextMock.Object, vehicleColumnOrderService.Object);
+            await vehicleRepository.UpdateAsync(data!);
+
+            // Assert
+            _dbContextMock.Verify(x => x.Vehicles, Times.Once);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleColumnOrderService.UpdateAsync)} method...", Times.Once, null);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleColumnOrderService.UpdateAsync)} method", Times.Never, null);
+        }
+
+        [Fact]
+        public async void GivenValidEntityAndVehicleRepositotyIsDown_WhenUpdateAsyncIsCalled_ThenThowETCEPAYCoreAPIException()
+        {
+            // Arrange
+            var someEx = new ACVDbException(99, "Some exception");
+            _dbContextMock.Setup(x => x.PeriodVehicles).Throws(someEx);
+
+            // Act
+            var priorityVehicleRepository = new PeriodVehicleRepository(_loggerMock.Object, _dbContextMock.Object, priorityVehicleColumnOrderService.Object);
+            Func<Task> func = async () => await priorityVehicleRepository.UpdateAsync(It.IsAny<PeriodVehicleModel>());
+
+            // Assert
+            var ex = await Assert.ThrowsAsync<ACVDbException>(func);
+            _dbContextMock.Verify(x => x.PeriodVehicles, Times.Once);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(priorityVehicleRepository.UpdateAsync)} method...", Times.Once, null);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(priorityVehicleRepository.UpdateAsync)} method", Times.Once, null);
+        }
         #endregion
     }
 }
