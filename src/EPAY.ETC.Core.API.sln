@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EPAY.ETC.Core.API.Infrastru
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPAY.ETC.Core.API.Infrastructure.UnitTests", "EPAY.ETC.Core.API.Infrastructure.UnitTests\EPAY.ETC.Core.API.Infrastructure.UnitTests.csproj", "{109483FE-90C8-4CB6-9E3A-CB6FE3A8C636}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPAY.ETC.Core.API.UnitTest", "EPAY.ETC.Core.API.UnitTest\EPAY.ETC.Core.API.UnitTest.csproj", "{B84862D3-1936-43D2-B43D-26CFC8C1E9A6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{109483FE-90C8-4CB6-9E3A-CB6FE3A8C636}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{109483FE-90C8-4CB6-9E3A-CB6FE3A8C636}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{109483FE-90C8-4CB6-9E3A-CB6FE3A8C636}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B84862D3-1936-43D2-B43D-26CFC8C1E9A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B84862D3-1936-43D2-B43D-26CFC8C1E9A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B84862D3-1936-43D2-B43D-26CFC8C1E9A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B84862D3-1936-43D2-B43D-26CFC8C1E9A6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -47,6 +53,7 @@ Global
 		{9B926E95-D165-4ADA-B97D-4652C21FD1AF} = {9C61BCB8-5A0F-4357-BC50-2DB7757D22D4}
 		{B7367263-E60C-4C80-8188-889B50E462AC} = {9C61BCB8-5A0F-4357-BC50-2DB7757D22D4}
 		{109483FE-90C8-4CB6-9E3A-CB6FE3A8C636} = {B30AE151-90AB-4B7E-A750-1B6A68D5020B}
+		{B84862D3-1936-43D2-B43D-26CFC8C1E9A6} = {B30AE151-90AB-4B7E-A750-1B6A68D5020B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {48B7B8CA-795C-4E9C-9BD6-0BDFA16910AB}

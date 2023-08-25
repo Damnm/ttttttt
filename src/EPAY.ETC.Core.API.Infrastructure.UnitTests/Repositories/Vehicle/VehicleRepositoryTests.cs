@@ -28,9 +28,6 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.Vehicle
         private Mock<ILogger<VehicleRepository>> _loggerMock = new Mock<ILogger<VehicleRepository>>();
         private Mock<IVehicleDynamicColumnOrderService<VehicleSearchItemModel>> vehicleColumnOrderService = new Mock<IVehicleDynamicColumnOrderService<VehicleSearchItemModel>>();
         private Mock<DbSet<VehicleModel>> _dbVehicleSetMock;
-        
-        #endregion
-
         private VehicleSearchRequestModel _request = new VehicleSearchRequestModel()
         {
             Refinements = new VehicleSearchRefinementsModel()
@@ -69,6 +66,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.Vehicle
                 VehicleType = "Loại 2"
             },
         };
+        #endregion
 
         #region GetByIdAsync
         [Fact]
