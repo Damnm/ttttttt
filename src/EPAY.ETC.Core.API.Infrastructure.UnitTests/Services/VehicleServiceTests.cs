@@ -26,7 +26,14 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services
         private VehicleModel _request = new VehicleModel()
         {
             Id = id,
-            
+            CreatedDate = DateTime.Now,
+            PlateNumber = "Some Plate number",
+            PlateColor = "Some Plate colour",
+            RFID = "Some RFID",
+            Make = "Some make",
+            Seat = 10,
+            VehicleType = "Loại 2",
+            Weight = 7000,
         };
         #endregion
 
@@ -90,70 +97,70 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services
         }
         #endregion
 
-        //#region UpdateAsync
-        //[Fact]
-        //public async Task GivenValidRequest_WhenUpdateAsyncIsCalled_ThenReturnCorrectResult()
-        //{
-        //    // Arrange
-        //    Object callbackObject;
-        //    _repositoryMock.Setup(x => x.GetByIdAsync(It.IsNotNull<Guid>())).ReturnsAsync(_request);
-        //    _repositoryMock.Setup(x => x.UpdateAsync(It.IsNotNull<VehicleModel>())).Callback<object>(k => callbackObject = k);
+        #region UpdateAsync
+        [Fact]
+        public async Task GivenValidRequest_WhenUpdateAsyncIsCalled_ThenReturnCorrectResult()
+        {
+            // Arrange
+            Object callbackObject;
+            _repositoryMock.Setup(x => x.GetByIdAsync(It.IsNotNull<Guid>())).ReturnsAsync(_request);
+            _repositoryMock.Setup(x => x.UpdateAsync(It.IsNotNull<VehicleModel>())).Callback<object>(k => callbackObject = k);
 
-        //    // Act
-        //    var service = new VehicleService(_loggerMock.Object, _repositoryMock.Object,_mapper);
-        //    var result = await service.UpdateAsync(_request);
+            // Act
+            var service = new VehicleService(_loggerMock.Object, _repositoryMock.Object, _mapper);
+            var result = await service.UpdateAsync(_request);
 
-        //    // Assert
-        //    result.Should().NotBeNull();
-        //    result.Data.Should().NotBeNull();
-        //    result.Succeeded.Should().BeTrue();
-        //    _repositoryMock.Verify(x => x.GetByIdAsync(It.IsNotNull<Guid>()), Times.Once);
-        //    _repositoryMock.Verify(x => x.UpdateAsync(It.IsNotNull<VehicleModel>()), Times.Once);
-        //    _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.UpdateAsync)} method...", Times.Once, null);
-        //    _loggerMock.VerifyLog(LogLevel.Error, $"Failed to run {nameof(service.UpdateAsync)} method", Times.Never, null);
-        //}
-        //[Fact]
-        //public async Task GivenValidRequestAndNonExistingSettingGuid_WhenUpdateAsyncIsCalled_ThenReturnNotFound()
-        //{
-        //    // Arrange
-        //    Object callbackObject;
-        //    _repositoryMock.Setup(x => x.GetByIdAsync(It.IsNotNull<Guid>())).ReturnsAsync((VehicleModel)null);
-        //    _repositoryMock.Setup(x => x.UpdateAsync(It.IsNotNull<VehicleModel>())).Callback<object>(k => callbackObject = k);
+            // Assert
+            result.Should().NotBeNull();
+            result.Data.Should().NotBeNull();
+            result.Succeeded.Should().BeTrue();
+            _repositoryMock.Verify(x => x.GetByIdAsync(It.IsNotNull<Guid>()), Times.Once);
+            _repositoryMock.Verify(x => x.UpdateAsync(It.IsNotNull<VehicleModel>()), Times.Once);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.UpdateAsync)} method...", Times.Once, null);
+            _loggerMock.VerifyLog(LogLevel.Error, $"Failed to run {nameof(service.UpdateAsync)} method", Times.Never, null);
+        }
+        [Fact]
+        public async Task GivenValidRequestAndNonExistingSettingGuid_WhenUpdateAsyncIsCalled_ThenReturnNotFound()
+        {
+            // Arrange
+            Object callbackObject;
+            _repositoryMock.Setup(x => x.GetByIdAsync(It.IsNotNull<Guid>())).ReturnsAsync((VehicleModel)null);
+            _repositoryMock.Setup(x => x.UpdateAsync(It.IsNotNull<VehicleModel>())).Callback<object>(k => callbackObject = k);
 
-        //    // Act
-        //    var service = new VehicleService(_loggerMock.Object, _repositoryMock.Object, _mapper);
-        //    var result = await service.UpdateAsync(_request);
+            // Act
+            var service = new VehicleService(_loggerMock.Object, _repositoryMock.Object, _mapper);
+            var result = await service.UpdateAsync(_request);
 
-        //    // Assert
-        //    result.Should().NotBeNull();
-        //    result.Data.Should().BeNull();
-        //    result.Succeeded.Should().BeFalse();
-        //    result.Errors.Count(x => x.Code == 404).Should().Be(1);
-        //    _repositoryMock.Verify(x => x.GetByIdAsync(It.IsNotNull<Guid>()), Times.Once);
-        //    _repositoryMock.Verify(x => x.UpdateAsync(It.IsNotNull<VehicleModel>()), Times.Never);
-        //    _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.UpdateAsync)} method...", Times.Once, null);
-        //    _loggerMock.VerifyLog(LogLevel.Error, $"Failed to run {nameof(service.UpdateAsync)} method", Times.Never, null);
-        //}
+            // Assert
+            result.Should().NotBeNull();
+            result.Data.Should().BeNull();
+            result.Succeeded.Should().BeFalse();
+            result.Errors.Count(x => x.Code == 404).Should().Be(1);
+            _repositoryMock.Verify(x => x.GetByIdAsync(It.IsNotNull<Guid>()), Times.Once);
+            _repositoryMock.Verify(x => x.UpdateAsync(It.IsNotNull<VehicleModel>()), Times.Never);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.UpdateAsync)} method...", Times.Once, null);
+            _loggerMock.VerifyLog(LogLevel.Error, $"Failed to run {nameof(service.UpdateAsync)} method", Times.Never, null);
+        }
 
-        //[Fact]
-        //public async Task GivenValidRequestAndRepositoryIsDown_WhenUpdateAsyncIsCalled_ThenThrowException()
-        //{
-        //    // Arrange
-        //    _repositoryMock.Setup(x => x.GetByIdAsync(It.IsNotNull<Guid>())).ReturnsAsync(_request);
-        //    _repositoryMock.Setup(x => x.UpdateAsync(It.IsNotNull<VehicleModel>())).ThrowsAsync(new Exception());
+        [Fact]
+        public async Task GivenValidRequestAndRepositoryIsDown_WhenUpdateAsyncIsCalled_ThenThrowException()
+        {
+            // Arrange
+            _repositoryMock.Setup(x => x.GetByIdAsync(It.IsNotNull<Guid>())).ReturnsAsync(_request);
+            _repositoryMock.Setup(x => x.UpdateAsync(It.IsNotNull<VehicleModel>())).ThrowsAsync(new Exception());
 
-        //    // Act
-        //    var service = new VehicleService(_loggerMock.Object, _repositoryMock.Object, _mapper);
-        //    Func<Task> func = () => service.UpdateAsync(_request);
+            // Act
+            var service = new VehicleService(_loggerMock.Object, _repositoryMock.Object, _mapper);
+            Func<Task> func = () => service.UpdateAsync(_request);
 
-        //    // Assert
-        //    var ex = await Assert.ThrowsAsync<Exception>(func);
-        //    _repositoryMock.Verify(x => x.GetByIdAsync(It.IsNotNull<Guid>()), Times.Once);
-        //    _repositoryMock.Verify(x => x.UpdateAsync(It.IsNotNull<VehicleModel>()), Times.Once);
-        //    _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.UpdateAsync)} method...", Times.Once, null);
-        //    _loggerMock.VerifyLog(LogLevel.Error, $"Failed to run {nameof(service.UpdateAsync)} method", Times.Once, null);
-        //}
-        //#endregion
+            // Assert
+            var ex = await Assert.ThrowsAsync<Exception>(func);
+            _repositoryMock.Verify(x => x.GetByIdAsync(It.IsNotNull<Guid>()), Times.Once);
+            _repositoryMock.Verify(x => x.UpdateAsync(It.IsNotNull<VehicleModel>()), Times.Once);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.UpdateAsync)} method...", Times.Once, null);
+            _loggerMock.VerifyLog(LogLevel.Error, $"Failed to run {nameof(service.UpdateAsync)} method", Times.Once, null);
+        }
+        #endregion
 
         #region RemoveAsync
         [Fact]
