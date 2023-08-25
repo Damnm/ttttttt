@@ -9,7 +9,7 @@ using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Vehicle;
 using Microsoft.Extensions.Logging;
 using System.Linq.Expressions;
 
-namespace EPAY.ETC.Core.API.Infrastructure.Services
+namespace EPAY.ETC.Core.API.Infrastructure.Services.Vehicles
 {
     public class VehicleService : IVehicleService
     {
@@ -21,7 +21,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services
         #endregion
 
         #region Constructor
-        public VehicleService(ILogger<VehicleService> logger, IVehicleRepository vehicleRepository,IMapper mapper)
+        public VehicleService(ILogger<VehicleService> logger, IVehicleRepository vehicleRepository, IMapper mapper)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _repository = vehicleRepository ?? throw new ArgumentNullException(nameof(vehicleRepository));
@@ -44,7 +44,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services
                 }
 
                 input.CreatedDate = DateTime.Now.ConvertToAsianTime(DateTimeKind.Local);
-                
+
 
                 var result = await _repository.AddAsync(input);
 
@@ -88,7 +88,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services
                 var result = await _repository.GetByIdAsync(id);
                 if (result == null)
                 {
-                    return ValidationResult.Failed<Guid>(Guid.Empty, new List<ValidationError>()
+                    return ValidationResult.Failed(Guid.Empty, new List<ValidationError>()
                     {
                         ValidationError.NotFound
                     });
@@ -119,7 +119,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services
                     });
                 }
 
-                 input.CreatedDate = oldRecord.CreatedDate;
+                input.CreatedDate = oldRecord.CreatedDate;
 
                 var entity = _mapper.Map<VehicleModel>(input);
                 await _repository.UpdateAsync(entity);

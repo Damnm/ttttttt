@@ -1,6 +1,8 @@
 ﻿using EPAY.ETC.Core.API.Core.Exceptions;
 using EPAY.ETC.Core.API.Core.Interfaces.Repositories;
 using EPAY.ETC.Core.API.Core.Interfaces.Services;
+using EPAY.ETC.Core.API.Core.Interfaces.Services.OrderBuilder;
+using EPAY.ETC.Core.API.Core.Models.Common;
 using EPAY.ETC.Core.API.Core.Models.Vehicle;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
@@ -14,10 +16,11 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Vehicle
         #region Variables
         private readonly ILogger<VehicleRepository> _logger;
         private readonly CoreDbContext _dbContext;
+        private readonly IVehicleDynamicColumnOrderService<VehicleSearchItemModel> _columnOrderService;
         #endregion
 
         #region Constructor
-        public VehicleRepository(ILogger<VehicleRepository> logger, CoreDbContext dbContext)
+        public VehicleRepository(ILogger<VehicleRepository> logger, CoreDbContext dbContext, IVehicleDynamicColumnOrderService<VehicleSearchItemModel> columnOrderService)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
@@ -69,7 +72,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Vehicle
 
             try
             {
-                var vehicle = await _dbContext.Vehicles.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+                var vehicle =  _dbContext.Vehicles.AsNoTracking().FirstOrDefault(x => x.Id == id);
                 return vehicle;
             }
             catch (Exception ex)
