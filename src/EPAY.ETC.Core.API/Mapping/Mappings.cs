@@ -11,7 +11,7 @@ namespace EPAY.ETC.Core.API.Mapping
         {
           
 
-            CreateMap<VehicleRequestModel, VehicleModel>()
+            CreateMap<VehicleRequestModel, VehicleModel>()               
                 .ForMember(e => e.RFID, act => act.MapFrom(src => src.RFID))
                 .ForMember(e => e.PlateNumber, act => act.MapFrom(src => src.PlateNumber))
                 .ForMember(e => e.PlateColor, act => act.MapFrom(src => src.PlateColor))

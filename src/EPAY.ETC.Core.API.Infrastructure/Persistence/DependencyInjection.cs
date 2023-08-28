@@ -25,7 +25,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence
             services.AddScoped<IVehicleService, VehicleService>();
             services.AddTransient<IVehicleDynamicColumnOrderBuilder<VehicleSearchItemModel>, Services.ColumnOrderBuilder.VehicleSearchItem.ColumnOrderBuilder>();
             services.AddTransient<IVehicleDynamicColumnOrderService<VehicleSearchItemModel>, VehicleColumnOrderService>();
-            //Add Services
+            ////Add Services
             return services;
         }
     }
