@@ -15,11 +15,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EPAY.ETC.Core.API.Core", "E
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EPAY.ETC.Core.API.Infrastructure", "EPAY.ETC.Core.API.Infrastructure\EPAY.ETC.Core.API.Infrastructure.csproj", "{B7367263-E60C-4C80-8188-889B50E462AC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EPAY.ETC.Core.API.Infrastructure.UnitTests", "EPAY.ETC.Core.API.Infrastructure.UnitTests\EPAY.ETC.Core.API.Infrastructure.UnitTests.csproj", "{109483FE-90C8-4CB6-9E3A-CB6FE3A8C636}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EPAY.ETC.Core.API.Infrastructure.UnitTests", "UnitTests\EPAY.ETC.Core.API.Infrastructure.UnitTests\EPAY.ETC.Core.API.Infrastructure.UnitTests.csproj", "{109483FE-90C8-4CB6-9E3A-CB6FE3A8C636}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EPAY.ETC.Core.API.UnitTest", "EPAY.ETC.Core.API.UnitTest\EPAY.ETC.Core.API.UnitTest.csproj", "{B84862D3-1936-43D2-B43D-26CFC8C1E9A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EPAY.ETC.Core.API.UnitTest", "UnitTests\EPAY.ETC.Core.API.UnitTest\EPAY.ETC.Core.API.UnitTest.csproj", "{B84862D3-1936-43D2-B43D-26CFC8C1E9A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPAY.ETC.Core.API.IntegrationTests", "EPAY.ETC.Core.API.IntegrationTests\EPAY.ETC.Core.API.IntegrationTests.csproj", "{DF8A5C44-E733-428A-A7FE-A591812164E1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPAY.ETC.Core.API.IntegrationTests", "IntegrationTests\EPAY.ETC.Core.API.IntegrationTests\EPAY.ETC.Core.API.IntegrationTests.csproj", "{DF8A5C44-E733-428A-A7FE-A591812164E1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
