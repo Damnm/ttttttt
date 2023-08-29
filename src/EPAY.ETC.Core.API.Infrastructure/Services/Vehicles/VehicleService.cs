@@ -105,7 +105,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Vehicles
             }
         }
 
-        public async Task<ValidationResult<VehicleModel>> UpdateAsync(VehicleRequestModel input)
+        public async Task<ValidationResult<VehicleModel>> UpdateAsync(VehicleModel input)
         {
             _logger.LogInformation($"Executing {nameof(UpdateAsync)} method...");
             try

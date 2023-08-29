@@ -42,7 +42,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Controllers
         public async Task GivenValidRequest_WhenApiAddAsyncIsCalled_ThenReturnCorrectResult()
         {
             // Arrange
-
+            HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", JWTToken);
             // Act
             var result = await HttpClient.PostAsJsonAsync($"/api/Vehicle/v1/vehicles", request);
             var content = await result.Content.ReadAsStringAsync();

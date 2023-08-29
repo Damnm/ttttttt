@@ -30,7 +30,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Vehicle
         #region Addsync
         public async Task<VehicleModel> AddAsync(VehicleModel entity)
         {
-            _logger.LogInformation($"Executing EmployeeRepository {nameof(AddAsync)} method...");
+            _logger.LogInformation($"Executing {nameof(AddAsync)} method...");
             try
             {
                 var res = await _dbContext.Vehicles.AddAsync(entity);
@@ -39,7 +39,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Vehicle
             }
             catch (ETCEPAYCoreAPIException ex)
             {
-                _logger.LogError($"An error occurred when calling EmployeeRepository {nameof(AddAsync)} method. Details: {ex.Message}. Stack trace: {ex.StackTrace}");
+                _logger.LogError($"An error occurred when calling {nameof(AddAsync)} method. Details: {ex.Message}. Stack trace: {ex.StackTrace}");
                 throw;
             }
         }

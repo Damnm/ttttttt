@@ -36,18 +36,6 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services
             VehicleType = "Loại 2",
             Weight = 7000,
         };
-        private VehicleRequestModel request = new VehicleRequestModel()
-        {
-            Id = id,
-            CreatedDate = DateTime.Now,
-            PlateNumber = "Some Plate number",
-            PlateColor = "Some Plate colour",
-            RFID = "Some RFID",
-            Make = "Some make",
-            Seat = 10,
-            VehicleType = "Loại 2",
-            Weight = 7000,
-        };
         #endregion
 
         #region AddAsync
@@ -121,7 +109,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services
 
             // Act
             var service = new VehicleService(_loggerMock.Object, _repositoryMock.Object, _mapper);
-            var result = await service.UpdateAsync(request);
+            var result = await service.UpdateAsync(_request);
 
             // Assert
             result.Should().NotBeNull();
@@ -142,7 +130,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services
 
             // Act
             var service = new VehicleService(_loggerMock.Object, _repositoryMock.Object, _mapper);
-            var result = await service.UpdateAsync(request);
+            var result = await service.UpdateAsync(_request);
 
             // Assert
             result.Should().NotBeNull();
@@ -164,7 +152,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services
 
             // Act
             var service = new VehicleService(_loggerMock.Object, _repositoryMock.Object, _mapper);
-            Func<Task> func = () => service.UpdateAsync(request);
+            Func<Task> func = () => service.UpdateAsync(_request);
 
             // Assert
             var ex = await Assert.ThrowsAsync<Exception>(func);

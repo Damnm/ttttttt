@@ -99,13 +99,19 @@ namespace EPAY.ETC.Core.API.Controllers
         #endregion
         #region DeleteVehiclesAsync
         [HttpDelete("v1/vehicles/{vehicleId}")]
-        public async Task<IActionResult> RemoveAsync(Guid vehicleId)
+        public async Task<IActionResult> RemoveAsync(string vehicleId)
         {
             try
             {
                 _logger.LogInformation($"Executing {nameof(RemoveAsync)}...");
 
-                var data = await _vehicleService.RemoveAsync(vehicleId);
+                Guid _vehicleId;
+                if (!Guid.TryParse(vehicleId, out _vehicleId))
+                {
+                    return BadRequest(ValidationResult.Failed<VehicleModel>(null, new List<ValidationError>() { ValidationError.BadRequest }));
+                }
+
+                var data = await _vehicleService.RemoveAsync(_vehicleId);
 
                 if (!data.Succeeded && data.Errors.Any(x => x.Code == StatusCodes.Status404NotFound))
                 {
@@ -128,7 +134,7 @@ namespace EPAY.ETC.Core.API.Controllers
         [HttpPut("v1/vehicles/{vehicleId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> UpdateAsync(string vehicleId, VehicleRequestModel request)
+        public async Task<IActionResult> UpdateAsync(string vehicleId, VehicleModel request)
         {
             try
             {
