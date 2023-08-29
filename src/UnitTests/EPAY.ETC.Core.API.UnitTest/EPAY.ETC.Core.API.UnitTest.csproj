@@ -35,7 +35,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EPAY.ETC.Core.API\EPAY.ETC.Core.API.csproj" />
+    <ProjectReference Include="..\..\EPAY.ETC.Core.API\EPAY.ETC.Core.API.csproj" />
   </ItemGroup>
 
 </Project>
