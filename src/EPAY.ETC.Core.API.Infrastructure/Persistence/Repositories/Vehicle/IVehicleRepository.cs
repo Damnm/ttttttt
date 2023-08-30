@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Vehicle
 {
-    public interface IVehicleRepository : IRepository<VehicleModel, Guid>    
+    public interface IVehicleRepository : IRepository<VehicleModel, Guid>
     {
         
     }

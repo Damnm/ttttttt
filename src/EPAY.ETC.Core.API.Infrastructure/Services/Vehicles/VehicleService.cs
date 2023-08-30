@@ -121,10 +121,10 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Vehicles
 
                 input.CreatedDate = oldRecord.CreatedDate;
 
-                var entity = _mapper.Map<VehicleModel>(input);
-                await _repository.UpdateAsync(entity);
+                
+                await _repository.UpdateAsync(input);
 
-                return ValidationResult.Success(entity);
+                return ValidationResult.Success(input);
             }
             catch (Exception ex)
             {

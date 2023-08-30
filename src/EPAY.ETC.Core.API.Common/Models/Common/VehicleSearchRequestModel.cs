@@ -17,8 +17,13 @@ namespace EPAY.ETC.Core.API.Core.Models.Common
 
     public class VehicleSearchRefinementsModel
     {
-        public string RFID { get; set; }
-        public string PlateNumber { get; set; }
+        public string? RFID { get; set; }
+        public string? PlateNumber { get; set; }
+        public string? PlateColor { get; set; }
+        public string? Make { get; set; }
+        public int? Seat { get; set; }
+        public int? Weight { get; set; }
+        public string? VehicleType { get; set; }
         public DateRangeModel DateRange { get; set; }
     }
 }

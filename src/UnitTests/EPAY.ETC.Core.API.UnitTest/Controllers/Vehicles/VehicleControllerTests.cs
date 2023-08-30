@@ -25,6 +25,16 @@ namespace EPAY.ETC.Core.API.UnitTest.Controllers.Vehicles
     {
         private Mock<IVehicleService> _vehicleServiceMock = new Mock<IVehicleService>();
         private Mock<ILogger<VehicleController>> _loggerMock = new Mock<ILogger<VehicleController>>();
+        private VehicleModel requestMock = new VehicleModel()
+        {
+            PlateNumber = "Some Plate number",
+            PlateColor = "Some Plate colour",
+            RFID = "Some RFID",
+            Make = "Some make",
+            Seat = 10,
+            VehicleType = "Loại 2",
+            Weight = 7000,
+        };
         private ValidationResult<VehicleModel> responseMock = new ValidationResult<VehicleModel>(new VehicleModel()
         {
             Id = new Guid(),
@@ -37,16 +47,6 @@ namespace EPAY.ETC.Core.API.UnitTest.Controllers.Vehicles
             VehicleType = "Loại 2",
             Weight = 7000,
         });
-        private VehicleModel requestMock = new VehicleModel()
-        {
-            PlateNumber = "Some Plate number",
-            PlateColor = "Some Plate colour",
-            RFID = "Some RFID",
-            Make = "Some make",
-            Seat = 10,
-            VehicleType = "Loại 2",
-            Weight = 7000,
-        };
         #region AddAsync
         // Happy case 200/201
         [Fact]
