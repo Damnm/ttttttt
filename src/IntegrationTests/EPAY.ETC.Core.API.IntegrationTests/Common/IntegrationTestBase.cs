@@ -16,7 +16,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Common
     {
         protected WebApplicationFactory<Program> WebApplicationFactory;
         protected HttpClient HttpClient;
-
+        protected string JWTToken;
         public IntegrationTestBase()
         {
             WebApplicationFactory = new WebApplicationFactory<Program>()
