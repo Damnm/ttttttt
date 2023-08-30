@@ -1,13 +1,12 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using EPAY.ETC.Core.API.IntegrationTests.Helpers;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.VisualStudio.TestPlatform.TestHost;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 
 namespace EPAY.ETC.Core.API.IntegrationTests.Common
@@ -31,9 +30,27 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Common
 
                         builder.UseConfiguration(configBuilder);
                     });
+
+                    builder.ConfigureTestServices(services =>
+                    {
+                        services.Configure<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme, options =>
+                        {
+                            options.TokenValidationParameters = new TokenValidationParameters
+                            {
+                                ValidateIssuer = true,
+                                ValidateAudience = true,
+                                ValidateLifetime = true,
+                                ValidateIssuerSigningKey = true,
+                                ValidIssuer = MockJwtTokensHelper.Issuer,
+                                ValidAudience = MockJwtTokensHelper.Audience,
+                                IssuerSigningKey = MockJwtTokensHelper.SecurityKey,
+                            };
+                        });
+                    });
                 });
             HttpClient = WebApplicationFactory.CreateClient();
-           
+            JWTToken = MockJwtTokensHelper.GenerateJwtToken();
+
         }
 
         public void Dispose()
