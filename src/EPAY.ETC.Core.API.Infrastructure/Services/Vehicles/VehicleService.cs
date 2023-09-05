@@ -137,8 +137,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Vehicles
         async Task<bool> CheckExistVehicleInfo(VehicleModel input)
         {
             Expression<Func<VehicleModel, bool>> expression = s =>
-                s.CreatedDate == input.CreatedDate
-                && s.PlateNumber == input.PlateNumber
+                s.PlateNumber == input.PlateNumber
                 && s.PlateColor == input.PlateColor
                 && s.RFID == input.RFID
                 && s.Seat == input.Seat
