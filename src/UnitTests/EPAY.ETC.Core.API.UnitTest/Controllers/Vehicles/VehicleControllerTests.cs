@@ -1,7 +1,6 @@
 ﻿using EPAY.ETC.Core.API.Controllers;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Vehicles;
 using EPAY.ETC.Core.API.Core.Models.Common;
-using EPAY.ETC.Core.API.Core.Models.Vehicle;
 using EPAY.ETC.Core.API.Core.Validation;
 using EPAY.ETC.Core.API.UnitTest.Helpers;
 using FluentAssertions;
@@ -18,6 +17,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
+using EPAY.ETC.Core.API.Core.Models.Vehicle;
 
 namespace EPAY.ETC.Core.API.UnitTest.Controllers.Vehicles
 {

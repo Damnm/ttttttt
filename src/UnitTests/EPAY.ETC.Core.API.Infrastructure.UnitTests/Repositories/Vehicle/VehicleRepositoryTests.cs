@@ -1,6 +1,5 @@
 ﻿using EPAY.ETC.Core.API.Core.Models.Common;
 using EPAY.ETC.Core.API.Core.Models.SearchRequest;
-using EPAY.ETC.Core.API.Core.Models.Vehicle;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Context;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Vehicle;
@@ -18,6 +17,7 @@ using FluentAssertions;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.OrderBuilder;
 using EPAY.ETC.Core.API.Infrastructure.UnitTests.Common;
 using EPAY.ETC.Core.API.Core.Exceptions;
+using EPAY.ETC.Core.API.Core.Models.Vehicle;
 
 namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.Vehicle
 {

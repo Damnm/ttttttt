@@ -1,5 +1,4 @@
 ﻿using EPAY.ETC.Core.API.Core.Interfaces.Services.Vehicles;
-using EPAY.ETC.Core.API.Core.Models.Vehicle;
 using EPAY.ETC.Core.API.IntegrationTests.Common;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
@@ -14,6 +13,7 @@ using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using XUnitPriorityOrderer;
 using FluentAssertions;
+using EPAY.ETC.Core.API.Core.Models.Vehicle;
 
 namespace EPAY.ETC.Core.API.IntegrationTests.Controllers
 {

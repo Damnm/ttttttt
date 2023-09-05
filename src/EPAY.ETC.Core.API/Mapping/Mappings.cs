@@ -10,7 +10,7 @@ namespace EPAY.ETC.Core.API.Mapping
         public Mappings()
         {
             CreateMap<VehicleRequestModel, VehicleModel>()
-                .ForMember(e => e.Id, act => act.MapFrom(src => src.VehicleId))
+                .ForMember(e => e.Id, act => act.MapFrom(src => src.Id))
                 .ReverseMap();
             CreateMap<FusionRequestModel, FusionModel>()
                 .ForMember(e => e.Id, act => act.MapFrom(src => src.ObjectId))

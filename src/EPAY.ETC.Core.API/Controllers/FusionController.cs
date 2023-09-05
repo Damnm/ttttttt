@@ -24,7 +24,7 @@ namespace EPAY.ETC.Core.API.Controllers
             _fusionService = fusionService ?? throw new ArgumentNullException(nameof(fusionService));
         }
         #endregion
-        #region CreateVehicleAsync
+        #region AddAsync
         /// <summary>
         /// Create new employee
         /// </summary>

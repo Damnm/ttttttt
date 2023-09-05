@@ -3,8 +3,8 @@
 namespace EPAY.ETC.Core.API.Core.Models.Vehicle
 {
     public class VehicleModel : BaseEntity<Guid>
-    { 
-        public string? RFID { get; set; }   
+    {
+        public string? RFID { get; set; }
         public string? PlateNumber { get; set; }
         public string? PlateColor { get; set; }
         public string? Make { get; set; }

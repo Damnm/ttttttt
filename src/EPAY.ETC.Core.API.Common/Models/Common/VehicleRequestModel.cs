@@ -10,7 +10,7 @@ namespace EPAY.ETC.Core.API.Core.Models.Common
     public class VehicleRequestModel
     {
         [JsonIgnore]
-        public Guid VehicleId { get; set; }
+        public Guid Id { get; set; }
         [JsonIgnore]
         public DateTime? CreatedDate { get; set; }
         public string? RFID { get; set; }
