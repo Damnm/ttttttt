@@ -1,36 +1,41 @@
 ﻿using EPAY.ETC.Core.API.Core.Exceptions;
-using EPAY.ETC.Core.API.Core.Interfaces.Repositories;
-using EPAY.ETC.Core.API.Core.Interfaces.Services;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.OrderBuilder;
 using EPAY.ETC.Core.API.Core.Models.Common;
-using EPAY.ETC.Core.API.Core.Models.Vehicle;
+using EPAY.ETC.Core.API.Core.Models.Fusion;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Context;
-using Microsoft.EntityFrameworkCore;
+using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Vehicle;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using System.Linq.Dynamic.Core;
 
-namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Vehicle
+namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Fusion
 {
-    public class VehicleRepository : IVehicleRepository
+    public class FusionRepository : IFusionRepository
     {
         #region Variables
-        private readonly ILogger<VehicleRepository> _logger;
+        private readonly ILogger<FusionRepository> _logger;
         private readonly CoreDbContext _dbContext;
         #endregion
         #region Constructor
-        public VehicleRepository(ILogger<VehicleRepository> logger, CoreDbContext dbContext)
+        public FusionRepository(ILogger<FusionRepository> logger, CoreDbContext dbContext)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         }
         #endregion
-        #region Addsync
-        public async Task<VehicleModel> AddAsync(VehicleModel entity)
+        #region AddAsync
+        public async Task<FusionModel> AddAsync(FusionModel entity)
         {
             _logger.LogInformation($"Executing {nameof(AddAsync)} method...");
             try
             {
-                var res = await _dbContext.Vehicles.AddAsync(entity);
+                var res = await _dbContext.Fusions.AddAsync(entity);
                 await _dbContext.SaveChangesAsync();
                 return entity;
             }
@@ -42,17 +47,17 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Vehicle
         }
         #endregion
         #region GetAsync
-        public async Task<IEnumerable<VehicleModel>> GetAllAsync(Expression<Func<VehicleModel, bool>>? expression = null)
+        public async Task<IEnumerable<FusionModel>> GetAllAsync(Expression<Func<FusionModel, bool>>? expression = null)
         {
             _logger.LogInformation($"Executing {nameof(GetAllAsync)} method...");
             try
             {
                 if (expression == null)
                 {
-                    return _dbContext.Vehicles.AsNoTracking();
+                    return _dbContext.Fusions.AsNoTracking();
                 }
 
-                return _dbContext.Vehicles.AsNoTracking().Where(expression);
+                return _dbContext.Fusions.AsNoTracking().Where(expression);
             }
             catch (Exception ex)
             {
@@ -62,14 +67,14 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Vehicle
         }
         #endregion
         #region GetByIdAsync
-        public async Task<VehicleModel?> GetByIdAsync(Guid id)
+        public async Task<FusionModel?> GetByIdAsync(Guid id)
         {
             _logger.LogInformation($"Executing {nameof(GetByIdAsync)} method...");
 
             try
             {
-                var vehicle =  _dbContext.Vehicles.AsNoTracking().FirstOrDefault(x => x.Id == id);
-                return vehicle;
+                var fusion = _dbContext.Fusions.AsNoTracking().FirstOrDefault(x => x.Id == id);
+                return fusion;
             }
             catch (Exception ex)
             {
@@ -79,12 +84,12 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Vehicle
         }
         #endregion
         #region RemoveAsync
-        public async Task RemoveAsync(VehicleModel entity)
+        public async Task RemoveAsync(FusionModel entity)
         {
             _logger.LogInformation($"Executing {nameof(RemoveAsync)} method...");
             try
             {
-                _dbContext.Vehicles.Remove(entity);
+                _dbContext.Fusions.Remove(entity);
                 await _dbContext.SaveChangesAsync();
             }
             catch (Exception ex)
@@ -95,13 +100,13 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Vehicle
         }
         #endregion
         #region UpdateAsync
-        public async Task UpdateAsync(VehicleModel entity)
+        public async Task UpdateAsync(FusionModel entity)
         {
             _logger.LogInformation($"Executing {nameof(UpdateAsync)} method...");
 
             try
             {
-                _dbContext.Vehicles.Update(entity);
+                _dbContext.Fusions.Update(entity);
                 await _dbContext.SaveChangesAsync();
             }
             catch (ETCEPAYCoreAPIException ex)
@@ -111,6 +116,5 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Vehicle
             }
         }
         #endregion
-
     }
 }

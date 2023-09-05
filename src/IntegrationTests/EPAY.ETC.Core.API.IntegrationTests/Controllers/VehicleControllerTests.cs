@@ -27,7 +27,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Controllers
         private static VehicleModel request = new VehicleModel()
         {
             Id = _vehicleId,
-            CreatedDate = DateTime.Now,
+            CreatedDate = DateTime.UtcNow,
             PlateNumber = "Some Plate number",
             PlateColor = "Some Plate colour",
             RFID = "Some RFID",

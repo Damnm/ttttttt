@@ -1,53 +1,47 @@
 ﻿using AutoMapper;
 using EPAY.ETC.Core.API.Core.Extensions;
-using EPAY.ETC.Core.API.Core.Interfaces.Services.Vehicles;
+using EPAY.ETC.Core.API.Core.Interfaces.Services.Fusion;
 using EPAY.ETC.Core.API.Core.Models.Common;
-using EPAY.ETC.Core.API.Core.Models.Enum;
+using EPAY.ETC.Core.API.Core.Models.Fusion;
 using EPAY.ETC.Core.API.Core.Models.Vehicle;
 using EPAY.ETC.Core.API.Core.Validation;
+using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Fusion;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Vehicle;
+using EPAY.ETC.Core.API.Infrastructure.Services.Vehicles;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace EPAY.ETC.Core.API.Infrastructure.Services.Vehicles
+namespace EPAY.ETC.Core.API.Infrastructure.Services.Fusion
 {
-    public class VehicleService : IVehicleService
+    public class FusionService : IFusionService
     {
-
         #region Variables   -
-        private readonly ILogger<VehicleService> _logger;
-        private readonly IVehicleRepository _repository;
+        private readonly ILogger<FusionService> _logger;
+        private readonly IFusionRepository _repository;
         private readonly IMapper _mapper;
         #endregion
-
         #region Constructor
-        public VehicleService(ILogger<VehicleService> logger, IVehicleRepository vehicleRepository, IMapper mapper)
+        public FusionService(ILogger<FusionService> logger, IFusionRepository fusionRepository, IMapper mapper)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _repository = vehicleRepository ?? throw new ArgumentNullException(nameof(vehicleRepository));
+            _repository = fusionRepository ?? throw new ArgumentNullException(nameof(fusionRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
         #endregion
-        public async Task<ValidationResult<VehicleModel>> AddAsync(VehicleModel input)
+        #region AddAsync
+        public async Task<ValidationResult<FusionModel>> AddAsync(FusionRequestModel input)
         {
             _logger.LogInformation($"Executing {nameof(AddAsync)} method...");
             try
             {
-                var existVehicle = await CheckExistVehicleInfo(input);
+                var entity = _mapper.Map<FusionModel>(input);
 
-                if (existVehicle)
-                {
-                    return ValidationResult.Failed<VehicleModel>(new List<ValidationError>()
-                    {
-                        new ValidationError("Dữ liệu đã tồn tại trên hệ thống", ValidationError.Conflict.Code)
-                    });
-                }
-
-                input.CreatedDate = DateTime.Now.ConvertToAsianTime(DateTimeKind.Local);
-
-
-                var result = await _repository.AddAsync(input);
-
+                var result = await _repository.AddAsync(entity);
                 return ValidationResult.Success(result);
             }
             catch (Exception ex)
@@ -56,8 +50,9 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Vehicles
                 throw;
             }
         }
-
-        public async Task<ValidationResult<VehicleModel>> GetByIdAsync(Guid id)
+        #endregion
+        #region GetIdAsync
+        public async Task<ValidationResult<FusionModel>> GetByIdAsync(Guid id)
         {
             _logger.LogInformation($"Executing {nameof(GetByIdAsync)} method...");
             try
@@ -65,7 +60,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Vehicles
                 var result = await _repository.GetByIdAsync(id);
                 if (result == null)
                 {
-                    return ValidationResult.Failed<VehicleModel>(null, new List<ValidationError>()
+                    return ValidationResult.Failed<FusionModel>(null, new List<ValidationError>()
                     {
                         ValidationError.NotFound
                     });
@@ -79,7 +74,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Vehicles
                 throw;
             }
         }
-
+        #endregion
+        #region RemoveAsync
         public async Task<ValidationResult<Guid>> RemoveAsync(Guid id)
         {
             _logger.LogInformation($"Executing {nameof(RemoveAsync)} method...");
@@ -104,8 +100,9 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Vehicles
                 throw;
             }
         }
-
-        public async Task<ValidationResult<VehicleModel>> UpdateAsync(VehicleModel input)
+        #endregion
+        #region UpdateAsync
+        public async Task<ValidationResult<FusionModel>> UpdateAsync(FusionModel input)
         {
             _logger.LogInformation($"Executing {nameof(UpdateAsync)} method...");
             try
@@ -113,7 +110,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Vehicles
                 var oldRecord = await _repository.GetByIdAsync(input.Id);
                 if (oldRecord == null)
                 {
-                    return ValidationResult.Failed<VehicleModel>(null, new List<ValidationError>()
+                    return ValidationResult.Failed<FusionModel>(null, new List<ValidationError>()
                     {
                         ValidationError.NotFound
                     });
@@ -121,7 +118,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Vehicles
 
                 input.CreatedDate = oldRecord.CreatedDate;
 
-                
+
                 await _repository.UpdateAsync(input);
 
                 return ValidationResult.Success(input);
@@ -132,23 +129,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Vehicles
                 throw;
             }
         }
-
-        #region Private method
-        async Task<bool> CheckExistVehicleInfo(VehicleModel input)
-        {
-            Expression<Func<VehicleModel, bool>> expression = s =>
-                s.Id ==input.Id
-                && s.PlateNumber == input.PlateNumber
-                && s.PlateColor == input.PlateColor
-                && s.RFID == input.RFID
-                && s.Seat == input.Seat
-                && s.Make == input.Make
-                && s.Weight == input.Weight;
-
-            var result = await _repository.GetAllAsync(expression);
-
-            return result.Any();
-        }
         #endregion
+        }
     }
-}
+

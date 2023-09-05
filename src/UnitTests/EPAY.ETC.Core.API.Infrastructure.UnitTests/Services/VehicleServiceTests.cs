@@ -48,14 +48,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services
             Weight = 7000,
 
         };
-        private VehicleSearchRequestModel searchRequest = new VehicleSearchRequestModel()
-        {
-            SearchOptions = new Core.Models.SearchRequest.SearchOptionsModel()
-            {
-                Offset = 0,
-                PageSize = 10
-            }
-        };
+       
         #endregion
 
         #region AddAsync

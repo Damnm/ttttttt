@@ -206,7 +206,6 @@ namespace EPAY.ETC.Core.API.UnitTest.Controllers.Vehicles
             var vehicleController = new VehicleController(_loggerMock.Object
                 , _vehicleServiceMock.Object);
             var actualResult = await vehicleController.UpdateAsync(Guid.NewGuid().ToString(), It.IsAny<VehicleModel>());
-            var data = ((ObjectResult)actualResult).Value as ValidationResult<VehicleSearchResponseModel>;
             var actualResultRespone = ((ObjectResult)actualResult).Value as ValidationResult<string>;
 
             // Assert

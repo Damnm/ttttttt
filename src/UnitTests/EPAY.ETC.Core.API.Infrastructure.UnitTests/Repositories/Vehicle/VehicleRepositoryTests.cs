@@ -26,19 +26,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.Vehicle
         #region Init mock data
         private Mock<CoreDbContext> _dbContextMock = new Mock<CoreDbContext>();
         private Mock<ILogger<VehicleRepository>> _loggerMock = new Mock<ILogger<VehicleRepository>>();
-        private Mock<IVehicleDynamicColumnOrderService<VehicleSearchItemModel>> vehicleColumnOrderService = new Mock<IVehicleDynamicColumnOrderService<VehicleSearchItemModel>>();
         private Mock<DbSet<VehicleModel>>? _dbVehicleSetMock;
-        private VehicleSearchRequestModel _request = new VehicleSearchRequestModel()
-        {
-            Refinements = new VehicleSearchRefinementsModel()
-            {
-                PlateNumber = "Some plate number",
-            },
-            SearchOptions = new SearchOptionsModel()
-            {
-                PageSize = 10,
-            }
-        };
         private List<VehicleModel> _vehicles = new List<VehicleModel>()
         {
             new VehicleModel()
@@ -78,7 +66,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.Vehicle
             _dbContextMock.Setup(x => x.Vehicles).Returns(_dbVehicleSetMock.Object);
              
             // Act
-            var vehicleRepository = new VehicleRepository(_loggerMock.Object, _dbContextMock.Object, vehicleColumnOrderService.Object);
+            var vehicleRepository = new VehicleRepository(_loggerMock.Object, _dbContextMock.Object);
             var result = await vehicleRepository.GetByIdAsync(data!.Id);
 
             // Assert
@@ -96,7 +84,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.Vehicle
             _dbContextMock.Setup(x => x.Vehicles).Throws(someEx);
 
             // Act
-            var vehicleRepository = new VehicleRepository(_loggerMock.Object, _dbContextMock.Object, vehicleColumnOrderService.Object);
+            var vehicleRepository = new VehicleRepository(_loggerMock.Object, _dbContextMock.Object);
             Func<Task> func = async () => await vehicleRepository.GetByIdAsync(It.IsNotNull<Guid>());
 
             // Assert
@@ -117,7 +105,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.Vehicle
             _dbContextMock.Setup(x => x.Vehicles).Returns(_dbVehicleSetMock.Object);
 
             // Act
-            var vehicleRepository = new VehicleRepository(_loggerMock.Object, _dbContextMock.Object, vehicleColumnOrderService.Object);
+            var vehicleRepository = new VehicleRepository(_loggerMock.Object, _dbContextMock.Object);
             var result = await vehicleRepository.AddAsync(data!);
 
             // Assert
@@ -135,7 +123,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.Vehicle
             _dbContextMock.Setup(x => x.Vehicles).Throws(someEx);
 
             // Act
-            var vehicleRepository = new VehicleRepository(_loggerMock.Object, _dbContextMock.Object, vehicleColumnOrderService.Object);
+            var vehicleRepository = new VehicleRepository(_loggerMock.Object, _dbContextMock.Object);
             Func<Task> func = async () => await vehicleRepository.AddAsync(It.IsAny<VehicleModel>());
 
             // Assert
@@ -156,7 +144,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.Vehicle
             _dbContextMock.Setup(x => x.Vehicles).Returns(_dbVehicleSetMock.Object);
 
             // Act
-            var vehicleRepository = new VehicleRepository(_loggerMock.Object, _dbContextMock.Object, vehicleColumnOrderService.Object);
+            var vehicleRepository = new VehicleRepository(_loggerMock.Object, _dbContextMock.Object);
             await vehicleRepository.UpdateAsync(data!);
 
             // Assert
@@ -173,7 +161,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.Vehicle
             _dbContextMock.Setup(x => x.Vehicles).Throws(someEx);
 
             // Act
-            var vehicleRepository = new VehicleRepository(_loggerMock.Object, _dbContextMock.Object, vehicleColumnOrderService.Object);
+            var vehicleRepository = new VehicleRepository(_loggerMock.Object, _dbContextMock.Object);
             Func<Task> func = async () => await vehicleRepository.UpdateAsync(It.IsAny<VehicleModel>());
 
             // Assert
@@ -194,7 +182,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.Vehicle
             _dbContextMock.Setup(x => x.Vehicles).Returns(_dbVehicleSetMock.Object);
 
             // Act
-            var vehicleRepository = new VehicleRepository(_loggerMock.Object, _dbContextMock.Object, vehicleColumnOrderService.Object);
+            var vehicleRepository = new VehicleRepository(_loggerMock.Object, _dbContextMock.Object);
             await vehicleRepository.RemoveAsync(data!);
 
             // Assert
@@ -211,7 +199,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.Vehicle
             _dbContextMock.Setup(x => x.Vehicles).Throws(someEx);
 
             // Act
-            var vehicleRepository = new VehicleRepository(_loggerMock.Object, _dbContextMock.Object, vehicleColumnOrderService.Object);
+            var vehicleRepository = new VehicleRepository(_loggerMock.Object, _dbContextMock.Object);
             Func<Task> func = async () => await vehicleRepository.RemoveAsync(It.IsAny<VehicleModel>());
 
             // Assert
