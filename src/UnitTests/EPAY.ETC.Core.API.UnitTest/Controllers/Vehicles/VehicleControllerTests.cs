@@ -66,13 +66,13 @@ namespace EPAY.ETC.Core.API.UnitTest.Controllers.Vehicles
         public async Task GivenValidRequest_WhenApiAddAsyncIsCalled_ThenReturnCorrectResult()
         {
             // Arrange
-            _vehicleServiceMock.Setup(x => x.AddAsync(It.IsAny<VehicleModel>())).ReturnsAsync(responseMock);
+            _vehicleServiceMock.Setup(x => x.AddAsync(It.IsAny<VehicleRequestModel>())).ReturnsAsync(responseMock);
             var request = new VehicleModel();
 
             // Act
             var vehicleController = new VehicleController(_loggerMock.Object
                 , _vehicleServiceMock.Object);
-            var actualResult = await vehicleController.AddAsync(request);
+            var actualResult = await vehicleController.AddAsync(It.IsAny<VehicleRequestModel>());
             var data = ((ObjectResult)actualResult).Value as ValidationResult<VehicleModel>;
 
             // Assert
@@ -92,17 +92,17 @@ namespace EPAY.ETC.Core.API.UnitTest.Controllers.Vehicles
             {
                 ValidationError.Conflict
             });
-            _vehicleServiceMock.Setup(x => x.AddAsync(It.IsAny<VehicleModel>())).ReturnsAsync(responseMock);
+            _vehicleServiceMock.Setup(x => x.AddAsync(It.IsAny<VehicleRequestModel>())).ReturnsAsync(responseMock);
             var request = new VehicleModel();
 
             // Act
             var vehicleController = new VehicleController(_loggerMock.Object
                 , _vehicleServiceMock.Object);
-            var actualResult = await vehicleController.AddAsync(request);
+            var actualResult = await vehicleController.AddAsync(It.IsAny<VehicleRequestModel>());
             var data = actualResult as ConflictObjectResult;
             var actualResultRespone = data!.Value as ValidationResult<VehicleModel>;
             // Assert
-            _vehicleServiceMock.Verify(x => x.AddAsync(It.IsAny<VehicleModel>()), Times.Once);
+            _vehicleServiceMock.Verify(x => x.AddAsync(It.IsAny<VehicleRequestModel>()), Times.Once);
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleController.AddAsync)}...", Times.Once, null);
             _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleController.AddAsync)} method", Times.Never, null);
             ((ObjectResult)actualResult).StatusCode.Should().Be(StatusCodes.Status409Conflict);
@@ -116,12 +116,12 @@ namespace EPAY.ETC.Core.API.UnitTest.Controllers.Vehicles
         {
             // Arrange
             var someEx = new Exception("An error occurred when calling AddAsync method");
-            _vehicleServiceMock.Setup(x => x.AddAsync(It.IsAny<VehicleModel>())).ThrowsAsync(someEx);
+            _vehicleServiceMock.Setup(x => x.AddAsync(It.IsAny<VehicleRequestModel>())).ThrowsAsync(someEx);
 
             // Act
             var vehicleController = new VehicleController(_loggerMock.Object
                 , _vehicleServiceMock.Object);
-            var actualResult = await vehicleController.AddAsync(It.IsAny<VehicleModel>());
+            var actualResult = await vehicleController.AddAsync(It.IsAny<VehicleRequestModel>());
             var actualResultRespone = ((ObjectResult)actualResult).Value as ValidationResult<string>;
 
             // Assert
@@ -138,12 +138,12 @@ namespace EPAY.ETC.Core.API.UnitTest.Controllers.Vehicles
         public async Task GivenValidRequest_WhenUpdateAsyncIsCalled_ThenReturnCorrectResult()
         {
             // Arrange
-            _vehicleServiceMock.Setup(x => x.UpdateAsync(It.IsAny<VehicleModel>())).ReturnsAsync(responseMock);
+            _vehicleServiceMock.Setup(x => x.UpdateAsync(It.IsAny<Guid>(), It.IsAny<VehicleRequestModel>())).ReturnsAsync(responseMock);
 
             // Act
             var vehicleController = new VehicleController(_loggerMock.Object
                 , _vehicleServiceMock.Object);
-            var actualResult = await vehicleController.UpdateAsync(Guid.NewGuid().ToString(), new VehicleModel());
+            var actualResult = await vehicleController.UpdateAsync(It.IsAny<Guid>(), It.IsAny<VehicleRequestModel>());
             var data = ((OkObjectResult)actualResult).Value as ValidationResult<VehicleModel>;
             // Assert
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleController.UpdateAsync)}...", Times.Once, null);
@@ -173,17 +173,17 @@ namespace EPAY.ETC.Core.API.UnitTest.Controllers.Vehicles
             {
                 ValidationError.NotFound
             });
-            _vehicleServiceMock.Setup(x => x.UpdateAsync(It.IsAny<VehicleModel>())).ReturnsAsync(responseMock);
+            _vehicleServiceMock.Setup(x => x.UpdateAsync(It.IsAny<Guid>(), It.IsAny<VehicleRequestModel>())).ReturnsAsync(responseMock);
 
             // Act
             var vehicleController = new VehicleController(_loggerMock.Object
                 , _vehicleServiceMock.Object);
-            var actualResult = await vehicleController.UpdateAsync(Guid.NewGuid().ToString(), new VehicleModel());
+            var actualResult = await vehicleController.UpdateAsync(It.IsAny<Guid>(), It.IsAny<VehicleRequestModel>());
             var data = actualResult as NotFoundObjectResult;
             var actualResultRespone = data!.Value as ValidationResult<VehicleModel>;
 
             // Assert
-            _vehicleServiceMock.Verify(x => x.UpdateAsync(It.IsAny<VehicleModel>()), Times.Once);
+            _vehicleServiceMock.Verify(x => x.UpdateAsync(It.IsAny<Guid>(), It.IsAny<VehicleRequestModel>()), Times.Once);
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleController.UpdateAsync)}...", Times.Once, null);
             _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleController.UpdateAsync)} method", Times.Never, null);
             ((ObjectResult)actualResult).StatusCode.Should().Be(StatusCodes.Status404NotFound);
@@ -200,12 +200,12 @@ namespace EPAY.ETC.Core.API.UnitTest.Controllers.Vehicles
                 Id = Guid.NewGuid()
             };
             var someEx = new Exception("An error occurred when calling UpdateAsync method");
-            _vehicleServiceMock.Setup(x => x.UpdateAsync(It.IsAny<VehicleModel>())).ThrowsAsync(someEx);
+            _vehicleServiceMock.Setup(x => x.UpdateAsync(Guid.NewGuid(), new VehicleRequestModel())).ThrowsAsync(someEx);
 
             // Act
             var vehicleController = new VehicleController(_loggerMock.Object
                 , _vehicleServiceMock.Object);
-            var actualResult = await vehicleController.UpdateAsync(Guid.NewGuid().ToString(), It.IsAny<VehicleModel>());
+            var actualResult = await vehicleController.UpdateAsync(Guid.NewGuid(), It.IsAny<VehicleRequestModel>());
             var actualResultRespone = ((ObjectResult)actualResult).Value as ValidationResult<string>;
 
             // Assert

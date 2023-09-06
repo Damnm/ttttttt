@@ -24,7 +24,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services
         private readonly Mock<ILogger<VehicleService>> _loggerMock = new();
         private readonly Mock<IVehicleRepository> _repositoryMock = new();
         private static Guid id = Guid.NewGuid();
-        private VehicleModel _request = new VehicleModel()
+        private VehicleModel vehicle = new VehicleModel()
         {
             Id = id,
             CreatedDate = DateTime.Now,
@@ -56,11 +56,11 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services
         public async Task GivenValidRequest_WhenAddAsyncIsCalled_ThenReturnCorrectResult()
         {
             // Arrange
-            _repositoryMock.Setup(x => x.AddAsync(It.IsNotNull<VehicleModel>())).ReturnsAsync(_request);
+            _repositoryMock.Setup(x => x.AddAsync(It.IsNotNull<VehicleModel>())).ReturnsAsync(vehicle);
 
             // Act
             var service = new VehicleService(_loggerMock.Object, _repositoryMock.Object, _mapper);
-            var result = await service.AddAsync(_request);
+            var result = await service.AddAsync(request);
 
             // Assert
             result.Should().NotBeNull();
@@ -75,12 +75,11 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services
         public async Task GivenValidRequestAndExistingVehicle_WhenAddAsyncIsCalled_ThenReturnConflict()
         {
             // Arrange
-            _repositoryMock.Setup(x => x.GetAllAsync(It.IsAny<Expression<Func<VehicleModel, bool>>>())).ReturnsAsync(new List<VehicleModel>() { new VehicleModel() });
-            _repositoryMock.Setup(x => x.AddAsync(It.IsNotNull<VehicleModel>())).ReturnsAsync(_request);
+            _repositoryMock.Setup(x => x.AddAsync(It.IsNotNull<VehicleModel>())).ReturnsAsync(vehicle);
 
             // Act
             var service = new VehicleService(_loggerMock.Object, _repositoryMock.Object, _mapper);
-            var result = await service.AddAsync(_request);
+            var result = await service.AddAsync(request);
 
             // Assert
             result.Should().NotBeNull();
@@ -101,7 +100,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services
 
             // Act
             var service = new VehicleService(_loggerMock.Object, _repositoryMock.Object, _mapper);
-            Func<Task> func = () => service.AddAsync(_request);
+            Func<Task> func = () => service.AddAsync(request);
 
             // Assert
             var ex = await Assert.ThrowsAsync<Exception>(func);
@@ -117,12 +116,12 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services
         {
             // Arrange
             Object callbackObject;
-            _repositoryMock.Setup(x => x.GetByIdAsync(It.IsNotNull<Guid>())).ReturnsAsync(_request);
+            _repositoryMock.Setup(x => x.GetByIdAsync(It.IsNotNull<Guid>())).ReturnsAsync(vehicle);
             _repositoryMock.Setup(x => x.UpdateAsync(It.IsNotNull<VehicleModel>())).Callback<object>(k => callbackObject = k);
 
             // Act
             var service = new VehicleService(_loggerMock.Object, _repositoryMock.Object, _mapper);
-            var result = await service.UpdateAsync(_request);
+            var result = await service.UpdateAsync(id,request);
 
             // Assert
             result.Should().NotBeNull();
@@ -138,12 +137,12 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services
         {
             // Arrange
             Object callbackObject;
-            _repositoryMock.Setup(x => x.GetByIdAsync(It.IsNotNull<Guid>())).ReturnsAsync((VehicleModel)null);
+            _repositoryMock.Setup(x => x.GetByIdAsync(It.IsNotNull<Guid>())).ReturnsAsync(vehicle= null);
             _repositoryMock.Setup(x => x.UpdateAsync(It.IsNotNull<VehicleModel>())).Callback<object>(k => callbackObject = k);
 
             // Act
             var service = new VehicleService(_loggerMock.Object, _repositoryMock.Object, _mapper);
-            var result = await service.UpdateAsync(_request);
+            var result = await service.UpdateAsync(id, request);
 
             // Assert
             result.Should().NotBeNull();
@@ -182,7 +181,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services
         {
             // Arrange
             Object callbackObject;
-            _repositoryMock.Setup(x => x.GetByIdAsync(It.IsNotNull<Guid>())).ReturnsAsync(_request);
+            _repositoryMock.Setup(x => x.GetByIdAsync(It.IsNotNull<Guid>())).ReturnsAsync(vehicle);
             _repositoryMock.Setup(x => x.RemoveAsync(It.IsNotNull<VehicleModel>())).Callback<object>(k => callbackObject = k);
 
             // Act
@@ -200,10 +199,10 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services
         }
 
         [Fact]
-        public async Task GivenValidRequestAndNonExistingSettingGuid_WhenRemoveAsyncIsCalled_ThenReturnNotFound()
+        public async Task GivenValidRequestAndNonExistingGuid_WhenRemoveAsyncIsCalled_ThenReturnNotFound()
         {
             // Arrange
-            _repositoryMock.Setup(x => x.GetByIdAsync(It.IsNotNull<Guid>())).ReturnsAsync((VehicleModel)null);
+            _repositoryMock.Setup(x => x.GetByIdAsync(It.IsNotNull<Guid>())).ReturnsAsync(vehicle = null);
 
             // Act
             var service = new VehicleService(_loggerMock.Object, _repositoryMock.Object, _mapper);
@@ -244,7 +243,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services
         public async Task GivenValidRequest_WhenGetByIdAsyncIsCalled_ThenReturnCorrectResult()
         {
             // Arrange
-            _repositoryMock.Setup(x => x.GetByIdAsync(It.IsNotNull<Guid>())).ReturnsAsync(_request);
+            _repositoryMock.Setup(x => x.GetByIdAsync(It.IsNotNull<Guid>())).ReturnsAsync(vehicle);
 
             // Act
             var service = new VehicleService(_loggerMock.Object, _repositoryMock.Object, _mapper);
