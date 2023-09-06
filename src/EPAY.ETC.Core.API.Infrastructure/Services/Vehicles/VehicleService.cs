@@ -3,6 +3,7 @@ using EPAY.ETC.Core.API.Core.Extensions;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Vehicles;
 using EPAY.ETC.Core.API.Core.Models.Common;
 using EPAY.ETC.Core.API.Core.Models.Enum;
+using EPAY.ETC.Core.API.Core.Models.Fusion;
 using EPAY.ETC.Core.API.Core.Models.Vehicle;
 using EPAY.ETC.Core.API.Core.Validation;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Vehicle;
@@ -28,7 +29,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Vehicles
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
         #endregion
-        public async Task<ValidationResult<VehicleModel>> AddAsync(VehicleModel input)
+        public async Task<ValidationResult<VehicleModel>> AddAsync(VehicleRequestModel input)
         {
             _logger.LogInformation($"Executing {nameof(AddAsync)} method...");
             try
@@ -42,12 +43,9 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Vehicles
                         new ValidationError("Dữ liệu đã tồn tại trên hệ thống", ValidationError.Conflict.Code)
                     });
                 }
-
-                input.CreatedDate = DateTime.Now.ConvertToAsianTime(DateTimeKind.Local);
-
-
-                var result = await _repository.AddAsync(input);
-
+                var entity = _mapper.Map<VehicleModel>(input);
+                //input.CreatedDate = DateTime.Now.ConvertToAsianTime(DateTimeKind.Local);
+                var result = await _repository.AddAsync(entity);
                 return ValidationResult.Success(result);
             }
             catch (Exception ex)
@@ -105,12 +103,12 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Vehicles
             }
         }
 
-        public async Task<ValidationResult<VehicleModel>> UpdateAsync(VehicleModel input)
+        public async Task<ValidationResult<VehicleModel>> UpdateAsync(Guid id,VehicleRequestModel input)
         {
             _logger.LogInformation($"Executing {nameof(UpdateAsync)} method...");
             try
             {
-                var oldRecord = await _repository.GetByIdAsync(input.Id);
+                var oldRecord = await _repository.GetByIdAsync(id);
                 if (oldRecord == null)
                 {
                     return ValidationResult.Failed<VehicleModel>(null, new List<ValidationError>()
@@ -118,13 +116,25 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Vehicles
                         ValidationError.NotFound
                     });
                 }
+                if (oldRecord.Id != id)
+                {
+                    return ValidationResult.Failed<VehicleModel>(new List<ValidationError>()
+                    {
+                        new ValidationError("Giá trị đã có trên hệ thống", ValidationError.Conflict.Code)
+                    });
+                }
+                oldRecord.Id = input.Id;
+                oldRecord.CreatedDate = input.CreatedDate;
+                oldRecord.RFID = input.RFID;
+                oldRecord.PlateNumber = input.PlateNumber;
+                oldRecord.PlateColor = input.PlateColor;
+                oldRecord.Make = input.Make;
+                oldRecord.Seat = input.Seat;
+                oldRecord.Weight = input.Weight;
+                oldRecord.VehicleType = input.VehicleType;
 
-                input.CreatedDate = oldRecord.CreatedDate;
-
-                
-                await _repository.UpdateAsync(input);
-
-                return ValidationResult.Success(input);
+                await _repository.UpdateAsync(oldRecord);
+                return ValidationResult.Success(oldRecord);
             }
             catch (Exception ex)
             {
@@ -134,16 +144,11 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Vehicles
         }
 
         #region Private method
-        async Task<bool> CheckExistVehicleInfo(VehicleModel input)
+        async Task<bool> CheckExistVehicleInfo(VehicleRequestModel input)
         {
             Expression<Func<VehicleModel, bool>> expression = s =>
-                s.Id ==input.Id
-                && s.PlateNumber == input.PlateNumber
-                && s.PlateColor == input.PlateColor
-                && s.RFID == input.RFID
-                && s.Seat == input.Seat
-                && s.Make == input.Make
-                && s.Weight == input.Weight;
+                s.Id == input.Id;
+                
 
             var result = await _repository.GetAllAsync(expression);
 

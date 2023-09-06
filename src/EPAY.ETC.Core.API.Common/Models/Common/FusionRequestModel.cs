@@ -5,6 +5,7 @@ namespace EPAY.ETC.Core.API.Core.Models.Common
 {
     public class FusionRequestModel
     {
+        [JsonIgnore]
         public Guid ObjectId { get; set; }
         public float Epoch { get; set; }
         public bool Loop1 { get; set; }

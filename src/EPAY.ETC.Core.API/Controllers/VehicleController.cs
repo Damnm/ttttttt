@@ -6,6 +6,7 @@ using EPAY.ETC.Core.API.Core.Validation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Nest;
+using System;
 
 namespace EPAY.ETC.Core.API.Controllers
 {
@@ -38,7 +39,7 @@ namespace EPAY.ETC.Core.API.Controllers
         [HttpPost("v1/vehicles")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> AddAsync(VehicleModel request)
+        public async Task<IActionResult> AddAsync(VehicleRequestModel request)
         {
             try
             {
@@ -134,32 +135,20 @@ namespace EPAY.ETC.Core.API.Controllers
         [HttpPut("v1/vehicles/{vehicleId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> UpdateAsync(string vehicleId, VehicleModel request)
+        public async Task<IActionResult> UpdateAsync(Guid vehicleId, VehicleRequestModel request)
         {
             try
             {
                 _logger.LogInformation($"Executing {nameof(UpdateAsync)}...");
-               
 
-                Guid _vehicleId;
-                if (!Guid.TryParse(vehicleId, out _vehicleId))
-                {
-                    return BadRequest(ValidationResult.Failed<VehicleModel>(null, new List<ValidationError>() { ValidationError.BadRequest }));
-                }
 
-                request.Id = _vehicleId;
-                var data = await _vehicleService.UpdateAsync(request);
+                var data = await _vehicleService.UpdateAsync(vehicleId, request);
 
                 if (!data.Succeeded)
                 {
                     if (data.Errors.Any(x => x.Code == StatusCodes.Status404NotFound))
                     {
                         return NotFound(data);
-                    }
-
-                    if (data.Errors.Any(x => x.Code == StatusCodes.Status409Conflict))
-                    {
-                        return Conflict(data);
                     }
                 }
 
@@ -172,7 +161,7 @@ namespace EPAY.ETC.Core.API.Controllers
                 _logger.LogError(errorMessage);
                 validationErrors.Add(ValidationError.InternalServerError);
                 return StatusCode(StatusCodes.Status500InternalServerError, ValidationResult.Failed(errorMessage, validationErrors));
-            }            
+            }
         }
         #endregion
     }
