@@ -39,6 +39,14 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fusion
             _logger.LogInformation($"Executing {nameof(AddAsync)} method...");
             try
             {
+                var existingRecords = await GetExistingRecordAsync(input);
+                if (existingRecords)
+                {
+                    return ValidationResult.Failed<FusionModel>(new List<ValidationError>()
+                    {
+                        new ValidationError("Gía trị đã có trên hệ thống", ValidationError.Conflict.Code)
+                    });
+                }
                 var entity = _mapper.Map<FusionModel>(input);
 
                 var result = await _repository.AddAsync(entity);
@@ -102,12 +110,12 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fusion
         }
         #endregion
         #region UpdateAsync
-        public async Task<ValidationResult<FusionModel>> UpdateAsync(FusionModel input)
+        public async Task<ValidationResult<FusionModel>> UpdateAsync(Guid id,FusionRequestModel request)
         {
             _logger.LogInformation($"Executing {nameof(UpdateAsync)} method...");
             try
             {
-                var oldRecord = await _repository.GetByIdAsync(input.Id);
+                var oldRecord = await _repository.GetByIdAsync(id);
                 if (oldRecord == null)
                 {
                     return ValidationResult.Failed<FusionModel>(null, new List<ValidationError>()
@@ -115,13 +123,26 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fusion
                         ValidationError.NotFound
                     });
                 }
+                if (oldRecord.Id != id)
+                {
+                    return ValidationResult.Failed<FusionModel>(new List<ValidationError>()
+                    {
+                        new ValidationError("Giá trị đã có trên hệ thống", ValidationError.Conflict.Code)
+                    });
+                }
+                oldRecord.Id = request.ObjectId;
+                oldRecord.Epoch= request.Epoch;
+                oldRecord.Loop1= request.Loop1;
+                oldRecord.RFID= request.RFID;
+                oldRecord.Cam1 = request.Cam1;
+                oldRecord.Loop2 = request.Loop2;
+                oldRecord.Cam2 = request.Cam2;
+                oldRecord.Loop3 = request.Loop3;
+                oldRecord.ReversedLoop1 = request.ReversedLoop1;
+                oldRecord.ReversedLoop2 = request.ReversedLoop2;
 
-                input.CreatedDate = oldRecord.CreatedDate;
-
-
-                await _repository.UpdateAsync(input);
-
-                return ValidationResult.Success(input);
+                await _repository.UpdateAsync(oldRecord);
+                return ValidationResult.Success(oldRecord);
             }
             catch (Exception ex)
             {
@@ -130,6 +151,17 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fusion
             }
         }
         #endregion
+        #region Private method
+        async Task<bool> GetExistingRecordAsync(FusionRequestModel input, string? id = null)
+        {
+            Expression<Func<FusionModel, bool>> expression = s =>
+                s.Id == input.ObjectId;
+
+            var result = await _repository.GetAllAsync(expression);
+
+            return result.Any(x => !x.Id.ToString().Equals(id));
         }
+        #endregion
     }
+}
 

@@ -62,5 +62,99 @@ namespace EPAY.ETC.Core.API.Controllers
             }
         }
         #endregion
+        #region GetByIdAsync
+        [HttpGet("v1/fusions/{objectId}")]
+        public async Task<IActionResult> GetByIdAsync(string objectId)
+        {
+            try
+            {
+                _logger.LogInformation($"Executing {nameof(GetByIdAsync)}...");
+
+                Guid _objectId;
+                if (!Guid.TryParse(objectId, out _objectId))
+                {
+                    return BadRequest(ValidationResult.Failed<FusionModel>(null, new List<ValidationError>() { ValidationError.BadRequest }));
+                }
+
+                var result = await _fusionService.GetByIdAsync(_objectId);
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                List<ValidationError> validationErrors = new();
+                string errorMessage = $"An error occurred when calling {nameof(GetByIdAsync)} method: {ex.Message}. InnerException : {ApiExceptionMessages.ExceptionMessages(ex)}. Stack trace: {ex.StackTrace}";
+                _logger.LogError(errorMessage);
+                validationErrors.Add(ValidationError.InternalServerError);
+                return StatusCode(StatusCodes.Status500InternalServerError, ValidationResult.Failed(errorMessage, validationErrors));
+            }
+        }
+        #endregion
+        #region RemoveAsync
+        [HttpDelete("v1/fusions/{objectId}")]
+        public async Task<IActionResult> RemoveAsync(string objectId)
+        {
+            try
+            {
+                _logger.LogInformation($"Executing {nameof(RemoveAsync)}...");
+
+                Guid _objectId;
+                if (!Guid.TryParse(objectId, out _objectId))
+                {
+                    return BadRequest(ValidationResult.Failed<FusionModel>(null, new List<ValidationError>() { ValidationError.BadRequest }));
+                }
+
+                var data = await _fusionService.RemoveAsync(_objectId);
+
+                if (!data.Succeeded && data.Errors.Any(x => x.Code == StatusCodes.Status404NotFound))
+                {
+                    return NotFound(data);
+                }
+
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                List<ValidationError> validationErrors = new();
+                string errorMessage = $"An error occurred when calling {nameof(RemoveAsync)} method: {ex.Message}. InnerException : {ApiExceptionMessages.ExceptionMessages(ex)}. Stack trace: {ex.StackTrace}";
+                _logger.LogError(errorMessage);
+                validationErrors.Add(ValidationError.InternalServerError);
+                return StatusCode(StatusCodes.Status500InternalServerError, ValidationResult.Failed(errorMessage, validationErrors));
+            }
+        }
+        #endregion
+        #region UpdateAsync
+        [HttpPut("v1/fusions/{objectId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> UpdateAsync(Guid objectId, [FromBody]FusionRequestModel request)
+        {
+            try
+            {
+                _logger.LogInformation($"Executing {nameof(UpdateAsync)}...");
+                
+
+                var data = await _fusionService.UpdateAsync(objectId, request);
+
+                if (!data.Succeeded)
+                {
+                    if (data.Errors.Any(x => x.Code == StatusCodes.Status404NotFound))
+                    {
+                        return NotFound(data);
+                    }
+                }
+
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                List<ValidationError> validationErrors = new();
+                string errorMessage = $"An error occurred when calling {nameof(UpdateAsync)} method: {ex.Message}. InnerException : {ApiExceptionMessages.ExceptionMessages(ex)}. Stack trace: {ex.StackTrace}";
+                _logger.LogError(errorMessage);
+                validationErrors.Add(ValidationError.InternalServerError);
+                return StatusCode(StatusCodes.Status500InternalServerError, ValidationResult.Failed(errorMessage, validationErrors));
+            }
+        }
+        #endregion
     }
 }
