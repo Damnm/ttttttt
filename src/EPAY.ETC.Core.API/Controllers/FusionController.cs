@@ -64,19 +64,12 @@ namespace EPAY.ETC.Core.API.Controllers
         #endregion
         #region GetByIdAsync
         [HttpGet("v1/fusions/{objectId}")]
-        public async Task<IActionResult> GetByIdAsync(string objectId)
+        public async Task<IActionResult> GetByIdAsync(Guid objectId)
         {
             try
             {
                 _logger.LogInformation($"Executing {nameof(GetByIdAsync)}...");
-
-                Guid _objectId;
-                if (!Guid.TryParse(objectId, out _objectId))
-                {
-                    return BadRequest(ValidationResult.Failed<FusionModel>(null, new List<ValidationError>() { ValidationError.BadRequest }));
-                }
-
-                var result = await _fusionService.GetByIdAsync(_objectId);
+                var result = await _fusionService.GetByIdAsync(objectId);
 
                 return Ok(result);
             }
@@ -92,19 +85,15 @@ namespace EPAY.ETC.Core.API.Controllers
         #endregion
         #region RemoveAsync
         [HttpDelete("v1/fusions/{objectId}")]
-        public async Task<IActionResult> RemoveAsync(string objectId)
+        public async Task<IActionResult> RemoveAsync(Guid objectId)
         {
             try
             {
                 _logger.LogInformation($"Executing {nameof(RemoveAsync)}...");
 
-                Guid _objectId;
-                if (!Guid.TryParse(objectId, out _objectId))
-                {
-                    return BadRequest(ValidationResult.Failed<FusionModel>(null, new List<ValidationError>() { ValidationError.BadRequest }));
-                }
 
-                var data = await _fusionService.RemoveAsync(_objectId);
+                _logger.LogInformation($"Executing {nameof(RemoveAsync)}...");
+                var data = await _fusionService.RemoveAsync(objectId);
 
                 if (!data.Succeeded && data.Errors.Any(x => x.Code == StatusCodes.Status404NotFound))
                 {

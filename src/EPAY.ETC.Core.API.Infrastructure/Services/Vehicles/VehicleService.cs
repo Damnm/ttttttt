@@ -78,7 +78,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Vehicles
             }
         }
 
-        public async Task<ValidationResult<Guid>> RemoveAsync(Guid id)
+        public async Task<ValidationResult<VehicleModel>> RemoveAsync(Guid id)
         {
             _logger.LogInformation($"Executing {nameof(RemoveAsync)} method...");
             try
@@ -86,15 +86,14 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Vehicles
                 var result = await _repository.GetByIdAsync(id);
                 if (result == null)
                 {
-                    return ValidationResult.Failed(Guid.Empty, new List<ValidationError>()
+                    return ValidationResult.Failed<VehicleModel>(null, new List<ValidationError>()
                     {
                         ValidationError.NotFound
                     });
                 }
 
                 await _repository.RemoveAsync(result);
-
-                return ValidationResult.Success(id);
+                return ValidationResult.Success(result = null);
             }
             catch (Exception ex)
             {
@@ -123,8 +122,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Vehicles
                         new ValidationError("Giá trị đã có trên hệ thống", ValidationError.Conflict.Code)
                     });
                 }
-                oldRecord.Id = input.Id;
-                oldRecord.CreatedDate = input.CreatedDate;
+                //oldRecord.Id = input.Id;
+                //oldRecord.CreatedDate = input.CreatedDate;
                 oldRecord.RFID = input.RFID;
                 oldRecord.PlateNumber = input.PlateNumber;
                 oldRecord.PlateColor = input.PlateColor;

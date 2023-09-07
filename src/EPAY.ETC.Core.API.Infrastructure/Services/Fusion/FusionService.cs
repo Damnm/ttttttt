@@ -84,7 +84,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fusion
         }
         #endregion
         #region RemoveAsync
-        public async Task<ValidationResult<Guid>> RemoveAsync(Guid id)
+        public async Task<ValidationResult<FusionModel>> RemoveAsync(Guid id)
         {
             _logger.LogInformation($"Executing {nameof(RemoveAsync)} method...");
             try
@@ -92,7 +92,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fusion
                 var result = await _repository.GetByIdAsync(id);
                 if (result == null)
                 {
-                    return ValidationResult.Failed(Guid.Empty, new List<ValidationError>()
+                    return ValidationResult.Failed<FusionModel>(null, new List<ValidationError>()
                     {
                         ValidationError.NotFound
                     });
@@ -100,7 +100,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fusion
 
                 await _repository.RemoveAsync(result);
 
-                return ValidationResult.Success(id);
+                return ValidationResult.Success(result=null);
             }
             catch (Exception ex)
             {
@@ -130,7 +130,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fusion
                         new ValidationError("Giá trị đã có trên hệ thống", ValidationError.Conflict.Code)
                     });
                 }
-                oldRecord.Id = request.ObjectId;
+                //oldRecord.Id = request.ObjectId;
                 oldRecord.Epoch= request.Epoch;
                 oldRecord.Loop1= request.Loop1;
                 oldRecord.RFID= request.RFID;

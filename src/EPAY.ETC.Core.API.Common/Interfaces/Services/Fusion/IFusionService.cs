@@ -15,6 +15,6 @@ namespace EPAY.ETC.Core.API.Core.Interfaces.Services.Fusion
         public Task<ValidationResult<FusionModel>> AddAsync(FusionRequestModel input);
         public Task<ValidationResult<FusionModel>> GetByIdAsync(Guid id);
         public Task<ValidationResult<FusionModel>> UpdateAsync(Guid id,FusionRequestModel request);
-        public Task<ValidationResult<Guid>> RemoveAsync(Guid id);
+        public Task<ValidationResult<FusionModel>> RemoveAsync(Guid id);
     }
 }

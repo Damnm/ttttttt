@@ -222,15 +222,14 @@ namespace EPAY.ETC.Core.API.UnitTest.Controllers.Vehicles
         public async Task GivenValidRequest_WhenApiRemoveAsyncIsCalled_ThenReturnCorrectResult()
         {
             // Arrange
-            var vehicleId = Guid.NewGuid();
-            var responseMock = ValidationResult.Success(Guid.NewGuid());
-            _vehicleServiceMock.Setup(x => x.RemoveAsync(vehicleId)).ReturnsAsync(responseMock);
+            var responseMock = new ValidationResult<VehicleModel>(null, new List<ValidationError>());
+            _vehicleServiceMock.Setup(x => x.RemoveAsync(It.IsNotNull<Guid>())).ReturnsAsync(responseMock);
 
             // Act
             var vehicleController = new VehicleController(_loggerMock.Object
                 , _vehicleServiceMock.Object);
-            var actualResult = await vehicleController.RemoveAsync(vehicleId.ToString());
-            var data = ((OkObjectResult)actualResult).Value as ValidationResult<Guid>;
+            var actualResult = await vehicleController.RemoveAsync(It.IsNotNull<Guid>());
+            var data = ((OkObjectResult)actualResult).Value as ValidationResult<VehicleModel>;
 
             // Assert
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleController.RemoveAsync)}...", Times.Once, null);
@@ -238,25 +237,25 @@ namespace EPAY.ETC.Core.API.UnitTest.Controllers.Vehicles
             actualResult.Should().BeOfType<OkObjectResult>();
             ((ObjectResult)actualResult).StatusCode.Should().Be(StatusCodes.Status200OK);
             data.Succeeded.Should().BeTrue();
-            data.Data.Should().NotBeEmpty();
+            data.Data.Should().BeNull();
         }
         [Fact]
         public async Task GivenValidRequestAndNonExistingVehicleId_WhenApiRemoveAsyncIsCalled_ThenReturnNotFound()
         {
             // Arrange
-            var vehicleId = Guid.NewGuid();
-            var responseMock = new ValidationResult<Guid>(new List<ValidationError>()
+            var responseMock = new ValidationResult<VehicleModel>(null, new List<ValidationError>()
+
             {
                 ValidationError.NotFound
             });
-            _vehicleServiceMock.Setup(x => x.RemoveAsync(vehicleId)).ReturnsAsync(responseMock);
+            _vehicleServiceMock.Setup(x => x.RemoveAsync(It.IsNotNull<Guid>())).ReturnsAsync(responseMock);
 
             // Act
             var vehicleController = new VehicleController(_loggerMock.Object
                 , _vehicleServiceMock.Object);
-            var actualResult = await vehicleController.RemoveAsync(vehicleId.ToString());
+            var actualResult = await vehicleController.RemoveAsync(It.IsNotNull<Guid>());
             var data = actualResult as NotFoundObjectResult;
-            var actualResultRespone = data!.Value as ValidationResult<Guid>;
+            var actualResultRespone = data!.Value as ValidationResult<VehicleModel>;
             // Assert
             _vehicleServiceMock.Verify(x => x.RemoveAsync(It.IsNotNull<Guid>()), Times.Once);
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleController.RemoveAsync)}...", Times.Once, null);
@@ -270,13 +269,13 @@ namespace EPAY.ETC.Core.API.UnitTest.Controllers.Vehicles
         public async Task GivenValidRequestAndVehicleServiceIsDown_WhenApiRemoveAsyncIsCalled_ThenReturnInternalServerError()
         {
             // Arrange
-            var priorityVehicleId = Guid.NewGuid();
-            _vehicleServiceMock.Setup(x => x.RemoveAsync(priorityVehicleId)).ThrowsAsync(new Exception("Some exception"));
+            var someEx = new Exception("An error occurred when calling RemoveAsync method");
+            _vehicleServiceMock.Setup(x => x.RemoveAsync(It.IsNotNull<Guid>())).ThrowsAsync(new Exception("Some exception"));
 
             // Act
             var vehicleController = new VehicleController(_loggerMock.Object
                 , _vehicleServiceMock.Object);
-            var actualResult = await vehicleController.RemoveAsync(priorityVehicleId.ToString());
+            var actualResult = await vehicleController.RemoveAsync(It.IsNotNull<Guid>());
             var actualResultRespone = ((ObjectResult)actualResult).Value as ValidationResult<string>;
 
             // Assert

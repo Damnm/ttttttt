@@ -10,6 +10,6 @@ namespace EPAY.ETC.Core.API.Core.Interfaces.Services.Vehicles
         Task<ValidationResult<VehicleModel>> AddAsync(VehicleRequestModel input);
         Task<ValidationResult<VehicleModel>> GetByIdAsync(Guid id);
         Task<ValidationResult<VehicleModel>> UpdateAsync(Guid id ,VehicleRequestModel input);
-        Task<ValidationResult<Guid>> RemoveAsync(Guid id);
+        Task<ValidationResult<VehicleModel>> RemoveAsync(Guid id);
     }
 }

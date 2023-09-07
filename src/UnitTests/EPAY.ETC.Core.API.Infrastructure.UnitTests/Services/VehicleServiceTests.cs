@@ -75,6 +75,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services
         public async Task GivenValidRequestAndExistingVehicle_WhenAddAsyncIsCalled_ThenReturnConflict()
         {
             // Arrange
+            List<VehicleModel> vehicles = new List<VehicleModel>() { new VehicleModel()};
             _repositoryMock.Setup(x => x.AddAsync(It.IsNotNull<VehicleModel>())).ReturnsAsync(vehicle);
 
             // Act
@@ -86,8 +87,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services
             result.Data.Should().BeNull();
             result.Succeeded.Should().BeFalse();
             result.Errors.Count(x => x.Code == StatusCodes.Status409Conflict).Should().Be(1);
-            _repositoryMock.Verify(x => x.GetAllAsync(It.IsAny<Expression<Func<VehicleModel, bool>>>()), Times.Once);
-            _repositoryMock.Verify(x => x.AddAsync(It.IsNotNull<VehicleModel>()), Times.Never);
+            _repositoryMock.Verify(x => x.AddAsync(It.IsNotNull<VehicleModel>()),Times.Never);
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.AddAsync)} method...", Times.Once, null);
             _loggerMock.VerifyLog(LogLevel.Error, $"Failed to run {nameof(service.AddAsync)} method", Times.Never, null);
         }
@@ -190,7 +190,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services
 
             // Assert
             result.Should().NotBeNull();
-            result.Data.Should().NotBeEmpty();
+            result.Data.Should().BeNull();
             result.Succeeded.Should().BeTrue();
             _repositoryMock.Verify(x => x.GetByIdAsync(It.IsNotNull<Guid>()), Times.Once);
             _repositoryMock.Verify(x => x.RemoveAsync(It.IsNotNull<VehicleModel>()), Times.Once);
@@ -210,7 +210,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services
 
             // Assert
             result.Should().NotBeNull();
-            result.Data.Should().BeEmpty();
+            result.Data.Should().BeNull();
             result.Succeeded.Should().BeFalse();
             result.Errors.Count(x => x.Code == 404).Should().Be(1);
             _repositoryMock.Verify(x => x.GetByIdAsync(It.IsNotNull<Guid>()), Times.Once);
