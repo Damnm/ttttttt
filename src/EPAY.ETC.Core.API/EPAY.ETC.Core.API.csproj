@@ -29,4 +29,10 @@
     <ProjectReference Include="..\EPAY.ETC.Core.API.Infrastructure\EPAY.ETC.Core.API.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

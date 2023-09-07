@@ -90,9 +90,6 @@ namespace EPAY.ETC.Core.API.Controllers
             try
             {
                 _logger.LogInformation($"Executing {nameof(RemoveAsync)}...");
-
-
-                _logger.LogInformation($"Executing {nameof(RemoveAsync)}...");
                 var data = await _fusionService.RemoveAsync(objectId);
 
                 if (!data.Succeeded && data.Errors.Any(x => x.Code == StatusCodes.Status404NotFound))

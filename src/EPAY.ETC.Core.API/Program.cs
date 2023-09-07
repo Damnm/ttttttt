@@ -1,6 +1,4 @@
 using EPAY.ETC.Core.API.Infrastructure.Persistence;
-using EPAY.ETC.Core.API.Infrastructure.Persistence.Context;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using NLog;
 using NLog.Web;
