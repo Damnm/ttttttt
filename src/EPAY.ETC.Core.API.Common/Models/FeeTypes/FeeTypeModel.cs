@@ -10,7 +10,7 @@ namespace EPAY.ETC.Core.API.Core.Models.FeeTypes
     public class FeeTypeModel : BaseEntity<Guid>
     {
         public FeeTypeEnum Name { get; set; }
-        public float? Amount { get; set; }
+        public double? Amount { get; set; }
         [StringLength(255)]
         public string? Desc { get; set; }
 

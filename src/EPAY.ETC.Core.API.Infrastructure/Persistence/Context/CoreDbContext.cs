@@ -57,28 +57,28 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                 new CustomVehicleTypeModel()
                 {
                     Id = new Guid("fffbf4d1-8b76-4f3a-9070-0cfa0a658f08"),
-                    CreatedDate = DateTime.UtcNow,
+                    CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
                     Name = CustomVehicleTypeEnum.Type1,
                     Desc = CustomVehicleTypeEnum.Type1.ToEnumMemberAttrValue()
                 },
                 new CustomVehicleTypeModel()
                 {
                     Id = new Guid("a4a39e55-85c0-4761-ba64-f941111186f9"),
-                    CreatedDate = DateTime.UtcNow,
+                    CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
                     Name = CustomVehicleTypeEnum.Type2,
                     Desc = CustomVehicleTypeEnum.Type2.ToEnumMemberAttrValue()
                 },
                 new CustomVehicleTypeModel()
                 {
                     Id = new Guid("be652877-ca81-4fb4-bfa1-b9cec61f9e6b"),
-                    CreatedDate = DateTime.UtcNow,
+                    CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
                     Name = CustomVehicleTypeEnum.Type3,
                     Desc = CustomVehicleTypeEnum.Type3.ToEnumMemberAttrValue()
                 },
                 new CustomVehicleTypeModel()
                 {
                     Id = new Guid("090a7db5-2d5d-4c1c-a32c-27f946f8dd61"),
-                    CreatedDate = DateTime.UtcNow,
+                    CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
                     Name = CustomVehicleTypeEnum.Type4,
                     Desc = CustomVehicleTypeEnum.Type4.ToEnumMemberAttrValue()
                 });
@@ -91,31 +91,31 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                 new VehicleCategoryModel()
                 {
                     Id = new Guid("70884a61-39f3-4e8e-b936-d5b18652d3ac"),
-                    CreatedDate = DateTime.UtcNow,
+                    CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
                     Name = "Xe nhượng quyền"
                 },
                 new VehicleCategoryModel()
                 {
                     Id = new Guid("82f143d3-b2ed-40d6-a59e-4fc980a24450"),
-                    CreatedDate = DateTime.UtcNow,
+                    CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
                     Name = "Xe nhượng quyền TCP"
                 },
                 new VehicleCategoryModel()
                 {
                     Id = new Guid("2b0557d0-cc6b-4fc2-a0b3-08788c9fd8c7"),
-                    CreatedDate = DateTime.UtcNow,
+                    CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
                     Name = "Xe ưu tiên theo tháng"
                 },
                 new VehicleCategoryModel()
                 {
                     Id = new Guid("bd4e670d-8cae-46fa-8bac-d77ac139a044"),
-                    CreatedDate = DateTime.UtcNow,
+                    CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
                     Name = "Xe ưu tiên theo quý"
                 },
                 new VehicleCategoryModel()
                 {
                     Id = new Guid("ac9b71a5-0541-4d2e-a358-6afac6d6c525"),
-                    CreatedDate = DateTime.UtcNow,
+                    CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
                     Name = "Xe ưu tiên theo năm"
                 });
             #endregion
@@ -131,7 +131,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                 new FeeTypeModel()
                 {
                     Id = new Guid("30ee8597-aa3e-43e7-a1f1-559ee2d4b85e"),
-                    CreatedDate = DateTime.UtcNow,
+                    CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
                     Name = FeeTypeEnum.Free,
                     Desc = FeeTypeEnum.Free.ToEnumMemberAttrValue(),
                     Amount = 0
@@ -139,7 +139,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                 new FeeTypeModel()
                 {
                     Id = new Guid("46b26ea4-abfd-4b9f-bdf4-ec0e434d9ffc"),
-                    CreatedDate = DateTime.UtcNow,
+                    CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
                     Name = FeeTypeEnum.Fixed,
                     Desc = FeeTypeEnum.Fixed.ToEnumMemberAttrValue(),
                     Amount = 0
@@ -147,14 +147,14 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                 new FeeTypeModel()
                 {
                     Id = new Guid("1143d8c3-22e2-4bd5-a690-89ca0c47b3c9"),
-                    CreatedDate = DateTime.UtcNow,
+                    CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
                     Name = FeeTypeEnum.TimeBlock,
                     Desc = FeeTypeEnum.TimeBlock.ToEnumMemberAttrValue()
                 },
                 new FeeTypeModel()
                 {
                     Id = new Guid("04595036-c8a8-4800-9513-c4015b98da3b"),
-                    CreatedDate = DateTime.UtcNow,
+                    CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
                     Name = FeeTypeEnum.DayBlock,
                     Desc = FeeTypeEnum.DayBlock.ToEnumMemberAttrValue()
                 });
@@ -167,19 +167,19 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                 new VehicleGroupModel()
                 {
                     Id = new Guid("efbe78bc-290b-4a01-a596-bbc62f60f5f3"),
-                    CreatedDate = DateTime.UtcNow,
+                    CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
                     Name = "Taxi Mai Linh"
                 },
                 new VehicleGroupModel()
                 {
                     Id = new Guid("1fc5fc58-94e4-4169-a576-3cd9ecf8eb96"),
-                    CreatedDate = DateTime.UtcNow,
+                    CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
                     Name = "Taxi Xanh"
                 },
                 new VehicleGroupModel()
                 {
                     Id = new Guid("ec2a686b-8adc-4053-9e2e-4942cab0168d"),
-                    CreatedDate = DateTime.UtcNow,
+                    CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
                     Name = "Công ty vận tải hành khách"
                 });
             #endregion
@@ -198,7 +198,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                 new TimeBlockFeeModel()
                 {
                     Id = new Guid("ad21057b-6071-4e56-8949-ce60bf54f75b"),
-                    CreatedDate = DateTime.UtcNow,
+                    CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
                     CustomVehicleTypeId = new Guid("fffbf4d1-8b76-4f3a-9070-0cfa0a658f08"),
                     BlockDurationInSeconds = 600,
                     FromSecond = 0,
@@ -208,7 +208,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                 new TimeBlockFeeModel()
                 {
                     Id = new Guid("2e8ab3f8-8d72-4f42-831f-b0100f814a23"),
-                    CreatedDate = DateTime.UtcNow,
+                    CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
                     CustomVehicleTypeId = new Guid("fffbf4d1-8b76-4f3a-9070-0cfa0a658f08"),
                     BlockDurationInSeconds = 3000,
                     FromSecond = 600,
@@ -218,7 +218,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                 new TimeBlockFeeModel()
                 {
                     Id = new Guid("0c8d860a-c5ba-473c-a3f6-95aafd295a70"),
-                    CreatedDate = DateTime.UtcNow,
+                    CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
                     CustomVehicleTypeId = new Guid("fffbf4d1-8b76-4f3a-9070-0cfa0a658f08"),
                     BlockDurationInSeconds = 1800,
                     FromSecond = 3600,
@@ -228,7 +228,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                 new TimeBlockFeeModel()
                 {
                     Id = new Guid("e3772040-a29c-4a40-bd65-17d8be7211bb"),
-                    CreatedDate = DateTime.UtcNow,
+                    CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
                     CustomVehicleTypeId = new Guid("fffbf4d1-8b76-4f3a-9070-0cfa0a658f08"),
                     BlockDurationInSeconds = 1800,
                     FromSecond = 5400,
@@ -240,7 +240,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                 new TimeBlockFeeModel()
                 {
                     Id = new Guid("f8d3b541-2f77-4f14-bbe6-8a3028fccd07"),
-                    CreatedDate = DateTime.UtcNow,
+                    CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
                     CustomVehicleTypeId = new Guid("a4a39e55-85c0-4761-ba64-f941111186f9"),
                     BlockDurationInSeconds = 600,
                     FromSecond = 0,
@@ -250,7 +250,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                 new TimeBlockFeeModel()
                 {
                     Id = new Guid("df059c09-28aa-4134-919a-e3b3041213a4"),
-                    CreatedDate = DateTime.UtcNow,
+                    CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
                     CustomVehicleTypeId = new Guid("a4a39e55-85c0-4761-ba64-f941111186f9"),
                     BlockDurationInSeconds = 3000,
                     FromSecond = 600,
@@ -260,7 +260,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                 new TimeBlockFeeModel()
                 {
                     Id = new Guid("120fd104-b6e4-403f-87d7-811ccb1c61e4"),
-                    CreatedDate = DateTime.UtcNow,
+                    CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
                     CustomVehicleTypeId = new Guid("a4a39e55-85c0-4761-ba64-f941111186f9"),
                     BlockDurationInSeconds = 1800,
                     FromSecond = 3600,
@@ -270,7 +270,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                 new TimeBlockFeeModel()
                 {
                     Id = new Guid("9302c9e0-12c2-437c-bd2d-92ed4c159e9f"),
-                    CreatedDate = DateTime.UtcNow,
+                    CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
                     CustomVehicleTypeId = new Guid("a4a39e55-85c0-4761-ba64-f941111186f9"),
                     BlockDurationInSeconds = 1800,
                     FromSecond = 5400,
@@ -282,7 +282,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                 new TimeBlockFeeModel()
                 {
                     Id = new Guid("8b000abd-8e74-47a3-8a90-299dc37fac4d"),
-                    CreatedDate = DateTime.UtcNow,
+                    CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
                     CustomVehicleTypeId = new Guid("be652877-ca81-4fb4-bfa1-b9cec61f9e6b"),
                     BlockDurationInSeconds = 600,
                     FromSecond = 0,
@@ -292,7 +292,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                 new TimeBlockFeeModel()
                 {
                     Id = new Guid("8585a134-fa8f-467e-8e66-f37e75444a65"),
-                    CreatedDate = DateTime.UtcNow,
+                    CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
                     CustomVehicleTypeId = new Guid("be652877-ca81-4fb4-bfa1-b9cec61f9e6b"),
                     BlockDurationInSeconds = 3000,
                     FromSecond = 600,
@@ -302,7 +302,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                 new TimeBlockFeeModel()
                 {
                     Id = new Guid("b3b643cb-488d-48f3-a167-ea9531db75ca"),
-                    CreatedDate = DateTime.UtcNow,
+                    CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
                     CustomVehicleTypeId = new Guid("be652877-ca81-4fb4-bfa1-b9cec61f9e6b"),
                     BlockDurationInSeconds = 1800,
                     FromSecond = 3600,
@@ -312,7 +312,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                 new TimeBlockFeeModel()
                 {
                     Id = new Guid("9e891bfc-2f03-4382-8b7e-6306c2757963"),
-                    CreatedDate = DateTime.UtcNow,
+                    CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
                     CustomVehicleTypeId = new Guid("be652877-ca81-4fb4-bfa1-b9cec61f9e6b"),
                     BlockDurationInSeconds = 1800,
                     FromSecond = 5400,
@@ -324,7 +324,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                 new TimeBlockFeeModel()
                 {
                     Id = new Guid("f8d9683b-7cb4-4ce6-985c-5aa0a8f944e0"),
-                    CreatedDate = DateTime.UtcNow,
+                    CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
                     CustomVehicleTypeId = new Guid("090a7db5-2d5d-4c1c-a32c-27f946f8dd61"),
                     BlockDurationInSeconds = 600,
                     FromSecond = 0,
@@ -334,7 +334,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                 new TimeBlockFeeModel()
                 {
                     Id = new Guid("8a8040ae-479c-4824-a0c2-3b4277d0ea9c"),
-                    CreatedDate = DateTime.UtcNow,
+                    CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
                     CustomVehicleTypeId = new Guid("090a7db5-2d5d-4c1c-a32c-27f946f8dd61"),
                     BlockDurationInSeconds = 3000,
                     FromSecond = 600,
@@ -344,7 +344,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                 new TimeBlockFeeModel()
                 {
                     Id = new Guid("adda0b07-7bd5-470b-9f89-77bb6b5cbfb2"),
-                    CreatedDate = DateTime.UtcNow,
+                    CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
                     CustomVehicleTypeId = new Guid("090a7db5-2d5d-4c1c-a32c-27f946f8dd61"),
                     BlockDurationInSeconds = 1800,
                     FromSecond = 3600,
@@ -354,7 +354,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                 new TimeBlockFeeModel()
                 {
                     Id = new Guid("3ae0b8be-525b-4ee4-9d49-d2889c6998c3"),
-                    CreatedDate = DateTime.UtcNow,
+                    CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
                     CustomVehicleTypeId = new Guid("090a7db5-2d5d-4c1c-a32c-27f946f8dd61"),
                     BlockDurationInSeconds = 1800,
                     FromSecond = 5400,
@@ -392,7 +392,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                 new FeeVehicleCategoryModel()
                 {
                     Id = new Guid("a15041a9-1d57-4ae3-b070-2d96aaa041ec"),
-                    CreatedDate = DateTime.UtcNow,
+                    CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
                     FeeTypeId = new Guid("46b26ea4-abfd-4b9f-bdf4-ec0e434d9ffc"),
                     VehicleCategoryId = new Guid("70884a61-39f3-4e8e-b936-d5b18652d3ac"),
                     VehicleGroupId = new Guid("efbe78bc-290b-4a01-a596-bbc62f60f5f3"),
@@ -404,7 +404,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                 new FeeVehicleCategoryModel()
                 {
                     Id = new Guid("1d6603bb-d361-4111-aa45-e780f50b6974"),
-                    CreatedDate = DateTime.UtcNow,
+                    CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
                     FeeTypeId = new Guid("46b26ea4-abfd-4b9f-bdf4-ec0e434d9ffc"),
                     VehicleCategoryId = new Guid("70884a61-39f3-4e8e-b936-d5b18652d3ac"),
                     VehicleGroupId = new Guid("1fc5fc58-94e4-4169-a576-3cd9ecf8eb96"),
@@ -416,7 +416,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                 new FeeVehicleCategoryModel()
                 {
                     Id = new Guid("a743e3e1-d6aa-49c5-a63f-28ba262bc2b8"),
-                    CreatedDate = DateTime.UtcNow,
+                    CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
                     FeeTypeId = new Guid("30ee8597-aa3e-43e7-a1f1-559ee2d4b85e"),
                     VehicleCategoryId = new Guid("70884a61-39f3-4e8e-b936-d5b18652d3ac"),
                     VehicleGroupId = new Guid("ec2a686b-8adc-4053-9e2e-4942cab0168d"),
@@ -428,7 +428,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                 new FeeVehicleCategoryModel()
                 {
                     Id = new Guid("b780afae-6c9e-4730-a054-8ab8a876dffe"),
-                    CreatedDate = DateTime.UtcNow,
+                    CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
                     FeeTypeId = new Guid("30ee8597-aa3e-43e7-a1f1-559ee2d4b85e"),
                     VehicleCategoryId = new Guid("2b0557d0-cc6b-4fc2-a0b3-08788c9fd8c7"),
                     VehicleGroupId = new Guid("ec2a686b-8adc-4053-9e2e-4942cab0168d"),
