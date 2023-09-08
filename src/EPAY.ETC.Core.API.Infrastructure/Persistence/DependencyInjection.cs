@@ -1,7 +1,5 @@
 ﻿using EPAY.ETC.Core.API.Core.Interfaces.Services.Fusion;
-using EPAY.ETC.Core.API.Core.Interfaces.Services.OrderBuilder;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Vehicles;
-using EPAY.ETC.Core.API.Core.Models.Common;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Context;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Fusion;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Vehicle;
@@ -21,6 +19,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence
             services.AddDbContext<CoreDbContext>(options =>
             {
                 options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
+                options.EnableSensitiveDataLogging();
             });
 
             //Add Repositories...

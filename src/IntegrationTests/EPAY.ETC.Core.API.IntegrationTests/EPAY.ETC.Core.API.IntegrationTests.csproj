@@ -11,6 +11,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="APIServices\**" />
+    <Compile Remove="Persistence\**" />
+    <Compile Remove="Services\**" />
+    <EmbeddedResource Remove="APIServices\**" />
+    <EmbeddedResource Remove="Persistence\**" />
+    <EmbeddedResource Remove="Services\**" />
+    <None Remove="APIServices\**" />
+    <None Remove="Persistence\**" />
+    <None Remove="Services\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="coverlet.msbuild" Version="6.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -30,12 +42,6 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="XUnitPriorityOrderer" Version="1.0.3" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="APIServices\" />
-    <Folder Include="Services\" />
-    <Folder Include="Persistence\" />
   </ItemGroup>
 
   <ItemGroup>
