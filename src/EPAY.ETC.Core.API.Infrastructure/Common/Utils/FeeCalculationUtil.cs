@@ -19,9 +19,6 @@ namespace EPAY.ETC.Core.API.Infrastructure.Common.Utils
                 return timeBlockFeeExists.Amount ?? 0;
             }
 
-            // get block 1
-            var block1Amount = (timeBlockFees.Count() > 1 ? timeBlockFees[1].Amount : timeBlockFees.First().Amount) ?? 0;
-
             // Get last 2 record
             var reverse = timeBlockFees.OrderByDescending(x => x.FromSecond).Take(2);
             var lastBlock = reverse.First();
