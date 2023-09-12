@@ -366,3 +366,4 @@ FodyWeavers.xsd
 [Ll]ogs/
 
 internal-nlog.txt
+/coverage
