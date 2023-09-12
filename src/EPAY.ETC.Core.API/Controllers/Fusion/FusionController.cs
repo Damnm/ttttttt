@@ -1,59 +1,53 @@
 ﻿using EPAY.ETC.Core.API.Core.Exceptions;
+using EPAY.ETC.Core.API.Core.Interfaces.Services.Fusion;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Vehicles;
 using EPAY.ETC.Core.API.Core.Models.Common;
+using EPAY.ETC.Core.API.Core.Models.Fusion;
 using EPAY.ETC.Core.API.Core.Models.Vehicle;
 using EPAY.ETC.Core.API.Core.Validation;
-using Microsoft.AspNetCore.Authorization;
+using EPAY.ETC.Core.API.Infrastructure.Services.Vehicles;
 using Microsoft.AspNetCore.Mvc;
-using Nest;
-using System;
 
-namespace EPAY.ETC.Core.API.Controllers
+namespace EPAY.ETC.Core.API.Controllers.Fusion
 {
-    [ApiController]
-    [Route("~/api/[controller]")]
-
-    public class VehicleController : ControllerBase
+    public class FusionController : ControllerBase
     {
         #region Variables
-        private readonly ILogger<VehicleController> _logger;
-        private readonly IVehicleService _vehicleService;
+        private readonly ILogger<FusionController> _logger;
+        private readonly IFusionService _fusionService;
         #endregion
-
         #region Constructor
-        public VehicleController(ILogger<VehicleController> logger,
-            IVehicleService vehicleService)
+        public FusionController(ILogger<FusionController> logger,
+            IFusionService fusionService)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _vehicleService = vehicleService ?? throw new ArgumentNullException(nameof(vehicleService));
+            _fusionService = fusionService ?? throw new ArgumentNullException(nameof(fusionService));
         }
-
         #endregion
-
-        #region CreateVehicleAsync
+        #region AddAsync
         /// <summary>
         /// Create new employee
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        [HttpPost("v1/vehicles")]
+        [HttpPost("v1/fusion")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> AddAsync(VehicleRequestModel request)
+        public async Task<IActionResult> AddAsync([FromBody] FusionRequestModel request)
         {
             try
             {
                 _logger.LogInformation($"Executing {nameof(AddAsync)}...");
 
 
-                var vehicleResult = await _vehicleService.AddAsync(request);
+                var fusionResult = await _fusionService.AddAsync(request);
 
-                if (!vehicleResult.Succeeded && vehicleResult.Errors.Any(x => x.Code == StatusCodes.Status409Conflict))
+                if (!fusionResult.Succeeded && fusionResult.Errors.Any(x => x.Code == StatusCodes.Status409Conflict))
                 {
-                    return Conflict(vehicleResult);
+                    return Conflict(fusionResult);
                 }
 
-                return new ObjectResult(vehicleResult)
+                return new ObjectResult(fusionResult)
                 {
                     StatusCode = StatusCodes.Status201Created
                 };
@@ -68,25 +62,16 @@ namespace EPAY.ETC.Core.API.Controllers
             }
         }
         #endregion
-        #region GetVehiclesDetailAsync
-        [HttpGet("v1/vehicles/{vehicleId}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetByIdAsync(string vehicleId)
+        #region GetByIdAsync
+        [HttpGet("v1/fusions/{objectId}")]
+        public async Task<IActionResult> GetByIdAsync(Guid objectId)
         {
             try
             {
                 _logger.LogInformation($"Executing {nameof(GetByIdAsync)}...");
+                var result = await _fusionService.GetByIdAsync(objectId);
 
-                Guid _vehicleId;
-                if (!Guid.TryParse(vehicleId, out _vehicleId))
-                {
-                    return BadRequest(ValidationResult.Failed<VehicleModel>(null, new List<ValidationError>() { ValidationError.BadRequest }));
-                }
-
-                var priorityVehicleResult = await _vehicleService.GetByIdAsync(_vehicleId);
-
-                return Ok(priorityVehicleResult);
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -98,14 +83,14 @@ namespace EPAY.ETC.Core.API.Controllers
             }
         }
         #endregion
-        #region DeleteVehiclesAsync
-        [HttpDelete("v1/vehicles/{vehicleId}")]
-        public async Task<IActionResult> RemoveAsync(Guid vehicleId)
+        #region RemoveAsync
+        [HttpDelete("v1/fusions/{objectId}")]
+        public async Task<IActionResult> RemoveAsync(Guid objectId)
         {
             try
             {
                 _logger.LogInformation($"Executing {nameof(RemoveAsync)}...");
-                var data = await _vehicleService.RemoveAsync(vehicleId);
+                var data = await _fusionService.RemoveAsync(objectId);
 
                 if (!data.Succeeded && data.Errors.Any(x => x.Code == StatusCodes.Status404NotFound))
                 {
@@ -125,17 +110,17 @@ namespace EPAY.ETC.Core.API.Controllers
         }
         #endregion
         #region UpdateAsync
-        [HttpPut("v1/vehicles/{vehicleId}")]
+        [HttpPut("v1/fusions/{objectId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> UpdateAsync(Guid vehicleId, VehicleRequestModel request)
+        public async Task<IActionResult> UpdateAsync(Guid objectId, [FromBody] FusionRequestModel request)
         {
             try
             {
                 _logger.LogInformation($"Executing {nameof(UpdateAsync)}...");
 
 
-                var data = await _vehicleService.UpdateAsync(vehicleId, request);
+                var data = await _fusionService.UpdateAsync(objectId, request);
 
                 if (!data.Succeeded)
                 {

@@ -11,6 +11,7 @@ namespace EPAY.ETC.Core.API.Core.Models.Common
     {
         [JsonIgnore]
         public Guid Id { get; set; }
+        [JsonIgnore]
         public DateTime? CreatedDate { get; set; }
         public string? RFID { get; set; }
         public string? PlateNumber { get; set; }
