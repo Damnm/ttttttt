@@ -22,6 +22,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.Fusion
     public class FusionRepositoryTests : AutoMapperTestBase
     {
         #region Init mock data
+        private readonly Exception _exception = null!;
         private Mock<CoreDbContext> _dbContextMock = new Mock<CoreDbContext>();
         private Mock<ILogger<FusionRepository>> _loggerMock = new Mock<ILogger<FusionRepository>>();
         private Mock<DbSet<FusionModel>>? _dbFusionSetMock;
@@ -43,7 +44,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.Fusion
         #endregion
         #region AddAsync
         [Fact]
-        public async void GivenValidRequest_WhenAddAsyncIsCalled_ThenReturnCorrectResult()
+        public  void GivenValidRequestAndData_WhenAddAsyncIsCalled_ThenReturnCorrectResult()
         {
             // Arrange
             var data = listFusion.FirstOrDefault();
@@ -57,7 +58,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.Fusion
             // Assert
             result.Should().NotBeNull();
             _dbContextMock.Verify(x => x.Fusions, Times.Once);
-            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(fusionsRepository.AddAsync)} method...", Times.Once, null);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(fusionsRepository.AddAsync)} method...", Times.Once, _exception);
         }
 
         [Fact]
@@ -74,8 +75,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.Fusion
             // Assert
             var ex = await Assert.ThrowsAsync<ETCEPAYCoreAPIException>(func);
             _dbContextMock.Verify(x => x.Fusions, Times.Once);
-            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(fusionsRepository.AddAsync)} method...", Times.Once, null);
-            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(fusionsRepository.AddAsync)} method", Times.Once, null);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(fusionsRepository.AddAsync)} method...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(fusionsRepository.AddAsync)} method", Times.Once, _exception);
         }
         #endregion
         #region GetByIdAsync
@@ -95,8 +96,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.Fusion
             result.Should().NotBeNull();
             result.Should().BeEquivalentTo(data);
             _dbContextMock.Verify(x => x.Fusions, Times.Once);
-            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(fusionsRepository.GetByIdAsync)} method...", Times.Once, null);
-            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(fusionsRepository.GetByIdAsync)} method", Times.Never, null);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(fusionsRepository.GetByIdAsync)} method...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(fusionsRepository.GetByIdAsync)} method", Times.Never, _exception);
         }
 
         [Fact]
@@ -113,8 +114,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.Fusion
             // Assert
             var ex = await Assert.ThrowsAsync<ETCEPAYCoreAPIException>(func);
             _dbContextMock.Verify(x => x.Fusions, Times.Once);
-            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(fusionsRepository.GetByIdAsync)} method...", Times.Once, null);
-            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(fusionsRepository.GetByIdAsync)} method", Times.Once, null);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(fusionsRepository.GetByIdAsync)} method...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(fusionsRepository.GetByIdAsync)} method", Times.Once, _exception);
         }
         #endregion
         #region RemoveAsync
@@ -131,7 +132,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.Fusion
 
             // Assert
             _dbContextMock.Verify(x => x.Fusions, Times.Once);
-            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(fusionsRepository.RemoveAsync)} method...", Times.Once, null);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(fusionsRepository.RemoveAsync)} method...", Times.Once, _exception);
         }
 
         [Fact]
@@ -148,8 +149,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.Fusion
             // Assert
             var ex = await Assert.ThrowsAsync<ETCEPAYCoreAPIException>(func);
             _dbContextMock.Verify(x => x.Fusions, Times.Once);
-            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(fusionsRepository.RemoveAsync)} method...", Times.Once, null);
-            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(fusionsRepository.RemoveAsync)} method", Times.Once, null);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(fusionsRepository.RemoveAsync)} method...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(fusionsRepository.RemoveAsync)} method", Times.Once,_exception);
         }
         #endregion
         #region UpdateAsync
@@ -167,8 +168,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.Fusion
 
             // Assert
             _dbContextMock.Verify(x => x.Fusions, Times.Once);
-            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(fusionsRepository.UpdateAsync)} method...", Times.Once, null);
-            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(fusionsRepository.UpdateAsync)} method", Times.Never, null);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(fusionsRepository.UpdateAsync)} method...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(fusionsRepository.UpdateAsync)} method", Times.Never, _exception);
         }
 
         [Fact]
@@ -185,8 +186,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.Fusion
             // Assert
             var ex = await Assert.ThrowsAsync<ETCEPAYCoreAPIException>(func);
             _dbContextMock.Verify(x => x.Fusions, Times.Once);
-            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(fusionsRepository.UpdateAsync)} method...", Times.Once, null);
-            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(fusionsRepository.UpdateAsync)} method", Times.Once, null);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(fusionsRepository.UpdateAsync)} method...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(fusionsRepository.UpdateAsync)} method", Times.Once, _exception);
         }
         #endregion
     }

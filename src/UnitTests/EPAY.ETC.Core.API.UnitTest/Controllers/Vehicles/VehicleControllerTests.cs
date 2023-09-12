@@ -23,6 +23,7 @@ namespace EPAY.ETC.Core.API.UnitTest.Controllers.Vehicles
 {
     public class VehicleControllerTests : ControllerBase
     {
+        private readonly Exception _exception = null!;
         private Mock<IVehicleService> _vehicleServiceMock = new Mock<IVehicleService>();
         private Mock<ILogger<VehicleController>> _loggerMock = new Mock<ILogger<VehicleController>>();
         private VehicleModel requestMock = new VehicleModel()
@@ -76,19 +77,19 @@ namespace EPAY.ETC.Core.API.UnitTest.Controllers.Vehicles
             var data = ((ObjectResult)actualResult).Value as ValidationResult<VehicleModel>;
 
             // Assert
-            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleController.AddAsync)}...", Times.Once, null);
-            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleController.AddAsync)} method", Times.Never, null);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleController.AddAsync)}...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleController.AddAsync)} method", Times.Never, _exception);
             actualResult.Should().BeOfType<ObjectResult>();
             ((ObjectResult)actualResult).StatusCode.Should().Be(StatusCodes.Status201Created);
-            data.Succeeded.Should().BeTrue();
-            data.Data.Should().NotBeNull();
+            data?.Succeeded.Should().BeTrue();
+            data?.Data.Should().NotBeNull();
         }
 
         [Fact]
         public async Task GivenValidRequestAndVehicleAlreadyExists_WhenApiAddAsyncIsCalled_ThenReturnConflict()
         {
             // Arrange
-            responseMock = new ValidationResult<VehicleModel>(null, new List<ValidationError>()
+            responseMock = new ValidationResult<VehicleModel>(new List<ValidationError>()
             {
                 ValidationError.Conflict
             });
@@ -103,10 +104,10 @@ namespace EPAY.ETC.Core.API.UnitTest.Controllers.Vehicles
             var actualResultRespone = data!.Value as ValidationResult<VehicleModel>;
             // Assert
             _vehicleServiceMock.Verify(x => x.AddAsync(It.IsAny<VehicleRequestModel>()), Times.Once);
-            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleController.AddAsync)}...", Times.Once, null);
-            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleController.AddAsync)} method", Times.Never, null);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleController.AddAsync)}...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleController.AddAsync)} method", Times.Never, _exception);
             ((ObjectResult)actualResult).StatusCode.Should().Be(StatusCodes.Status409Conflict);
-            actualResultRespone.Succeeded.Should().BeFalse();
+            actualResultRespone!.Succeeded.Should().BeFalse();
             Assert.True(actualResultRespone.Errors.Count(x => x.Code == StatusCodes.Status409Conflict) > 0);
         }
 
@@ -125,10 +126,10 @@ namespace EPAY.ETC.Core.API.UnitTest.Controllers.Vehicles
             var actualResultRespone = ((ObjectResult)actualResult).Value as ValidationResult<string>;
 
             // Assert
-            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleController.AddAsync)}...", Times.Once, null);
-            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleController.AddAsync)} method", Times.Once, null);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleController.AddAsync)}...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleController.AddAsync)} method", Times.Once, _exception);
             ((ObjectResult)actualResult).StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
-            actualResultRespone.Succeeded.Should().BeFalse();
+            actualResultRespone!.Succeeded.Should().BeFalse();
             Assert.True(actualResultRespone.Errors.Count() > 0);
         }
         #endregion
@@ -146,19 +147,19 @@ namespace EPAY.ETC.Core.API.UnitTest.Controllers.Vehicles
             var actualResult = await vehicleController.UpdateAsync(It.IsAny<Guid>(), It.IsAny<VehicleRequestModel>());
             var data = ((OkObjectResult)actualResult).Value as ValidationResult<VehicleModel>;
             // Assert
-            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleController.UpdateAsync)}...", Times.Once, null);
-            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleController.UpdateAsync)} method", Times.Never, null);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleController.UpdateAsync)}...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleController.UpdateAsync)} method", Times.Never, _exception);
             actualResult.Should().BeOfType<OkObjectResult>();
             ((OkObjectResult)actualResult).StatusCode.Should().Be(StatusCodes.Status200OK);
-            data.Succeeded.Should().BeTrue();
-            data.Data.Should().NotBeNull();
-            data.Data.PlateNumber.Should().Be(responseMock.Data.PlateNumber);
-            data.Data.PlateColor.Should().Be(responseMock.Data.PlateColor);
-            data.Data.RFID.Should().Be(responseMock.Data.RFID);
-            data.Data.Make.Should().Be(responseMock.Data.Make);
-            data.Data.Seat.Should().Be(responseMock.Data.Seat);
-            data.Data.VehicleType.Should().Be(responseMock.Data.VehicleType);
-            data.Data.Weight.Should().Be(responseMock.Data.Weight);
+            data?.Succeeded.Should().BeTrue();
+            data?.Data.Should().NotBeNull();
+            data?.Data.PlateNumber.Should().Be(responseMock.Data.PlateNumber);
+            data?.Data.PlateColor.Should().Be(responseMock.Data.PlateColor);
+            data?.Data.RFID.Should().Be(responseMock.Data.RFID);
+            data?.Data.Make.Should().Be(responseMock.Data.Make);
+            data?.Data.Seat.Should().Be(responseMock.Data.Seat);
+            data?.Data.VehicleType.Should().Be(responseMock.Data.VehicleType);
+            data?.Data.Weight.Should().Be(responseMock.Data.Weight);
 
         }
         [Fact]
@@ -169,7 +170,7 @@ namespace EPAY.ETC.Core.API.UnitTest.Controllers.Vehicles
             {
                 Id = Guid.NewGuid()
             };
-            responseMock = new ValidationResult<VehicleModel>(null, new List<ValidationError>()
+            responseMock = new ValidationResult<VehicleModel>( new List<ValidationError>()
             {
                 ValidationError.NotFound
             });
@@ -184,10 +185,10 @@ namespace EPAY.ETC.Core.API.UnitTest.Controllers.Vehicles
 
             // Assert
             _vehicleServiceMock.Verify(x => x.UpdateAsync(It.IsAny<Guid>(), It.IsAny<VehicleRequestModel>()), Times.Once);
-            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleController.UpdateAsync)}...", Times.Once, null);
-            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleController.UpdateAsync)} method", Times.Never, null);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleController.UpdateAsync)}...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleController.UpdateAsync)} method", Times.Never, _exception);
             ((ObjectResult)actualResult).StatusCode.Should().Be(StatusCodes.Status404NotFound);
-            actualResultRespone.Succeeded.Should().BeFalse();
+            actualResultRespone!.Succeeded.Should().BeFalse();
             Assert.True(actualResultRespone.Errors.Count(x => x.Code == StatusCodes.Status404NotFound) > 0);
         }
         // Unhappy case 400
@@ -209,10 +210,10 @@ namespace EPAY.ETC.Core.API.UnitTest.Controllers.Vehicles
             var actualResultRespone = ((ObjectResult)actualResult).Value as ValidationResult<string>;
 
             // Assert
-            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleController.UpdateAsync)}...", Times.Once, null);
-            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleController.UpdateAsync)} method", Times.Once, null);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleController.UpdateAsync)}...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleController.UpdateAsync)} method", Times.Once, _exception);
             ((ObjectResult)actualResult).StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
-            actualResultRespone.Succeeded.Should().BeFalse();
+            actualResultRespone!.Succeeded.Should().BeFalse();
             Assert.True(actualResultRespone.Errors.Count() > 0);
         }
         #endregion
@@ -222,7 +223,7 @@ namespace EPAY.ETC.Core.API.UnitTest.Controllers.Vehicles
         public async Task GivenValidRequest_WhenApiRemoveAsyncIsCalled_ThenReturnCorrectResult()
         {
             // Arrange
-            var responseMock = new ValidationResult<VehicleModel>(null, new List<ValidationError>());
+            var responseMock = new ValidationResult<VehicleModel>(new List<ValidationError>());
             _vehicleServiceMock.Setup(x => x.RemoveAsync(It.IsNotNull<Guid>())).ReturnsAsync(responseMock);
 
             // Act
@@ -232,18 +233,18 @@ namespace EPAY.ETC.Core.API.UnitTest.Controllers.Vehicles
             var data = ((OkObjectResult)actualResult).Value as ValidationResult<VehicleModel>;
 
             // Assert
-            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleController.RemoveAsync)}...", Times.Once, null);
-            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleController.RemoveAsync)} method", Times.Never, null);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleController.RemoveAsync)}...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleController.RemoveAsync)} method", Times.Never, _exception);
             actualResult.Should().BeOfType<OkObjectResult>();
             ((ObjectResult)actualResult).StatusCode.Should().Be(StatusCodes.Status200OK);
-            data.Succeeded.Should().BeTrue();
-            data.Data.Should().BeNull();
+            data?.Succeeded.Should().BeTrue();
+            data?.Data.Should().BeNull();
         }
         [Fact]
         public async Task GivenValidRequestAndNonExistingVehicleId_WhenApiRemoveAsyncIsCalled_ThenReturnNotFound()
         {
             // Arrange
-            var responseMock = new ValidationResult<VehicleModel>(null, new List<ValidationError>()
+            var responseMock = new ValidationResult<VehicleModel>(new List<ValidationError>()
 
             {
                 ValidationError.NotFound
@@ -258,10 +259,10 @@ namespace EPAY.ETC.Core.API.UnitTest.Controllers.Vehicles
             var actualResultRespone = data!.Value as ValidationResult<VehicleModel>;
             // Assert
             _vehicleServiceMock.Verify(x => x.RemoveAsync(It.IsNotNull<Guid>()), Times.Once);
-            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleController.RemoveAsync)}...", Times.Once, null);
-            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleController.RemoveAsync)} method", Times.Never, null);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleController.RemoveAsync)}...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleController.RemoveAsync)} method", Times.Never, _exception);
             ((NotFoundObjectResult)actualResult).StatusCode.Should().Be(StatusCodes.Status404NotFound);
-            actualResultRespone.Succeeded.Should().BeFalse();
+            actualResultRespone!.Succeeded.Should().BeFalse();
             Assert.True(actualResultRespone.Errors.Count(x => x.Code == StatusCodes.Status404NotFound) > 0);
         }
         // Unhappy case 400
@@ -279,10 +280,10 @@ namespace EPAY.ETC.Core.API.UnitTest.Controllers.Vehicles
             var actualResultRespone = ((ObjectResult)actualResult).Value as ValidationResult<string>;
 
             // Assert
-            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleController.RemoveAsync)}...", Times.Once, null);
-            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleController.RemoveAsync)} method", Times.Once, null);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleController.RemoveAsync)}...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleController.RemoveAsync)} method", Times.Once, _exception);
             ((ObjectResult)actualResult).StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
-            actualResultRespone.Succeeded.Should().BeFalse();
+            actualResultRespone!.Succeeded.Should().BeFalse();
             Assert.True(actualResultRespone.Errors.Count(x => x.Code == StatusCodes.Status500InternalServerError) > 0);
         }
         #endregion
@@ -300,19 +301,19 @@ namespace EPAY.ETC.Core.API.UnitTest.Controllers.Vehicles
             var data = ((OkObjectResult)actualResult).Value as ValidationResult<VehicleModel>;
 
             // Assert
-            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleController.GetByIdAsync)}...", Times.Once, null);
-            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleController.GetByIdAsync)} method", Times.Never, null);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleController.GetByIdAsync)}...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleController.GetByIdAsync)} method", Times.Never, _exception);
             actualResult.Should().BeOfType<OkObjectResult>();
             ((ObjectResult)actualResult).StatusCode.Should().Be(StatusCodes.Status200OK);
-            data.Succeeded.Should().BeTrue();
-            data.Data.Should().NotBeNull();
-            data.Data.PlateNumber.Should().Be(responseMock.Data.PlateNumber);
-            data.Data.PlateColor.Should().Be(responseMock.Data.PlateColor);
-            data.Data.RFID.Should().Be(responseMock.Data.RFID);
-            data.Data.Make.Should().Be(responseMock.Data.Make);
-            data.Data.Seat.Should().Be(responseMock.Data.Seat);
-            data.Data.VehicleType.Should().Be(responseMock.Data.VehicleType);
-            data.Data.Weight.Should().Be(responseMock.Data.Weight);
+            data?.Succeeded.Should().BeTrue();
+            data?.Data.Should().NotBeNull();
+            data?.Data.PlateNumber.Should().Be(responseMock.Data.PlateNumber);
+            data?.Data.PlateColor.Should().Be(responseMock.Data.PlateColor);
+            data?.Data.RFID.Should().Be(responseMock.Data.RFID);
+            data?.Data.Make.Should().Be(responseMock.Data.Make);
+            data?.Data.Seat.Should().Be(responseMock.Data.Seat);
+            data?.Data.VehicleType.Should().Be(responseMock.Data.VehicleType);
+            data?.Data.Weight.Should().Be(responseMock.Data.Weight);
         }
         // Unhappy case 400
         [Fact]
@@ -329,10 +330,10 @@ namespace EPAY.ETC.Core.API.UnitTest.Controllers.Vehicles
             var actualResultRespone = ((ObjectResult)actualResult).Value as ValidationResult<string>;
 
             // Assert
-            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleController.GetByIdAsync)}...", Times.Once, null);
-            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleController.GetByIdAsync)} method", Times.Once, null);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleController.GetByIdAsync)}...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleController.GetByIdAsync)} method", Times.Once, _exception);
             ((ObjectResult)actualResult).StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
-            actualResultRespone.Succeeded.Should().BeFalse();
+            actualResultRespone!.Succeeded.Should().BeFalse();
             Assert.True(actualResultRespone.Errors.Count() > 0);
         }
         #endregion

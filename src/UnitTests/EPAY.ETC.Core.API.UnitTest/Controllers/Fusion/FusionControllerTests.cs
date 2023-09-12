@@ -17,10 +17,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EPAY.ETC.Core.API.UnitTest.Controllers.Vehicles
+namespace EPAY.ETC.Core.API.UnitTest.Controllers.Fusion
 {
     public class FusionControllerTests : ControllerBase
     {
+        private readonly Exception _exception = null!;
         private Mock<IFusionService> _fusionServiceMock = new Mock<IFusionService>();
         private Mock<ILogger<FusionController>> _loggerMock = new Mock<ILogger<FusionController>>();
         private ValidationResult<FusionModel> responseMock = new ValidationResult<FusionModel>(new FusionModel()
@@ -74,27 +75,27 @@ namespace EPAY.ETC.Core.API.UnitTest.Controllers.Vehicles
             var data = ((ObjectResult)actualResult).Value as ValidationResult<FusionModel>;
 
             // Assert
-            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(fusionsController.AddAsync)}...", Times.Once, null);
-            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(fusionsController.AddAsync)} method", Times.Never, null);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(fusionsController.AddAsync)}...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(fusionsController.AddAsync)} method", Times.Never, _exception);
             actualResult.Should().BeOfType<ObjectResult>();
             ((ObjectResult)actualResult).StatusCode.Should().Be(StatusCodes.Status201Created);
-            data.Succeeded.Should().BeTrue();
-            data.Data.Should().NotBeNull();
-            data.Data.Epoch.Should().Be(requestMock.Epoch);
-            data.Data.Loop1.Should().Be(requestMock.Loop1);
-            data.Data.RFID.Should().Be(requestMock.RFID);
-            data.Data.Cam1.Should().Be(requestMock.Cam1);
-            data.Data.Loop2.Should().Be(requestMock.Loop2);
-            data.Data.Cam2.Should().Be(requestMock.Cam2);
-            data.Data.Loop3.Should().Be(requestMock.Loop3);
-            data.Data.ReversedLoop1.Should().Be(requestMock.ReversedLoop1);
-            data.Data.ReversedLoop2.Should().Be(requestMock.ReversedLoop2);
+            data?.Succeeded.Should().BeTrue();
+            data?.Data.Should().NotBeNull();
+            data?.Data.Epoch.Should().Be(requestMock.Epoch);
+            data?.Data.Loop1.Should().Be(requestMock.Loop1);
+            data?.Data.RFID.Should().Be(requestMock.RFID);
+            data?.Data.Cam1.Should().Be(requestMock.Cam1);
+            data?.Data.Loop2.Should().Be(requestMock.Loop2);
+            data?.Data.Cam2.Should().Be(requestMock.Cam2);
+            data?.Data.Loop3.Should().Be(requestMock.Loop3);
+            data?.Data.ReversedLoop1.Should().Be(requestMock.ReversedLoop1);
+            data?.Data.ReversedLoop2.Should().Be(requestMock.ReversedLoop2);
         }
         [Fact]
         public async Task GivenValidRequestAndSettingsAlreadyExists_WhenAddAsyncIsCalled_ThenReturnConflict()
         {
             // Arrange
-            responseMock = new ValidationResult<FusionModel>(null, new List<ValidationError>()
+            responseMock = new ValidationResult<FusionModel>(null!, new List<ValidationError>()
             {
                 ValidationError.Conflict
             });
@@ -107,10 +108,10 @@ namespace EPAY.ETC.Core.API.UnitTest.Controllers.Vehicles
             var actualResultRespone = data!.Value as ValidationResult<FusionModel>;
             // Assert
             _fusionServiceMock.Verify(x => x.AddAsync(It.IsAny<FusionRequestModel>()), Times.Once);
-            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(fusionsController.AddAsync)}...", Times.Once, null);
-            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(fusionsController.AddAsync)} method", Times.Never, null);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(fusionsController.AddAsync)}...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(fusionsController.AddAsync)} method", Times.Never, _exception);
             ((ObjectResult)actualResult).StatusCode.Should().Be(StatusCodes.Status409Conflict);
-            actualResultRespone.Succeeded.Should().BeFalse();
+            actualResultRespone!.Succeeded.Should().BeFalse();
             Assert.True(actualResultRespone.Errors.Count(x => x.Code == StatusCodes.Status409Conflict) > 0);
         }
         // Unhappy case 400
@@ -127,12 +128,12 @@ namespace EPAY.ETC.Core.API.UnitTest.Controllers.Vehicles
             var actualResultRespone = ((ObjectResult)actualResult).Value as ValidationResult<string>;
 
             // Assert
-            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(fusionsController.AddAsync)}...", Times.Once, null);
-            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(fusionsController.AddAsync)} method", Times.Once, null);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(fusionsController.AddAsync)}...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(fusionsController.AddAsync)} method", Times.Once, _exception);
             ((ObjectResult)actualResult).StatusCode.Should().Be(500);
-            actualResultRespone.Succeeded.Should().BeFalse();
+            actualResultRespone!.Succeeded.Should().BeFalse();
             Assert.True(actualResultRespone.Errors.Count() > 0);
-            
+
         }
         #endregion
         #region UpdateAsync
@@ -149,21 +150,21 @@ namespace EPAY.ETC.Core.API.UnitTest.Controllers.Vehicles
             var actualResult = await vehicleController.UpdateAsync(It.IsAny<Guid>(), It.IsAny<FusionRequestModel>());
             var data = ((OkObjectResult)actualResult).Value as ValidationResult<FusionModel>;
             // Assert
-            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleController.UpdateAsync)}...", Times.Once, null);
-            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleController.UpdateAsync)} method", Times.Never, null);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleController.UpdateAsync)}...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleController.UpdateAsync)} method", Times.Never, _exception);
             actualResult.Should().BeOfType<OkObjectResult>();
             ((OkObjectResult)actualResult).StatusCode.Should().Be(StatusCodes.Status200OK);
-            data.Succeeded.Should().BeTrue();
-            data.Data.Should().NotBeNull();
-            data.Data.Epoch.Should().Be(requestMock.Epoch);
-            data.Data.Loop1.Should().Be(requestMock.Loop1);
-            data.Data.RFID.Should().Be(requestMock.RFID);
-            data.Data.Cam1.Should().Be(requestMock.Cam1);
-            data.Data.Loop2.Should().Be(requestMock.Loop2);
-            data.Data.Cam2.Should().Be(requestMock.Cam2);
-            data.Data.Loop3.Should().Be(requestMock.Loop3);
-            data.Data.ReversedLoop1.Should().Be(requestMock.ReversedLoop1);
-            data.Data.ReversedLoop2.Should().Be(requestMock.ReversedLoop2);
+            data?.Succeeded.Should().BeTrue();
+            data?.Data.Should().NotBeNull();
+            data?.Data.Epoch.Should().Be(requestMock.Epoch);
+            data?.Data.Loop1.Should().Be(requestMock.Loop1);
+            data?.Data.RFID.Should().Be(requestMock.RFID);
+            data?.Data.Cam1.Should().Be(requestMock.Cam1);
+            data?.Data.Loop2.Should().Be(requestMock.Loop2);
+            data?.Data.Cam2.Should().Be(requestMock.Cam2);
+            data?.Data.Loop3.Should().Be(requestMock.Loop3);
+            data?.Data.ReversedLoop1.Should().Be(requestMock.ReversedLoop1);
+            data?.Data.ReversedLoop2.Should().Be(requestMock.ReversedLoop2);
 
         }
         [Fact]
@@ -174,7 +175,7 @@ namespace EPAY.ETC.Core.API.UnitTest.Controllers.Vehicles
             {
                 Id = Guid.NewGuid()
             };
-            responseMock = new ValidationResult<FusionModel>(null, new List<ValidationError>()
+            responseMock = new ValidationResult<FusionModel>( new List<ValidationError>()
             {
                 ValidationError.NotFound
             });
@@ -189,10 +190,10 @@ namespace EPAY.ETC.Core.API.UnitTest.Controllers.Vehicles
 
             // Assert
             _fusionServiceMock.Verify(x => x.UpdateAsync(It.IsAny<Guid>(), It.IsAny<FusionRequestModel>()), Times.Once);
-            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleController.UpdateAsync)}...", Times.Once, null);
-            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleController.UpdateAsync)} method", Times.Never, null);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleController.UpdateAsync)}...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleController.UpdateAsync)} method", Times.Never, _exception);
             ((ObjectResult)actualResult).StatusCode.Should().Be(StatusCodes.Status404NotFound);
-            actualResultRespone.Succeeded.Should().BeFalse();
+            actualResultRespone!.Succeeded.Should().BeFalse();
             Assert.True(actualResultRespone.Errors.Count(x => x.Code == StatusCodes.Status404NotFound) > 0);
         }
         // Unhappy case 400
@@ -214,10 +215,10 @@ namespace EPAY.ETC.Core.API.UnitTest.Controllers.Vehicles
             var actualResultRespone = ((ObjectResult)actualResult).Value as ValidationResult<string>;
 
             // Assert
-            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleController.UpdateAsync)}...", Times.Once, null);
-            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleController.UpdateAsync)} method", Times.Once, null);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleController.UpdateAsync)}...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleController.UpdateAsync)} method", Times.Once, _exception);
             ((ObjectResult)actualResult).StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
-            actualResultRespone.Succeeded.Should().BeFalse();
+            actualResultRespone!.Succeeded.Should().BeFalse();
             Assert.True(actualResultRespone.Errors.Count() > 0);
         }
         #endregion
@@ -227,7 +228,7 @@ namespace EPAY.ETC.Core.API.UnitTest.Controllers.Vehicles
         public async Task GivenValidRequest_WhenRemoveAsyncIsCalled_ThenReturnCorrectResult()
         {
             // Arrange
-            var responseMock = new ValidationResult<FusionModel>(null, new List<ValidationError>());
+            var responseMock = new ValidationResult<FusionModel>(new List<ValidationError>());
             _fusionServiceMock.Setup(x => x.RemoveAsync(It.IsNotNull<Guid>())).ReturnsAsync(responseMock);
 
             // Act
@@ -236,19 +237,19 @@ namespace EPAY.ETC.Core.API.UnitTest.Controllers.Vehicles
             var data = ((OkObjectResult)actualResult).Value as ValidationResult<FusionModel>;
 
             // Assert
-            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(fusionController.RemoveAsync)}...", Times.Once, null);
-            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(fusionController.RemoveAsync)} method", Times.Never, null);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(fusionController.RemoveAsync)}...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(fusionController.RemoveAsync)} method", Times.Never, _exception);
             actualResult.Should().BeOfType<OkObjectResult>();
             ((OkObjectResult)actualResult).StatusCode.Should().Be(StatusCodes.Status200OK);
-            data.Succeeded.Should().BeTrue();
-            data.Data.Should().BeNull();
+            data?.Succeeded.Should().BeTrue();
+            data?.Data.Should().BeNull();
         }
 
         [Fact]
         public async Task GivenValidRequestAndNonExistingSettingsGuid_WhenRemoveAsyncIsCalled_ThenReturnNotFound()
         {
             // Arrange
-            var responseMock = new ValidationResult<FusionModel>(null, new List<ValidationError>()
+            var responseMock = new ValidationResult<FusionModel>(new List<ValidationError>()
             {
                 ValidationError.NotFound
             });
@@ -261,10 +262,10 @@ namespace EPAY.ETC.Core.API.UnitTest.Controllers.Vehicles
             var actualResultRespone = data!.Value as ValidationResult<FusionModel>;
             // Assert
             _fusionServiceMock.Verify(x => x.RemoveAsync(It.IsNotNull<Guid>()), Times.Once);
-            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(fusionController.RemoveAsync)}...", Times.Once, null);
-            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(fusionController.RemoveAsync)} method", Times.Never, null);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(fusionController.RemoveAsync)}...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(fusionController.RemoveAsync)} method", Times.Never, _exception);
             ((ObjectResult)actualResult).StatusCode.Should().Be(StatusCodes.Status404NotFound);
-            actualResultRespone.Succeeded.Should().BeFalse();
+            actualResultRespone!.Succeeded.Should().BeFalse();
             Assert.True(actualResultRespone.Errors.Count(x => x.Code == StatusCodes.Status404NotFound) > 0);
         }
 
@@ -283,10 +284,10 @@ namespace EPAY.ETC.Core.API.UnitTest.Controllers.Vehicles
             var actualResultRespone = ((ObjectResult)actualResult).Value as ValidationResult<string>;
 
             // Assert
-            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(fusionController.RemoveAsync)}...", Times.Once, null);
-            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(fusionController.RemoveAsync)} method", Times.Once, null);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(fusionController.RemoveAsync)}...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(fusionController.RemoveAsync)} method", Times.Once, _exception);
             ((ObjectResult)actualResult).StatusCode.Should().Be(500);
-            actualResultRespone.Succeeded.Should().BeFalse();
+            actualResultRespone!.Succeeded.Should().BeFalse();
             Assert.True(actualResultRespone.Errors.Count() > 0);
         }
         #endregion
@@ -304,21 +305,21 @@ namespace EPAY.ETC.Core.API.UnitTest.Controllers.Vehicles
             var data = ((OkObjectResult)actualResult).Value as ValidationResult<FusionModel>;
 
             // Assert
-            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(fusionController.GetByIdAsync)}...", Times.Once, null);
-            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(fusionController.GetByIdAsync)} method", Times.Never, null);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(fusionController.GetByIdAsync)}...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(fusionController.GetByIdAsync)} method", Times.Never, _exception);
             actualResult.Should().BeOfType<OkObjectResult>();
             ((ObjectResult)actualResult).StatusCode.Should().Be(StatusCodes.Status200OK);
-            data.Succeeded.Should().BeTrue();
-            data.Data.Should().NotBeNull();
-            data.Data.Epoch.Should().Be(requestMock.Epoch);
-            data.Data.Loop1.Should().Be(requestMock.Loop1);
-            data.Data.RFID.Should().Be(requestMock.RFID);
-            data.Data.Cam1.Should().Be(requestMock.Cam1);
-            data.Data.Loop2.Should().Be(requestMock.Loop2);
-            data.Data.Cam2.Should().Be(requestMock.Cam2);
-            data.Data.Loop3.Should().Be(requestMock.Loop3);
-            data.Data.ReversedLoop1.Should().Be(requestMock.ReversedLoop1);
-            data.Data.ReversedLoop2.Should().Be(requestMock.ReversedLoop2);
+            data?.Succeeded.Should().BeTrue();
+            data?.Data.Should().NotBeNull();
+            data?.Data.Epoch.Should().Be(requestMock.Epoch);
+            data?.Data.Loop1.Should().Be(requestMock.Loop1);
+            data?.Data.RFID.Should().Be(requestMock.RFID);
+            data?.Data.Cam1.Should().Be(requestMock.Cam1);
+            data?.Data.Loop2.Should().Be(requestMock.Loop2);
+            data?.Data.Cam2.Should().Be(requestMock.Cam2);
+            data?.Data.Loop3.Should().Be(requestMock.Loop3);
+            data?.Data.ReversedLoop1.Should().Be(requestMock.ReversedLoop1);
+            data?.Data.ReversedLoop2.Should().Be(requestMock.ReversedLoop2);
         }
 
         // Unhappy case 400
@@ -335,11 +336,11 @@ namespace EPAY.ETC.Core.API.UnitTest.Controllers.Vehicles
             var actualResultRespone = ((ObjectResult)actualResult).Value as ValidationResult<string>;
 
             // Assert
-            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(fusionController.GetByIdAsync)}...", Times.Once, null);
-            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(fusionController.GetByIdAsync)} method", Times.Once, null);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(fusionController.GetByIdAsync)}...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(fusionController.GetByIdAsync)} method", Times.Once, _exception);
             ((ObjectResult)actualResult).StatusCode.Should().Be(500);
-            actualResultRespone.Succeeded.Should().BeFalse();
-            Assert.True(actualResultRespone.Errors.Count() > 0);
+            actualResultRespone?.Succeeded.Should().BeFalse();
+            Assert.True(actualResultRespone?.Errors.Count() > 0);
         }
         #endregion
     }

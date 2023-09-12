@@ -24,6 +24,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.Vehicle
     public class VehicleRepositoryTests : AutoMapperTestBase
     {
         #region Init mock data
+        private readonly Exception _exception = null!;
         private Mock<CoreDbContext> _dbContextMock = new Mock<CoreDbContext>();
         private Mock<ILogger<VehicleRepository>> _loggerMock = new Mock<ILogger<VehicleRepository>>();
         private Mock<DbSet<VehicleModel>>? _dbVehicleSetMock;
@@ -73,8 +74,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.Vehicle
             result.Should().NotBeNull();
             result.Should().BeEquivalentTo(data);
             _dbContextMock.Verify(x => x.Vehicles, Times.Once);
-            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleRepository.GetByIdAsync)} method...", Times.Once, null);
-            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleRepository.GetByIdAsync)} method", Times.Never, null);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleRepository.GetByIdAsync)} method...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleRepository.GetByIdAsync)} method", Times.Never, _exception);
         }
         [Fact]
         public async void GivenValidRequestAndVehicleRepositoryIsDown_WhenGetByIdAsyncIsCalled_ThenThowETCEPAYCoreAPIException()
@@ -90,8 +91,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.Vehicle
             // Assert
             var ex = await Assert.ThrowsAsync<ETCEPAYCoreAPIException>(func);
             _dbContextMock.Verify(x => x.Vehicles, Times.Once);
-            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleRepository.GetByIdAsync)} method...", Times.Once, null);
-            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleRepository.GetByIdAsync)} method", Times.Once, null);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleRepository.GetByIdAsync)} method...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleRepository.GetByIdAsync)} method", Times.Once, _exception);
         }
         #endregion        
 
@@ -111,8 +112,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.Vehicle
             // Assert
             result.Should().NotBeNull().And.BeEquivalentTo(data);
             _dbContextMock.Verify(x => x.Vehicles, Times.Once);
-            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleRepository.AddAsync)} method...", Times.Once, null);
-            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleRepository.AddAsync)} method", Times.Never, null);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleRepository.AddAsync)} method...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleRepository.AddAsync)} method", Times.Never, _exception);
         }
 
         [Fact]
@@ -129,8 +130,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.Vehicle
             // Assert
             var ex = await Assert.ThrowsAsync<ETCEPAYCoreAPIException>(func);
             _dbContextMock.Verify(x => x.Vehicles, Times.Once);
-            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleRepository.AddAsync)} method...", Times.Once, null);
-            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleRepository.AddAsync)} method", Times.Once, null);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleRepository.AddAsync)} method...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleRepository.AddAsync)} method", Times.Once, _exception);
         }
         #endregion
 
@@ -149,8 +150,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.Vehicle
 
             // Assert
             _dbContextMock.Verify(x => x.Vehicles, Times.Once);
-            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleRepository.UpdateAsync)} method...", Times.Once, null);
-            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleRepository.UpdateAsync)} method", Times.Never, null);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleRepository.UpdateAsync)} method...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleRepository.UpdateAsync)} method", Times.Never, _exception);
         }
 
         [Fact]
@@ -167,8 +168,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.Vehicle
             // Assert
             var ex = await Assert.ThrowsAsync<ETCEPAYCoreAPIException>(func);
             _dbContextMock.Verify(x => x.Vehicles, Times.Once);
-            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleRepository.UpdateAsync)} method...", Times.Once, null);
-            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleRepository.UpdateAsync)} method", Times.Once, null);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleRepository.UpdateAsync)} method...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleRepository.UpdateAsync)} method", Times.Once, _exception);
         }
         #endregion
 
@@ -187,8 +188,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.Vehicle
 
             // Assert
             _dbContextMock.Verify(x => x.Vehicles, Times.Once);
-            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleRepository.RemoveAsync)} method...", Times.Once, null);
-            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleRepository.RemoveAsync)} method", Times.Never, null);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleRepository.RemoveAsync)} method...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleRepository.RemoveAsync)} method", Times.Never, _exception);
         }
 
         [Fact]
@@ -205,8 +206,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.Vehicle
             // Assert
             var ex = await Assert.ThrowsAsync<ETCEPAYCoreAPIException>(func);
             _dbContextMock.Verify(x => x.Vehicles, Times.Once);
-            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleRepository.RemoveAsync)} method...", Times.Once, null);
-            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleRepository.RemoveAsync)} method", Times.Once, null);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleRepository.RemoveAsync)} method...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleRepository.RemoveAsync)} method", Times.Once, _exception);
         }
         #endregion
     }

@@ -47,17 +47,17 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Fusion
         }
         #endregion
         #region GetAsync
-        public async Task<IEnumerable<FusionModel>> GetAllAsync(Expression<Func<FusionModel, bool>>? expression = null)
+        public Task<IEnumerable<FusionModel>> GetAllAsync(Expression<Func<FusionModel, bool>>? expression = null)
         {
             _logger.LogInformation($"Executing {nameof(GetAllAsync)} method...");
             try
             {
                 if (expression == null)
                 {
-                    return _dbContext.Fusions.AsNoTracking();
+                    return Task.FromResult<IEnumerable<FusionModel>>(_dbContext.Fusions.AsNoTracking());
                 }
 
-                return _dbContext.Fusions.AsNoTracking().Where(expression);
+                return Task.FromResult<IEnumerable<FusionModel>>(_dbContext.Fusions.AsNoTracking().Where(expression));
             }
             catch (Exception ex)
             {
