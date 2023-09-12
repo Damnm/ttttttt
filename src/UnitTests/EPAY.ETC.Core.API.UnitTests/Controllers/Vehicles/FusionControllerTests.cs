@@ -5,7 +5,7 @@ using EPAY.ETC.Core.API.Core.Models.Common;
 using EPAY.ETC.Core.API.Core.Models.Fusion;
 using EPAY.ETC.Core.API.Core.Models.Vehicle;
 using EPAY.ETC.Core.API.Core.Validation;
-using EPAY.ETC.Core.API.UnitTest.Helpers;
+using EPAY.ETC.Core.API.UnitTests.Helpers;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +17,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EPAY.ETC.Core.API.UnitTest.Controllers.Vehicles
+namespace EPAY.ETC.Core.API.UnitTests.Controllers.Vehicles
 {
     public class FusionControllerTests : ControllerBase
     {
@@ -132,7 +132,7 @@ namespace EPAY.ETC.Core.API.UnitTest.Controllers.Vehicles
             ((ObjectResult)actualResult).StatusCode.Should().Be(500);
             actualResultRespone.Succeeded.Should().BeFalse();
             Assert.True(actualResultRespone.Errors.Count() > 0);
-            
+
         }
         #endregion
         #region UpdateAsync

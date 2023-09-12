@@ -1,10 +1,5 @@
 ﻿using AutoMapper;
 using EPAY.ETC.Core.API.Mapping;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Common
 {
@@ -18,11 +13,4 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Common
 
         public IMapper _mapper = new Mapper(mapperConfig);
     }
-    //public class UnitTestMappings : Profile
-    //{
-    //    public UnitTestMappings() 
-    //    {
-
-    //    }
-    //}
 }

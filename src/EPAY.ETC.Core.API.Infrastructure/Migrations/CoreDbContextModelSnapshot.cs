@@ -335,11 +335,11 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                     b.Property<Guid>("CustomVehicleTypeId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("CustomVehicletypeId")
-                        .HasColumnType("uuid");
-
                     b.Property<long>("FromSecond")
                         .HasColumnType("bigint");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("integer");
 
                     b.Property<long>("ToSecond")
                         .HasColumnType("bigint");
@@ -361,6 +361,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                             CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, 0, DateTimeKind.Utc),
                             CustomVehicleTypeId = new Guid("fffbf4d1-8b76-4f3a-9070-0cfa0a658f08"),
                             FromSecond = 0L,
+                            Order = 0,
                             ToSecond = 599L
                         },
                         new
@@ -371,6 +372,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                             CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, 0, DateTimeKind.Utc),
                             CustomVehicleTypeId = new Guid("fffbf4d1-8b76-4f3a-9070-0cfa0a658f08"),
                             FromSecond = 600L,
+                            Order = 1,
                             ToSecond = 3599L
                         },
                         new
@@ -381,6 +383,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                             CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, 0, DateTimeKind.Utc),
                             CustomVehicleTypeId = new Guid("fffbf4d1-8b76-4f3a-9070-0cfa0a658f08"),
                             FromSecond = 3600L,
+                            Order = 2,
                             ToSecond = 5399L
                         },
                         new
@@ -391,6 +394,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                             CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, 0, DateTimeKind.Utc),
                             CustomVehicleTypeId = new Guid("fffbf4d1-8b76-4f3a-9070-0cfa0a658f08"),
                             FromSecond = 5400L,
+                            Order = 3,
                             ToSecond = 7199L
                         },
                         new
@@ -401,6 +405,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                             CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, 0, DateTimeKind.Utc),
                             CustomVehicleTypeId = new Guid("a4a39e55-85c0-4761-ba64-f941111186f9"),
                             FromSecond = 0L,
+                            Order = 0,
                             ToSecond = 599L
                         },
                         new
@@ -411,6 +416,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                             CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, 0, DateTimeKind.Utc),
                             CustomVehicleTypeId = new Guid("a4a39e55-85c0-4761-ba64-f941111186f9"),
                             FromSecond = 600L,
+                            Order = 1,
                             ToSecond = 3599L
                         },
                         new
@@ -421,6 +427,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                             CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, 0, DateTimeKind.Utc),
                             CustomVehicleTypeId = new Guid("a4a39e55-85c0-4761-ba64-f941111186f9"),
                             FromSecond = 3600L,
+                            Order = 2,
                             ToSecond = 5399L
                         },
                         new
@@ -431,6 +438,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                             CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, 0, DateTimeKind.Utc),
                             CustomVehicleTypeId = new Guid("a4a39e55-85c0-4761-ba64-f941111186f9"),
                             FromSecond = 5400L,
+                            Order = 3,
                             ToSecond = 7199L
                         },
                         new
@@ -441,6 +449,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                             CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, 0, DateTimeKind.Utc),
                             CustomVehicleTypeId = new Guid("be652877-ca81-4fb4-bfa1-b9cec61f9e6b"),
                             FromSecond = 0L,
+                            Order = 0,
                             ToSecond = 599L
                         },
                         new
@@ -451,6 +460,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                             CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, 0, DateTimeKind.Utc),
                             CustomVehicleTypeId = new Guid("be652877-ca81-4fb4-bfa1-b9cec61f9e6b"),
                             FromSecond = 600L,
+                            Order = 1,
                             ToSecond = 3599L
                         },
                         new
@@ -461,6 +471,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                             CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, 0, DateTimeKind.Utc),
                             CustomVehicleTypeId = new Guid("be652877-ca81-4fb4-bfa1-b9cec61f9e6b"),
                             FromSecond = 3600L,
+                            Order = 2,
                             ToSecond = 5399L
                         },
                         new
@@ -471,6 +482,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                             CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, 0, DateTimeKind.Utc),
                             CustomVehicleTypeId = new Guid("be652877-ca81-4fb4-bfa1-b9cec61f9e6b"),
                             FromSecond = 5400L,
+                            Order = 3,
                             ToSecond = 7199L
                         },
                         new
@@ -481,6 +493,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                             CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, 0, DateTimeKind.Utc),
                             CustomVehicleTypeId = new Guid("090a7db5-2d5d-4c1c-a32c-27f946f8dd61"),
                             FromSecond = 0L,
+                            Order = 0,
                             ToSecond = 599L
                         },
                         new
@@ -491,6 +504,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                             CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, 0, DateTimeKind.Utc),
                             CustomVehicleTypeId = new Guid("090a7db5-2d5d-4c1c-a32c-27f946f8dd61"),
                             FromSecond = 600L,
+                            Order = 1,
                             ToSecond = 3599L
                         },
                         new
@@ -501,6 +515,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                             CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, 0, DateTimeKind.Utc),
                             CustomVehicleTypeId = new Guid("090a7db5-2d5d-4c1c-a32c-27f946f8dd61"),
                             FromSecond = 3600L,
+                            Order = 2,
                             ToSecond = 5399L
                         },
                         new
@@ -511,6 +526,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                             CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, 0, DateTimeKind.Utc),
                             CustomVehicleTypeId = new Guid("090a7db5-2d5d-4c1c-a32c-27f946f8dd61"),
                             FromSecond = 5400L,
+                            Order = 3,
                             ToSecond = 7199L
                         });
                 });

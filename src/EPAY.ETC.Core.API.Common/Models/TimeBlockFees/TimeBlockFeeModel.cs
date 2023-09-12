@@ -8,11 +8,12 @@ namespace EPAY.ETC.Core.API.Core.Models.TimeBlockFees
     public class TimeBlockFeeModel : BaseEntity<Guid>
     {
         public Guid CustomVehicleTypeId { get; set; }
-        [ForeignKey("CustomVehicletypeId")]
+        [ForeignKey("CustomVehicleTypeId")]
         public virtual CustomVehicleTypeModel? CustomVehicleType { get; set; }
         public long FromSecond { get; set; } = 0;
         public long ToSecond { get; set; } = 0;
         public int? BlockDurationInSeconds { get; set; } = 0;
         public double? Amount { get; set; }
+        public int Order { set; get; } = 0;
     }
 }

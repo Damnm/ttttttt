@@ -1,9 +1,12 @@
 ﻿using EPAY.ETC.Core.API.Core.Extensions;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Fees;
 using EPAY.ETC.Core.API.Core.Models.Enum;
+using EPAY.ETC.Core.API.Core.Utils;
+using EPAY.ETC.Core.API.Core.Validation;
 using EPAY.ETC.Core.API.Infrastructure.Common.Utils;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.FeeVehicleCategories;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.TimeBlockFees;
+using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Vehicle;
 using EPAY.ETC.Core.Models.Enums;
 using EPAY.ETC.Core.Models.VehicleFee;
 using Microsoft.Extensions.Logging;
@@ -15,18 +18,22 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
         private readonly ILogger<FeeCalculationService> _logger;
         private readonly IFeeVehicleCategoryRepository _feeVehicleCategoryRepository;
         private readonly ITimeBlockFeeRepository _timeBlockFeeRepository;
+        private readonly IVehicleRepository _vehicleRepository;
 
         public FeeCalculationService(
             ILogger<FeeCalculationService> logger,
             IFeeVehicleCategoryRepository feeVehicleCategoryRepository,
-            ITimeBlockFeeRepository timeBlockFeeRepository)
+            ITimeBlockFeeRepository timeBlockFeeRepository,
+            IVehicleRepository vehicleRepository)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _feeVehicleCategoryRepository = feeVehicleCategoryRepository ?? throw new ArgumentNullException(nameof(feeVehicleCategoryRepository));
             _timeBlockFeeRepository = timeBlockFeeRepository ?? throw new ArgumentNullException(nameof(timeBlockFeeRepository));
+            _vehicleRepository = vehicleRepository ?? throw new ArgumentNullException(nameof(vehicleRepository));
         }
 
-        public async Task<VehicleFeeModel> CalculateFeeAsync(string RFID, string? plateNumber, long checkInDateEpoch, long checkOutDateEpoch)
+        // TODO: Do check vehicle in BOO?
+        public async Task<ValidationResult<VehicleFeeModel>> CalculateFeeAsync(string? rfid, string? plateNumber, long checkInDateEpoch, long checkOutDateEpoch)
         {
             try
             {
@@ -43,26 +50,25 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
                     Fee = new FeeModel()
                     {
                         Amount = 0,
-                        Duration = (int)duration
+                        Duration = (int)duration,
+                        Currency = CurrencyEnum.VND.ToString()
                     }
                 };
 
                 // Get vehicle already defined
-                var feeVehicleCategory = (await _feeVehicleCategoryRepository.GetAllAsync(x =>
+                var feeVehicleCategories = await _feeVehicleCategoryRepository.GetAllAsync(x =>
                     (
                         x.RFID != null
-                        && !string.IsNullOrEmpty(RFID)
-                        && x.RFID.Equals(RFID)
+                        && !string.IsNullOrEmpty(rfid)
+                        && x.RFID.Equals(rfid)
                     )
                     || (
                         x.PlateNumber != null
                         && !string.IsNullOrEmpty(plateNumber)
                         && x.PlateNumber.Equals(plateNumber)
                     )
-                ))
-                .OrderBy(x => x.RFID)
-                .ThenBy(x => x.PlateNumber)
-                .FirstOrDefault();
+                );
+                var feeVehicleCategory = feeVehicleCategories.OrderBy(x => x.RFID).ThenBy(x => x.PlateNumber).FirstOrDefault();
 
                 // If exists
                 if (feeVehicleCategory != null)
@@ -81,6 +87,17 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
                     // Set fee type if exists
                     feeType = feeVehicleCategory.FeeType?.Name ?? FeeTypeEnum.TimeBlock;
                 }
+                else if (!string.IsNullOrEmpty(rfid))
+                {
+                    var vehicles = await _vehicleRepository.GetAllAsync(x => x.RFID == rfid);
+
+                    if (vehicles.Any())
+                    {
+                        var vehicle = vehicles.FirstOrDefault()!;
+
+                        customVehicleType = VehicleTypeConverter.ConvertVehicleType(vehicle.Seat ?? 0, vehicle.Weight);
+                    }
+                }
 
                 // Calculate fee
                 switch (feeType)
@@ -95,14 +112,15 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
 
                     // Calculate using TimeBlockFee
                     default:
-                        customVehicleType = feeVehicleCategory?.CustomVehicleType?.Name ?? CustomVehicleTypeEnum.Type1;
+                        if (feeVehicleCategory?.CustomVehicleType != null)
+                            customVehicleType = feeVehicleCategory.CustomVehicleType.Name;
 
                         var timeBlockFees = await _timeBlockFeeRepository.GetAllAsync(x => x.CustomVehicleType != null && x.CustomVehicleType.Name == customVehicleType);
                         result.Fee.Amount = FeeCalculationUtil.FeeCalculation(timeBlockFees?.ToList(), duration);
                         break;
                 }
 
-                return result;
+                return ValidationResult.Success(result);
             }
             catch (Exception ex)
             {
@@ -111,7 +129,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
             }
         }
 
-        public async Task<VehicleFeeModel> CalculateFeeAsync(string plateNumber, CustomVehicleTypeEnum customVehicleType, long checkInDateEpoch, long checkOutDateEpoch)
+        public async Task<ValidationResult<VehicleFeeModel>> CalculateFeeAsync(string? plateNumber, CustomVehicleTypeEnum? customVehicleType, long checkInDateEpoch, long checkOutDateEpoch)
         {
             try
             {
@@ -126,7 +144,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
                     Fee = new FeeModel()
                     {
                         Amount = 0,
-                        Duration = (int)duration
+                        Duration = (int)duration,
+                        Currency = CurrencyEnum.VND.ToString()
                     }
                 };
 
@@ -134,7 +153,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
                 var timeBlockFees = await _timeBlockFeeRepository.GetAllAsync(x => x.CustomVehicleType != null && x.CustomVehicleType.Name == customVehicleType);
                 result.Fee.Amount = FeeCalculationUtil.FeeCalculation(timeBlockFees?.ToList(), duration);
 
-                return result;
+                return ValidationResult.Success(result);
             }
             catch (Exception ex)
             {

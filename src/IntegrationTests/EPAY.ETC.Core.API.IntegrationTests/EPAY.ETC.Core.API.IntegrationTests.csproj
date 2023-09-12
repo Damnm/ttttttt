@@ -12,13 +12,10 @@
 
   <ItemGroup>
     <Compile Remove="APIServices\**" />
-    <Compile Remove="Persistence\**" />
     <Compile Remove="Services\**" />
     <EmbeddedResource Remove="APIServices\**" />
-    <EmbeddedResource Remove="Persistence\**" />
     <EmbeddedResource Remove="Services\**" />
     <None Remove="APIServices\**" />
-    <None Remove="Persistence\**" />
     <None Remove="Services\**" />
   </ItemGroup>
 

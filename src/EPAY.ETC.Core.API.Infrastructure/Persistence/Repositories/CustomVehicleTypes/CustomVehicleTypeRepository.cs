@@ -1,4 +1,5 @@
-﻿using EPAY.ETC.Core.API.Core.Models.CustomVehicleTypes;
+﻿using EPAY.ETC.Core.API.Core.Exceptions;
+using EPAY.ETC.Core.API.Core.Models.CustomVehicleTypes;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -31,7 +32,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.CustomVehicl
 
                 return Task.FromResult(result);
             }
-            catch (Exception ex)
+            catch (ETCEPAYCoreAPIException ex)
             {
                 _logger.LogError($"An error occurred when calling {nameof(GetAllAsync)} method. Details: {ex.Message}. Stack trace: {ex.StackTrace}");
                 throw;
@@ -48,7 +49,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.CustomVehicl
 
                 return Task.FromResult(result);
             }
-            catch (Exception ex)
+            catch (ETCEPAYCoreAPIException ex)
             {
                 _logger.LogError($"An error occurred when calling {nameof(GetByIdAsync)} method. Details: {ex.Message}. Stack trace: {ex.StackTrace}");
                 throw;

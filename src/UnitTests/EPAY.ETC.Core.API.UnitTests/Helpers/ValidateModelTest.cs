@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EPAY.ETC.Core.API.UnitTest.Helpers
+namespace EPAY.ETC.Core.API.UnitTests.Helpers
 {
     public static class ValidateModelTest
     {

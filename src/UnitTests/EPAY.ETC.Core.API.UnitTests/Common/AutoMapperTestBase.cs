@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using EPAY.ETC.Core.API.Mapping;
 
-namespace ACV.Toll.Admin.API.Infrastructure.UnitTests.Common
+namespace EPAY.ETC.Core.API.UnitTests.Common
 {
     public class AutoMapperTestBase
     {

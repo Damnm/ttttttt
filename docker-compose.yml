@@ -11,12 +11,46 @@ services:
 
   postgreSQL:
     image: postgres:15.3-alpine
+    container_name: "postgres"
     environment:
-      - POSTGRES_DB=MainDB
+      - POSTGRES_DB=dbtest
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_PASSWORD=Abcd@12345
     ports:
       - '5432:5432'
     volumes:
           # copy the sql script to create tables
           - ./docker/sql:/docker-entrypoint-initdb.d
+    networks:
+      - my-network
+
+  #unit-tests:
+  unit-tests:
+    depends_on:
+      - sdk
+    image: net_sdk
+    command: sh -c "/code/unit_tests.sh"
+    volumes:
+      *code-volumes
+
+  #integration-tests:
+  integration-tests:
+    depends_on:
+      - sdk
+      - unit-tests
+      - postgreSQL
+    image: net_sdk
+    environment:
+      ASPNETCORE_ENVIRONMENT: IntegrationTests.Dockers
+      OS: Linux
+    command: sh -c "/code/integration_tests.sh"
+    volumes:
+      *code-volumes
+    links:
+      - postgreSQL
+    networks:
+      - my-network
+
+networks:
+  my-network:
+    driver: bridge

@@ -24,12 +24,28 @@ namespace EPAY.ETC.Core.API.Infrastructure.Common.Utils
             var lastBlock = reverse.First();
             var nextBlock = reverse.Last();
 
-            // Calculate amount increase and time duration in 1 block
-            var amountBetweenTwoBlock = (lastBlock.Amount - nextBlock.Amount) ?? 0;
-            var timeBetweenTwoBlock = lastBlock.FromSecond - nextBlock.FromSecond;
+            // Get block 1 has been defined
+            TimeBlockFeeModel? block1 = timeBlockFees.FirstOrDefault(x => x.Order == 1);
+            double block1Amount = block1?.Amount ?? 0;
+
+            // Calculate amount increase
+            double amountBetweenTwoBlock = (lastBlock.Amount - nextBlock.Amount) ?? 0;
+            long timeBetweenTwoBlock = lastBlock.FromSecond - nextBlock.FromSecond;
+
+            // If timeBetweenTwoBlock equals 0 then return
+            if (timeBetweenTwoBlock == 0) return fee;
+
+            // Minus block1 time from duration
+            if (block1 != null)
+            {
+                duration -= block1.ToSecond + 1;
+            }
+
+            // Get total block
+            decimal totalBlock = Math.Ceiling(duration / (decimal)timeBetweenTwoBlock);
 
             // Calculate amount
-            return (double)Math.Ceiling(duration / (decimal)timeBetweenTwoBlock) * amountBetweenTwoBlock;
+            return (double)totalBlock * amountBetweenTwoBlock + block1Amount;
         }
     }
 }

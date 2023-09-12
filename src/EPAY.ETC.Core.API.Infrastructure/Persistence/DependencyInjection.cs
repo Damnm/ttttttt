@@ -1,8 +1,16 @@
-﻿using EPAY.ETC.Core.API.Core.Interfaces.Services.Fusion;
+﻿using EPAY.ETC.Core.API.Core.Interfaces.Services.Fees;
+using EPAY.ETC.Core.API.Core.Interfaces.Services.Fusion;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Vehicles;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Context;
+using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.CustomVehicleTypes;
+using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.FeeTypes;
+using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.FeeVehicleCategories;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Fusion;
+using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.TimeBlockFees;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Vehicle;
+using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.VehicleCategories;
+using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.VehicleGroups;
+using EPAY.ETC.Core.API.Infrastructure.Services.Fees;
 using EPAY.ETC.Core.API.Infrastructure.Services.Fusion;
 using EPAY.ETC.Core.API.Infrastructure.Services.Vehicles;
 using Microsoft.EntityFrameworkCore;
@@ -24,10 +32,19 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence
 
             //Add Repositories...
             services.AddScoped<IVehicleRepository, VehicleRepository>();
+            services.AddScoped<IFusionRepository, FusionRepository>();
+            services.AddScoped<ICustomVehicleTypeRepository, CustomVehicleTypeRepository>();
+            services.AddScoped<IFeeTypeRepository, FeeTypeRepository>();
+            services.AddScoped<IFeeVehicleCategoryRepository, FeeVehicleCategoryRepository>();
+            services.AddScoped<ITimeBlockFeeRepository, TimeBlockFeeRepository>();
+            services.AddScoped<IVehicleCategoryRepository, VehicleCategoryRepository>();
+            services.AddScoped<IVehicleGroupRepository, VehicleGroupRepository>();
+
+            ////Add Services
             services.AddScoped<IVehicleService, VehicleService>();
             services.AddScoped<IFusionService, FusionService>();
-            services.AddScoped<IFusionRepository, FusionRepository>();
-            ////Add Services
+            services.AddScoped<IFeeCalculationService, FeeCalculationService>();
+
             return services;
         }
     }

@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.VisualStudio.TestPlatform.TestHost;
 
 
 namespace EPAY.ETC.Core.API.IntegrationTests.Common
@@ -26,6 +25,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Common
                     {
                         var configBuilder = new ConfigurationBuilder()
                                             .AddJsonFile("appsettings.IntegrationTests.json")
+                                            .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", true)
                                             .Build();
 
                         builder.UseConfiguration(configBuilder);

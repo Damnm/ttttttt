@@ -2,7 +2,6 @@
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Vehicles;
 using EPAY.ETC.Core.API.Core.Models.Common;
 using EPAY.ETC.Core.API.Core.Validation;
-using EPAY.ETC.Core.API.UnitTest.Helpers;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,8 +17,9 @@ using System.Text;
 using System.Threading.Tasks;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 using EPAY.ETC.Core.API.Core.Models.Vehicle;
+using EPAY.ETC.Core.API.UnitTests.Helpers;
 
-namespace EPAY.ETC.Core.API.UnitTest.Controllers.Vehicles
+namespace EPAY.ETC.Core.API.UnitTests.Controllers.Vehicles
 {
     public class VehicleControllerTests : ControllerBase
     {
@@ -296,7 +296,7 @@ namespace EPAY.ETC.Core.API.UnitTest.Controllers.Vehicles
             // Act
             var vehicleController = new VehicleController(_loggerMock.Object
                 , _vehicleServiceMock.Object);
-            var actualResult = await vehicleController.GetByIdAsync((new Guid().ToString()));
+            var actualResult = await vehicleController.GetByIdAsync(new Guid().ToString());
             var data = ((OkObjectResult)actualResult).Value as ValidationResult<VehicleModel>;
 
             // Assert
@@ -325,7 +325,7 @@ namespace EPAY.ETC.Core.API.UnitTest.Controllers.Vehicles
             // Act
             var vehicleController = new VehicleController(_loggerMock.Object
                 , _vehicleServiceMock.Object);
-            var actualResult = await vehicleController.GetByIdAsync((new Guid().ToString()));
+            var actualResult = await vehicleController.GetByIdAsync(new Guid().ToString());
             var actualResultRespone = ((ObjectResult)actualResult).Value as ValidationResult<string>;
 
             // Assert
