@@ -64,6 +64,22 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Repository.VehicleGroup
             // Assert
             result.Should().NotBeNull();
         }
+
+        [Fact]
+        public async Task GivenRequestIsValidAndIdIsNotExists_WhenGetByIdAsyncIsCalled_ThenReturnNull()
+        {
+            using var scope = WebApplicationFactory.Services.CreateScope();
+            _repository = scope.ServiceProvider.GetRequiredService<IVehicleGroupRepository>();
+
+            // Arrange
+            Guid guid = Guid.NewGuid();
+
+            // Act
+            var result = await _repository.GetByIdAsync(guid);
+
+            // Assert
+            result.Should().BeNull();
+        }
         #endregion
     }
 }

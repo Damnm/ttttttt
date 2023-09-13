@@ -65,6 +65,22 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Repository.FeeTypes
             result.Should().NotBeNull();
             result?.Id.Should().Be(guid);
         }
+
+        [Fact]
+        public async Task GivenRequestIsValidAndIdIsNotExists_WhenGetByIdAsyncIsCalled_ThenReturnNull()
+        {
+            using var scope = WebApplicationFactory.Services.CreateScope();
+            _repository = scope.ServiceProvider.GetRequiredService<IFeeTypeRepository>();
+
+            // Arrange
+            Guid guid = Guid.NewGuid();
+
+            // Act
+            var result = await _repository.GetByIdAsync(guid);
+
+            // Assert
+            result.Should().BeNull();
+        }
         #endregion
     }
 }
