@@ -4,7 +4,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Common.Utils
 {
     public static class FeeCalculationUtil
     {
-        public static double FeeCalculation(List<TimeBlockFeeModel>? timeBlockFees, long duration)
+        public static double FeeCalculation(List<TimeBlockFeeModel>? timeBlockFees, TimeBlockFeeFormulaModel? timeBlockFeeFormula, long duration)
         {
             double fee = 0;
 
@@ -19,33 +19,26 @@ namespace EPAY.ETC.Core.API.Infrastructure.Common.Utils
                 return timeBlockFeeExists.Amount ?? 0;
             }
 
-            // Get last 2 record
-            var reverse = timeBlockFees.OrderByDescending(x => x.FromSecond).Take(2);
-            var lastBlock = reverse.First();
-            var nextBlock = reverse.Last();
-
-            // Get block 1 has been defined
-            TimeBlockFeeModel? block1 = timeBlockFees.FirstOrDefault(x => x.BlockNumber == 1);
-            double block1Amount = block1?.Amount ?? 0;
-
-            // Calculate amount increase
-            double amountBetweenTwoBlock = (lastBlock.Amount - nextBlock.Amount) ?? 0;
-            long timeBetweenTwoBlock = lastBlock.FromSecond - nextBlock.FromSecond;
-
-            // If timeBetweenTwoBlock equals 0 then return
-            if (timeBetweenTwoBlock == 0) return fee;
-
-            // Minus block1 time from duration
-            if (block1 != null)
+            // Return 0 if not exists formula
+            if (timeBlockFeeFormula == null || timeBlockFeeFormula.IntervalInSeconds == 0)
             {
-                duration -= block1.ToSecond + 1;
+                return fee;
             }
 
-            // Get total block
-            decimal totalBlock = Math.Ceiling(duration / (decimal)timeBetweenTwoBlock);
+            // Get block prev has been defined
+            TimeBlockFeeModel? prevBlock = timeBlockFees.FirstOrDefault(x => x.BlockNumber == (timeBlockFeeFormula.FromBlockNumber - 1));
+            double block1Amount = prevBlock?.Amount ?? 0;
+
+            // Get total block without Block less then fromBlock has define in formula
+            if (prevBlock != null)
+            {
+                duration -= prevBlock.ToSecond + 1;
+            }
+
+            decimal totalBlock = Math.Ceiling(duration / (decimal)timeBlockFeeFormula.IntervalInSeconds);
 
             // Calculate amount
-            return (double)totalBlock * amountBetweenTwoBlock + block1Amount;
+            return (double)totalBlock * timeBlockFeeFormula.Amount + block1Amount;
         }
     }
 }

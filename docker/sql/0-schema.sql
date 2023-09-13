@@ -73,7 +73,7 @@ CREATE TABLE IF NOT EXISTS public."TimeBlockFee"
     "BlockDurationInSeconds" integer,
     "Amount" double precision,
     "CreatedDate" timestamp with time zone,
-    "Order" integer DEFAULT 0 NOT NULL,
+    "BlockNumber" integer DEFAULT 0 NOT NULL,
     CONSTRAINT "PK_TimeBlockFee" PRIMARY KEY ("Id"),
     CONSTRAINT "FK_TimeBlockFee_CustomVehicleType_CustomVehicleTypeId" FOREIGN KEY ("CustomVehicleTypeId")
         REFERENCES public."CustomVehicleType" ("Id") MATCH SIMPLE
