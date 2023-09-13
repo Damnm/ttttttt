@@ -20,12 +20,16 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Common
             WebApplicationFactory = new WebApplicationFactory<Program>()
                 .WithWebHostBuilder(builder =>
                 {
-                    builder.UseEnvironment("IntegrationTests");
+                    var enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
+                    if (enviroment == null)
+                        builder.UseEnvironment("IntegrationTests");
+
                     builder.ConfigureServices(services =>
                     {
                         var configBuilder = new ConfigurationBuilder()
                                             .AddJsonFile("appsettings.IntegrationTests.json")
-                                            .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", true)
+                                            .AddJsonFile($"appsettings.{enviroment}.json", true)
                                             .Build();
 
                         builder.UseConfiguration(configBuilder);

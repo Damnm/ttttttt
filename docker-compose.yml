@@ -16,13 +16,16 @@ services:
       - POSTGRES_DB=dbtest
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=Abcd@12345
+      - PGDATA=/var/lib/postgresql/data
     ports:
       - '5432:5432'
     volumes:
-          # copy the sql script to create tables
-          - ./docker/sql:/docker-entrypoint-initdb.d
+      # copy the sql script to create tables
+      - postgreSQL:/var/lib/postgresql/data
+      - ./docker/sql:/docker-entrypoint-initdb.d
     networks:
-      - my-network
+      postgres:
+        ipv4_address: 10.5.0.10
 
   #unit-tests:
   unit-tests:
@@ -49,8 +52,17 @@ services:
     links:
       - postgreSQL
     networks:
-      - my-network
+      postgres:
+        ipv4_address: 10.5.0.11
 
 networks:
-  my-network:
+  postgres:
     driver: bridge
+    ipam:
+     config:
+       - subnet: 10.5.0.0/16
+         gateway: 10.5.0.1
+
+volumes:
+  postgreSQL:
+    driver: local

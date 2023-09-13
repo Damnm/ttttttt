@@ -2,6 +2,7 @@ using EPAY.ETC.Core.API.Infrastructure.Persistence;
 using Microsoft.OpenApi.Models;
 using NLog;
 using NLog.Web;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 ConfigurationManager config = builder.Configuration;
