@@ -186,6 +186,29 @@ TABLESPACE pg_default;
 ALTER TABLE IF EXISTS public."Vehicles"
     OWNER to postgres;
 
+-- Table: public.Fusions
+
+-- DROP TABLE IF EXISTS public."Fusions";
+
+CREATE TABLE IF NOT EXISTS public."Fusions"
+(
+    "Id" uuid NOT NULL,
+    "Epoch" real NOT NULL,
+    "Loop1" boolean NOT NULL,
+    "RFID" boolean NOT NULL,
+    "Cam1" character varying(15) COLLATE pg_catalog."default",
+    "Loop2" boolean NOT NULL,
+    "Cam2" character varying(15) COLLATE pg_catalog."default",
+    "Loop3" boolean NOT NULL,
+    "ReversedLoop1" boolean NOT NULL,
+    "ReversedLoop2" boolean NOT NULL,
+    CONSTRAINT "PK_Fusions" PRIMARY KEY ("Id")
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public."Fusions"
+    OWNER to postgres;
 
 -- Table: public.TimeBlockFeeFormulas
 CREATE TABLE IF NOT EXISTS public."TimeBlockFeeFormulas"
