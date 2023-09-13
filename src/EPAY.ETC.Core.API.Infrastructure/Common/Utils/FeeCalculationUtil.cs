@@ -25,7 +25,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Common.Utils
             var nextBlock = reverse.Last();
 
             // Get block 1 has been defined
-            TimeBlockFeeModel? block1 = timeBlockFees.FirstOrDefault(x => x.Order == 1);
+            TimeBlockFeeModel? block1 = timeBlockFees.FirstOrDefault(x => x.BlockNumber == 1);
             double block1Amount = block1?.Amount ?? 0;
 
             // Calculate amount increase

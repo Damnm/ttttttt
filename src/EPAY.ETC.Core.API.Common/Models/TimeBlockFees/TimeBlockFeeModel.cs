@@ -14,6 +14,6 @@ namespace EPAY.ETC.Core.API.Core.Models.TimeBlockFees
         public long ToSecond { get; set; } = 0;
         public int? BlockDurationInSeconds { get; set; } = 0;
         public double? Amount { get; set; }
-        public int Order { set; get; } = 0;
+        public int BlockNumber { set; get; } = 0;
     }
 }
