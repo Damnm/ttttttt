@@ -77,13 +77,14 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Repository.Vehicle
             // Assert
             result.Should().NotBeNull();
             result?.Id.Should().Be(vehicle.Id);
-            result.RFID.Should().Be(vehicle.RFID);
-            result.PlateNumber.Should().Be(vehicle.PlateNumber);
-            result.PlateColor.Should().Be(vehicle.PlateColor);
-            result.Make.Should().Be(vehicle.Make);
-            result.Seat.Should().Be(vehicle.Seat);
-            result.VehicleType.Should().Be(vehicle.VehicleType);
-            result.Weight.Should().Be(vehicle.Weight);
+            result?.CreatedDate.Should().Be(vehicle.CreatedDate);
+            result?.RFID.Should().Be(vehicle.RFID);
+            result?.PlateNumber.Should().Be(vehicle.PlateNumber);
+            result?.PlateColor.Should().Be(vehicle.PlateColor);
+            result?.Make.Should().Be(vehicle.Make);
+            result?.Seat.Should().Be(vehicle.Seat);
+            result?.VehicleType.Should().Be(vehicle.VehicleType);
+            result?.Weight.Should().Be(vehicle.Weight);
         }
         #endregion
         #region UpdateAsync

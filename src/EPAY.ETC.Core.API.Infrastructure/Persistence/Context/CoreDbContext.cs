@@ -144,7 +144,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                     CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
                     Name = FeeTypeEnum.Fixed,
                     Desc = FeeTypeEnum.Fixed.ToEnumMemberAttrValue(),
-                    Amount = 0
+                    Amount = 15000
                 },
                 new FeeTypeModel()
                 {
@@ -384,7 +384,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                     });
             #endregion
 
-            #region Time Block Fee configuration
+            #region Fee vehicle Fee configuration
             modelBuilder.Entity<FeeVehicleCategoryModel>().HasKey(x => x.Id);
             modelBuilder.Entity<FeeVehicleCategoryModel>()
                 .HasOne(x => x.VehicleCategory)
@@ -420,6 +420,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                         VehicleGroupId = new Guid("efbe78bc-290b-4a01-a596-bbc62f60f5f3"),
                         CustomVehicleTypeId = new Guid("fffbf4d1-8b76-4f3a-9070-0cfa0a658f08"),
                         PlateNumber = "51A3268",
+                        RFID = "843206065135832015",
                         ValidFrom = new DateTime(2023, 1, 1, 0, 0, 0, DateTimeKind.Utc),
                         ValidTo = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
                     },
@@ -432,6 +433,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                         VehicleGroupId = new Guid("1fc5fc58-94e4-4169-a576-3cd9ecf8eb96"),
                         CustomVehicleTypeId = new Guid("a4a39e55-85c0-4761-ba64-f941111186f9"),
                         PlateNumber = "50A3008",
+                        RFID = "840326156843215625",
                         ValidFrom = new DateTime(2023, 1, 1, 0, 0, 0, DateTimeKind.Utc),
                         ValidTo = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
                     },

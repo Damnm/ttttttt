@@ -3,6 +3,7 @@ using System;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EPAY.ETC.Core.API.Infrastructure.Migrations
 {
     [DbContext(typeof(CoreDbContext))]
-    partial class CoreDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230913033959_update-test-data")]
+    partial class updatetestdata
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -147,7 +150,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                         new
                         {
                             Id = new Guid("46b26ea4-abfd-4b9f-bdf4-ec0e434d9ffc"),
-                            Amount = 15000.0,
+                            Amount = 0.0,
                             CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, 0, DateTimeKind.Utc),
                             Desc = "Phí cố định",
                             Name = "Fixed"
