@@ -185,3 +185,31 @@ TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public."Vehicles"
     OWNER to postgres;
+
+
+-- Table: public.TimeBlockFeeFormulas
+CREATE TABLE IF NOT EXISTS public."TimeBlockFeeFormulas"
+(
+    "Id" uuid NOT NULL,
+    "CustomVehicleTypeId" uuid NOT NULL,
+    "FromBlockNumber" integer NOT NULL,
+    "Amount" double precision NOT NULL,
+    "IntervalInSeconds" bigint NOT NULL,
+    "ApplyDate" timestamp with time zone NOT NULL,
+    "CreatedDate" timestamp with time zone,
+    CONSTRAINT "PK_TimeBlockFeeFormulas" PRIMARY KEY ("Id"),
+    CONSTRAINT "FK_TimeBlockFeeFormulas_CustomVehicleType_CustomVehicleTypeId" FOREIGN KEY ("CustomVehicleTypeId")
+        REFERENCES public."CustomVehicleType" ("Id") MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public."TimeBlockFeeFormulas"
+    OWNER to postgres;
+-- Index: IX_TimeBlockFeeFormulas_CustomVehicleTypeId
+CREATE INDEX IF NOT EXISTS "IX_TimeBlockFeeFormulas_CustomVehicleTypeId"
+    ON public."TimeBlockFeeFormulas" USING btree
+    ("CustomVehicleTypeId" ASC NULLS LAST)
+    TABLESPACE pg_default;
