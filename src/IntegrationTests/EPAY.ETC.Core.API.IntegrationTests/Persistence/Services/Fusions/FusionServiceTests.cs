@@ -108,7 +108,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Services.Fusions
         }
         #endregion
         #region RemoveAsync
-        [Fact, Order(3)]
+        [Fact, Order(4)]
         public async void GivenValidRequest_WhenRemoveAsyncIsCalled_ThenReturnCorrectResult()
         {
             using var scope = WebApplicationFactory.Services.CreateScope();
@@ -123,13 +123,14 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Services.Fusions
             // Assert
             result.Should().NotBeNull();
             result.Data.Should().BeNull();
-            result.Succeeded.Should().BeFalse();
+            result.Succeeded.Should().BeTrue();
             expected.Should().NotBeNull();
             expected.Data.Should().BeNull();
             expected.Succeeded.Should().BeFalse();
+            expected.Errors.Count(x => x.Code == ValidationError.NotFound.Code).Should().Be(1);
         }
 
-        [Fact, Order(4)]
+        [Fact, Order(5)]
         public async void GivenValidRequestAndNonExistingRoleId_WhenRemoveAsyncIsCalled_ThenReturnNotFound()
         {
             using var scope = WebApplicationFactory.Services.CreateScope();
@@ -149,7 +150,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Services.Fusions
         }
         #endregion
         #region UpdateAsync
-        [Fact, Order(4)]
+        [Fact, Order(3)]
         public async void GivenValidRequest_WhenUpdateAsyncIsCalled_ThenReturnCorrectResult()
         {
             using var scope = WebApplicationFactory.Services.CreateScope();
@@ -172,10 +173,10 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Services.Fusions
 
             // Assert
             result.Should().NotBeNull();
-            result.Succeeded.Should().BeFalse();
+            result.Succeeded.Should().BeTrue();
             expected.Should().NotBeNull();
-            expected.Succeeded.Should().BeFalse();
-            //result!.Data.Id.Should().Be((Guid)expected!.Data!.Id);
+            expected.Succeeded.Should().BeTrue();
+            result!.Data.Id.Should().Be((Guid)expected!.Data!.Id);
             result!.Data.Epoch.Should().Be(expected!.Data!.Epoch);
             result!.Data.Loop1.Should().Be(expected!.Data!.Loop1);
             result!.Data.RFID.Should().Be(expected!.Data!.RFID);

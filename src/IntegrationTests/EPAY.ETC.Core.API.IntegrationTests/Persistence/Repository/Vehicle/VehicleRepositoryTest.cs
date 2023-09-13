@@ -25,7 +25,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Repository.Vehicle
         private VehicleModel vehicle = new VehicleModel()
         {
             Id = vehicleId,
-            CreatedDate = DateTime.Now.ConvertToAsianTime(DateTimeKind.Local),
+            //CreatedDate = DateTime.Now.ConvertToAsianTime(DateTimeKind.Local),
             RFID = "123asdas48v6aaswd",
             PlateNumber = "12A123456",
             PlateColor = "White",
@@ -76,15 +76,15 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Repository.Vehicle
 
             // Assert
             result.Should().NotBeNull();
-            result?.Id.Should().Be(vehicle.Id);
-            result?.CreatedDate.Should().Be(vehicle.CreatedDate);
-            result?.RFID.Should().Be(vehicle.RFID);
-            result?.PlateNumber.Should().Be(vehicle.PlateNumber);
-            result?.PlateColor.Should().Be(vehicle.PlateColor);
-            result?.Make.Should().Be(vehicle.Make);
-            result?.Seat.Should().Be(vehicle.Seat);
-            result?.VehicleType.Should().Be(vehicle.VehicleType);
-            result?.Weight.Should().Be(vehicle.Weight);
+            result!.Id.Should().Be(vehicle.Id);
+            result!.CreatedDate.Should().Be(vehicle.CreatedDate);
+            result!.RFID.Should().Be(vehicle.RFID);
+            result!.PlateNumber.Should().Be(vehicle.PlateNumber);
+            result!.PlateColor.Should().Be(vehicle.PlateColor);
+            result!.Make.Should().Be(vehicle.Make);
+            result!.Seat.Should().Be(vehicle.Seat);
+            result!.VehicleType.Should().Be(vehicle.VehicleType);
+            result!.Weight.Should().Be(vehicle.Weight);
         }
         #endregion
         #region UpdateAsync
