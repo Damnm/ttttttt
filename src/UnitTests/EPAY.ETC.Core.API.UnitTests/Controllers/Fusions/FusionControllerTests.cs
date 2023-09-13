@@ -1,4 +1,4 @@
-﻿using EPAY.ETC.Core.API.Controllers;
+﻿using EPAY.ETC.Core.API.Controllers.Fusion;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Fusion;
 using EPAY.ETC.Core.API.Core.Models.Common;
 using EPAY.ETC.Core.API.Core.Models.Fusion;

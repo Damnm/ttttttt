@@ -136,7 +136,13 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Controllers
         {
             // Arrange
             HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", JWTToken);
-            request.PlateNumber = "New some Plate Number";
+            request.PlateNumber = "Some Plate number";
+            request.PlateColor = "Some Plate colour";
+            request.RFID = "Some RFID";
+            request.Make = "Some make";
+            request.Seat = 10;
+            request.VehicleType = "Loại 2";
+            request.Weight = 7000;
 
             // Act
             var result = await HttpClient.PutAsJsonAsync($"/api/Vehicle/v1/vehicles/{_vehicleId}", request);

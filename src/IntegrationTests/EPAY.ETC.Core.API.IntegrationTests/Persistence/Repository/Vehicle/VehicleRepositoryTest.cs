@@ -14,7 +14,7 @@ using System.Text;
 using System.Threading.Tasks;
 using XUnitPriorityOrderer;
 
-namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Vehicle
+namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Repository.Vehicle
 {
     [TestCaseOrderer(CasePriorityOrderer.TypeName, CasePriorityOrderer.AssembyName)]
     public class VehicleRepositoryTest : IntegrationTestBase
@@ -33,7 +33,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Vehicle
             Seat = 5,
             VehicleType = "Loai 2",
             Weight = 5000,
-        };    
+        };
         #endregion
         #region AddAsync
         [Fact, Order(1)]
