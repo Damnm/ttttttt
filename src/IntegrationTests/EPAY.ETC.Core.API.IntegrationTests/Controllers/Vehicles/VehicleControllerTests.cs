@@ -17,7 +17,7 @@ using EPAY.ETC.Core.API.Core.Models.Vehicle;
 using EPAY.ETC.Core.API.Core.Models.Common;
 using EPAY.ETC.Core.API.Core.Extensions;
 
-namespace EPAY.ETC.Core.API.IntegrationTests.Controllers
+namespace EPAY.ETC.Core.API.IntegrationTests.Controllers.Vehicles
 {
     [TestCaseOrderer(CasePriorityOrderer.TypeName, CasePriorityOrderer.AssembyName)]
     public class VehicleControllerTests : IntegrationTestBase
@@ -26,8 +26,8 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Controllers
 
         private static VehicleRequestModel request = new VehicleRequestModel()
         {
-            Id = Guid.NewGuid(),
-            CreatedDate = DateTime.Now.ConvertToAsianTime(DateTimeKind.Local),
+            //Id = Guid.NewGuid(),
+            //CreatedDate = DateTime.Now.ConvertToAsianTime(DateTimeKind.Local),
             PlateNumber = "Some Plate number",
             PlateColor = "Some Plate colour",
             RFID = "Some RFID",
@@ -55,7 +55,27 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Controllers
             result.StatusCode.Should().Be(HttpStatusCode.Created);
             content.Should().NotBeEmpty();
             successful?.GetValue<bool>().Should().BeTrue();
-            data.Should().NotBeNull();           
+            data.Should().NotBeNull();
+        }
+        [Fact, Order(2)]
+        public async Task GivenRequestIsValidAndVehiclesAlreadyExists_WhenAddAsyncIsCalled_ThenReturnConflict()
+        {
+            // Arrange
+            HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", JWTToken);
+
+            // Act
+            var result = await HttpClient.PostAsJsonAsync($"/api/Vehicle/v1/vehicles/{_vehicleId}", request);
+            var content = await result.Content.ReadAsStringAsync();
+
+            var reports = JsonNode.Parse(content);
+            var data = reports?["data"]?.AsObject();
+            var successful = reports?["succeeded"]?.AsValue();
+
+            // Assert
+            result.StatusCode.Should().Be(HttpStatusCode.Conflict);
+            content.Should().NotBeEmpty();
+            successful.GetValue<bool>().Should().BeFalse();
+            data.Should().BeNull();
         }
 
         [Fact, Order(2)]
@@ -73,9 +93,9 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Controllers
             var successful = reports?["succeeded"]?.AsValue();
 
             // Assert
-            result.StatusCode.Should().NotBe(HttpStatusCode.BadRequest);
+            result.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             content.Should().NotBeEmpty();
-            successful?.GetValue<bool>().Should().BeFalse();
+            successful!.GetValue<bool>().Should().BeFalse();
         }
         #endregion
         #region GetByIdAsync
@@ -105,11 +125,11 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Controllers
             data?["Seat"]?.GetValue<int>().Should().Be(request.Seat);
             data?["VehicleType"]?.GetValue<string>().Should().Be(request.VehicleType);
             data?["Weight"]?.GetValue<int>().Should().Be(request.Weight);
-            
+
         }
 
-        [Fact, Order(4)]
-        public async Task GivenNonExistingSettingsGuid_WhenGetByIdAsyncIsCalled_ThenReturnEmpty()
+        [Fact, Order(3)]
+        public async Task GivenNonExistingGuid_WhenGetByIdAsyncIsCalled_ThenReturnEmpty()
         {
             // Arrange
             var _vehicleId = Guid.NewGuid();
@@ -131,7 +151,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Controllers
         }
         #endregion
         #region UpdateAsync
-        [Fact, Order(5)]
+        [Fact, Order(4)]
         public async Task GivenRequestIsValid_WhenUpdateAsync_ThenReturnCorrectResult()
         {
             // Arrange
@@ -166,8 +186,8 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Controllers
             data?["Weight"]?.GetValue<int>().Should().Be(request.Weight);
         }
 
-        [Fact, Order(6)]
-        public async Task GivenNonExistingSettingsGuid_WhenUpdateAsyncIsCalled_ThenReturnNotFound()
+        [Fact, Order(5)]
+        public async Task GivenNonExistingGuid_WhenUpdateAsyncIsCalled_ThenReturnNotFound()
         {
             // Arrange
             HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", JWTToken);
@@ -188,7 +208,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Controllers
             data.Should().BeNull();
         }
 
-        [Fact, Order(7)]
+        [Fact, Order(5)]
         public async Task GivenRequestIsInValid_WhenUpdateAsyncIsCalled_ThenReturnBadRequest()
         {
             // Arrange
@@ -209,7 +229,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Controllers
         }
         #endregion
         #region RemoveAsync
-        [Fact, Order(8)]
+        [Fact, Order(6)]
         public async Task GivenRequestIsValid_WhenRemoveAsync_ThenReturnCorrect()
         {
             // Arrange
@@ -226,11 +246,11 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Controllers
             // Assert
             result.StatusCode.Should().Be(HttpStatusCode.OK);
             content.Should().NotBeEmpty();
-            successful!.GetValue<bool>().Should().BeTrue(); 
+            successful!.GetValue<bool>().Should().BeTrue();
         }
 
-        [Fact, Order(9)]
-        public async Task GivenRequestIsValidAndNonExistingSettingsGuid_WhenRemoveAsync_ThenReturnNotFound()
+        [Fact, Order(7)]
+        public async Task GivenRequestIsValidAndNonExistingGuid_WhenRemoveAsync_ThenReturnNotFound()
         {
             // Arrange
             HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", JWTToken);

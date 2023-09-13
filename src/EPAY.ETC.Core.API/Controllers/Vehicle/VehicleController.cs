@@ -74,6 +74,11 @@ namespace EPAY.ETC.Core.API.Controllers.Vehicle
         }
         #endregion
         #region GetVehiclesDetailAsync
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="vehicleId"></param>
+        /// <returns></returns>
         [HttpGet("v1/vehicles/{vehicleId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

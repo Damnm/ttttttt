@@ -53,3 +53,13 @@ INSERT INTO public."TimeBlockFeeFormulas" ("Id", "CustomVehicleTypeId", "FromBlo
 INSERT INTO public."TimeBlockFeeFormulas" ("Id", "CustomVehicleTypeId", "FromBlockNumber", "Amount", "IntervalInSeconds", "ApplyDate", "CreatedDate") VALUES ('8376b7a6-4330-4133-9e47-afd0d3f7c921', '090a7db5-2d5d-4c1c-a32c-27f946f8dd61', 2, 14000, 1800, '2023-01-01 07:00:00+07', '2023-09-08 07:00:00+07');
 INSERT INTO public."TimeBlockFeeFormulas" ("Id", "CustomVehicleTypeId", "FromBlockNumber", "Amount", "IntervalInSeconds", "ApplyDate", "CreatedDate") VALUES ('98c39b48-1248-4471-ae72-22e51e456307', 'a4a39e55-85c0-4761-ba64-f941111186f9', 2, 9000, 1800, '2023-01-01 07:00:00+07', '2023-09-08 07:00:00+07');
 
+INSERT INTO public."Fusions" ("Id", "Epoch", "Loop1", "RFID", "Cam1", "Loop2", "Cam2", "Loop3", "ReversedLoop1", "ReversedLoop2") VALUES ('47610194-3f8d-44c1-90d5-87bec44a9dd2', 20, true, true, '12A1345', true, '12A1345', true, true, true);
+INSERT INTO public."Fusions" ("Id", "Epoch", "Loop1", "RFID", "Cam1", "Loop2", "Cam2", "Loop3", "ReversedLoop1", "ReversedLoop2") VALUES ('9c3c8fcd-5819-4ec8-a3aa-e71e74a83c80', 10, true, true, '12A123456', true, '12A123456', true, true, true);
+INSERT INTO public."Fusions" ("Id", "Epoch", "Loop1", "RFID", "Cam1", "Loop2", "Cam2", "Loop3", "ReversedLoop1", "ReversedLoop2") VALUES ('ed7384ce-7918-4839-a9fe-4f0780a5b72c', 0, true, true, 'straaaaaing', true, 'string', true, true, true);
+INSERT INTO public."Fusions" ("Id", "Epoch", "Loop1", "RFID", "Cam1", "Loop2", "Cam2", "Loop3", "ReversedLoop1", "ReversedLoop2") VALUES ('b9ec5016-f5ca-4ac8-aadb-53e5bb041fc5', 0, true, true, 'string', true, 'string', true, true, true);
+
+
+INSERT INTO public."Vehicles" ("Id", "RFID", "PlateNumber", "PlateColor", "Make", "Seat", "Weight", "VehicleType", "CreatedDate") VALUES ('d4a2f1a0-5b6f-40db-ad09-6fdabbb9365f', '4156asdasd87479q', '12B5478', 'Blue', 'Toyota', 5, 2000, 'Loại 2', '2023-08-25 10:34:49.218526+07');
+INSERT INTO public."Vehicles" ("Id", "RFID", "PlateNumber", "PlateColor", "Make", "Seat", "Weight", "VehicleType", "CreatedDate") VALUES ('3d21ec09-f271-4183-b691-477274f4d547', '12s4adsvsad', '12A12345', 'blue', 'Toyota', 5, 5000, 'Loai 1', NULL);
+INSERT INTO public."Vehicles" ("Id", "RFID", "PlateNumber", "PlateColor", "Make", "Seat", "Weight", "VehicleType", "CreatedDate") VALUES ('a18081f7-5706-499d-acf9-680d5f13502e', '12s4adsvsad', '12A12345', 'blue', 'Toyota', 5, 5000, 'Loai 1', NULL);
+INSERT INTO public."Vehicles" ("Id", "RFID", "PlateNumber", "PlateColor", "Make", "Seat", "Weight", "VehicleType", "CreatedDate") VALUES ('8fd84949-94b8-4607-856d-b38564fe7bac', '123asdas48v6aaswd', '12A123456', 'White', 'Toyotra', 5, 5000, 'Loai 2', '2023-09-13 10:11:58.84279+07');
