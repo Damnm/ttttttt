@@ -1,5 +1,8 @@
-﻿namespace EPAY.ETC.Core.API.Core.Exceptions
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace EPAY.ETC.Core.API.Core.Exceptions
 {
+    [ExcludeFromCodeCoverage]
     public class ApiExceptionMessages
     {
         public static string ExceptionMessages(Exception ex)

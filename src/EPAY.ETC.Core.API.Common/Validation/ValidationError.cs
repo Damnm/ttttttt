@@ -1,4 +1,4 @@
-﻿using System.Runtime.Serialization;
+﻿using System.Diagnostics.CodeAnalysis;
 
 namespace EPAY.ETC.Core.API.Core.Validation
 {
@@ -8,6 +8,7 @@ namespace EPAY.ETC.Core.API.Core.Validation
     /// Error messages allow the caller to easily show error messages to the end user.
     /// </summary>
     [Serializable]
+    [ExcludeFromCodeCoverage]
     public class ValidationError
     {
         /// <summary>

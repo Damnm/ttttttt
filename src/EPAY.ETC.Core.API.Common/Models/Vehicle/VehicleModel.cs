@@ -1,7 +1,9 @@
 ﻿using EPAY.ETC.Core.API.Core.Entities;
+using System.Diagnostics.CodeAnalysis;
 
 namespace EPAY.ETC.Core.API.Core.Models.Vehicle
 {
+    [ExcludeFromCodeCoverage]
     public class VehicleModel : BaseEntity<Guid>
     {
         public string? RFID { get; set; }

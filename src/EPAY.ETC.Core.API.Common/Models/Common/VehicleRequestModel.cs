@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace EPAY.ETC.Core.API.Core.Models.Common
 {
+    [ExcludeFromCodeCoverage]
     public class VehicleRequestModel
     {
         [JsonIgnore]

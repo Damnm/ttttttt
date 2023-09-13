@@ -2,10 +2,12 @@
 using EPAY.ETC.Core.API.Core.Models.FeeVehicleCategories;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace EPAY.ETC.Core.API.Core.Models.VehicleGroups
 {
     [Table("VehicleGroup")]
+    [ExcludeFromCodeCoverage]
     public class VehicleGroupModel : BaseEntity<Guid>
     {
         [StringLength(100)]

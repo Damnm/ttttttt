@@ -1,10 +1,12 @@
 ﻿using EPAY.ETC.Core.API.Core.Entities;
 using EPAY.ETC.Core.API.Core.Models.CustomVehicleTypes;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace EPAY.ETC.Core.API.Core.Models.TimeBlockFees
 {
     [Table("TimeBlockFee")]
+    [ExcludeFromCodeCoverage]
     public class TimeBlockFeeModel : BaseEntity<Guid>
     {
         public Guid CustomVehicleTypeId { get; set; }

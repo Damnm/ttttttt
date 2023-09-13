@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Diagnostics.CodeAnalysis;
 
 namespace EPAY.ETC.Core.API.Core.Models.SearchRequest
 {
+    [ExcludeFromCodeCoverage]
     public class DateRangeModel
     {
         public DateTime FromDate { get; set; }

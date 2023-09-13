@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
 namespace EPAY.ETC.Core.API.Core.Models.Common
 {
+    [ExcludeFromCodeCoverage]
     public class FusionRequestModel
     {
         [JsonIgnore]

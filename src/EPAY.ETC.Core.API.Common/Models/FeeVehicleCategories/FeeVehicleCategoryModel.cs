@@ -5,10 +5,12 @@ using EPAY.ETC.Core.API.Core.Models.VehicleCategories;
 using EPAY.ETC.Core.API.Core.Models.VehicleGroups;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace EPAY.ETC.Core.API.Core.Models.FeeVehicleCategories
 {
     [Table("FeeVehicleCategory")]
+    [ExcludeFromCodeCoverage]
     public class FeeVehicleCategoryModel : BaseEntity<Guid>
     {
         public Guid VehicleCategoryId { get; set; }

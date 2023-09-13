@@ -1,30 +1,34 @@
-﻿namespace EPAY.ETC.Core.API.Core.Validation
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace EPAY.ETC.Core.API.Core.Validation
 {
 
     /// <summary>
     /// A standard response for service calls.
     /// </summary>
     /// <typeparam name="T">Return data type</typeparam>
+    [ExcludeFromCodeCoverage]
     public class ValidationResult<T> : ValidationResult
     {
         public T Data { get; set; }
-        
+
         public ValidationResult(T data)
         {
             Data = data;
         }
-        
+
         public ValidationResult(T data, List<ValidationError> errors) : base(errors)
         {
             Data = data;
-        }        
-        
+        }
+
         public ValidationResult(List<ValidationError> errors) : base(errors)
         {
 
         }
     }
 
+    [ExcludeFromCodeCoverage]
     public class ValidationResult
     {
         public bool Succeeded => Errors == null || !Errors.Any();

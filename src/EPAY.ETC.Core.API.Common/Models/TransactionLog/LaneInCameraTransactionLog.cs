@@ -1,13 +1,10 @@
 ﻿using EPAY.ETC.Core.API.Core.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics.CodeAnalysis;
 
 namespace EPAY.ETC.Core.API.Core.Models.TransactionLog
 {
-    public class LaneInCameraTransactionLog: BaseEntity<Guid>
+    [ExcludeFromCodeCoverage]
+    public class LaneInCameraTransactionLog : BaseEntity<Guid>
     {
         public Double Epoch { get; set; }
         public string? RFID { get; set; }

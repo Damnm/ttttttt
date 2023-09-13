@@ -1,21 +1,18 @@
 ﻿using EPAY.ETC.Core.API.Core.Extensions;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics.CodeAnalysis;
 
 namespace EPAY.ETC.Core.API.Core.Entities
 {
+    [ExcludeFromCodeCoverage]
     public class VehicleInfromation : BaseEntity<string>
     {
-        public VehicleInfromation() 
+        public VehicleInfromation()
         {
             CreatedDate = DateTime.Now.ConvertToAsianTime(DateTimeKind.Local);
         }
 
-        
+
         [StringLength(50)]
         public string? RFID { get; set; }
         [StringLength(20)]

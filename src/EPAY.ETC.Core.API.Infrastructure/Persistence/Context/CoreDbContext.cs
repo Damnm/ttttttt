@@ -14,9 +14,11 @@ using EPAY.ETC.Core.API.Core.Models.VehicleGroups;
 using EPAY.ETC.Core.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using System.Diagnostics.CodeAnalysis;
 
 namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
 {
+    [ExcludeFromCodeCoverage]
     public class CoreDbContext : DbContext
     {
         public CoreDbContext() { }

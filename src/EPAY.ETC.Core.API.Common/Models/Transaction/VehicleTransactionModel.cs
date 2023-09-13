@@ -1,15 +1,11 @@
 ﻿using EPAY.ETC.Core.API.Core.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics.CodeAnalysis;
 
 namespace EPAY.ETC.Core.API.Core.Models.Transaction
 {
+    [ExcludeFromCodeCoverage]
     public class VehicleTransactionModel : BaseEntity<Guid>
     {
-        
         public Guid LaneInId { get; set; }
         public DateTime LaneInDate { get; set; }
         public Guid LaneOutId { get; set; }

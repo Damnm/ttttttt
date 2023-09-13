@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EPAY.ETC.Core.API.Core.Extensions
 {
+    [ExcludeFromCodeCoverage]
     public static class DateTimeHelperExtensions
     {
         /// <summary>

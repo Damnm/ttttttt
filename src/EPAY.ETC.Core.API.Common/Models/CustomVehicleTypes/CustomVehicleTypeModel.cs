@@ -4,10 +4,12 @@ using EPAY.ETC.Core.API.Core.Models.TimeBlockFees;
 using EPAY.ETC.Core.Models.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace EPAY.ETC.Core.API.Core.Models.CustomVehicleTypes
 {
     [Table("CustomVehicleType")]
+    [ExcludeFromCodeCoverage]
     public class CustomVehicleTypeModel : BaseEntity<Guid>
     {
         public CustomVehicleTypeEnum Name { get; set; }

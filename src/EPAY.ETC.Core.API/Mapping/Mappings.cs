@@ -2,11 +2,19 @@
 using EPAY.ETC.Core.API.Core.Models.Common;
 using EPAY.ETC.Core.API.Core.Models.Fusion;
 using EPAY.ETC.Core.API.Core.Models.Vehicle;
+using System.Diagnostics.CodeAnalysis;
 
 namespace EPAY.ETC.Core.API.Mapping
 {
-    public class Mappings: Profile
+    /// <summary>
+    /// 
+    /// </summary>
+    [ExcludeFromCodeCoverage]
+    public class Mappings : Profile
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public Mappings()
         {
             CreateMap<VehicleRequestModel, VehicleModel>()

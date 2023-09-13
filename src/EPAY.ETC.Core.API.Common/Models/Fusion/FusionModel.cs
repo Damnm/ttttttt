@@ -1,13 +1,10 @@
 ﻿using EPAY.ETC.Core.API.Core.Entities;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics.CodeAnalysis;
 
 namespace EPAY.ETC.Core.API.Core.Models.Fusion
 {
+    [ExcludeFromCodeCoverage]
     public class FusionModel : BaseEntity<Guid>
     {
         public float Epoch { get; set; }
