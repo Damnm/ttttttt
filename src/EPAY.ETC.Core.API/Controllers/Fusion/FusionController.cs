@@ -1,15 +1,14 @@
 ﻿using EPAY.ETC.Core.API.Core.Exceptions;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Fusion;
-using EPAY.ETC.Core.API.Core.Interfaces.Services.Vehicles;
 using EPAY.ETC.Core.API.Core.Models.Common;
-using EPAY.ETC.Core.API.Core.Models.Fusion;
-using EPAY.ETC.Core.API.Core.Models.Vehicle;
 using EPAY.ETC.Core.API.Core.Validation;
-using EPAY.ETC.Core.API.Infrastructure.Services.Vehicles;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EPAY.ETC.Core.API.Controllers.Fusion
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class FusionController : ControllerBase
     {
         #region Variables
@@ -17,6 +16,12 @@ namespace EPAY.ETC.Core.API.Controllers.Fusion
         private readonly IFusionService _fusionService;
         #endregion
         #region Constructor
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="logger"></param>
+        /// <param name="fusionService"></param>
+        /// <exception cref="ArgumentNullException"></exception>
         public FusionController(ILogger<FusionController> logger,
             IFusionService fusionService)
         {

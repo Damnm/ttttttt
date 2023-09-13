@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EPAY.ETC.Core.API.Controllers.Fees
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [ApiController]
     [Route("~/api/[controller]")]
     public class FeeCalculationController : ControllerBase
@@ -13,6 +16,11 @@ namespace EPAY.ETC.Core.API.Controllers.Fees
         private readonly ILogger<FeeCalculationController> _logger;
         private readonly IFeeCalculationService _feeCalculationService;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="logger"></param>
+        /// <param name="feeCalculationService"></param>
         public FeeCalculationController(ILogger<FeeCalculationController> logger, IFeeCalculationService feeCalculationService)
         {
             _logger = logger;
@@ -21,7 +29,7 @@ namespace EPAY.ETC.Core.API.Controllers.Fees
 
         #region CalculateFeeAsync
         /// <summary>
-        /// Calculate fee
+        /// Fee calculation 
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>

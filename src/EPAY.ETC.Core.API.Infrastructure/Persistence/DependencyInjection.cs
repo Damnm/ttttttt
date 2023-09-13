@@ -36,6 +36,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence
             services.AddScoped<ICustomVehicleTypeRepository, CustomVehicleTypeRepository>();
             services.AddScoped<IFeeTypeRepository, FeeTypeRepository>();
             services.AddScoped<IFeeVehicleCategoryRepository, FeeVehicleCategoryRepository>();
+            services.AddScoped<ITimeBlockFeeFormulaRepository, TimeBlockFeeFormulaRepository>();
             services.AddScoped<ITimeBlockFeeRepository, TimeBlockFeeRepository>();
             services.AddScoped<IVehicleCategoryRepository, VehicleCategoryRepository>();
             services.AddScoped<IVehicleGroupRepository, VehicleGroupRepository>();

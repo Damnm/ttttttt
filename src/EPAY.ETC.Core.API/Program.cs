@@ -48,6 +48,7 @@ builder.Services.AddSwaggerGen(c =>
 
                     }
                 });
+    c.IncludeXmlComments(Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "EPAY.ETC.Core.API.xml"), true);
 });
 builder.Services.AddAutoMapper(typeof(Program));
 

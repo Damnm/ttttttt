@@ -3,16 +3,15 @@ using EPAY.ETC.Core.API.Core.Interfaces.Services.Vehicles;
 using EPAY.ETC.Core.API.Core.Models.Common;
 using EPAY.ETC.Core.API.Core.Models.Vehicle;
 using EPAY.ETC.Core.API.Core.Validation;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Nest;
-using System;
 
 namespace EPAY.ETC.Core.API.Controllers.Vehicle
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [ApiController]
     [Route("~/api/[controller]")]
-
     public class VehicleController : ControllerBase
     {
         #region Variables
@@ -21,6 +20,12 @@ namespace EPAY.ETC.Core.API.Controllers.Vehicle
         #endregion
 
         #region Constructor
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="logger"></param>
+        /// <param name="vehicleService"></param>
+        /// <exception cref="ArgumentNullException"></exception>
         public VehicleController(ILogger<VehicleController> logger,
             IVehicleService vehicleService)
         {

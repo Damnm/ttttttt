@@ -122,6 +122,25 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.FeeVehicleCate
         }
 
         [Fact]
+        public async void GivenRequestIsValidAndIdIsNotExists_WhenGetByIdAsyncIsCalled_ThenReturnNull()
+        {
+            // Arrange
+            var data = entities.FirstOrDefault()!;
+            _dbSetMock = EFTestHelper.GetMockDbSet(new List<FeeVehicleCategoryModel>());
+            _dbContextMock.Setup(x => x.FeeVehicleCategories).Returns(_dbSetMock.Object);
+
+            // Act
+            var repository = new FeeVehicleCategoryRepository(_loggerMock.Object, _dbContextMock.Object);
+            var result = await repository.GetByIdAsync(data.Id);
+
+            // Assert
+            result.Should().BeNull();
+            _dbContextMock.Verify(x => x.FeeVehicleCategories, Times.Once);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(repository.GetByIdAsync)} method...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(repository.GetByIdAsync)} method", Times.Never, _exception);
+        }
+
+        [Fact]
         public async Task GivenRequestIsValidAndDBContextIsDown_WhenGetByIdAsyncIsCalled_ThenThrowExceptionAsync()
         {
             // Arrange

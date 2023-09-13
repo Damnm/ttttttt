@@ -18,17 +18,20 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
         private readonly ILogger<FeeCalculationService> _logger;
         private readonly IFeeVehicleCategoryRepository _feeVehicleCategoryRepository;
         private readonly ITimeBlockFeeRepository _timeBlockFeeRepository;
+        private readonly ITimeBlockFeeFormulaRepository _feeFormulaRepository;
         private readonly IVehicleRepository _vehicleRepository;
 
         public FeeCalculationService(
             ILogger<FeeCalculationService> logger,
             IFeeVehicleCategoryRepository feeVehicleCategoryRepository,
             ITimeBlockFeeRepository timeBlockFeeRepository,
+            ITimeBlockFeeFormulaRepository feeFormulaRepository,
             IVehicleRepository vehicleRepository)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _feeVehicleCategoryRepository = feeVehicleCategoryRepository ?? throw new ArgumentNullException(nameof(feeVehicleCategoryRepository));
             _timeBlockFeeRepository = timeBlockFeeRepository ?? throw new ArgumentNullException(nameof(timeBlockFeeRepository));
+            _feeFormulaRepository = feeFormulaRepository ?? throw new ArgumentNullException(nameof(feeFormulaRepository));
             _vehicleRepository = vehicleRepository ?? throw new ArgumentNullException(nameof(vehicleRepository));
         }
 
@@ -114,9 +117,9 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
                     default:
                         if (feeVehicleCategory?.CustomVehicleType != null)
                             customVehicleType = feeVehicleCategory.CustomVehicleType.Name;
-
+                        var timeBlockFeeFormulas = await _feeFormulaRepository.GetAllAsync(x => x.CustomVehicleType != null && x.CustomVehicleType.Name == customVehicleType);
                         var timeBlockFees = await _timeBlockFeeRepository.GetAllAsync(x => x.CustomVehicleType != null && x.CustomVehicleType.Name == customVehicleType);
-                        result.Fee.Amount = FeeCalculationUtil.FeeCalculation(timeBlockFees?.ToList(), duration);
+                        result.Fee.Amount = FeeCalculationUtil.FeeCalculation(timeBlockFees?.ToList(), timeBlockFeeFormulas.FirstOrDefault(), duration);
                         break;
                 }
 
@@ -150,8 +153,9 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
                 };
 
                 // Calculate using TimeBlockFee
+                var timeBlockFeeFormulas = await _feeFormulaRepository.GetAllAsync(x => x.CustomVehicleType != null && x.CustomVehicleType.Name == customVehicleType);
                 var timeBlockFees = await _timeBlockFeeRepository.GetAllAsync(x => x.CustomVehicleType != null && x.CustomVehicleType.Name == customVehicleType);
-                result.Fee.Amount = FeeCalculationUtil.FeeCalculation(timeBlockFees?.ToList(), duration);
+                result.Fee.Amount = FeeCalculationUtil.FeeCalculation(timeBlockFees?.ToList(), timeBlockFeeFormulas.FirstOrDefault(), duration);
 
                 return ValidationResult.Success(result);
             }

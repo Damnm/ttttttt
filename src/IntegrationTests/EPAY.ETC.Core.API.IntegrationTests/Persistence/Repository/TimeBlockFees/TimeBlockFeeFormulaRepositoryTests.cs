@@ -1,16 +1,16 @@
-﻿using EPAY.ETC.Core.API.Core.Models.CustomVehicleTypes;
-using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.CustomVehicleTypes;
+﻿using EPAY.ETC.Core.API.Core.Models.TimeBlockFees;
+using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.TimeBlockFees;
 using EPAY.ETC.Core.API.IntegrationTests.Common;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq.Expressions;
 
-namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Repository.CustomVehicleTypes
+namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Repository.TimeBlockFeeFormulas
 {
-    public class CustomVehicleTypeRepositoryTests : IntegrationTestBase
+    public class TimeBlockFeeFormulaRepositoryTests : IntegrationTestBase
     {
         #region Init Method
-        private ICustomVehicleTypeRepository? _repository;
+        private ITimeBlockFeeFormulaRepository? _repository;
         #endregion
 
         #region Init Data test
@@ -21,7 +21,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Repository.CustomVehicl
         public async Task GivenRequestIsValid_WhenGetAllAsyncIsCalled_ThenReturnCorrectResult()
         {
             using var scope = WebApplicationFactory.Services.CreateScope();
-            _repository = scope.ServiceProvider.GetRequiredService<ICustomVehicleTypeRepository>();
+            _repository = scope.ServiceProvider.GetRequiredService<ITimeBlockFeeFormulaRepository>();
 
             // Arrange
 
@@ -35,10 +35,10 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Repository.CustomVehicl
         public async Task GivenRequestIsValidAndExpressionIsExists_WhenGetAllAsyncIsCalled_ThenReturnCorrectResult()
         {
             using var scope = WebApplicationFactory.Services.CreateScope();
-            _repository = scope.ServiceProvider.GetRequiredService<ICustomVehicleTypeRepository>();
+            _repository = scope.ServiceProvider.GetRequiredService<ITimeBlockFeeFormulaRepository>();
 
             // Arrange
-            Expression<Func<CustomVehicleTypeModel, bool>> expression = s => s.Name == Models.Enums.CustomVehicleTypeEnum.Type1;
+            Expression<Func<TimeBlockFeeFormulaModel, bool>> expression = s => s.CustomVehicleTypeId == Guid.Parse("a4a39e55-85c0-4761-ba64-f941111186f9");
 
             // Act
             var result = await _repository.GetAllAsync(expression);
@@ -53,10 +53,10 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Repository.CustomVehicl
         public async Task GivenRequestIsValid_WhenGetByIdAsyncIsCalled_ThenReturnCorrectResult()
         {
             using var scope = WebApplicationFactory.Services.CreateScope();
-            _repository = scope.ServiceProvider.GetRequiredService<ICustomVehicleTypeRepository>();
+            _repository = scope.ServiceProvider.GetRequiredService<ITimeBlockFeeFormulaRepository>();
 
             // Arrange
-            Guid guid = Guid.Parse("be652877-ca81-4fb4-bfa1-b9cec61f9e6b");
+            Guid guid = Guid.Parse("667b13b4-088e-4a1a-bd36-ec15e795109b");
 
             // Act
             var result = await _repository.GetByIdAsync(guid);
@@ -70,7 +70,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Repository.CustomVehicl
         public async Task GivenRequestIsValidAndIdIsNotExists_WhenGetByIdAsyncIsCalled_ThenReturnNull()
         {
             using var scope = WebApplicationFactory.Services.CreateScope();
-            _repository = scope.ServiceProvider.GetRequiredService<ICustomVehicleTypeRepository>();
+            _repository = scope.ServiceProvider.GetRequiredService<ITimeBlockFeeFormulaRepository>();
 
             // Arrange
             Guid guid = Guid.NewGuid();

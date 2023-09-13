@@ -16,5 +16,6 @@ namespace EPAY.ETC.Core.API.Core.Models.CustomVehicleTypes
 
         public virtual ICollection<FeeVehicleCategoryModel>? FeeVehicleCategories { get; set; }
         public virtual ICollection<TimeBlockFeeModel>? TimeBlockFees { get; set; }
+        public virtual ICollection<TimeBlockFeeFormulaModel>? TimeBlockFeeFormulas { get; set; }
     }
 }

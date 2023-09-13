@@ -37,6 +37,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
         public virtual DbSet<VehicleCategoryModel> VehicleCategories { get; set; }
         public virtual DbSet<VehicleGroupModel> VehicleGroups { get; set; }
         public virtual DbSet<TimeBlockFeeModel> TimeBlockFees { get; set; }
+        public virtual DbSet<TimeBlockFeeFormulaModel> TimeBlockFeeFormulas { get; set; }
         public virtual DbSet<FeeVehicleCategoryModel> FeeVehicleCategories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -209,7 +210,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                         FromSecond = 0,
                         ToSecond = 599,
                         Amount = 9000,
-                        Order = 0
+                        BlockNumber = 0
                     },
                     new TimeBlockFeeModel()
                     {
@@ -220,7 +221,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                         FromSecond = 600,
                         ToSecond = 3599,
                         Amount = 14000,
-                        Order = 1
+                        BlockNumber = 1
                     },
                     new TimeBlockFeeModel()
                     {
@@ -231,7 +232,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                         FromSecond = 3600,
                         ToSecond = 5399,
                         Amount = 21000,
-                        Order = 2
+                        BlockNumber = 2
                     },
                     new TimeBlockFeeModel()
                     {
@@ -242,7 +243,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                         FromSecond = 5400,
                         ToSecond = 7199,
                         Amount = 28000,
-                        Order = 3
+                        BlockNumber = 3
                     },
 
                     // Xe loại 2
@@ -255,7 +256,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                         FromSecond = 0,
                         ToSecond = 599,
                         Amount = 14000,
-                        Order = 0
+                        BlockNumber = 0
                     },
                     new TimeBlockFeeModel()
                     {
@@ -266,7 +267,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                         FromSecond = 600,
                         ToSecond = 3599,
                         Amount = 19000,
-                        Order = 1
+                        BlockNumber = 1
                     },
                     new TimeBlockFeeModel()
                     {
@@ -277,7 +278,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                         FromSecond = 3600,
                         ToSecond = 5399,
                         Amount = 28000,
-                        Order = 2
+                        BlockNumber = 2
                     },
                     new TimeBlockFeeModel()
                     {
@@ -288,7 +289,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                         FromSecond = 5400,
                         ToSecond = 7199,
                         Amount = 37000,
-                        Order = 3
+                        BlockNumber = 3
                     },
 
                     // Xe loại 3
@@ -301,7 +302,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                         FromSecond = 0,
                         ToSecond = 599,
                         Amount = 14000,
-                        Order = 0
+                        BlockNumber = 0
                     },
                     new TimeBlockFeeModel()
                     {
@@ -312,7 +313,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                         FromSecond = 600,
                         ToSecond = 3599,
                         Amount = 24000,
-                        Order = 1
+                        BlockNumber = 1
                     },
                     new TimeBlockFeeModel()
                     {
@@ -323,7 +324,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                         FromSecond = 3600,
                         ToSecond = 5399,
                         Amount = 38000,
-                        Order = 2
+                        BlockNumber = 2
                     },
                     new TimeBlockFeeModel()
                     {
@@ -334,7 +335,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                         FromSecond = 5400,
                         ToSecond = 7199,
                         Amount = 52000,
-                        Order = 3
+                        BlockNumber = 3
                     },
 
                     // Xe loại 4
@@ -347,7 +348,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                         FromSecond = 0,
                         ToSecond = 599,
                         Amount = 24000,
-                        Order = 0
+                        BlockNumber = 0
                     },
                     new TimeBlockFeeModel()
                     {
@@ -358,7 +359,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                         FromSecond = 600,
                         ToSecond = 3599,
                         Amount = 24000,
-                        Order = 1
+                        BlockNumber = 1
                     },
                     new TimeBlockFeeModel()
                     {
@@ -369,7 +370,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                         FromSecond = 3600,
                         ToSecond = 5399,
                         Amount = 38000,
-                        Order = 2
+                        BlockNumber = 2
                     },
                     new TimeBlockFeeModel()
                     {
@@ -380,7 +381,66 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                         FromSecond = 5400,
                         ToSecond = 7199,
                         Amount = 52000,
-                        Order = 3
+                        BlockNumber = 3
+                    });
+            #endregion
+
+            #region Time Block Fee Formula configuration
+            modelBuilder.Entity<TimeBlockFeeFormulaModel>().HasKey(x => x.Id);
+            modelBuilder.Entity<TimeBlockFeeFormulaModel>()
+                .HasOne(x => x.CustomVehicleType)
+                .WithMany(x => x.TimeBlockFeeFormulas)
+                .HasForeignKey(x => x.CustomVehicleTypeId);
+            modelBuilder.Entity<TimeBlockFeeFormulaModel>().HasIndex(x => x.CustomVehicleTypeId);
+
+            if (isDevelopment)
+                modelBuilder.Entity<TimeBlockFeeFormulaModel>().HasData(
+                    // Xe loại 1
+                    new TimeBlockFeeFormulaModel()
+                    {
+                        Id = new Guid("667b13b4-088e-4a1a-bd36-ec15e795109b"),
+                        CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
+                        CustomVehicleTypeId = new Guid("fffbf4d1-8b76-4f3a-9070-0cfa0a658f08"),
+                        FromBlockNumber = 2,
+                        IntervalInSeconds = 1800,
+                        Amount = 7000,
+                        ApplyDate = new DateTime(2023, 1, 1, 0, 0, 0, DateTimeKind.Utc)
+                    },
+
+                    // Xe loại 2
+                    new TimeBlockFeeFormulaModel()
+                    {
+                        Id = new Guid("98c39b48-1248-4471-ae72-22e51e456307"),
+                        CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
+                        CustomVehicleTypeId = new Guid("a4a39e55-85c0-4761-ba64-f941111186f9"),
+                        FromBlockNumber = 2,
+                        IntervalInSeconds = 1800,
+                        Amount = 9000,
+                        ApplyDate = new DateTime(2023, 1, 1, 0, 0, 0, DateTimeKind.Utc)
+                    },
+
+                    // Xe loại 3
+                    new TimeBlockFeeFormulaModel()
+                    {
+                        Id = new Guid("41369f70-ab4d-4199-a1b3-f7746fa0ff88"),
+                        CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
+                        CustomVehicleTypeId = new Guid("be652877-ca81-4fb4-bfa1-b9cec61f9e6b"),
+                        FromBlockNumber = 2,
+                        IntervalInSeconds = 1800,
+                        Amount = 14000,
+                        ApplyDate = new DateTime(2023, 1, 1, 0, 0, 0, DateTimeKind.Utc)
+                    },
+
+                    // Xe loại 4
+                    new TimeBlockFeeFormulaModel()
+                    {
+                        Id = new Guid("8376b7a6-4330-4133-9e47-afd0d3f7c921"),
+                        CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
+                        CustomVehicleTypeId = new Guid("090a7db5-2d5d-4c1c-a32c-27f946f8dd61"),
+                        FromBlockNumber = 2,
+                        IntervalInSeconds = 1800,
+                        Amount = 14000,
+                        ApplyDate = new DateTime(2023, 1, 1, 0, 0, 0, DateTimeKind.Utc)
                     });
             #endregion
 
