@@ -1,4 +1,5 @@
-﻿using EPAY.ETC.Core.API.Core.Models.Fusion;
+﻿using EPAY.ETC.Core.API.Core.Interfaces.Repositories;
+using EPAY.ETC.Core.API.Core.Models.Fusion;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Fusion;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Vehicle;
 using EPAY.ETC.Core.API.IntegrationTests.Common;
@@ -88,6 +89,21 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Repository.Fusions
             result!.Loop3.Should().Be(fusion.Loop3);
             result!.ReversedLoop1.Should().Be(fusion.ReversedLoop1);
             result!.ReversedLoop2.Should().Be(fusion.ReversedLoop2);
+        }
+        [Fact, Order(2)]
+        public async Task GivenRequestIsValidAndIdIsNotExists_WhenGetByIdAsyncIsCalled_ThenReturnNull()
+        {
+            using var scope = WebApplicationFactory.Services.CreateScope();
+            _fusionRepository = scope.ServiceProvider.GetRequiredService<IFusionRepository>();
+
+            // Arrange
+            Guid guid = Guid.NewGuid();
+
+            // Act
+            var result = await _fusionRepository.GetByIdAsync(guid);
+
+            // Assert
+            result.Should().BeNull();
         }
         #endregion
         #region UpdateAsync

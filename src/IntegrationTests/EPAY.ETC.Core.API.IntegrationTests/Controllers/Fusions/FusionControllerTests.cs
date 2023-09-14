@@ -1,7 +1,6 @@
-﻿using EPAY.ETC.Core.API.Core.Interfaces.Services.Vehicles;
+﻿using EPAY.ETC.Core.API.Core.Models.Common;
 using EPAY.ETC.Core.API.IntegrationTests.Common;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Linq;
+using FluentAssertions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,31 +11,26 @@ using System.Text;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using XUnitPriorityOrderer;
-using FluentAssertions;
-using EPAY.ETC.Core.API.Core.Models.Vehicle;
-using EPAY.ETC.Core.API.Core.Models.Common;
-using EPAY.ETC.Core.API.Core.Extensions;
 
-namespace EPAY.ETC.Core.API.IntegrationTests.Controllers.Vehicles
+namespace EPAY.ETC.Core.API.IntegrationTests.Controllers.Fusions
 {
     [TestCaseOrderer(CasePriorityOrderer.TypeName, CasePriorityOrderer.AssembyName)]
-    public class VehicleControllerTests : IntegrationTestBase
+    public class FusionControllerTests : IntegrationTestBase
     {
-        private static Guid? _vehicleId = Guid.Empty;
+        private static Guid? _fusionId = Guid.Empty;
 
-        private static VehicleRequestModel request = new VehicleRequestModel()
+        private static FusionRequestModel request = new FusionRequestModel()
         {
-            //Id = Guid.NewGuid(),
-            //CreatedDate = DateTime.Now.ConvertToAsianTime(DateTimeKind.Local),
-            PlateNumber = "Some Plate number",
-            PlateColor = "Some Plate colour",
-            RFID = "Some RFID",
-            Make = "Some make",
-            Seat = 10,
-            VehicleType = "Loại 2",
-            Weight = 7000,
+            Epoch = 01524,
+            Loop1 = true,
+            RFID = false,
+            Cam1 = "12A12356",
+            Loop2 = true,
+            Cam2 = "12A12356",
+            Loop3 = true,
+            ReversedLoop1 = true,
+            ReversedLoop2 = true,
         };
-
         #region AddAsync
         [Fact, Order(1)]
         public async Task GivenValidRequest_WhenApiAddAsyncIsCalled_ThenReturnCorrectResult()
@@ -44,7 +38,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Controllers.Vehicles
             // Arrange
             HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", JWTToken);
             // Act
-            var result = await HttpClient.PostAsJsonAsync($"/api/Vehicle/v1/vehicles", request);
+            var result = await HttpClient.PostAsJsonAsync($"/api/Fusion/v1/fusions", request);
             var content = await result.Content.ReadAsStringAsync();
 
             var reports = JsonNode.Parse(content);
@@ -56,7 +50,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Controllers.Vehicles
             content.Should().NotBeEmpty();
             successful?.GetValue<bool>().Should().BeTrue();
             data.Should().NotBeNull();
-            _vehicleId = data?["id"]?.GetValue<Guid?>();
+            _fusionId = data?["id"]?.GetValue<Guid?>();
         }
         [Fact, Order(2)]
         public async Task GivenRequestIsValidAndVehiclesAlreadyExists_WhenAddAsyncIsCalled_ThenReturnConflict()
@@ -65,7 +59,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Controllers.Vehicles
             HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", JWTToken);
 
             // Act
-            var result = await HttpClient.PostAsJsonAsync($"/api/Vehicle/v1/vehicles", request);
+            var result = await HttpClient.PostAsJsonAsync($"/api/Fusion/v1/fusions", request);
             var content = await result.Content.ReadAsStringAsync();
 
             var reports = JsonNode.Parse(content);
@@ -87,7 +81,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Controllers.Vehicles
             HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", JWTToken);
 
             // Act
-            var result = await HttpClient.PostAsJsonAsync($"/api/Vehicle/v1/vehicles", request);
+            var result = await HttpClient.PostAsJsonAsync($"/api/Fusion/v1/fusions", request);
             var content = await result.Content.ReadAsStringAsync();
 
             var reports = JsonNode.Parse(content);
@@ -107,7 +101,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Controllers.Vehicles
             HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", JWTToken);
 
             // Act
-            var result = await HttpClient.GetAsync($"/api/Vehicle/v1/vehicles/{_vehicleId}");
+            var result = await HttpClient.GetAsync($"/api/Fusion/v1/fusions/{_fusionId}");
             var content = await result.Content.ReadAsStringAsync();
 
             var reports = JsonNode.Parse(content);
@@ -119,13 +113,15 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Controllers.Vehicles
             content.Should().NotBeEmpty();
             data.Should().NotBeNull();
             successful.GetValue<bool>().Should().BeTrue();
-            data?["PlateNumber"]?.GetValue<string>().Should().Be(request.PlateNumber);
-            data?["PlateColor"]?.GetValue<string>().Should().Be(request.PlateColor);
-            data?["RFID"]?.GetValue<string>().Should().Be(request.RFID);
-            data?["Make"]?.GetValue<string>().Should().Be(request.Make);
-            data?["Seat"]?.GetValue<int>().Should().Be(request.Seat);
-            data?["VehicleType"]?.GetValue<string>().Should().Be(request.VehicleType);
-            data?["Weight"]?.GetValue<int>().Should().Be(request.Weight);
+            data?["Epoch"]?.GetValue<float>().Should().Be(request.Epoch);
+            data?["Loop1"]?.GetValue<bool>().Should().Be(request.Loop1);
+            data?["RFID"]?.GetValue<bool>().Should().Be(request.RFID);
+            data?["Cam1"]?.GetValue<string>().Should().Be(request.Cam1);
+            data?["Loop2"]?.GetValue<bool>().Should().Be(request.Loop2);
+            data?["Cam2"]?.GetValue<string>().Should().Be(request.Cam2);
+            data?["Loop3"]?.GetValue<bool>().Should().Be(request.Loop3);
+            data?["ReversedLoop1"]?.GetValue<bool>().Should().Be(request.ReversedLoop1);
+            data?["ReversedLoop2"]?.GetValue<bool>().Should().Be(request.ReversedLoop2);
 
         }
 
@@ -133,11 +129,11 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Controllers.Vehicles
         public async Task GivenNonExistingGuid_WhenGetByIdAsyncIsCalled_ThenReturnEmpty()
         {
             // Arrange
-            var _vehicleId = Guid.NewGuid();
+            var _fusionId = Guid.NewGuid();
             HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", JWTToken);
 
             // Act
-            var result = await HttpClient.GetAsync($"/api/Vehicle/v1/vehicles/ {_vehicleId}");
+            var result = await HttpClient.GetAsync($"/api/Fusion/v1/fusions/{_fusionId}");
             var content = await result.Content.ReadAsStringAsync();
 
             var reports = JsonNode.Parse(content);
@@ -157,16 +153,18 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Controllers.Vehicles
         {
             // Arrange
             HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", JWTToken);
-            request.PlateNumber = "Some Plate number";
-            request.PlateColor = "Some Plate colour";
-            request.RFID = "Some RFID";
-            request.Make = "Some make";
-            request.Seat = 10;
-            request.VehicleType = "Loại 2";
-            request.Weight = 7000;
+            request.Epoch = 666;
+            request.Loop1 = false;
+            request.RFID = false;
+            request.Cam1 = "12A9999";
+            request.Loop2 = false;
+            request.Cam2 = "12A9999";
+            request.Loop3 = false;
+            request.ReversedLoop1 = false;
+            request.ReversedLoop2 = false;
 
             // Act
-            var result = await HttpClient.PutAsJsonAsync($"/api/Vehicle/v1/vehicles/{_vehicleId}", request);
+            var result = await HttpClient.PutAsJsonAsync($"/api/Fusion/v1/fusions/{_fusionId}", request);
             var content = await result.Content.ReadAsStringAsync();
 
             var reports = JsonNode.Parse(content);
@@ -178,13 +176,15 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Controllers.Vehicles
             content.Should().NotBeEmpty();
             successful?.GetValue<bool>().Should().BeTrue();
             data.Should().NotBeNull();
-            data?["PlateNumber"]?.GetValue<string>().Should().Be(request.PlateNumber);
-            data?["PlateColor"]?.GetValue<string>().Should().Be(request.PlateColor);
-            data?["RFID"]?.GetValue<string>().Should().Be(request.RFID);
-            data?["Make"]?.GetValue<string>().Should().Be(request.Make);
-            data?["Seat"]?.GetValue<int>().Should().Be(request.Seat);
-            data?["VehicleType"]?.GetValue<string>().Should().Be(request.VehicleType);
-            data?["Weight"]?.GetValue<int>().Should().Be(request.Weight);
+            data?["Epoch"]?.GetValue<float>().Should().Be(request.Epoch);
+            data?["Loop1"]?.GetValue<bool>().Should().Be(request.Loop1);
+            data?["RFID"]?.GetValue<bool>().Should().Be(request.RFID);
+            data?["Cam1"]?.GetValue<string>().Should().Be(request.Cam1);
+            data?["Loop2"]?.GetValue<bool>().Should().Be(request.Loop2);
+            data?["Cam2"]?.GetValue<string>().Should().Be(request.Cam2);
+            data?["Loop3"]?.GetValue<bool>().Should().Be(request.Loop3);
+            data?["ReversedLoop1"]?.GetValue<bool>().Should().Be(request.ReversedLoop1);
+            data?["ReversedLoop2"]?.GetValue<bool>().Should().Be(request.ReversedLoop2);
         }
 
         [Fact, Order(5)]
@@ -192,10 +192,10 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Controllers.Vehicles
         {
             // Arrange
             HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", JWTToken);
-            var _vehicleId = Guid.NewGuid();
+            var _fusionId = Guid.NewGuid();
 
             // Act
-            var result = await HttpClient.PutAsJsonAsync($"/api/Vehicle/v1/vehicles/{_vehicleId}", request);
+            var result = await HttpClient.PutAsJsonAsync($"/api/Fusion/v1/fusions/{_fusionId}", request);
             var content = await result.Content.ReadAsStringAsync();
 
             var reports = JsonNode.Parse(content);
@@ -217,7 +217,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Controllers.Vehicles
             HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", JWTToken);
 
             // Act
-            var result = await HttpClient.PutAsJsonAsync($"/api/Vehicle/v1/vehicles/{_vehicleId}", request);
+            var result = await HttpClient.PutAsJsonAsync($"/api/Fusion/v1/fusions/{_fusionId}", request);
             var content = await result.Content.ReadAsStringAsync();
 
             var reports = JsonNode.Parse(content);
@@ -237,7 +237,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Controllers.Vehicles
             HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", JWTToken);
 
             // Act
-            var result = await HttpClient.DeleteAsync($"/api/Vehicle/v1/vehicles/{_vehicleId}");
+            var result = await HttpClient.DeleteAsync($"/api/Fusion/v1/fusions/{_fusionId}");
             var content = await result.Content.ReadAsStringAsync();
 
             var reports = JsonNode.Parse(content);
@@ -258,7 +258,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Controllers.Vehicles
             HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", JWTToken);
 
             // Act
-            var result = await HttpClient.DeleteAsync($"/api/Vehicle/v1/vehicles/ {_vehicleId}");
+            var result = await HttpClient.DeleteAsync($"/api/Fusion/v1/fusions/{_fusionId}");
             var content = await result.Content.ReadAsStringAsync();
 
             var reports = JsonNode.Parse(content);

@@ -31,11 +31,11 @@ namespace EPAY.ETC.Core.API.Controllers.Fusion
         #endregion
         #region AddAsync
         /// <summary>
-        /// Create new employee
+        /// Create new fusion
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        [HttpPost("v1/fusion")]
+        [HttpPost("api/Fusion/v1/fusions")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> AddAsync([FromBody] FusionRequestModel request)
@@ -68,7 +68,10 @@ namespace EPAY.ETC.Core.API.Controllers.Fusion
         }
         #endregion
         #region GetByIdAsync
-        [HttpGet("v1/fusions/{objectId}")]
+        /// <summary>
+        /// Get Fusion Detail
+        /// </summary>
+        [HttpGet("api/Fusion/v1/fusions/{objectId}")]
         public async Task<IActionResult> GetByIdAsync(Guid objectId)
         {
             try
@@ -89,7 +92,10 @@ namespace EPAY.ETC.Core.API.Controllers.Fusion
         }
         #endregion
         #region RemoveAsync
-        [HttpDelete("v1/fusions/{objectId}")]
+        /// <summary>
+        /// Remove Fusion
+        /// </summary>
+        [HttpDelete("api/Fusion/v1/fusions/{objectId}")]
         public async Task<IActionResult> RemoveAsync(Guid objectId)
         {
             try
@@ -115,7 +121,10 @@ namespace EPAY.ETC.Core.API.Controllers.Fusion
         }
         #endregion
         #region UpdateAsync
-        [HttpPut("v1/fusions/{objectId}")]
+        /// <summary>
+        /// Update Fusion Detail
+        /// </summary>
+        [HttpPut("api/Fusion/v1/fusions/{objectId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> UpdateAsync(Guid objectId, [FromBody] FusionRequestModel request)

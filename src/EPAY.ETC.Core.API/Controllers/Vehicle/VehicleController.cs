@@ -37,7 +37,7 @@ namespace EPAY.ETC.Core.API.Controllers.Vehicle
 
         #region CreateVehicleAsync
         /// <summary>
-        /// Create new employee
+        /// Create new vehicle
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
@@ -75,7 +75,7 @@ namespace EPAY.ETC.Core.API.Controllers.Vehicle
         #endregion
         #region GetVehiclesDetailAsync
         /// <summary>
-        /// 
+        /// Get Vehicle Detail
         /// </summary>
         /// <param name="vehicleId"></param>
         /// <returns></returns>
@@ -109,6 +109,9 @@ namespace EPAY.ETC.Core.API.Controllers.Vehicle
         }
         #endregion
         #region DeleteVehiclesAsync
+        /// <summary>
+        /// Remove Fusion 
+        /// </summary>
         [HttpDelete("v1/vehicles/{vehicleId}")]
         public async Task<IActionResult> RemoveAsync(Guid vehicleId)
         {
@@ -135,6 +138,9 @@ namespace EPAY.ETC.Core.API.Controllers.Vehicle
         }
         #endregion
         #region UpdateAsync
+        /// <summary>
+        /// Update Vehicle Detail
+        /// </summary>
         [HttpPut("v1/vehicles/{vehicleId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
