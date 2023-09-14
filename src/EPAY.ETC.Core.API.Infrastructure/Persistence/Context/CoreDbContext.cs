@@ -2,6 +2,7 @@
 using EPAY.ETC.Core.API.Core.Models.Common;
 using EPAY.ETC.Core.API.Core.Models.CustomVehicleTypes;
 using EPAY.ETC.Core.API.Core.Models.Enum;
+using EPAY.ETC.Core.API.Core.Models.Fees;
 using EPAY.ETC.Core.API.Core.Models.FeeTypes;
 using EPAY.ETC.Core.API.Core.Models.FeeVehicleCategories;
 using EPAY.ETC.Core.API.Core.Models.Fusion;
@@ -41,6 +42,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
         public virtual DbSet<TimeBlockFeeModel> TimeBlockFees { get; set; }
         public virtual DbSet<TimeBlockFeeFormulaModel> TimeBlockFeeFormulas { get; set; }
         public virtual DbSet<FeeVehicleCategoryModel> FeeVehicleCategories { get; set; }
+        public virtual DbSet<FeeModel> Fees { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -523,6 +525,25 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                         ValidFrom = new DateTime(2023, 1, 1, 0, 0, 0, DateTimeKind.Utc),
                         ValidTo = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
                     });
+            #endregion
+
+
+            #region Fee configuration
+            modelBuilder.Entity<FeeModel>().HasKey(x => x.Id);
+            modelBuilder.Entity<FeeModel>()
+                .HasOne(x => x.CustomVehicleType)
+                .WithMany(x => x.Fees)
+                .HasForeignKey(x => x.CustomVehicleTypeId);
+            modelBuilder.Entity<FeeModel>().HasIndex(x => x.CustomVehicleTypeId);
+            modelBuilder.Entity<FeeModel>().HasIndex(x => x.PlateNumber);
+            modelBuilder.Entity<FeeModel>().HasIndex(x => x.TicketId);
+            modelBuilder.Entity<FeeModel>().HasIndex(x => x.RFID);
+            modelBuilder.Entity<FeeModel>().HasIndex(x => x.LaneInId);
+            modelBuilder.Entity<FeeModel>().HasIndex(x => x.LaneInDate);
+            modelBuilder.Entity<FeeModel>().HasIndex(x => x.LaneInEpoch);
+            modelBuilder.Entity<FeeModel>().HasIndex(x => x.LaneOutId);
+            modelBuilder.Entity<FeeModel>().HasIndex(x => x.LaneOutDate);
+            modelBuilder.Entity<FeeModel>().HasIndex(x => x.LaneOutEpoch);
             #endregion
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
