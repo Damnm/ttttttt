@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
 namespace EPAY.ETC.Core.API.Core.Models.Common
@@ -10,7 +11,8 @@ namespace EPAY.ETC.Core.API.Core.Models.Common
         public Guid Id { get; set; }
         [JsonIgnore]
         public DateTime? CreatedDate { get; set; }
-        public string? RFID { get; set; }
+        [Required(ErrorMessage = "RFID required!")]
+        public string RFID { get; set; } = string.Empty;
         public string? PlateNumber { get; set; }
         public string? PlateColor { get; set; }
         public string? Make { get; set; }

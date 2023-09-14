@@ -53,7 +53,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Controllers.Fusions
             _fusionId = data?["id"]?.GetValue<Guid?>();
         }
         [Fact, Order(2)]
-        public async Task GivenRequestIsValidAndVehiclesAlreadyExists_WhenAddAsyncIsCalled_ThenReturnConflict()
+        public async Task GivenRequestIsValidAndFusionAlreadyExists_WhenAddAsyncIsCalled_ThenReturnConflict()
         {
             // Arrange
             HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", JWTToken);
@@ -213,7 +213,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Controllers.Fusions
         public async Task GivenRequestIsInValid_WhenUpdateAsyncIsCalled_ThenReturnBadRequest()
         {
             // Arrange
-            VehicleRequestModel _request = new VehicleRequestModel();
+            VehicleRequestModel request = new VehicleRequestModel();
             HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", JWTToken);
 
             // Act

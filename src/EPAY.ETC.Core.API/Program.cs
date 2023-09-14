@@ -1,3 +1,4 @@
+using EPAY.ETC.Core.API.Filters;
 using EPAY.ETC.Core.API.Infrastructure.Persistence;
 using Microsoft.OpenApi.Models;
 using NLog;
@@ -14,7 +15,12 @@ ConfigurationManager config = builder.Configuration;
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-
+builder.Services.AddScoped<ValidationFilterAttribute>();
+// Add services to the container.
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add(new ValidationFilterAttribute());
+});
 // Configuration for swagger
 builder.Services.AddSwaggerGen(c =>
 {
