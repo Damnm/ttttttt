@@ -25,7 +25,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
         public CoreDbContext() { }
         public CoreDbContext(DbContextOptions options) : base(options)
         {
-
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         }
 
         public virtual DbSet<VehicleModel> Vehicles { get; set; }

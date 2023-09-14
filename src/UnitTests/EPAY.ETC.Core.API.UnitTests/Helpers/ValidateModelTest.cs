@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace EPAY.ETC.Core.API.UnitTests.Helpers
 {
@@ -11,6 +6,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Helpers
     {
         public static List<ValidationResult> ValidateModel<T>(T model)
         {
+            #nullable disable
             var context = new ValidationContext(model, null, null);
             var result = new List<ValidationResult>();
             var valid = Validator.TryValidateObject(model, context, result, true);

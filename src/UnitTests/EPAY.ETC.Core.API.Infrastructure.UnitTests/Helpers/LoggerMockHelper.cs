@@ -1,10 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Helpers
 {
@@ -17,9 +12,9 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Helpers
                 m => m.Log(
                     expectedLogLevel,
                     It.IsAny<EventId>(),
-                    It.Is<It.IsAnyType>((v, _) => v.ToString().Contains(expectedMessage)),
+                    It.Is<It.IsAnyType>((v, _) => (v.ToString() ?? string.Empty).Contains(expectedMessage)),
                     It.Is<Exception>(e => e == expectedException),
-                    It.IsAny<Func<It.IsAnyType, Exception, string>>()),
+                    It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
                 times);
         }
     }

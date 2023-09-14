@@ -4,8 +4,15 @@ using EPAY.ETC.Core.API.Core.Validation;
 
 namespace EPAY.ETC.Core.API.Filters
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class ValidationFilterAttribute : ActionFilterAttribute
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="context"></param>
         public override void OnActionExecuted(ActionExecutedContext context)
         {
             if (!context.ModelState.IsValid)
@@ -17,6 +24,11 @@ namespace EPAY.ETC.Core.API.Filters
                 context.ExceptionHandled = true;
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="context"></param>
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             if (!context.ModelState.IsValid)

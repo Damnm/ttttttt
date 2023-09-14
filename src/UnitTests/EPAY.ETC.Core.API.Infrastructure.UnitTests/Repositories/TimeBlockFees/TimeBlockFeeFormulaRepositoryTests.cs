@@ -80,7 +80,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.TimeBlockFeeFo
         }
 
         [Fact]
-        public async Task GivenRequestIsValidAndDBContextIsDown_WhenGetAllAsyncIsCalled_ThenThrowExceptionAsync()
+        public async Task GivenRequestIsValidAndDBContextIsDown_WhenGetAllAsyncIsCalled_ThenThrowETCEPAYCoreAPIException()
         {
             // Arrange
             var someEx = new ETCEPAYCoreAPIException(99, "Some exception");
@@ -139,7 +139,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.TimeBlockFeeFo
         }
 
         [Fact]
-        public async Task GivenRequestIsValidAndDBContextIsDown_WhenGetByIdAsyncIsCalled_ThenThrowExceptionAsync()
+        public async Task GivenRequestIsValidAndDBContextIsDown_WhenGetByIdAsyncIsCalled_ThenThrowETCEPAYCoreAPIException()
         {
             // Arrange
             var someEx = new ETCEPAYCoreAPIException(99, "Some exception");

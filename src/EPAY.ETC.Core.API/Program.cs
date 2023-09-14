@@ -61,7 +61,7 @@ builder.Services.AddSwaggerGen(c =>
 
                     }
                 });
-    c.IncludeXmlComments(Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "EPAY.ETC.Core.API.xml"), true);
+    c.IncludeXmlComments(Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location) ?? string.Empty, "EPAY.ETC.Core.API.xml"), true);
 });
 builder.Services.AddAutoMapper(typeof(Program));
 
@@ -126,6 +126,8 @@ app.MapControllers();
 
 app.Run();
 
-
+/// <summary>
+/// 
+/// </summary>
 public partial class Program { }
 

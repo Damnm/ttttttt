@@ -3,6 +3,7 @@ using System;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EPAY.ETC.Core.API.Infrastructure.Migrations
 {
     [DbContext(typeof(CoreDbContext))]
-    partial class CoreDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230914033839_update-fee-model")]
+    partial class updatefeemodel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,7 +32,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Make")
                         .HasColumnType("text");
@@ -38,11 +41,9 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("PlateNumber")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("RFID")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int?>("Seat")
@@ -66,7 +67,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Desc")
                         .HasMaxLength(255)
@@ -122,7 +123,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                         .HasColumnType("double precision");
 
                     b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Desc")
                         .HasMaxLength(255)
@@ -177,7 +178,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("CustomVehicleTypeId")
                         .HasColumnType("uuid");
@@ -197,10 +198,10 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                         .HasColumnType("character varying(50)");
 
                     b.Property<DateTime>("ValidFrom")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime?>("ValidTo")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("VehicleCategoryId")
                         .HasColumnType("uuid");
@@ -294,7 +295,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                         .HasColumnType("real");
 
                     b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("CustomVehicleTypeId")
                         .HasColumnType("uuid");
@@ -306,7 +307,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("LaneInDate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<long?>("LaneInEpoch")
                         .HasColumnType("bigint");
@@ -324,7 +325,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                         .HasColumnType("character varying(255)");
 
                     b.Property<DateTime?>("LaneOutDate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<long?>("LaneOutEpoch")
                         .HasColumnType("bigint");
@@ -459,10 +460,10 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                         .HasColumnType("double precision");
 
                     b.Property<DateTime>("ApplyDate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("CustomVehicleTypeId")
                         .HasColumnType("uuid");
@@ -538,7 +539,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("CustomVehicleTypeId")
                         .HasColumnType("uuid");
@@ -743,7 +744,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<bool>("IsSuccessful")
                         .HasColumnType("boolean");
@@ -769,7 +770,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                         .HasColumnType("double precision");
 
                     b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("Duration")
                         .HasColumnType("integer");
@@ -778,7 +779,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("LaneInDate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("LaneInId")
                         .HasColumnType("uuid");
@@ -790,7 +791,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime>("LaneOutDate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("LaneOutId")
                         .HasColumnType("uuid");
@@ -840,7 +841,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                         .HasColumnType("double precision");
 
                     b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<double>("Epoch")
                         .HasColumnType("double precision");
@@ -893,7 +894,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                         .HasColumnType("double precision");
 
                     b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<double>("Epoch")
                         .HasColumnType("double precision");
@@ -949,7 +950,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Make")
                         .HasColumnType("text");
@@ -984,7 +985,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Desc")
                         .HasMaxLength(255)
@@ -1038,7 +1039,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Desc")
                         .HasMaxLength(255)

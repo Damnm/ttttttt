@@ -3,6 +3,7 @@ using EPAY.ETC.Core.API.Core.Interfaces.Services.Fusion;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Vehicles;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Context;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.CustomVehicleTypes;
+using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Fees;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.FeeTypes;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.FeeVehicleCategories;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Fusion;
@@ -42,6 +43,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence
             services.AddScoped<ITimeBlockFeeRepository, TimeBlockFeeRepository>();
             services.AddScoped<IVehicleCategoryRepository, VehicleCategoryRepository>();
             services.AddScoped<IVehicleGroupRepository, VehicleGroupRepository>();
+            services.AddScoped<IFeeRepository, FeeRepository>();
 
             ////Add Services
             services.AddScoped<IVehicleService, VehicleService>();
