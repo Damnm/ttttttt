@@ -1,6 +1,7 @@
 ﻿using EPAY.ETC.Core.API.Core.Extensions;
 using EPAY.ETC.Core.API.Core.Models.Vehicle;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Vehicle;
+using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.VehicleGroups;
 using EPAY.ETC.Core.API.IntegrationTests.Common;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
@@ -85,6 +86,21 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Repository.Vehicle
             result!.Seat.Should().Be(vehicle.Seat);
             result!.VehicleType.Should().Be(vehicle.VehicleType);
             result!.Weight.Should().Be(vehicle.Weight);
+        }
+        [Fact, Order(2)]
+        public async Task GivenRequestIsValidAndIdIsNotExists_WhenGetByIdAsyncIsCalled_ThenReturnNull()
+        {
+            using var scope = WebApplicationFactory.Services.CreateScope();
+            _repository = scope.ServiceProvider.GetRequiredService<IVehicleRepository>();
+
+            // Arrange
+            Guid guid = Guid.NewGuid();
+
+            // Act
+            var result = await _repository.GetByIdAsync(guid);
+
+            // Assert
+            result.Should().BeNull();
         }
         #endregion
         #region UpdateAsync
