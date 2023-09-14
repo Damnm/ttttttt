@@ -77,7 +77,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Controllers.Fusions
         public async Task GivenRequestIsInValid_WhenAddAsyncIsCalled_ThenReturnBadRequest()
         {
             // Arrange
-            VehicleRequestModel request = new VehicleRequestModel();
+            FusionRequestModel request = new FusionRequestModel();
             HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", JWTToken);
 
             // Act
@@ -213,7 +213,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Controllers.Fusions
         public async Task GivenRequestIsInValid_WhenUpdateAsyncIsCalled_ThenReturnBadRequest()
         {
             // Arrange
-            VehicleRequestModel request = new VehicleRequestModel();
+            FusionRequestModel request = new FusionRequestModel();
             HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", JWTToken);
 
             // Act

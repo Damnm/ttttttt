@@ -13,6 +13,7 @@ namespace EPAY.ETC.Core.API.Core.Models.Common
         public DateTime? CreatedDate { get; set; }
         [Required(ErrorMessage = "RFID required!")]
         public string RFID { get; set; } = string.Empty;
+        [Required(ErrorMessage = "PlateNumber required!")]
         public string? PlateNumber { get; set; }
         public string? PlateColor { get; set; }
         public string? Make { get; set; }
