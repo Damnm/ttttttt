@@ -1,5 +1,4 @@
-﻿using EPAY.ETC.Core.API.Core.Models.Common;
-using EPAY.ETC.Core.API.Core.Models.Vehicle;
+﻿using EPAY.ETC.Core.API.Core.Models.Vehicle;
 using EPAY.ETC.Core.API.Core.Validation;
 using System.Linq.Expressions;
 

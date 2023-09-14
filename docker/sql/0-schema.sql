@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS public."CustomVehicleType"
     "Id" uuid NOT NULL,
     "Name" character varying(50) COLLATE pg_catalog."default" NOT NULL,
     "Desc" character varying(255) COLLATE pg_catalog."default",
-    "CreatedDate" timestamp with time zone,
+    "CreatedDate" timestamp without time zone,
     CONSTRAINT "PK_CustomVehicleType" PRIMARY KEY ("Id")
 )
 
@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS public."FeeType"
     "Name" character varying(50) COLLATE pg_catalog."default" NOT NULL,
     "Amount" double precision,
     "Desc" character varying(255) COLLATE pg_catalog."default",
-    "CreatedDate" timestamp with time zone,
+    "CreatedDate" timestamp without time zone,
     CONSTRAINT "PK_FeeType" PRIMARY KEY ("Id")
 )
 
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS public."VehicleCategory"
     "Id" uuid NOT NULL,
     "Name" character varying(100) COLLATE pg_catalog."default",
     "Desc" character varying(255) COLLATE pg_catalog."default",
-    "CreatedDate" timestamp with time zone,
+    "CreatedDate" timestamp without time zone,
     CONSTRAINT "PK_VehicleCategory" PRIMARY KEY ("Id")
 )
 
@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS public."VehicleGroup"
     "Id" uuid NOT NULL,
     "Name" character varying(100) COLLATE pg_catalog."default",
     "Desc" character varying(255) COLLATE pg_catalog."default",
-    "CreatedDate" timestamp with time zone,
+    "CreatedDate" timestamp without time zone,
     CONSTRAINT "PK_VehicleGroup" PRIMARY KEY ("Id")
 )
 
@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS public."TimeBlockFee"
     "ToSecond" bigint NOT NULL,
     "BlockDurationInSeconds" integer,
     "Amount" double precision,
-    "CreatedDate" timestamp with time zone,
+    "CreatedDate" timestamp without time zone,
     "BlockNumber" integer DEFAULT 0 NOT NULL,
     CONSTRAINT "PK_TimeBlockFee" PRIMARY KEY ("Id"),
     CONSTRAINT "FK_TimeBlockFee_CustomVehicleType_CustomVehicleTypeId" FOREIGN KEY ("CustomVehicleTypeId")
@@ -108,9 +108,9 @@ CREATE TABLE IF NOT EXISTS public."FeeVehicleCategory"
     "PlateNumber" character varying(20) COLLATE pg_catalog."default",
     "RFID" character varying(50) COLLATE pg_catalog."default",
     "IsTCPVehicle" boolean NOT NULL,
-    "ValidFrom" timestamp with time zone NOT NULL,
-    "ValidTo" timestamp with time zone,
-    "CreatedDate" timestamp with time zone,
+    "ValidFrom" timestamp without time zone NOT NULL,
+    "ValidTo" timestamp without time zone,
+    "CreatedDate" timestamp without time zone,
     CONSTRAINT "PK_FeeVehicleCategory" PRIMARY KEY ("Id"),
     CONSTRAINT "FK_FeeVehicleCategory_CustomVehicleType_CustomVehicleTypeId" FOREIGN KEY ("CustomVehicleTypeId")
         REFERENCES public."CustomVehicleType" ("Id") MATCH SIMPLE
@@ -177,7 +177,7 @@ CREATE TABLE IF NOT EXISTS public."Vehicles"
     "Seat" integer,
     "Weight" integer,
     "VehicleType" text COLLATE pg_catalog."default",
-    "CreatedDate" timestamp with time zone,
+    "CreatedDate" timestamp without time zone,
     CONSTRAINT "PK_Vehicles" PRIMARY KEY ("Id")
 )
 
@@ -218,8 +218,8 @@ CREATE TABLE IF NOT EXISTS public."TimeBlockFeeFormulas"
     "FromBlockNumber" integer NOT NULL,
     "Amount" double precision NOT NULL,
     "IntervalInSeconds" bigint NOT NULL,
-    "ApplyDate" timestamp with time zone NOT NULL,
-    "CreatedDate" timestamp with time zone,
+    "ApplyDate" timestamp without time zone NOT NULL,
+    "CreatedDate" timestamp without time zone,
     CONSTRAINT "PK_TimeBlockFeeFormulas" PRIMARY KEY ("Id"),
     CONSTRAINT "FK_TimeBlockFeeFormulas_CustomVehicleType_CustomVehicleTypeId" FOREIGN KEY ("CustomVehicleTypeId")
         REFERENCES public."CustomVehicleType" ("Id") MATCH SIMPLE
@@ -251,10 +251,10 @@ CREATE TABLE IF NOT EXISTS public."Fee"
     "Id" uuid NOT NULL,
     "ObjectId" uuid NOT NULL,
     "LaneInId" character varying(10) COLLATE pg_catalog."default",
-    "LaneInDate" timestamp with time zone,
+    "LaneInDate" timestamp without time zone,
     "LaneInEpoch" bigint,
     "LaneOutId" character varying(10) COLLATE pg_catalog."default",
-    "LaneOutDate" timestamp with time zone,
+    "LaneOutDate" timestamp without time zone,
     "LaneOutEpoch" bigint,
     "Duration" integer NOT NULL,
     "RFID" character varying(50) COLLATE pg_catalog."default",
@@ -276,7 +276,7 @@ CREATE TABLE IF NOT EXISTS public."Fee"
     "TicketId" character varying(50) COLLATE pg_catalog."default",
     "ShiftId" uuid,
     "EmployeeId" uuid,
-    "CreatedDate" timestamp with time zone,
+    "CreatedDate" timestamp without time zone,
     CONSTRAINT "PK_Fee" PRIMARY KEY ("Id"),
     CONSTRAINT "FK_Fee_CustomVehicleType_CustomVehicleTypeId" FOREIGN KEY ("CustomVehicleTypeId")
         REFERENCES public."CustomVehicleType" ("Id") MATCH SIMPLE

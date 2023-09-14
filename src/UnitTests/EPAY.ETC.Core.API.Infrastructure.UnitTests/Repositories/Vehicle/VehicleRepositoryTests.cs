@@ -1,23 +1,13 @@
-﻿using EPAY.ETC.Core.API.Core.Models.Common;
-using EPAY.ETC.Core.API.Core.Models.SearchRequest;
+﻿using EPAY.ETC.Core.API.Core.Exceptions;
+using EPAY.ETC.Core.API.Core.Models.Vehicle;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Context;
-using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Vehicle;
+using EPAY.ETC.Core.API.Infrastructure.UnitTests.Common;
 using EPAY.ETC.Core.API.Infrastructure.UnitTests.Helpers;
+using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Moq;
-using System.Linq.Expressions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FluentAssertions;
-using EPAY.ETC.Core.API.Core.Interfaces.Services.OrderBuilder;
-using EPAY.ETC.Core.API.Infrastructure.UnitTests.Common;
-using EPAY.ETC.Core.API.Core.Exceptions;
-using EPAY.ETC.Core.API.Core.Models.Vehicle;
 
 namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.Vehicle
 {
@@ -65,7 +55,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.Vehicle
             var data = _vehicles.FirstOrDefault();
             _dbVehicleSetMock = EFTestHelper.GetMockDbSet(_vehicles);
             _dbContextMock.Setup(x => x.Vehicles).Returns(_dbVehicleSetMock.Object);
-             
+
             // Act
             var vehicleRepository = new VehicleRepository(_loggerMock.Object, _dbContextMock.Object);
             var result = await vehicleRepository.GetByIdAsync(data!.Id);

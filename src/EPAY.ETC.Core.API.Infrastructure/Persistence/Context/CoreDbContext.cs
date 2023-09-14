@@ -1,5 +1,4 @@
 ﻿using EPAY.ETC.Core.API.Core.Extensions;
-using EPAY.ETC.Core.API.Core.Models.Common;
 using EPAY.ETC.Core.API.Core.Models.CustomVehicleTypes;
 using EPAY.ETC.Core.API.Core.Models.Enum;
 using EPAY.ETC.Core.API.Core.Models.Fees;
@@ -33,7 +32,6 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
         public virtual DbSet<VehicleTransactionModel> VehicleTransactionModels { get; set; }
         public virtual DbSet<LaneInCameraTransactionLog> LaneInCameraTransactionLogs { get; set; }
         public virtual DbSet<LaneInRFIDTransactionLog> LaneInRFIDTransactionLogs { get; set; }
-        public virtual DbSet<VehicleRequestModel> VehicleRequests { get; set; }
         public virtual DbSet<FusionModel> Fusions { get; set; }
         public virtual DbSet<CustomVehicleTypeModel> CustomVehicleTypes { get; set; }
         public virtual DbSet<FeeTypeModel> FeeTypes { get; set; }

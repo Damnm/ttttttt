@@ -1,8 +1,4 @@
 ﻿using EPAY.ETC.Core.API.Core.Exceptions;
-using EPAY.ETC.Core.API.Core.Interfaces.Repositories;
-using EPAY.ETC.Core.API.Core.Interfaces.Services;
-using EPAY.ETC.Core.API.Core.Interfaces.Services.OrderBuilder;
-using EPAY.ETC.Core.API.Core.Models.Common;
 using EPAY.ETC.Core.API.Core.Models.Vehicle;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
@@ -68,7 +64,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Vehicle
 
             try
             {
-                var vehicle =  _dbContext.Vehicles.AsNoTracking().FirstOrDefault(x => x.Id == id);
+                var vehicle = _dbContext.Vehicles.AsNoTracking().FirstOrDefault(x => x.Id == id);
                 return vehicle;
             }
             catch (Exception ex)

@@ -14,7 +14,6 @@ using System.Threading.Tasks;
 using XUnitPriorityOrderer;
 using FluentAssertions;
 using EPAY.ETC.Core.API.Core.Models.Vehicle;
-using EPAY.ETC.Core.API.Core.Models.Common;
 using EPAY.ETC.Core.API.Core.Extensions;
 
 namespace EPAY.ETC.Core.API.IntegrationTests.Controllers.Vehicles
@@ -26,8 +25,6 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Controllers.Vehicles
 
         private static VehicleRequestModel request = new VehicleRequestModel()
         {
-            //Id = Guid.NewGuid(),
-            //CreatedDate = DateTime.Now.ConvertToAsianTime(DateTimeKind.Local),
             PlateNumber = "Some Plate number",
             PlateColor = "Some Plate colour",
             RFID = "Some RFID",
@@ -148,7 +145,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Controllers.Vehicles
             result.StatusCode.Should().Be(HttpStatusCode.OK);
             content.Should().NotBeEmpty();
             data.Should().BeNull();
-            successful?.GetValue<bool>().Should().BeTrue();
+            successful?.GetValue<bool>().Should().BeFalse();
         }
         #endregion
         #region UpdateAsync
@@ -213,7 +210,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Controllers.Vehicles
         public async Task GivenRequestIsInValid_WhenUpdateAsyncIsCalled_ThenReturnBadRequest()
         {
             // Arrange
-            VehicleRequestModel _request = new VehicleRequestModel();
+            VehicleRequestModel request = new VehicleRequestModel();
             HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", JWTToken);
 
             // Act

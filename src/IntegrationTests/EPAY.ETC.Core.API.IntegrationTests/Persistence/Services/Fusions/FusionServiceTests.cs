@@ -1,31 +1,35 @@
-﻿using Azure.Core;
-using EPAY.ETC.Core.API.Core.Interfaces.Services.Fusion;
-using EPAY.ETC.Core.API.Core.Interfaces.Services.Vehicles;
-using EPAY.ETC.Core.API.Core.Models.Common;
+﻿using EPAY.ETC.Core.API.Core.Interfaces.Services.Fusion;
+using EPAY.ETC.Core.API.Core.Models.Fusion;
 using EPAY.ETC.Core.API.Core.Validation;
-using EPAY.ETC.Core.API.Infrastructure.Services.Vehicles;
 using EPAY.ETC.Core.API.IntegrationTests.Common;
 using FluentAssertions;
-using FluentAssertions.Common;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using XUnitPriorityOrderer;
 
 namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Services.Fusions
 {
     [TestCaseOrderer(CasePriorityOrderer.TypeName, CasePriorityOrderer.AssembyName)]
-    public class FusionServiceTests: IntegrationTestBase
+    public class FusionServiceTests : IntegrationTestBase
     {
         #region Init test data
         private IFusionService? fusionService;
         private static Guid newId = Guid.Empty;
-        private FusionRequestModel request = new FusionRequestModel()
+        private FusionAddRequestModel addRequest = new FusionAddRequestModel()
         {
             Epoch = 10,
+            Loop1 = true,
+            RFID = true,
+            Cam1 = "12A123456",
+            Loop2 = true,
+            Cam2 = "12A123456",
+            Loop3 = true,
+            ReversedLoop1 = true,
+            ReversedLoop2 = true,
+
+        };
+        private FusionUpdateRequestModel updateRequest = new FusionUpdateRequestModel()
+        {
+            Epoch = 20,
             Loop1 = true,
             RFID = true,
             Cam1 = "12A123456",
@@ -47,7 +51,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Services.Fusions
             // Arrange
 
             // Act
-            var result = await fusionService.AddAsync(request);
+            var result = await fusionService.AddAsync(addRequest);
             newId = result!.Data!.Id!;
             var expected = await fusionService.GetByIdAsync(newId);
 
@@ -78,14 +82,13 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Services.Fusions
             fusionService = scope.ServiceProvider.GetService<IFusionService>()!;
 
             // Arrange
-            Guid input = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66bfa6");
 
             // Act
-            var result = await fusionService.GetByIdAsync(input);
+            var result = await fusionService.GetByIdAsync(newId);
 
             // Assert
             result.Should().NotBeNull();
-            result.Data!.Id.Should().Be(input);
+            result.Data!.Id.Should().Be(newId);
             result.Succeeded.Should().BeTrue();
         }
 
@@ -157,18 +160,9 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Services.Fusions
             fusionService = scope.ServiceProvider.GetService<IFusionService>()!;
 
             // Arrange
-            request.Epoch = 20;
-            request.Loop1 = true;
-            request.RFID = true;
-            request.Cam1 = "12A123456";
-            request.Loop2 = true;
-            request.Cam2 = "12A123456";
-            request.Loop3 = true;
-            request.ReversedLoop1 = true;
-            request.ReversedLoop2 = true;
 
             // Act
-            var result = await fusionService.UpdateAsync(newId, request);
+            var result = await fusionService.UpdateAsync(newId, updateRequest);
             var expected = await fusionService.GetByIdAsync(newId);
 
             // Assert
@@ -198,7 +192,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Services.Fusions
             Guid newId = Guid.NewGuid();
 
             // Act
-            var result = await fusionService.UpdateAsync(newId, request);
+            var result = await fusionService.UpdateAsync(newId, updateRequest);
 
             // Assert
             result.Should().NotBeNull();

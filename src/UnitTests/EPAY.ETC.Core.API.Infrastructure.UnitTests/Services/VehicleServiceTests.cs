@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using EPAY.ETC.Core.API.Core.Models.Common;
 using EPAY.ETC.Core.API.Core.Models.Vehicle;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Vehicle;
 using EPAY.ETC.Core.API.Infrastructure.Services.Vehicles;
@@ -39,7 +38,6 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services
         };
         private VehicleRequestModel request = new VehicleRequestModel()
         {
-            CreatedDate = DateTime.Now,
             PlateNumber = "Some Plate number",
             PlateColor = "Some Plate colour",
             RFID = "Some RFID",
@@ -49,7 +47,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services
             Weight = 7000,
 
         };
-       
+
         #endregion
 
         #region AddAsync
@@ -121,7 +119,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services
 
             // Act
             var service = new VehicleService(_loggerMock.Object, _repositoryMock.Object, _mapper);
-            var result = await service.UpdateAsync(id,request);
+            var result = await service.UpdateAsync(id, request);
 
             // Assert
             result.Should().NotBeNull();
@@ -137,7 +135,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services
         {
             // Arrange
             Object callbackObject;
-            _repositoryMock.Setup(x => x.GetByIdAsync(It.IsNotNull<Guid>())).ReturnsAsync(vehicle= null);
+            _repositoryMock.Setup(x => x.GetByIdAsync(It.IsNotNull<Guid>())).ReturnsAsync(vehicle = null);
             _repositoryMock.Setup(x => x.UpdateAsync(It.IsNotNull<VehicleModel>())).Callback<object>(k => callbackObject = k);
 
             // Act

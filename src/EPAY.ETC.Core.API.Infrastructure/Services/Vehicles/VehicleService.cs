@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using EPAY.ETC.Core.API.Core.Extensions;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Vehicles;
-using EPAY.ETC.Core.API.Core.Models.Common;
 using EPAY.ETC.Core.API.Core.Models.Enum;
 using EPAY.ETC.Core.API.Core.Models.Fusion;
 using EPAY.ETC.Core.API.Core.Models.Vehicle;
@@ -93,7 +92,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Vehicles
                 }
 
                 await _repository.RemoveAsync(result);
-                return ValidationResult.Success(result = null);
+                return ValidationResult.Success<VehicleModel>(null!);
             }
             catch (Exception ex)
             {
@@ -102,7 +101,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Vehicles
             }
         }
 
-        public async Task<ValidationResult<VehicleModel>> UpdateAsync(Guid id,VehicleRequestModel input)
+        public async Task<ValidationResult<VehicleModel>> UpdateAsync(Guid id, VehicleRequestModel input)
         {
             _logger.LogInformation($"Executing {nameof(UpdateAsync)} method...");
             try
@@ -122,15 +121,19 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Vehicles
                         new ValidationError("Giá trị đã có trên hệ thống", ValidationError.Conflict.Code)
                     });
                 }
+
+                _mapper.Map(input, oldRecord);
+                oldRecord.Id = id;
+
                 //oldRecord.Id = input.Id;
                 //oldRecord.CreatedDate = input.CreatedDate;
-                oldRecord.RFID = input.RFID;
-                oldRecord.PlateNumber = input.PlateNumber;
-                oldRecord.PlateColor = input.PlateColor;
-                oldRecord.Make = input.Make;
-                oldRecord.Seat = input.Seat;
-                oldRecord.Weight = input.Weight;
-                oldRecord.VehicleType = input.VehicleType;
+                //oldRecord.RFID = input.RFID;
+                //oldRecord.PlateNumber = input.PlateNumber;
+                //oldRecord.PlateColor = input.PlateColor;
+                //oldRecord.Make = input.Make;
+                //oldRecord.Seat = input.Seat;
+                //oldRecord.Weight = input.Weight;
+                //oldRecord.VehicleType = input.VehicleType;
 
                 await _repository.UpdateAsync(oldRecord);
                 return ValidationResult.Success(oldRecord);
@@ -146,8 +149,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Vehicles
         async Task<bool> CheckExistVehicleInfo(VehicleRequestModel input)
         {
             Expression<Func<VehicleModel, bool>> expression = s =>
-                s.Id == input.Id;
-                
+                s.RFID == input.RFID || s.PlateNumber == input.PlateNumber;
 
             var result = await _repository.GetAllAsync(expression);
 

@@ -1,6 +1,6 @@
 ﻿using EPAY.ETC.Core.API.Core.Exceptions;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Fusion;
-using EPAY.ETC.Core.API.Core.Models.Common;
+using EPAY.ETC.Core.API.Core.Models.Fusion;
 using EPAY.ETC.Core.API.Core.Validation;
 using Microsoft.AspNetCore.Mvc;
 
@@ -38,7 +38,7 @@ namespace EPAY.ETC.Core.API.Controllers.Fusion
         [HttpPost("api/Fusion/v1/fusions")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> AddAsync([FromBody] FusionRequestModel request)
+        public async Task<IActionResult> AddAsync([FromBody] FusionAddRequestModel request)
         {
             try
             {
@@ -127,7 +127,7 @@ namespace EPAY.ETC.Core.API.Controllers.Fusion
         [HttpPut("api/Fusion/v1/fusions/{objectId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> UpdateAsync(Guid objectId, [FromBody] FusionRequestModel request)
+        public async Task<IActionResult> UpdateAsync(Guid objectId, [FromBody] FusionUpdateRequestModel request)
         {
             try
             {

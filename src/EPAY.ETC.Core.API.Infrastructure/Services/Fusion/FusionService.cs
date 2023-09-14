@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using EPAY.ETC.Core.API.Core.Extensions;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Fusion;
-using EPAY.ETC.Core.API.Core.Models.Common;
 using EPAY.ETC.Core.API.Core.Models.Fusion;
 using EPAY.ETC.Core.API.Core.Models.Vehicle;
 using EPAY.ETC.Core.API.Core.Validation;
@@ -34,7 +33,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fusion
         }
         #endregion
         #region AddAsync
-        public async Task<ValidationResult<FusionModel>> AddAsync(FusionRequestModel input)
+        public async Task<ValidationResult<FusionModel>> AddAsync(FusionAddRequestModel input)
         {
             _logger.LogInformation($"Executing {nameof(AddAsync)} method...");
             try
@@ -100,7 +99,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fusion
 
                 await _repository.RemoveAsync(result);
 
-                return ValidationResult.Success(result=null);
+                return ValidationResult.Success(result = null);
             }
             catch (Exception ex)
             {
@@ -110,7 +109,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fusion
         }
         #endregion
         #region UpdateAsync
-        public async Task<ValidationResult<FusionModel>> UpdateAsync(Guid id,FusionRequestModel request)
+        public async Task<ValidationResult<FusionModel>> UpdateAsync(Guid id, FusionUpdateRequestModel request)
         {
             _logger.LogInformation($"Executing {nameof(UpdateAsync)} method...");
             try
@@ -131,15 +130,19 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fusion
                     });
                 }
                 //oldRecord.Id = request.ObjectId;
-                oldRecord.Epoch= request.Epoch;
-                oldRecord.Loop1= request.Loop1;
-                oldRecord.RFID= request.RFID;
-                oldRecord.Cam1 = request.Cam1;
-                oldRecord.Loop2 = request.Loop2;
-                oldRecord.Cam2 = request.Cam2;
-                oldRecord.Loop3 = request.Loop3;
-                oldRecord.ReversedLoop1 = request.ReversedLoop1;
-                oldRecord.ReversedLoop2 = request.ReversedLoop2;
+
+                _mapper.Map(request, oldRecord);
+                oldRecord.Id = id;
+
+                //oldRecord.Epoch = request.Epoch;
+                //oldRecord.Loop1 = request.Loop1;
+                //oldRecord.RFID = request.RFID;
+                //oldRecord.Cam1 = request.Cam1;
+                //oldRecord.Loop2 = request.Loop2;
+                //oldRecord.Cam2 = request.Cam2;
+                //oldRecord.Loop3 = request.Loop3;
+                //oldRecord.ReversedLoop1 = request.ReversedLoop1;
+                //oldRecord.ReversedLoop2 = request.ReversedLoop2;
 
                 await _repository.UpdateAsync(oldRecord);
                 return ValidationResult.Success(oldRecord);
@@ -152,7 +155,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fusion
         }
         #endregion
         #region Private method
-        async Task<bool> GetExistingRecordAsync(FusionRequestModel input, string? id = null)
+        async Task<bool> GetExistingRecordAsync(FusionAddRequestModel input, string? id = null)
         {
             Expression<Func<FusionModel, bool>> expression = s =>
                 s.Id == input.ObjectId;

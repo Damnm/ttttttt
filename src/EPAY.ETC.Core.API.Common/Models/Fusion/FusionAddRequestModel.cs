@@ -1,13 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
-using System.Text.Json.Serialization;
 
-namespace EPAY.ETC.Core.API.Core.Models.Common
+namespace EPAY.ETC.Core.API.Core.Models.Fusion
 {
     [ExcludeFromCodeCoverage]
-    public class FusionRequestModel
+    public class FusionAddRequestModel
     {
-        [JsonIgnore]
         public Guid ObjectId { get; set; }
         public float Epoch { get; set; }
         public bool Loop1 { get; set; }

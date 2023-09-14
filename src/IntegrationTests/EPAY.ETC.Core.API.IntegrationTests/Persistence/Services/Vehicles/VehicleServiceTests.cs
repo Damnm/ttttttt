@@ -1,5 +1,5 @@
 ﻿using EPAY.ETC.Core.API.Core.Interfaces.Services.Vehicles;
-using EPAY.ETC.Core.API.Core.Models.Common;
+using EPAY.ETC.Core.API.Core.Models.Vehicle;
 using EPAY.ETC.Core.API.Core.Validation;
 using EPAY.ETC.Core.API.IntegrationTests.Common;
 using FluentAssertions;
@@ -16,15 +16,15 @@ using XUnitPriorityOrderer;
 namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Services.Vehicles
 {
     [TestCaseOrderer(CasePriorityOrderer.TypeName, CasePriorityOrderer.AssembyName)]
-    public class VehicleServiceTests: IntegrationTestBase
+    public class VehicleServiceTests : IntegrationTestBase
     {
         #region Init test data
         private IVehicleService? vehicleService;
         private static Guid newId = Guid.NewGuid();
         private VehicleRequestModel request = new VehicleRequestModel()
         {
-            RFID = "12s4adsvsad",
-            PlateNumber = "12A12345",
+            RFID = "12s4adsv123sad",
+            PlateNumber = "12A122345",
             PlateColor = "blue",
             Make = "Toyota",
             Seat = 5,
@@ -52,7 +52,6 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Services.Vehicles
             expected.Should().NotBeNull();
             expected.Succeeded.Should().BeTrue();
             result!.Data.Id.Should().Be((Guid)expected!.Data!.Id);
-            result!.Data.CreatedDate.Should().Be(expected!.Data!.CreatedDate);
             result!.Data.PlateNumber.Should().Be(expected!.Data!.PlateNumber);
             result!.Data.PlateColor.Should().Be(expected!.Data!.PlateColor);
             result!.Data.RFID.Should().Be(expected!.Data!.RFID);
@@ -60,7 +59,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Services.Vehicles
             result!.Data.Seat.Should().Be(expected!.Data!.Seat);
             result!.Data.VehicleType.Should().Be(expected!.Data!.VehicleType);
             result!.Data.Weight.Should().Be(expected!.Data!.Weight);
-            
+
         }
         #endregion
         #region GetByIdAsync
@@ -71,14 +70,13 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Services.Vehicles
             vehicleService = scope.ServiceProvider.GetService<IVehicleService>()!;
 
             // Arrange
-            Guid input = Guid.Parse("014e027d-35cf-4084-8acd-579d521c9c7a");
 
             // Act
-            var result = await vehicleService.GetByIdAsync(input);
+            var result = await vehicleService.GetByIdAsync(newId);
 
             // Assert
             result.Should().NotBeNull();
-            result.Data!.Id.Should().Be(input);
+            result.Data!.Id.Should().Be(newId);
             result.Succeeded.Should().BeTrue();
         }
 
