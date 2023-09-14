@@ -86,7 +86,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Controllers.Vehicles
             VehicleRequestModel request = new VehicleRequestModel();
             HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", JWTToken);
 
-            // Act
+            // Act                        
             var result = await HttpClient.PostAsJsonAsync($"/api/Vehicle/v1/vehicles", request);
             var content = await result.Content.ReadAsStringAsync();
 
