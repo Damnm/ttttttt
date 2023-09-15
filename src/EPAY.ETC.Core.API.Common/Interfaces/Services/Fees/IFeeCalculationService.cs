@@ -1,5 +1,5 @@
-﻿using EPAY.ETC.Core.API.Core.Validation;
-using EPAY.ETC.Core.Models.Enums;
+﻿using EPAY.ETC.Core.Models.Enums;
+using EPAY.ETC.Core.Models.Validation;
 using EPAY.ETC.Core.Models.VehicleFee;
 
 namespace EPAY.ETC.Core.API.Core.Interfaces.Services.Fees

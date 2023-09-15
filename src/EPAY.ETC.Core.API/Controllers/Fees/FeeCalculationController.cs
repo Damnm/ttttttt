@@ -1,6 +1,6 @@
 ﻿using EPAY.ETC.Core.API.Core.Exceptions;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Fees;
-using EPAY.ETC.Core.API.Core.Validation;
+using EPAY.ETC.Core.Models.Validation;
 using EPAY.ETC.Core.Models.VehicleFee;
 using Microsoft.AspNetCore.Mvc;
 

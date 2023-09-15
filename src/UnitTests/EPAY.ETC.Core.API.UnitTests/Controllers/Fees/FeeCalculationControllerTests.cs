@@ -2,9 +2,9 @@
 using EPAY.ETC.Core.API.Core.Extensions;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Fees;
 using EPAY.ETC.Core.API.Core.Models.Enum;
-using EPAY.ETC.Core.API.Core.Validation;
 using EPAY.ETC.Core.API.UnitTests.Helpers;
 using EPAY.ETC.Core.Models.Enums;
+using EPAY.ETC.Core.Models.Validation;
 using EPAY.ETC.Core.Models.VehicleFee;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
@@ -33,8 +33,8 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Fees
                 Model = "Some model",
                 PlateNumber = "Some plate",
                 RFID = "Some RFID",
-                VehicleCategory = "Some category",
-                VehicleGroup = "Some group"
+                VehicleCategoryName = "Some category",
+                VehicleGroupName = "Some group"
             },
             Fee = new FeeModel()
             {

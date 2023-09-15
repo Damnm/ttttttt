@@ -51,6 +51,7 @@ namespace EPAY.ETC.Core.API.Core.Models.Fees
         [MaxLength(50)]
         public string? TicketId { get; set; }
         public Guid? ShiftId { get; set; }
-        public Guid? EmployeeId { get; set; }
+        [MaxLength(20)]
+        public string? EmployeeId { get; set; }
     }
 }

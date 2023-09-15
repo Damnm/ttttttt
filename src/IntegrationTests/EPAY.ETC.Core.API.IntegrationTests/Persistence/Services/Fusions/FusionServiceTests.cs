@@ -1,7 +1,7 @@
 ﻿using EPAY.ETC.Core.API.Core.Interfaces.Services.Fusion;
 using EPAY.ETC.Core.API.Core.Models.Fusion;
-using EPAY.ETC.Core.API.Core.Validation;
 using EPAY.ETC.Core.API.IntegrationTests.Common;
+using EPAY.ETC.Core.Models.Validation;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using XUnitPriorityOrderer;

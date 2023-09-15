@@ -1,11 +1,5 @@
 ﻿using EPAY.ETC.Core.API.Core.Models.Fusion;
-using EPAY.ETC.Core.API.Core.Models.Vehicle;
-using EPAY.ETC.Core.API.Core.Validation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using EPAY.ETC.Core.Models.Validation;
 
 namespace EPAY.ETC.Core.API.Core.Interfaces.Services.Fusion
 {

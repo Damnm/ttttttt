@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc.Filters;
+﻿using EPAY.ETC.Core.Models.Validation;
 using Microsoft.AspNetCore.Mvc;
-using EPAY.ETC.Core.API.Core.Validation;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace EPAY.ETC.Core.API.Filters
 {

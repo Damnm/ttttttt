@@ -1,8 +1,8 @@
 ﻿using EPAY.ETC.Core.API.Controllers.Vehicle;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Vehicles;
 using EPAY.ETC.Core.API.Core.Models.Vehicle;
-using EPAY.ETC.Core.API.Core.Validation;
 using EPAY.ETC.Core.API.UnitTests.Helpers;
+using EPAY.ETC.Core.Models.Validation;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -161,7 +161,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Vehicles
             {
                 Id = Guid.NewGuid()
             };
-            responseMock = new ValidationResult<VehicleModel>( new List<ValidationError>()
+            responseMock = new ValidationResult<VehicleModel>(new List<ValidationError>()
             {
                 ValidationError.NotFound
             });
