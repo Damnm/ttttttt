@@ -115,7 +115,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Controllers.Vehicles
             result.StatusCode.Should().Be(HttpStatusCode.OK);
             content.Should().NotBeEmpty();
             data.Should().NotBeNull();
-            successful.GetValue<bool>().Should().BeTrue();
+            successful?.GetValue<bool>().Should().BeTrue();
             data?["PlateNumber"]?.GetValue<string>().Should().Be(request.PlateNumber);
             data?["PlateColor"]?.GetValue<string>().Should().Be(request.PlateColor);
             data?["RFID"]?.GetValue<string>().Should().Be(request.RFID);
@@ -228,7 +228,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Controllers.Vehicles
         #endregion
         #region RemoveAsync
         [Fact, Order(6)]
-        public async Task GivenRequestIsValid_WhenRemoveAsync_ThenReturnCorrect()
+         public async Task GivenRequestIsValid_WhenRemoveAsync_ThenReturnCorrect()
         {
             // Arrange
             HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", JWTToken);
