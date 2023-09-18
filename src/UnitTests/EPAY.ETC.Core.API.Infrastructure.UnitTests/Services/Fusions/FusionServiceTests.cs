@@ -61,7 +61,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fusions
         public async Task GivenValidRequest_WhenAddAsyncIsCalled_ThenReturnCorrectResult()
         {
             // Arrange
-            _fusionRepositoryMock.Setup(x => x.AddAsync(It.IsNotNull<FusionModel>())).ReturnsAsync(fusion);
+            _fusionRepositoryMock.Setup(x => x.AddAsync(It.IsNotNull<FusionModel>())).ReturnsAsync(fusion!);
 
             // Act
             var service = new FusionService(_loggerMock.Object, _fusionRepositoryMock.Object, _mapper);
@@ -267,7 +267,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fusions
         public async Task GivenValidRequestButNotFound_WhenGetByIdAsyncIsCalled_ThenReturnCorrectResult()
         {
             // Arrange
-            _fusionRepositoryMock.Setup(x => x.GetByIdAsync(It.IsNotNull<Guid>())).ReturnsAsync((FusionModel)null);
+            _fusionRepositoryMock.Setup(x => x.GetByIdAsync(It.IsNotNull<Guid>())).ReturnsAsync((FusionModel)null!);
 
             // Act
             var service = new FusionService(_loggerMock.Object, _fusionRepositoryMock.Object, _mapper);

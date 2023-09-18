@@ -153,13 +153,13 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fees
             // Assert
             result.Should().NotBeNull();
             result.Succeeded.Should().BeTrue();
-            result.Data.Fee.Should().NotBeNull();
-            result.Data.Fee?.Amount.Should().Be(amount);
-            result.Data.Fee?.Duration.Should().Be(duration);
-            result.Data.Fee?.Currency.Should().Be(CurrencyEnum.VND.ToString());
-            result.Data.Vehicle.Should().NotBeNull();
-            result.Data.Vehicle?.RFID.Should().Be(feeVehicleCategory.RFID);
-            result.Data.Vehicle?.PlateNumber.Should().Be(feeVehicleCategory.PlateNumber);
+            result.Data?.Fee.Should().NotBeNull();
+            result.Data?.Fee?.Amount.Should().Be(amount);
+            result.Data?.Fee?.Duration.Should().Be(duration);
+            result.Data?.Fee?.Currency.Should().Be(CurrencyEnum.VND.ToString());
+            result.Data?.Vehicle.Should().NotBeNull();
+            result.Data?.Vehicle?.RFID.Should().Be(feeVehicleCategory.RFID);
+            result.Data?.Vehicle?.PlateNumber.Should().Be(feeVehicleCategory.PlateNumber);
 
             switch (feeType)
             {
@@ -263,11 +263,11 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fees
             // Assert
             result.Should().NotBeNull();
             result.Succeeded.Should().BeTrue();
-            result.Data.Fee.Should().NotBeNull();
-            result.Data.Fee?.Amount.Should().Be(amount);
-            result.Data.Fee?.Duration.Should().Be(duration);
-            result.Data.Fee?.Currency.Should().Be(CurrencyEnum.VND.ToString());
-            result.Data.Vehicle.Should().BeNull();
+            result.Data?.Fee.Should().NotBeNull();
+            result.Data?.Fee?.Amount.Should().Be(amount);
+            result.Data?.Fee?.Duration.Should().Be(duration);
+            result.Data?.Fee?.Currency.Should().Be(CurrencyEnum.VND.ToString());
+            result.Data?.Vehicle.Should().BeNull();
 
             _feeVehicleCategoryRepositoryMock.Verify(x => x.GetAllAsync(It.IsAny<Expression<Func<FeeVehicleCategoryModel, bool>>>()), Times.Once);
             _timeBlockFeeFormulaRepositoryMock.Verify(x => x.GetAllAsync(It.IsAny<Expression<Func<TimeBlockFeeFormulaModel, bool>>>()), Times.Once);
@@ -299,11 +299,11 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fees
             // Assert
             result.Should().NotBeNull();
             result.Succeeded.Should().BeTrue();
-            result.Data.Fee.Should().NotBeNull();
-            result.Data.Fee?.Amount.Should().Be(amount);
-            result.Data.Fee?.Duration.Should().Be(duration);
-            result.Data.Fee?.Currency.Should().Be(CurrencyEnum.VND.ToString());
-            result.Data.Vehicle.Should().BeNull();
+            result.Data?.Fee.Should().NotBeNull();
+            result.Data?.Fee?.Amount.Should().Be(amount);
+            result.Data?.Fee?.Duration.Should().Be(duration);
+            result.Data?.Fee?.Currency.Should().Be(CurrencyEnum.VND.ToString());
+            result.Data?.Vehicle.Should().BeNull();
 
             _feeVehicleCategoryRepositoryMock.Verify(x => x.GetAllAsync(It.IsAny<Expression<Func<FeeVehicleCategoryModel, bool>>>()), Times.Once);
             _timeBlockFeeFormulaRepositoryMock.Verify(x => x.GetAllAsync(It.IsAny<Expression<Func<TimeBlockFeeFormulaModel, bool>>>()), Times.Once);
@@ -335,11 +335,11 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fees
             // Assert
             result.Should().NotBeNull();
             result.Succeeded.Should().BeTrue();
-            result.Data.Fee.Should().NotBeNull();
-            result.Data.Fee?.Amount.Should().Be(amount);
-            result.Data.Fee?.Duration.Should().Be(duration);
-            result.Data.Fee?.Currency.Should().Be(CurrencyEnum.VND.ToString());
-            result.Data.Vehicle.Should().BeNull();
+            result.Data?.Fee.Should().NotBeNull();
+            result.Data?.Fee?.Amount.Should().Be(amount);
+            result.Data?.Fee?.Duration.Should().Be(duration);
+            result.Data?.Fee?.Currency.Should().Be(CurrencyEnum.VND.ToString());
+            result.Data?.Vehicle.Should().BeNull();
 
             _feeVehicleCategoryRepositoryMock.Verify(x => x.GetAllAsync(It.IsAny<Expression<Func<FeeVehicleCategoryModel, bool>>>()), Times.Once);
             _timeBlockFeeFormulaRepositoryMock.Verify(x => x.GetAllAsync(It.IsAny<Expression<Func<TimeBlockFeeFormulaModel, bool>>>()), Times.Once);
@@ -371,11 +371,11 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fees
             // Assert
             result.Should().NotBeNull();
             result.Succeeded.Should().BeTrue();
-            result.Data.Fee.Should().NotBeNull();
-            result.Data.Fee?.Amount.Should().Be(amount);
-            result.Data.Fee?.Duration.Should().Be(duration);
-            result.Data.Fee?.Currency.Should().Be(CurrencyEnum.VND.ToString());
-            result.Data.Vehicle.Should().BeNull();
+            result.Data?.Fee.Should().NotBeNull();
+            result.Data?.Fee?.Amount.Should().Be(amount);
+            result.Data?.Fee?.Duration.Should().Be(duration);
+            result.Data?.Fee?.Currency.Should().Be(CurrencyEnum.VND.ToString());
+            result.Data?.Vehicle.Should().BeNull();
 
             _feeVehicleCategoryRepositoryMock.Verify(x => x.GetAllAsync(It.IsAny<Expression<Func<FeeVehicleCategoryModel, bool>>>()), Times.Once);
             _timeBlockFeeFormulaRepositoryMock.Verify(x => x.GetAllAsync(It.IsAny<Expression<Func<TimeBlockFeeFormulaModel, bool>>>()), Times.Once);
@@ -513,11 +513,11 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fees
             // Assert
             result.Should().NotBeNull();
             result.Succeeded.Should().BeTrue();
-            result.Data.Fee.Should().NotBeNull();
-            result.Data.Fee?.Amount.Should().Be(amount);
-            result.Data.Fee?.Duration.Should().Be(duration);
-            result.Data.Fee?.Currency.Should().Be(CurrencyEnum.VND.ToString());
-            result.Data.Vehicle.Should().BeNull();
+            result.Data?.Fee.Should().NotBeNull();
+            result.Data?.Fee?.Amount.Should().Be(amount);
+            result.Data?.Fee?.Duration.Should().Be(duration);
+            result.Data?.Fee?.Currency.Should().Be(CurrencyEnum.VND.ToString());
+            result.Data?.Vehicle.Should().BeNull();
 
             _timeBlockFeeFormulaRepositoryMock.Verify(x => x.GetAllAsync(It.IsAny<Expression<Func<TimeBlockFeeFormulaModel, bool>>>()), Times.Once);
             _timeBlockFeeRepositoryMock.Verify(x => x.GetAllAsync(It.IsAny<Expression<Func<TimeBlockFeeModel, bool>>>()), Times.Once);
@@ -542,11 +542,11 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fees
             // Assert
             result.Should().NotBeNull();
             result.Succeeded.Should().BeTrue();
-            result.Data.Fee.Should().NotBeNull();
-            result.Data.Fee?.Amount.Should().Be(amount);
-            result.Data.Fee?.Duration.Should().Be(duration);
-            result.Data.Fee?.Currency.Should().Be(CurrencyEnum.VND.ToString());
-            result.Data.Vehicle.Should().BeNull();
+            result.Data?.Fee.Should().NotBeNull();
+            result.Data?.Fee?.Amount.Should().Be(amount);
+            result.Data?.Fee?.Duration.Should().Be(duration);
+            result.Data?.Fee?.Currency.Should().Be(CurrencyEnum.VND.ToString());
+            result.Data?.Vehicle.Should().BeNull();
 
             _timeBlockFeeFormulaRepositoryMock.Verify(x => x.GetAllAsync(It.IsAny<Expression<Func<TimeBlockFeeFormulaModel, bool>>>()), Times.Once);
             _timeBlockFeeRepositoryMock.Verify(x => x.GetAllAsync(It.IsAny<Expression<Func<TimeBlockFeeModel, bool>>>()), Times.Once);
@@ -571,11 +571,11 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fees
             // Assert
             result.Should().NotBeNull();
             result.Succeeded.Should().BeTrue();
-            result.Data.Fee.Should().NotBeNull();
-            result.Data.Fee?.Amount.Should().Be(amount);
-            result.Data.Fee?.Duration.Should().Be(duration);
-            result.Data.Fee?.Currency.Should().Be(CurrencyEnum.VND.ToString());
-            result.Data.Vehicle.Should().BeNull();
+            result.Data?.Fee.Should().NotBeNull();
+            result.Data?.Fee?.Amount.Should().Be(amount);
+            result.Data?.Fee?.Duration.Should().Be(duration);
+            result.Data?.Fee?.Currency.Should().Be(CurrencyEnum.VND.ToString());
+            result.Data?.Vehicle.Should().BeNull();
 
             _timeBlockFeeFormulaRepositoryMock.Verify(x => x.GetAllAsync(It.IsAny<Expression<Func<TimeBlockFeeFormulaModel, bool>>>()), Times.Once);
             _timeBlockFeeRepositoryMock.Verify(x => x.GetAllAsync(It.IsAny<Expression<Func<TimeBlockFeeModel, bool>>>()), Times.Once);

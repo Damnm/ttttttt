@@ -36,9 +36,9 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Services.Fees
             // Assert
             result.Should().NotBeNull();
             result.Succeeded.Should().BeTrue();
-            result.Data.Fee.Should().NotBeNull();
-            result.Data.Fee?.Amount.Should().Be(amount);
-            result.Data.Fee?.Duration.Should().Be(duration);
+            result.Data?.Fee.Should().NotBeNull();
+            result.Data?.Fee?.Amount.Should().Be(amount);
+            result.Data?.Fee?.Duration.Should().Be(duration);
         }
 
         [Theory]
@@ -60,9 +60,9 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Services.Fees
             // Assert
             result.Should().NotBeNull();
             result.Succeeded.Should().BeTrue();
-            result.Data.Fee.Should().NotBeNull();
-            result.Data.Fee?.Amount.Should().Be(amount);
-            result.Data.Fee?.Duration.Should().Be(duration);
+            result.Data?.Fee.Should().NotBeNull();
+            result.Data?.Fee?.Amount.Should().Be(amount);
+            result.Data?.Fee?.Duration.Should().Be(duration);
         }
         #endregion
     }

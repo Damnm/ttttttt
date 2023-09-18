@@ -52,7 +52,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Services.Fusions
 
             // Act
             var result = await fusionService.AddAsync(addRequest);
-            newId = result!.Data!.Id!;
+            newId = result.Data!.Id!;
             var expected = await fusionService.GetByIdAsync(newId);
 
             // Assert
@@ -60,17 +60,17 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Services.Fusions
             result.Succeeded.Should().BeTrue();
             expected.Should().NotBeNull();
             expected.Succeeded.Should().BeTrue();
-            result!.Data.Id.Should().Be((Guid)expected!.Data!.Id);
-            result!.Data.CreatedDate.Should().Be(expected!.Data!.CreatedDate);
-            result!.Data.Epoch.Should().Be(expected!.Data!.Epoch);
-            result!.Data.Loop1.Should().Be(expected!.Data!.Loop1);
-            result!.Data.RFID.Should().Be(expected!.Data!.RFID);
-            result!.Data.Cam1.Should().Be(expected!.Data!.Cam1);
-            result!.Data.Loop2.Should().Be(expected!.Data!.Loop2);
-            result!.Data.Cam2.Should().Be(expected!.Data!.Cam2);
-            result!.Data.Loop3.Should().Be(expected!.Data!.Loop3);
-            result!.Data.ReversedLoop1.Should().Be(expected!.Data!.ReversedLoop1);
-            result!.Data.ReversedLoop1.Should().Be(expected!.Data!.ReversedLoop1);
+            result.Data?.Id.Should().Be((Guid)expected!.Data!.Id);
+            result.Data?.CreatedDate.Should().Be(expected!.Data!.CreatedDate);
+            result.Data?.Epoch.Should().Be(expected!.Data!.Epoch);
+            result.Data?.Loop1.Should().Be(expected!.Data!.Loop1);
+            result.Data?.RFID.Should().Be(expected!.Data!.RFID);
+            result.Data?.Cam1.Should().Be(expected!.Data!.Cam1);
+            result.Data?.Loop2.Should().Be(expected!.Data!.Loop2);
+            result.Data?.Cam2.Should().Be(expected!.Data!.Cam2);
+            result.Data?.Loop3.Should().Be(expected!.Data!.Loop3);
+            result.Data?.ReversedLoop1.Should().Be(expected!.Data!.ReversedLoop1);
+            result.Data?.ReversedLoop1.Should().Be(expected!.Data!.ReversedLoop1);
 
         }
         #endregion
@@ -170,16 +170,16 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Services.Fusions
             result.Succeeded.Should().BeTrue();
             expected.Should().NotBeNull();
             expected.Succeeded.Should().BeTrue();
-            result!.Data.Id.Should().Be((Guid)expected!.Data!.Id);
-            result!.Data.Epoch.Should().Be(expected!.Data!.Epoch);
-            result!.Data.Loop1.Should().Be(expected!.Data!.Loop1);
-            result!.Data.RFID.Should().Be(expected!.Data!.RFID);
-            result!.Data.Cam1.Should().Be(expected!.Data!.Cam1);
-            result!.Data.Loop2.Should().Be(expected!.Data!.Loop2);
-            result!.Data.Cam2.Should().Be(expected!.Data!.Cam2);
-            result!.Data.Loop3.Should().Be(expected!.Data!.Loop3);
-            result!.Data.ReversedLoop1.Should().Be(expected!.Data!.ReversedLoop1);
-            result!.Data.ReversedLoop1.Should().Be(expected!.Data!.ReversedLoop1);
+            result.Data?.Id.Should().Be((Guid)expected!.Data!.Id);
+            result.Data?.Epoch.Should().Be(expected!.Data!.Epoch);
+            result.Data?.Loop1.Should().Be(expected!.Data!.Loop1);
+            result.Data?.RFID.Should().Be(expected!.Data!.RFID);
+            result.Data?.Cam1.Should().Be(expected!.Data!.Cam1);
+            result.Data?.Loop2.Should().Be(expected!.Data!.Loop2);
+            result.Data?.Cam2.Should().Be(expected!.Data!.Cam2);
+            result.Data?.Loop3.Should().Be(expected!.Data!.Loop3);
+            result.Data?.ReversedLoop1.Should().Be(expected!.Data!.ReversedLoop1);
+            result.Data?.ReversedLoop1.Should().Be(expected!.Data!.ReversedLoop1);
         }
 
         [Fact, Order(5)]
