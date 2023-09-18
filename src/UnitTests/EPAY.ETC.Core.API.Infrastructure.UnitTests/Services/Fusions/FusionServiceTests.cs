@@ -1,108 +1,115 @@
-﻿using AutoMapper;
-using EPAY.ETC.Core.API.Core.Models.Vehicle;
-using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Vehicle;
-using EPAY.ETC.Core.API.Infrastructure.Services.Vehicles;
+﻿using EPAY.ETC.Core.API.Core.Models.Fusion;
+using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Fusion;
+using EPAY.ETC.Core.API.Infrastructure.Services.Fusion;
 using EPAY.ETC.Core.API.Infrastructure.UnitTests.Common;
 using EPAY.ETC.Core.API.Infrastructure.UnitTests.Helpers;
 using FluentAssertions;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services
+namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fusions
 {
-    public class VehicleServiceTests : AutoMapperTestBase
+    public class FusionServiceTests : AutoMapperTestBase
     {
         #region Init mock data
         private readonly Exception _exception = null!;
-        private readonly Mock<ILogger<VehicleService>> _loggerMock = new();
-        private readonly Mock<IVehicleRepository> _repositoryMock = new();
+        private readonly Mock<ILogger<FusionService>> _loggerMock = new();
+        private readonly Mock<IFusionRepository> _fusionRepositoryMock = new();
         private static Guid id = Guid.NewGuid();
-        private VehicleModel vehicle = new VehicleModel()
+        private FusionAddRequestModel addRequest = new FusionAddRequestModel()
+        {
+            ObjectId = id,
+            Epoch = 100,
+            Loop1 = true,
+            RFID = false,
+            Cam1 = "12A12345",
+            Loop2 = true,
+            Cam2 = "12A12345",
+            Loop3 = true,
+            ReversedLoop1 = true,
+            ReversedLoop2 = true
+        };
+        private FusionUpdateRequestModel updateRequest = new FusionUpdateRequestModel()
+        {
+            Epoch = 100,
+            Loop1 = true,
+            RFID = false,
+            Cam1 = "12A12345",
+            Loop2 = true,
+            Cam2 = "12A12345",
+            Loop3 = true,
+            ReversedLoop1 = true,
+            ReversedLoop2 = true
+        };
+        private FusionModel? fusion = new FusionModel()
         {
             Id = id,
             CreatedDate = DateTime.Now,
-            PlateNumber = "Some Plate number",
-            PlateColor = "Some Plate colour",
-            RFID = "Some RFID",
-            Make = "Some make",
-            Seat = 10,
-            VehicleType = "Loại 2",
-            Weight = 7000,
+            Epoch = 100,
+            Loop1 = true,
+            RFID = false,
+            Cam1 = "12A12345",
+            Loop2 = true,
+            Cam2 = "12A12345",
+            Loop3 = true,
+            ReversedLoop1 = true,
+            ReversedLoop2 = true
         };
-        private VehicleRequestModel request = new VehicleRequestModel()
-        {
-            PlateNumber = "Some Plate number",
-            PlateColor = "Some Plate colour",
-            RFID = "Some RFID",
-            Make = "Some make",
-            Seat = 10,
-            VehicleType = "Loại 2",
-            Weight = 7000,
-
-        };
-
         #endregion
-
         #region AddAsync
         [Fact]
         public async Task GivenValidRequest_WhenAddAsyncIsCalled_ThenReturnCorrectResult()
         {
             // Arrange
-            _repositoryMock.Setup(x => x.AddAsync(It.IsNotNull<VehicleModel>())).ReturnsAsync(vehicle);
+            _fusionRepositoryMock.Setup(x => x.AddAsync(It.IsNotNull<FusionModel>())).ReturnsAsync(fusion);
 
             // Act
-            var service = new VehicleService(_loggerMock.Object, _repositoryMock.Object, _mapper);
-            var result = await service.AddAsync(request);
+            var service = new FusionService(_loggerMock.Object, _fusionRepositoryMock.Object, _mapper);
+            var result = await service.AddAsync(addRequest);
 
             // Assert
             result.Should().NotBeNull();
             result.Data.Should().NotBeNull();
             result.Succeeded.Should().BeTrue();
-            _repositoryMock.Verify(x => x.AddAsync(It.IsNotNull<VehicleModel>()), Times.Once);
+            _fusionRepositoryMock.Verify(x => x.AddAsync(It.IsNotNull<FusionModel>()), Times.Once);
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.AddAsync)} method...", Times.Once, _exception);
             _loggerMock.VerifyLog(LogLevel.Error, $"Failed to run {nameof(service.AddAsync)} method", Times.Never, _exception);
         }
 
         //[Fact]
-        //public async Task GivenValidRequestAndExistingVehicle_WhenAddAsyncIsCalled_ThenReturnConflict()
+        //public async Task GivenValidRequestAndExistingFusion_WhenAddAsyncIsCalled_ThenReturnConflict()
         //{
         //    // Arrange
-        //    List<VehicleModel> vehicles = new List<VehicleModel>() { new VehicleModel() };
-        //    _repositoryMock.Setup(x => x.AddAsync(It.IsNotNull<VehicleModel>())).ReturnsAsync(vehicle);
+        //    id = Guid.Parse("47610194-3f8d-44c1-90d5-87bec44a9dd2");
+        //    _fusionRepositoryMock.Setup(x => x.AddAsync(It.IsNotNull<FusionModel>())).ReturnsAsync(fusion);
 
         //    // Act
-        //    var service = new VehicleService(_loggerMock.Object, _repositoryMock.Object, _mapper);
+        //    var service = new FusionService(_loggerMock.Object, _fusionRepositoryMock.Object, _mapper);
         //    var result = await service.AddAsync(request);
 
         //    // Assert
         //    result.Should().NotBeNull();
         //    result.Data.Should().NotBeNull();
         //    result.Succeeded.Should().BeTrue();
-        //    _repositoryMock.Verify(x => x.AddAsync(It.IsNotNull<VehicleModel>()), Times.Never);
-        //    _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.AddAsync)} method...", Times.Once, null);
-        //    _loggerMock.VerifyLog(LogLevel.Error, $"Failed to run {nameof(service.AddAsync)} method", Times.Never, null);
+        //    result.Errors.Count(x => x.Code == StatusCodes.Status409Conflict).Should().Be(1);
+        //    _fusionRepositoryMock.Verify(x => x.AddAsync(It.IsNotNull<FusionModel>()), Times.Never);
+        //    _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.AddAsync)} method...", Times.Once, _exception);
+        //    _loggerMock.VerifyLog(LogLevel.Error, $"Failed to run {nameof(service.AddAsync)} method", Times.Never, _exception);
         //}
 
         [Fact]
         public async Task GivenValidRequestAndRepositoryIsDown_WhenAddAsyncIsCalled_ThenThrowException()
         {
             // Arrange
-            _repositoryMock.Setup(x => x.AddAsync(It.IsNotNull<VehicleModel>())).ThrowsAsync(new Exception());
+            _fusionRepositoryMock.Setup(x => x.AddAsync(It.IsNotNull<FusionModel>())).ThrowsAsync(new Exception());
 
             // Act
-            var service = new VehicleService(_loggerMock.Object, _repositoryMock.Object, _mapper);
-            Func<Task> func = () => service.AddAsync(request);
+            var service = new FusionService(_loggerMock.Object, _fusionRepositoryMock.Object, _mapper);
+            Func<Task> func = () => service.AddAsync(addRequest);
 
             // Assert
             var ex = await Assert.ThrowsAsync<Exception>(func);
-            _repositoryMock.Verify(x => x.AddAsync(It.IsNotNull<VehicleModel>()), Times.Once);
+            _fusionRepositoryMock.Verify(x => x.AddAsync(It.IsNotNull<FusionModel>()), Times.Once);
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.AddAsync)} method...", Times.Once, _exception);
             _loggerMock.VerifyLog(LogLevel.Error, $"Failed to run {nameof(service.AddAsync)} method", Times.Once, _exception);
         }
@@ -113,20 +120,20 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services
         public async Task GivenValidRequest_WhenUpdateAsyncIsCalled_ThenReturnCorrectResult()
         {
             // Arrange
-            Object callbackObject;
-            _repositoryMock.Setup(x => x.GetByIdAsync(It.IsNotNull<Guid>())).ReturnsAsync(vehicle);
-            _repositoryMock.Setup(x => x.UpdateAsync(It.IsNotNull<VehicleModel>())).Callback<object>(k => callbackObject = k);
+            object callbackObject;
+            _fusionRepositoryMock.Setup(x => x.GetByIdAsync(It.IsNotNull<Guid>())).ReturnsAsync(fusion);
+            _fusionRepositoryMock.Setup(x => x.UpdateAsync(It.IsNotNull<FusionModel>())).Callback<object>(k => callbackObject = k);
 
             // Act
-            var service = new VehicleService(_loggerMock.Object, _repositoryMock.Object, _mapper);
-            var result = await service.UpdateAsync(id, request);
+            var service = new FusionService(_loggerMock.Object, _fusionRepositoryMock.Object, _mapper);
+            var result = await service.UpdateAsync(id, updateRequest);
 
             // Assert
             result.Should().NotBeNull();
             result.Data.Should().NotBeNull();
             result.Succeeded.Should().BeTrue();
-            _repositoryMock.Verify(x => x.GetByIdAsync(It.IsNotNull<Guid>()), Times.Once);
-            _repositoryMock.Verify(x => x.UpdateAsync(It.IsNotNull<VehicleModel>()), Times.Once);
+            _fusionRepositoryMock.Verify(x => x.GetByIdAsync(It.IsNotNull<Guid>()), Times.Once);
+            _fusionRepositoryMock.Verify(x => x.UpdateAsync(It.IsNotNull<FusionModel>()), Times.Once);
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.UpdateAsync)} method...", Times.Once, _exception);
             _loggerMock.VerifyLog(LogLevel.Error, $"Failed to run {nameof(service.UpdateAsync)} method", Times.Never, _exception);
         }
@@ -134,21 +141,21 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services
         public async Task GivenValidRequestAndNonExistingGuid_WhenUpdateAsyncIsCalled_ThenReturnNotFound()
         {
             // Arrange
-            Object callbackObject;
-            _repositoryMock.Setup(x => x.GetByIdAsync(It.IsNotNull<Guid>())).ReturnsAsync(vehicle = null);
-            _repositoryMock.Setup(x => x.UpdateAsync(It.IsNotNull<VehicleModel>())).Callback<object>(k => callbackObject = k);
+            object callbackObject;
+            _fusionRepositoryMock.Setup(x => x.GetByIdAsync(It.IsNotNull<Guid>())).ReturnsAsync(fusion = null);
+            _fusionRepositoryMock.Setup(x => x.UpdateAsync(It.IsNotNull<FusionModel>())).Callback<object>(k => callbackObject = k);
 
             // Act
-            var service = new VehicleService(_loggerMock.Object, _repositoryMock.Object, _mapper);
-            var result = await service.UpdateAsync(id, request);
+            var service = new FusionService(_loggerMock.Object, _fusionRepositoryMock.Object, _mapper);
+            var result = await service.UpdateAsync(id, updateRequest);
 
             // Assert
             result.Should().NotBeNull();
             result.Data.Should().BeNull();
             result.Succeeded.Should().BeFalse();
             result.Errors.Count(x => x.Code == 404).Should().Be(1);
-            _repositoryMock.Verify(x => x.GetByIdAsync(It.IsNotNull<Guid>()), Times.Once);
-            _repositoryMock.Verify(x => x.UpdateAsync(It.IsNotNull<VehicleModel>()), Times.Never);
+            _fusionRepositoryMock.Verify(x => x.GetByIdAsync(It.IsNotNull<Guid>()), Times.Once);
+            _fusionRepositoryMock.Verify(x => x.UpdateAsync(It.IsNotNull<FusionModel>()), Times.Never);
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.UpdateAsync)} method...", Times.Once, _exception);
             _loggerMock.VerifyLog(LogLevel.Error, $"Failed to run {nameof(service.UpdateAsync)} method", Times.Never, _exception);
         }
@@ -157,17 +164,17 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services
         public async Task GivenValidRequestAndRepositoryIsDown_WhenUpdateAsyncIsCalled_ThenThrowException()
         {
             // Arrange
-            _repositoryMock.Setup(x => x.GetByIdAsync(It.IsNotNull<Guid>())).ReturnsAsync(vehicle);
-            _repositoryMock.Setup(x => x.UpdateAsync(It.IsNotNull<VehicleModel>())).ThrowsAsync(new Exception());
+            _fusionRepositoryMock.Setup(x => x.GetByIdAsync(It.IsNotNull<Guid>())).ReturnsAsync(fusion);
+            _fusionRepositoryMock.Setup(x => x.UpdateAsync(It.IsNotNull<FusionModel>())).ThrowsAsync(new Exception());
 
             // Act
-            var service = new VehicleService(_loggerMock.Object, _repositoryMock.Object, _mapper);
-            Func<Task> func = () => service.UpdateAsync(id, request);
+            var service = new FusionService(_loggerMock.Object, _fusionRepositoryMock.Object, _mapper);
+            Func<Task> func = () => service.UpdateAsync(id, updateRequest);
 
             // Assert
             var ex = await Assert.ThrowsAsync<Exception>(func);
-            _repositoryMock.Verify(x => x.GetByIdAsync(It.IsNotNull<Guid>()), Times.Once);
-            _repositoryMock.Verify(x => x.UpdateAsync(It.IsNotNull<VehicleModel>()), Times.Once);
+            _fusionRepositoryMock.Verify(x => x.GetByIdAsync(It.IsNotNull<Guid>()), Times.Once);
+            _fusionRepositoryMock.Verify(x => x.UpdateAsync(It.IsNotNull<FusionModel>()), Times.Once);
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.UpdateAsync)} method...", Times.Once, _exception);
             _loggerMock.VerifyLog(LogLevel.Error, $"Failed to run {nameof(service.UpdateAsync)} method", Times.Once, _exception);
         }
@@ -178,20 +185,20 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services
         public async Task GivenValidRequest_WhenRemoveAsyncIsCalled_ThenReturnCorrectResult()
         {
             // Arrange
-            Object callbackObject;
-            _repositoryMock.Setup(x => x.GetByIdAsync(It.IsNotNull<Guid>())).ReturnsAsync(vehicle);
-            _repositoryMock.Setup(x => x.RemoveAsync(It.IsNotNull<VehicleModel>())).Callback<object>(k => callbackObject = k);
+            object callbackObject;
+            _fusionRepositoryMock.Setup(x => x.GetByIdAsync(It.IsNotNull<Guid>())).ReturnsAsync(fusion);
+            _fusionRepositoryMock.Setup(x => x.RemoveAsync(It.IsNotNull<FusionModel>())).Callback<object>(k => callbackObject = k);
 
             // Act
-            var service = new VehicleService(_loggerMock.Object, _repositoryMock.Object, _mapper);
+            var service = new FusionService(_loggerMock.Object, _fusionRepositoryMock.Object, _mapper);
             var result = await service.RemoveAsync(id);
 
             // Assert
             result.Should().NotBeNull();
             result.Data.Should().BeNull();
             result.Succeeded.Should().BeTrue();
-            _repositoryMock.Verify(x => x.GetByIdAsync(It.IsNotNull<Guid>()), Times.Once);
-            _repositoryMock.Verify(x => x.RemoveAsync(It.IsNotNull<VehicleModel>()), Times.Once);
+            _fusionRepositoryMock.Verify(x => x.GetByIdAsync(It.IsNotNull<Guid>()), Times.Once);
+            _fusionRepositoryMock.Verify(x => x.RemoveAsync(It.IsNotNull<FusionModel>()), Times.Once);
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.RemoveAsync)} method...", Times.Once, _exception);
             _loggerMock.VerifyLog(LogLevel.Error, $"Failed to run {nameof(service.RemoveAsync)} method", Times.Never, _exception);
         }
@@ -200,10 +207,10 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services
         public async Task GivenValidRequestAndNonExistingGuid_WhenRemoveAsyncIsCalled_ThenReturnNotFound()
         {
             // Arrange
-            _repositoryMock.Setup(x => x.GetByIdAsync(It.IsNotNull<Guid>())).ReturnsAsync(vehicle = null);
+            _fusionRepositoryMock.Setup(x => x.GetByIdAsync(It.IsNotNull<Guid>())).ReturnsAsync(fusion = null);
 
             // Act
-            var service = new VehicleService(_loggerMock.Object, _repositoryMock.Object, _mapper);
+            var service = new FusionService(_loggerMock.Object, _fusionRepositoryMock.Object, _mapper);
             var result = await service.RemoveAsync(id);
 
             // Assert
@@ -211,8 +218,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services
             result.Data.Should().BeNull();
             result.Succeeded.Should().BeFalse();
             result.Errors.Count(x => x.Code == 404).Should().Be(1);
-            _repositoryMock.Verify(x => x.GetByIdAsync(It.IsNotNull<Guid>()), Times.Once);
-            _repositoryMock.Verify(x => x.RemoveAsync(It.IsNotNull<VehicleModel>()), Times.Never);
+            _fusionRepositoryMock.Verify(x => x.GetByIdAsync(It.IsNotNull<Guid>()), Times.Once);
+            _fusionRepositoryMock.Verify(x => x.RemoveAsync(It.IsNotNull<FusionModel>()), Times.Never);
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.RemoveAsync)} method...", Times.Once, _exception);
             _loggerMock.VerifyLog(LogLevel.Error, $"Failed to run {nameof(service.RemoveAsync)} method", Times.Never, _exception);
         }
@@ -221,16 +228,16 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services
         public async Task GivenValidRequestAndRepositoryIsDown_WhenRemoveAsyncIsCalled_ThenThrowException()
         {
             // Arrange
-            _repositoryMock.Setup(x => x.GetByIdAsync(It.IsNotNull<Guid>())).ThrowsAsync(new Exception());
+            _fusionRepositoryMock.Setup(x => x.GetByIdAsync(It.IsNotNull<Guid>())).ThrowsAsync(new Exception());
 
             // Act
-            var service = new VehicleService(_loggerMock.Object, _repositoryMock.Object, _mapper);
+            var service = new FusionService(_loggerMock.Object, _fusionRepositoryMock.Object, _mapper);
             Func<Task> func = () => service.RemoveAsync(id);
 
             // Assert
             var ex = await Assert.ThrowsAsync<Exception>(func);
-            _repositoryMock.Verify(x => x.GetByIdAsync(It.IsNotNull<Guid>()), Times.Once);
-            _repositoryMock.Verify(x => x.RemoveAsync(It.IsNotNull<VehicleModel>()), Times.Never);
+            _fusionRepositoryMock.Verify(x => x.GetByIdAsync(It.IsNotNull<Guid>()), Times.Once);
+            _fusionRepositoryMock.Verify(x => x.RemoveAsync(It.IsNotNull<FusionModel>()), Times.Never);
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.RemoveAsync)} method...", Times.Once, _exception);
             _loggerMock.VerifyLog(LogLevel.Error, $"Failed to run {nameof(service.RemoveAsync)} method", Times.Once, _exception);
         }
@@ -241,17 +248,17 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services
         public async Task GivenValidRequest_WhenGetByIdAsyncIsCalled_ThenReturnCorrectResult()
         {
             // Arrange
-            _repositoryMock.Setup(x => x.GetByIdAsync(It.IsNotNull<Guid>())).ReturnsAsync(vehicle);
+            _fusionRepositoryMock.Setup(x => x.GetByIdAsync(It.IsNotNull<Guid>())).ReturnsAsync(fusion);
 
             // Act
-            var service = new VehicleService(_loggerMock.Object, _repositoryMock.Object, _mapper);
+            var service = new FusionService(_loggerMock.Object, _fusionRepositoryMock.Object, _mapper);
             var result = await service.GetByIdAsync(id);
 
             // Assert
             result.Should().NotBeNull();
             result.Data.Should().NotBeNull();
             result.Succeeded.Should().BeTrue();
-            _repositoryMock.Verify(x => x.GetByIdAsync(It.IsNotNull<Guid>()), Times.Once);
+            _fusionRepositoryMock.Verify(x => x.GetByIdAsync(It.IsNotNull<Guid>()), Times.Once);
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.GetByIdAsync)} method...", Times.Once, _exception);
             _loggerMock.VerifyLog(LogLevel.Error, $"Failed to run {nameof(service.GetByIdAsync)} method", Times.Never, _exception);
         }
@@ -260,17 +267,17 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services
         public async Task GivenValidRequestButNotFound_WhenGetByIdAsyncIsCalled_ThenReturnCorrectResult()
         {
             // Arrange
-            _repositoryMock.Setup(x => x.GetByIdAsync(It.IsNotNull<Guid>())).ReturnsAsync((VehicleModel)null);
+            _fusionRepositoryMock.Setup(x => x.GetByIdAsync(It.IsNotNull<Guid>())).ReturnsAsync((FusionModel)null);
 
             // Act
-            var service = new VehicleService(_loggerMock.Object, _repositoryMock.Object, _mapper);
+            var service = new FusionService(_loggerMock.Object, _fusionRepositoryMock.Object, _mapper);
             var result = await service.GetByIdAsync(id);
 
             // Assert
             result.Should().NotBeNull();
             result.Data.Should().BeNull();
             result.Succeeded.Should().BeFalse();
-            _repositoryMock.Verify(x => x.GetByIdAsync(It.IsNotNull<Guid>()), Times.Once);
+            _fusionRepositoryMock.Verify(x => x.GetByIdAsync(It.IsNotNull<Guid>()), Times.Once);
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.GetByIdAsync)} method...", Times.Once, _exception);
             _loggerMock.VerifyLog(LogLevel.Error, $"Failed to run {nameof(service.GetByIdAsync)} method", Times.Never, _exception);
         }
@@ -279,15 +286,15 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services
         public async Task GivenValidRequestAndRepositoryIsDown_WhenGetByIdAsyncIsCalled_ThenThrowException()
         {
             // Arrange
-            _repositoryMock.Setup(x => x.GetByIdAsync(It.IsNotNull<Guid>())).ThrowsAsync(new Exception());
+            _fusionRepositoryMock.Setup(x => x.GetByIdAsync(It.IsNotNull<Guid>())).ThrowsAsync(new Exception());
 
             // Act
-            var service = new VehicleService(_loggerMock.Object, _repositoryMock.Object, _mapper);
+            var service = new FusionService(_loggerMock.Object, _fusionRepositoryMock.Object, _mapper);
             Func<Task> func = () => service.GetByIdAsync(id);
 
             // Assert
             var ex = await Assert.ThrowsAsync<Exception>(func);
-            _repositoryMock.Verify(x => x.GetByIdAsync(It.IsNotNull<Guid>()), Times.Once);
+            _fusionRepositoryMock.Verify(x => x.GetByIdAsync(It.IsNotNull<Guid>()), Times.Once);
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.GetByIdAsync)} method...", Times.Once, _exception);
             _loggerMock.VerifyLog(LogLevel.Error, $"Failed to run {nameof(service.GetByIdAsync)} method", Times.Once, _exception);
         }
