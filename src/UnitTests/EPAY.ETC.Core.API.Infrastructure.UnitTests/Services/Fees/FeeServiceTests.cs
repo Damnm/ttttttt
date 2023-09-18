@@ -138,8 +138,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fees
             result.Succeeded.Should().BeTrue();
             result.Data.Should().BeEquivalentTo(feeModel);
 
-            _feeRepositoryMock.Verify(x => x.GetAllAsync(It.IsAny<Expression<Func<FeeModel, bool>>>()), Times.Once);
             _feeRepositoryMock.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+            _feeRepositoryMock.Verify(x => x.GetAllAsync(It.IsAny<Expression<Func<FeeModel, bool>>>()), Times.Once);
             _feeRepositoryMock.Verify(x => x.UpdateAsync(It.IsAny<FeeModel>()), Times.Once);
 
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.UpdateAsync)} method", Times.Once, _exception);
@@ -151,6 +151,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fees
         {
             // Arrange
             _feeRepositoryMock.Setup(x => x.GetAllAsync(It.IsAny<Expression<Func<FeeModel, bool>>>())).ReturnsAsync(new List<FeeModel>() { new FeeModel() });
+            _feeRepositoryMock.Setup(x => x.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(new FeeModel());
 
             // Act
             var service = new FeeService(_loggerMock.Object, _feeRepositoryMock.Object, _mapper);
@@ -162,8 +163,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fees
             result.Data.Should().BeNull();
             result.Errors.Count(x => x.Code.Equals(StatusCodes.Status409Conflict)).Should().BeGreaterThan(0);
 
+            _feeRepositoryMock.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
             _feeRepositoryMock.Verify(x => x.GetAllAsync(It.IsAny<Expression<Func<FeeModel, bool>>>()), Times.Once);
-            _feeRepositoryMock.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Never);
             _feeRepositoryMock.Verify(x => x.UpdateAsync(It.IsAny<FeeModel>()), Times.Never);
 
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.UpdateAsync)} method", Times.Once, _exception);
@@ -174,7 +175,6 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fees
         public async Task GivenValidRequestAndFeeIdIsNotExists_WhenUpdateAsyncIsCalled_ThenReturnNotFound()
         {
             // Arrange
-            _feeRepositoryMock.Setup(x => x.GetAllAsync(It.IsAny<Expression<Func<FeeModel, bool>>>())).ReturnsAsync(new List<FeeModel>() { });
             _feeRepositoryMock.Setup(x => x.GetByIdAsync(It.IsAny<Guid>()));
 
             // Act
@@ -187,8 +187,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fees
             result.Data.Should().BeNull();
             result.Errors.Count(x => x.Code.Equals(StatusCodes.Status404NotFound)).Should().BeGreaterThan(0);
 
-            _feeRepositoryMock.Verify(x => x.GetAllAsync(It.IsAny<Expression<Func<FeeModel, bool>>>()), Times.Once);
             _feeRepositoryMock.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+            _feeRepositoryMock.Verify(x => x.GetAllAsync(It.IsAny<Expression<Func<FeeModel, bool>>>()), Times.Never);
             _feeRepositoryMock.Verify(x => x.UpdateAsync(It.IsAny<FeeModel>()), Times.Never);
 
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.UpdateAsync)} method", Times.Once, _exception);
@@ -200,7 +200,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fees
         {
             // Arrange
             var exception = new Exception("Some ex");
-            _feeRepositoryMock.Setup(x => x.GetAllAsync(It.IsAny<Expression<Func<FeeModel, bool>>>())).ThrowsAsync(exception);
+            _feeRepositoryMock.Setup(x => x.GetByIdAsync(It.IsAny<Guid>())).ThrowsAsync(exception);
 
             // Act
             var service = new FeeService(_loggerMock.Object, _feeRepositoryMock.Object, _mapper);
@@ -210,8 +210,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fees
             var ex = await Assert.ThrowsAsync<Exception>(() => func());
             ex.Message.Should().Be(exception.Message);
 
-            _feeRepositoryMock.Verify(x => x.GetAllAsync(It.IsAny<Expression<Func<FeeModel, bool>>>()), Times.Once);
-            _feeRepositoryMock.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Never);
+            _feeRepositoryMock.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+            _feeRepositoryMock.Verify(x => x.GetAllAsync(It.IsAny<Expression<Func<FeeModel, bool>>>()), Times.Never);
             _feeRepositoryMock.Verify(x => x.UpdateAsync(It.IsAny<FeeModel>()), Times.Never);
 
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.UpdateAsync)} method", Times.Once, _exception);

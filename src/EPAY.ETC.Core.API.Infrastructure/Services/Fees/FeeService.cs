@@ -117,21 +117,21 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
             {
                 _logger.LogInformation($"Executing {nameof(UpdateAsync)} method...");
 
-                bool existRecord = await CheckExistsRecordByObjectId(id, request.ObjectId);
-                if (existRecord)
-                {
-                    return ValidationResult.Failed<FeeModel>(new List<ValidationError>()
-                    {
-                        ValidationError.Conflict
-                    });
-                }
-
                 var oldRecord = await _repository.GetByIdAsync(id);
                 if (oldRecord == null)
                 {
                     return ValidationResult.Failed<FeeModel>(new List<ValidationError>()
                     {
                         ValidationError.NotFound
+                    });
+                }
+
+                bool existRecord = await CheckExistsRecordByObjectId(id, request.ObjectId);
+                if (existRecord)
+                {
+                    return ValidationResult.Failed<FeeModel>(new List<ValidationError>()
+                    {
+                        ValidationError.Conflict
                     });
                 }
 

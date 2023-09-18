@@ -164,7 +164,7 @@ namespace EPAY.ETC.Core.API.Controllers.Fees
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpDelete("v1/fees/{id}")]
+        [HttpGet("v1/fees/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetByIdAsync(Guid id)
@@ -198,7 +198,7 @@ namespace EPAY.ETC.Core.API.Controllers.Fees
         /// Get all fee object
         /// </summary>
         /// <returns></returns>
-        [HttpDelete("v1/fees/{id}")]
+        [HttpGet("v1/fees")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllAsync()
