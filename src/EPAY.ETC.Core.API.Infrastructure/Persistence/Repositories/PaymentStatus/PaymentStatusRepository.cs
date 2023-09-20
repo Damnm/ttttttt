@@ -12,6 +12,7 @@ using System.Linq.Expressions;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
+using PaymentStatusModel = EPAY.ETC.Core.API.Core.Models.PaymentStatus.PaymentStatusModel;
 
 namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PaymentStatus
 {
@@ -29,7 +30,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PaymentStatu
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         }
         #endregion
-        public async Task<PaymentStatusModel> AddAsync(PaymentStatusModel entity)
+        public async Task<Core.Models.PaymentStatus.PaymentStatusModel> AddAsync(PaymentStatusModel entity)
         {
             _logger.LogInformation($"Executing {nameof(AddAsync)} method...");
             try

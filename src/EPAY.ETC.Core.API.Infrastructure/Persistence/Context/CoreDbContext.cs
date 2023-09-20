@@ -42,7 +42,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
         public virtual DbSet<TimeBlockFeeFormulaModel> TimeBlockFeeFormulas { get; set; }
         public virtual DbSet<FeeVehicleCategoryModel> FeeVehicleCategories { get; set; }
         public virtual DbSet<FeeModel> Fees { get; set; }
-        public virtual DbSet<PaymentStatusModel> PaymentStatuses { get; set; }
+        public virtual DbSet<Core.Models.PaymentStatus.PaymentStatusModel> PaymentStatuses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
