@@ -29,6 +29,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Controllers.Vehicles
             PlateColor = "Some Plate colour",
             RFID = "Some RFID",
             Make = "Some make",
+            Model = "Some model",
             Seat = 10,
             VehicleType = "Loại 2",
             Weight = 7000,
@@ -121,6 +122,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Controllers.Vehicles
             data?["RFID"]?.GetValue<string>().Should().Be(request.RFID);
             data?["Make"]?.GetValue<string>().Should().Be(request.Make);
             data?["Seat"]?.GetValue<int>().Should().Be(request.Seat);
+            data?["Model"]?.GetValue<string>().Should().Be(request.Model);
             data?["VehicleType"]?.GetValue<string>().Should().Be(request.VehicleType);
             data?["Weight"]?.GetValue<int>().Should().Be(request.Weight);
 
@@ -159,6 +161,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Controllers.Vehicles
             request.RFID = "Some RFID";
             request.Make = "Some make";
             request.Seat = 10;
+            request.Model = "Toyota";
             request.VehicleType = "Loại 2";
             request.Weight = 7000;
 
@@ -179,6 +182,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Controllers.Vehicles
             data?["PlateColor"]?.GetValue<string>().Should().Be(request.PlateColor);
             data?["RFID"]?.GetValue<string>().Should().Be(request.RFID);
             data?["Make"]?.GetValue<string>().Should().Be(request.Make);
+            data?["Model"]?.GetValue<string>().Should().Be(request.Model);
             data?["Seat"]?.GetValue<int>().Should().Be(request.Seat);
             data?["VehicleType"]?.GetValue<string>().Should().Be(request.VehicleType);
             data?["Weight"]?.GetValue<int>().Should().Be(request.Weight);

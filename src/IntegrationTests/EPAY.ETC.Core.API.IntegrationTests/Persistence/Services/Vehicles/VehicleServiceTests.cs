@@ -22,6 +22,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Services.Vehicles
             PlateColor = "blue",
             Make = "Toyota",
             Seat = 5,
+            Model = "Model",
             VehicleType = "Loai 1",
             Weight = 5000,
         };
@@ -50,6 +51,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Services.Vehicles
             result!.Data.PlateColor.Should().Be(expected!.Data!.PlateColor);
             result!.Data.RFID.Should().Be(expected!.Data!.RFID);
             result!.Data.Make.Should().Be(expected!.Data!.Make);
+            result!.Data.Model.Should().Be(expected!.Data!.Model);
             result!.Data.Seat.Should().Be(expected!.Data!.Seat);
             result!.Data.VehicleType.Should().Be(expected!.Data!.VehicleType);
             result!.Data.Weight.Should().Be(expected!.Data!.Weight);
@@ -105,6 +107,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Services.Vehicles
             request.PlateColor = "New PlateColor";
             request.Seat = 2;
             request.Make = "New Make";
+            request.Model = "New Model";
             request.VehicleType = "New VehicleType";
             request.Weight = 2000;
 
@@ -122,6 +125,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Services.Vehicles
             result!.Data?.PlateNumber.Should().Be(expected!.Data!.PlateNumber);
             result!.Data?.PlateColor.Should().Be(expected!.Data!.PlateColor);
             result!.Data?.Make.Should().Be(expected!.Data!.Make);
+            result!.Data?.Model.Should().Be(expected!.Data!.Model);
             result!.Data?.Seat.Should().Be(expected!.Data!.Seat);
             result!.Data?.VehicleType.Should().Be(expected!.Data!.VehicleType);
             result!.Data?.Weight.Should().Be(expected!.Data!.Weight);

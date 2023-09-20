@@ -32,6 +32,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Repository.Vehicle
             PlateColor = "White",
             Make = "Toyotra",
             Seat = 5,
+            Model = "Model",
             VehicleType = "Loai 2",
             Weight = 5000,
         };
@@ -59,6 +60,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Repository.Vehicle
             result!.PlateNumber.Should().Be(expected!.PlateNumber);
             result!.PlateColor.Should().Be(expected!.PlateColor);
             result!.Make.Should().Be(expected!.Make);
+            result!.Model.Should().Be(expected!.Model);
             result!.Seat.Should().Be(expected!.Seat);
             result!.VehicleType.Should().Be(expected!.VehicleType);
             result!.Weight.Should().Be(expected!.Weight);
@@ -117,6 +119,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Repository.Vehicle
             vehicle.PlateColor = "White";
             vehicle.Make = "Supra";
             vehicle.Seat = 2;
+            vehicle.Model = "Model";
             vehicle.VehicleType = "Loai 3";
             vehicle.Weight = 500000;
 
@@ -132,6 +135,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Repository.Vehicle
             expected?.PlateColor.Should().Be(expected!.PlateColor);
             expected?.Make.Should().Be(expected!.Make);
             expected?.Seat.Should().Be(expected!.Seat);
+            expected?.Model.Should().Be(expected!.Model);
             expected?.VehicleType.Should().Be(expected!.VehicleType);
             expected?.Weight.Should().Be(expected!.Weight);
             //expected?.CreatedDate.Should().Be(vehicle.CreatedDate);
