@@ -193,6 +193,7 @@ namespace EPAY.ETC.Core.API.Controllers.Fees
         }
         #endregion
 
+        public async Task<IActionResult> GetByObjectIdAsync(Guid objectId)
         #region GetAllAsync
         /// <summary>
         /// Get all fee object
