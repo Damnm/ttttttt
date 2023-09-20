@@ -13,6 +13,7 @@ namespace EPAY.ETC.Core.API.Core.Models.Vehicle
         public string PlateNumber { get; set; }
         public string? PlateColor { get; set; }
         public string? Make { get; set; }
+        public string? Model { get; set; }
         public int? Seat { get; set; }
         public int? Weight { get; set; }
         public string? VehicleType { get; set; }

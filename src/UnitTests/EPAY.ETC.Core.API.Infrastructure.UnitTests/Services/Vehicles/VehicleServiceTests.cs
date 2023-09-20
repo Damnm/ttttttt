@@ -70,26 +70,6 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Vehicles
             _loggerMock.VerifyLog(LogLevel.Error, $"Failed to run {nameof(service.AddAsync)} method", Times.Never, _exception);
         }
 
-        //[Fact]
-        //public async Task GivenValidRequestAndExistingVehicle_WhenAddAsyncIsCalled_ThenReturnConflict()
-        //{
-        //    // Arrange
-        //    List<VehicleModel> vehicles = new List<VehicleModel>() { new VehicleModel() };
-        //    _repositoryMock.Setup(x => x.AddAsync(It.IsNotNull<VehicleModel>())).ReturnsAsync(vehicle);
-
-        //    // Act
-        //    var service = new VehicleService(_loggerMock.Object, _repositoryMock.Object, _mapper);
-        //    var result = await service.AddAsync(request);
-
-        //    // Assert
-        //    result.Should().NotBeNull();
-        //    result.Data.Should().NotBeNull();
-        //    result.Succeeded.Should().BeTrue();
-        //    _repositoryMock.Verify(x => x.AddAsync(It.IsNotNull<VehicleModel>()), Times.Never);
-        //    _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.AddAsync)} method...", Times.Once, null);
-        //    _loggerMock.VerifyLog(LogLevel.Error, $"Failed to run {nameof(service.AddAsync)} method", Times.Never, null);
-        //}
-
         [Fact]
         public async Task GivenValidRequestAndRepositoryIsDown_WhenAddAsyncIsCalled_ThenThrowException()
         {
