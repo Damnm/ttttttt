@@ -39,8 +39,6 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Fees
             Fee = new FeeModel()
             {
                 Amount = 55000,
-                Currency = CurrencyEnum.VND.ToString(),
-                Duration = 10300
             }
         };
         private FeeCalculationRequestModel request = new FeeCalculationRequestModel()

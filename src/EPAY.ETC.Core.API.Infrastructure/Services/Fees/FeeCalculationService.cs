@@ -53,8 +53,6 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
                     Fee = new FeeModel()
                     {
                         Amount = 0,
-                        Duration = (int)duration,
-                        Currency = CurrencyEnum.VND.ToString()
                     }
                 };
 
@@ -150,8 +148,6 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
                     Fee = new FeeModel()
                     {
                         Amount = 0,
-                        Duration = (int)duration,
-                        Currency = CurrencyEnum.VND.ToString()
                     }
                 };
 
