@@ -30,7 +30,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.Fees
                 ConfidenceScore = (float?)0.9,
                 CustomVehicleTypeId = Guid.NewGuid(),
                 Duration = 15000,
-                EmployeeId = Guid.NewGuid(),
+                EmployeeId = "Some employee",
                 ObjectId = Guid.NewGuid(),
                 VehicleCategoryId = Guid.NewGuid(),
                 LaneInId = "0301",

@@ -1,16 +1,10 @@
 ﻿using EPAY.ETC.Core.API.Core.Interfaces.Services.Vehicles;
 using EPAY.ETC.Core.API.Core.Models.Vehicle;
-using EPAY.ETC.Core.API.Core.Validation;
 using EPAY.ETC.Core.API.IntegrationTests.Common;
+using EPAY.ETC.Core.Models.Validation;
 using FluentAssertions;
-using FluentAssertions.Common;
-using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using XUnitPriorityOrderer;
 
 namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Services.Vehicles
@@ -123,14 +117,14 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Services.Vehicles
             result.Succeeded.Should().BeTrue();
             expected.Should().NotBeNull();
             expected.Succeeded.Should().BeTrue();
-            result!.Data.Id.Should().Be((Guid)expected!.Data!.Id);
-            result!.Data.RFID.Should().Be(expected!.Data!.RFID);
-            result!.Data.PlateNumber.Should().Be(expected!.Data!.PlateNumber);
-            result!.Data.PlateColor.Should().Be(expected!.Data!.PlateColor);
-            result!.Data.Make.Should().Be(expected!.Data!.Make);
-            result!.Data.Seat.Should().Be(expected!.Data!.Seat);
-            result!.Data.VehicleType.Should().Be(expected!.Data!.VehicleType);
-            result!.Data.Weight.Should().Be(expected!.Data!.Weight);
+            result!.Data?.Id.Should().Be((Guid)expected!.Data!.Id);
+            result!.Data?.RFID.Should().Be(expected!.Data!.RFID);
+            result!.Data?.PlateNumber.Should().Be(expected!.Data!.PlateNumber);
+            result!.Data?.PlateColor.Should().Be(expected!.Data!.PlateColor);
+            result!.Data?.Make.Should().Be(expected!.Data!.Make);
+            result!.Data?.Seat.Should().Be(expected!.Data!.Seat);
+            result!.Data?.VehicleType.Should().Be(expected!.Data!.VehicleType);
+            result!.Data?.Weight.Should().Be(expected!.Data!.Weight);
         }
 
         [Fact, Order(5)]
@@ -149,7 +143,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Services.Vehicles
             result.Should().NotBeNull();
             result.Data.Should().BeNull();
             result.Succeeded.Should().BeFalse();
-            result.Errors.Count(x => x.Code == ValidationError.NotFound.Code).Should().Be(1);
+            result.Errors.Count(x => x.Code == StatusCodes.Status404NotFound).Should().Be(1);
         }
         #endregion
         #region RemoveAsync

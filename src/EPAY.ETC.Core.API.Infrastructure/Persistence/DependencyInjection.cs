@@ -49,6 +49,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence
             services.AddScoped<IVehicleService, VehicleService>();
             services.AddScoped<IFusionService, FusionService>();
             services.AddScoped<IFeeCalculationService, FeeCalculationService>();
+            services.AddScoped<IFeeService, FeeService>();
 
             return services;
         }

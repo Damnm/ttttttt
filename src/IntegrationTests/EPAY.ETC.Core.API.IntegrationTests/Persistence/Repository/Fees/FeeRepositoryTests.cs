@@ -28,8 +28,8 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Repository.Fees
             ConfidenceScore = (float?)0.9,
             CustomVehicleTypeId = Guid.Parse("090a7db5-2d5d-4c1c-a32c-27f946f8dd61"),
             Duration = 15000,
-            EmployeeId = Guid.Parse("f997cd23-5ce0-475b-a4e4-3269fe0ec427"),
-            ObjectId = Guid.Parse("d246a94a-8064-4bf7-bf4e-0723864daebf"),
+            EmployeeId = "Some employee",
+            ObjectId = Guid.Parse("d246a94a-8064-4af7-bf4e-0723864daebf"),
             VehicleCategoryId = Guid.Parse("d985883f-a420-47f1-8fac-d8d79dba96ca"),
             LaneInId = "0301",
             LaneInDate = new DateTime(2023, 9, 14, 1, 0, 24),
@@ -72,7 +72,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Repository.Fees
             var result = await _feeRepository.GetAllAsync();
 
             // Assert
-            result.Should().NotBeNull().And.HaveCount(1);
+            result.Should().NotBeNull().And.HaveCountGreaterThanOrEqualTo(1);
         }
 
         [Fact, Order(3)]

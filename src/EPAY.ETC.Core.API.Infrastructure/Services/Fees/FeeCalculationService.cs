@@ -2,12 +2,12 @@
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Fees;
 using EPAY.ETC.Core.API.Core.Models.Enum;
 using EPAY.ETC.Core.API.Core.Utils;
-using EPAY.ETC.Core.API.Core.Validation;
 using EPAY.ETC.Core.API.Infrastructure.Common.Utils;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.FeeVehicleCategories;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.TimeBlockFees;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Vehicle;
 using EPAY.ETC.Core.Models.Enums;
+using EPAY.ETC.Core.Models.Validation;
 using EPAY.ETC.Core.Models.VehicleFee;
 using Microsoft.Extensions.Logging;
 
@@ -81,10 +81,13 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
                     {
                         PlateNumber = feeVehicleCategory.PlateNumber,
                         RFID = feeVehicleCategory.RFID,
+                        CustomVehicleTypeId = feeVehicleCategory.CustomVehicleTypeId,
                         CustomVehicleTypeCode = feeVehicleCategory.CustomVehicleType?.Name.ToString(),
                         CustomVehicleTypeName = feeVehicleCategory.CustomVehicleType?.Name.ToEnumMemberAttrValue(),
-                        VehicleCategory = feeVehicleCategory.VehicleCategory?.Name,
-                        VehicleGroup = feeVehicleCategory.VehicleGroup?.Name
+                        VehicleCategoryId = feeVehicleCategory.VehicleCategoryId,
+                        VehicleCategoryName = feeVehicleCategory.VehicleCategory?.Name,
+                        VehicleGroupId = feeVehicleCategory.VehicleGroupId,
+                        VehicleGroupName = feeVehicleCategory.VehicleGroup?.Name
                     };
 
                     // Set fee type if exists

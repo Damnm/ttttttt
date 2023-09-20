@@ -1,19 +1,10 @@
 ﻿using AutoMapper;
-using EPAY.ETC.Core.API.Core.Extensions;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Fusion;
 using EPAY.ETC.Core.API.Core.Models.Fusion;
-using EPAY.ETC.Core.API.Core.Models.Vehicle;
-using EPAY.ETC.Core.API.Core.Validation;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Fusion;
-using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Vehicle;
-using EPAY.ETC.Core.API.Infrastructure.Services.Vehicles;
+using EPAY.ETC.Core.Models.Validation;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EPAY.ETC.Core.API.Infrastructure.Services.Fusion
 {

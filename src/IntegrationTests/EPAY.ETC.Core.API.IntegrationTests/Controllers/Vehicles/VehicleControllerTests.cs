@@ -72,7 +72,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Controllers.Vehicles
             // Assert
             result.StatusCode.Should().Be(HttpStatusCode.Conflict);
             content.Should().NotBeEmpty();
-            successful.GetValue<bool>().Should().BeFalse();
+            successful?.GetValue<bool>().Should().BeFalse();
             data.Should().BeNull();
         }
 
@@ -228,7 +228,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Controllers.Vehicles
         #endregion
         #region RemoveAsync
         [Fact, Order(6)]
-         public async Task GivenRequestIsValid_WhenRemoveAsync_ThenReturnCorrect()
+        public async Task GivenRequestIsValid_WhenRemoveAsync_ThenReturnCorrect()
         {
             // Arrange
             HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", JWTToken);

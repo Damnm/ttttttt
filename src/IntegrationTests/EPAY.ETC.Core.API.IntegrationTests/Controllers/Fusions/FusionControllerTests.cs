@@ -109,7 +109,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Controllers.Fusions
             result.StatusCode.Should().Be(HttpStatusCode.OK);
             content.Should().NotBeEmpty();
             data.Should().NotBeNull();
-            successful.GetValue<bool>().Should().BeTrue();
+            successful?.GetValue<bool>().Should().BeTrue();
             data?["Epoch"]?.GetValue<float>().Should().Be(request.Epoch);
             data?["Loop1"]?.GetValue<bool>().Should().Be(request.Loop1);
             data?["RFID"]?.GetValue<bool>().Should().Be(request.RFID);

@@ -72,6 +72,22 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Fees
             }
         }
 
+        public async Task<FeeModel?> GetByObjectIdAsync(Guid objectId)
+        {
+            try
+            {
+                _logger.LogInformation($"Executing {nameof(GetByObjectIdAsync)} method...");
+
+                return  await _dbContext.Fees.AsNoTracking().Where(x => x.ObjectId == objectId).FirstOrDefaultAsync();
+            }
+            catch (ETCEPAYCoreAPIException ex)
+            {
+                _logger.LogError($"An error occurred when calling {nameof(GetByObjectIdAsync)} method. Details: {ex.Message}. Stack trace: {ex.StackTrace}");
+                throw;
+            }
+        }
+
+
         public async Task RemoveAsync(FeeModel entity)
         {
             try

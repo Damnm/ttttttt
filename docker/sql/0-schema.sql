@@ -275,7 +275,7 @@ CREATE TABLE IF NOT EXISTS public."Fee"
     "TicketTypeId" character varying(50) COLLATE pg_catalog."default",
     "TicketId" character varying(50) COLLATE pg_catalog."default",
     "ShiftId" uuid,
-    "EmployeeId" uuid,
+    "EmployeeId" character varying(20),
     "CreatedDate" timestamp without time zone,
     CONSTRAINT "PK_Fee" PRIMARY KEY ("Id"),
     CONSTRAINT "FK_Fee_CustomVehicleType_CustomVehicleTypeId" FOREIGN KEY ("CustomVehicleTypeId")
