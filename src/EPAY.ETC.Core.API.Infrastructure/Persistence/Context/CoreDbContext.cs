@@ -5,6 +5,7 @@ using EPAY.ETC.Core.API.Core.Models.Fees;
 using EPAY.ETC.Core.API.Core.Models.FeeTypes;
 using EPAY.ETC.Core.API.Core.Models.FeeVehicleCategories;
 using EPAY.ETC.Core.API.Core.Models.Fusion;
+using EPAY.ETC.Core.API.Core.Models.PaymentStatus;
 using EPAY.ETC.Core.API.Core.Models.TimeBlockFees;
 using EPAY.ETC.Core.API.Core.Models.Transaction;
 using EPAY.ETC.Core.API.Core.Models.TransactionLog;
@@ -41,6 +42,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
         public virtual DbSet<TimeBlockFeeFormulaModel> TimeBlockFeeFormulas { get; set; }
         public virtual DbSet<FeeVehicleCategoryModel> FeeVehicleCategories { get; set; }
         public virtual DbSet<FeeModel> Fees { get; set; }
+        public virtual DbSet<PaymentStatusModel> PaymentStatuses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
