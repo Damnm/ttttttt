@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
 using EPAY.ETC.Core.API.Core.Models.Fees;
 using EPAY.ETC.Core.API.Core.Models.Fusion;
+using EPAY.ETC.Core.API.Core.Models.PaymentStatus;
 using EPAY.ETC.Core.API.Core.Models.Vehicle;
 using EPAY.ETC.Core.API.Core.Utils;
+using EPAY.ETC.Core.Models.Request;
+using EPAY.ETC.Core.Models.UI;
 using System.Diagnostics.CodeAnalysis;
 using CoreModel = EPAY.ETC.Core.Models.Fees;
 
@@ -26,8 +29,15 @@ namespace EPAY.ETC.Core.API.Mapping
             CreateMap<FusionAddRequestModel, FusionModel>()
                 .ForMember(e => e.Id, act => act.MapFrom(src => src.ObjectId))
                 .ReverseMap();
+            CreateMap<PaymentStatusAddRequestModel, Core.Models.PaymentStatus.PaymentStatusModel>()
+               .ForMember(e => e.Id, act => act.MapFrom(src => src.PaymentStatusId))
+               .ReverseMap();
             CreateMap<FusionUpdateRequestModel, FusionModel>()
                 .ReverseMap();
+            CreateMap<PaymentStatusUpdateRequestModel, Core.Models.PaymentStatus.PaymentStatusModel>()
+                 .ForMember(e => e.Status, act => act.MapFrom(src => src.Status))
+                 .ForMember(e => e.PaymentMethod, act => act.MapFrom(src => src.PaymentMethod))
+               .ReverseMap();
             CreateMap<CoreModel.FeeModel, FeeModel>()
                 .ForMember(e => e.Id, act => act.MapFrom(src => src.FeeId.HasValue ? src.FeeId : Guid.NewGuid()))
                 .ForMember(e => e.ObjectId, act => act.MapFrom(src => src.ObjectId))

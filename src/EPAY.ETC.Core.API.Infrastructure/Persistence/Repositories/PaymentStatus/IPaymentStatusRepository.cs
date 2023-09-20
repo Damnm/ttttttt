@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PaymentStatus
 {
-    public interface IPaymentStatusRepository: IRepository<PaymentStatusModel, Guid>
+    public interface IPaymentStatusRepository: IRepository<Core.Models.PaymentStatus.PaymentStatusModel, Guid>
     {
     }
 }

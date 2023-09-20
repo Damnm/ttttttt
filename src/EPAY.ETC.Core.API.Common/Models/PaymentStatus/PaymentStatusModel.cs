@@ -8,7 +8,6 @@ namespace EPAY.ETC.Core.API.Core.Models.PaymentStatus
         public Guid PaymentStatusId { get; set; }
         public Guid PaymentId { get; set; }
 
-        public DateTime CreatedDate { get; set; }
         public Double Amount { get; set; }
 
         public string Currency { get; set; }
