@@ -5,5 +5,6 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Fees
 {
     public interface IFeeRepository : IRepository<FeeModel, Guid>
     {
+        Task<FeeModel?> GetByObjectIdAsync(Guid objectId);
     }
 }

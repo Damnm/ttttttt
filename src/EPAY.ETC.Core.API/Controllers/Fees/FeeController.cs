@@ -193,7 +193,41 @@ namespace EPAY.ETC.Core.API.Controllers.Fees
         }
         #endregion
 
-        public async Task<IActionResult> GetByObjectIdAsync(Guid objectId)
+        #region GetByObjectIdAsync
+        /// <summary>
+        /// Get one fee object by Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("v1/fees/objectId/{objectId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetByObjectIdAsync(string objectId)
+        {
+            try
+            {
+                _logger.LogInformation($"Executing {nameof(GetByObjectIdAsync)}...");
+
+                var result = await _service.GetByObjectIdAsync(objectId);
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                List<ValidationError> validationErrors = new();
+                string errorMessage = $"An error occurred when calling {nameof(GetByObjectIdAsync)} method: {ex.Message}. InnerException : {ApiExceptionMessages.ExceptionMessages(ex)}. Stack trace: {ex.StackTrace}";
+
+                _logger.LogError(errorMessage);
+                validationErrors.Add(ValidationError.InternalServerError);
+
+                return new ObjectResult(ValidationResult.Failed(errorMessage, validationErrors))
+                {
+                    StatusCode = StatusCodes.Status500InternalServerError
+                };
+            }
+        }
+        #endregion
+
         #region GetAllAsync
         /// <summary>
         /// Get all fee object

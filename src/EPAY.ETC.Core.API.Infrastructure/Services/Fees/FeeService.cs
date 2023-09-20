@@ -85,6 +85,24 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
             }
         }
 
+        public async Task<ValidationResult<FeeModel?>> GetByObjectIdAsync(string objectId)
+        {
+            try
+            {
+                _logger.LogInformation($"Executing {nameof(GetByIdAsync)} method...");
+
+                Guid.TryParse(objectId, out Guid guid);
+                var result = await _repository.GetByObjectIdAsync(guid);
+
+                return ValidationResult.Success(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"An error occurred when calling {nameof(GetByIdAsync)} method. Details: {ex.Message}. Stack trace: {ex.StackTrace}");
+                throw;
+            }
+        }
+
         public async Task<ValidationResult<FeeModel?>> RemoveAsync(Guid id)
         {
             try
