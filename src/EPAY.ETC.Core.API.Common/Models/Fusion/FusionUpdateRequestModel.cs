@@ -6,7 +6,7 @@ namespace EPAY.ETC.Core.API.Core.Models.Fusion
     [ExcludeFromCodeCoverage]
     public class FusionUpdateRequestModel
     {
-        public float Epoch { get; set; }
+        public long Epoch { get; set; }
         public bool Loop1 { get; set; }
         [Required(ErrorMessage = "RFID required!")]
         public bool RFID { get; set; }

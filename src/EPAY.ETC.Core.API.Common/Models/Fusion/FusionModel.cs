@@ -7,7 +7,7 @@ namespace EPAY.ETC.Core.API.Core.Models.Fusion
     [ExcludeFromCodeCoverage]
     public class FusionModel : BaseEntity<Guid>
     {
-        public float Epoch { get; set; }
+        public long Epoch { get; set; }
         public bool Loop1 { get; set; }
         public bool RFID { get; set; }
         [StringLength(15)]
