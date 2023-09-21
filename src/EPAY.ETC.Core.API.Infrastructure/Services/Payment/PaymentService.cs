@@ -1,24 +1,24 @@
 ﻿using AutoMapper;
-using EPAY.ETC.Core.API.Core.Interfaces.Services.PaymentStatus;
-using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PaymentStatus;
+using EPAY.ETC.Core.API.Core.Interfaces.Services.Payment;
+using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Payment;
 using EPAY.ETC.Core.Models.Request;
 using EPAY.ETC.Core.Models.Validation;
 using Microsoft.Extensions.Logging;
 using System.Linq.Expressions;
-using PaymentStatusModel = EPAY.ETC.Core.API.Core.Models.PaymentStatus.PaymentStatusModel;
+using PaymentModel = EPAY.ETC.Core.API.Core.Models.Payment.PaymentModel;
 
-namespace EPAY.ETC.Core.API.Infrastructure.Services.PaymentStatus
+namespace EPAY.ETC.Core.API.Infrastructure.Services.Payment
 {
-    public class PaymentStatusService: IPaymentStatusService
+    public class PaymentService: IPaymentService
     {
 
-        #region Variables 
-        private readonly ILogger<PaymentStatusService> _logger;
-        private readonly IPaymentStatusRepository _repository;
+        #region Variables
+        private readonly ILogger<PaymentService> _logger;
+        private readonly IPaymentRepository _repository;
         private readonly IMapper _mapper;
         #endregion
         #region Constructor
-        public PaymentStatusService(ILogger<PaymentStatusService> logger, IPaymentStatusRepository fusionRepository, IMapper mapper)
+        public PaymentService(ILogger<PaymentService> logger, IPaymentRepository fusionRepository, IMapper mapper)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _repository = fusionRepository ?? throw new ArgumentNullException(nameof(fusionRepository));
@@ -26,7 +26,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.PaymentStatus
         }
         #endregion
         #region AddAsync
-        public async Task<ValidationResult<PaymentStatusModel>> AddAsync(PaymentStatusAddRequestModel input)
+        public async Task<ValidationResult<PaymentModel>> AddAsync(PaymentAddRequestModel input)
         {
             _logger.LogInformation($"Executing {nameof(AddAsync)} method...");
             try
@@ -34,12 +34,12 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.PaymentStatus
                 var existingRecords = await GetExistingRecordAsync(input);
                 if (existingRecords)
                 {
-                    return ValidationResult.Failed<PaymentStatusModel>(new List<ValidationError>()
+                    return ValidationResult.Failed<PaymentModel>(new List<ValidationError>()
                     {
                         new ValidationError("Gía trị đã có trên hệ thống", ValidationError.Conflict.Code)
                     });
                 }
-                var entity = _mapper.Map<PaymentStatusModel>(input);
+                var entity = _mapper.Map<PaymentModel>(input);
 
                 var result = await _repository.AddAsync(entity);
                 return ValidationResult.Success(result);
@@ -53,7 +53,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.PaymentStatus
         #endregion
 
         #region GetIdAsync
-        public async Task<ValidationResult<Core.Models.PaymentStatus.PaymentStatusModel>> GetByIdAsync(Guid id)
+        public async Task<ValidationResult<PaymentModel>> GetByIdAsync(Guid id)
         {
             _logger.LogInformation($"Executing {nameof(GetByIdAsync)} method...");
             try
@@ -61,7 +61,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.PaymentStatus
                 var result = await _repository.GetByIdAsync(id);
                 if (result == null)
                 {
-                    return ValidationResult.Failed<Core.Models.PaymentStatus.PaymentStatusModel>(null, new List<ValidationError>()
+                    return ValidationResult.Failed<PaymentModel>(null, new List<ValidationError>()
                     {
                         ValidationError.NotFound
                     });
@@ -78,7 +78,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.PaymentStatus
         #endregion
 
         #region RemoveAsync
-        public async Task<ValidationResult<Core.Models.PaymentStatus.PaymentStatusModel>> RemoveAsync(Guid id)
+        public async Task<ValidationResult<PaymentModel>> RemoveAsync(Guid id)
         {
             _logger.LogInformation($"Executing {nameof(RemoveAsync)} method...");
             try
@@ -86,7 +86,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.PaymentStatus
                 var result = await _repository.GetByIdAsync(id);
                 if (result == null)
                 {
-                    return ValidationResult.Failed<Core.Models.PaymentStatus.PaymentStatusModel>(null, new List<ValidationError>()
+                    return ValidationResult.Failed<PaymentModel>(null, new List<ValidationError>()
                     {
                         ValidationError.NotFound
                     });
@@ -106,7 +106,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.PaymentStatus
         #endregion
 
         #region UpdateAsync
-        public async Task<ValidationResult<Core.Models.PaymentStatus.PaymentStatusModel>> UpdateAsync(Guid id, PaymentStatusUpdateRequestModel request)
+        public async Task<ValidationResult<PaymentModel>> UpdateAsync(Guid id, PaymentUpdateRequestModel request)
         {
             _logger.LogInformation($"Executing {nameof(UpdateAsync)} method...");
             try
@@ -114,14 +114,14 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.PaymentStatus
                 var oldRecord = await _repository.GetByIdAsync(id);
                 if (oldRecord == null)
                 {
-                    return ValidationResult.Failed<Core.Models.PaymentStatus.PaymentStatusModel>(null, new List<ValidationError>()
+                    return ValidationResult.Failed<PaymentModel>(null, new List<ValidationError>()
                     {
                         ValidationError.NotFound
                     });
                 }
                 if (oldRecord.Id != id)
                 {
-                    return ValidationResult.Failed<PaymentStatusModel>(new List<ValidationError>()
+                    return ValidationResult.Failed<PaymentModel>(new List<ValidationError>()
                     {
                         new ValidationError("Giá trị đã có trên hệ thống", ValidationError.Conflict.Code)
                     });
@@ -141,10 +141,10 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.PaymentStatus
         #endregion
 
         #region Private method
-        private async Task<bool> GetExistingRecordAsync(PaymentStatusAddRequestModel input, string? id = null)
+        private async Task<bool> GetExistingRecordAsync(PaymentAddRequestModel input, string? id = null)
         {
-            Expression<Func<PaymentStatusModel, bool>> expression = s =>
-                s.Id == input.PaymentStatusId;
+            Expression<Func<PaymentModel, bool>> expression = s =>
+                s.Id == input.PaymentId;
 
             var result = await _repository.GetAllAsync(expression);
 

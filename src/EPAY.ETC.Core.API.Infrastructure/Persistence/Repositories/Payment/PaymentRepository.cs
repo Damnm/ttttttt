@@ -3,30 +3,32 @@ using EPAY.ETC.Core.API.Infrastructure.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Linq.Expressions;
-using PaymentStatusModel = EPAY.ETC.Core.API.Core.Models.PaymentStatus.PaymentStatusModel;
+using PaymentModel = EPAY.ETC.Core.API.Core.Models.Payment.PaymentModel;
 
-namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PaymentStatus
+namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Payment
 {
-    public class PaymentStatusRepository : IPaymentStatusRepository
+    public class PaymentRepository : IPaymentRepository
     {
 
         #region Variables
-        private readonly ILogger<PaymentStatusRepository> _logger;
+        private readonly ILogger<PaymentRepository> _logger;
         private readonly CoreDbContext _dbContext;
         #endregion
+
         #region Constructor
-        public PaymentStatusRepository(ILogger<PaymentStatusRepository> logger, CoreDbContext dbContext)
+        public PaymentRepository(ILogger<PaymentRepository> logger, CoreDbContext dbContext)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         }
         #endregion
-        public async Task<Core.Models.PaymentStatus.PaymentStatusModel> AddAsync(PaymentStatusModel entity)
+
+        public async Task<PaymentModel> AddAsync(PaymentModel entity)
         {
             _logger.LogInformation($"Executing {nameof(AddAsync)} method...");
             try
             {
-                var res = await _dbContext.PaymentStatuses.AddAsync(entity);
+                var res = await _dbContext.Payments.AddAsync(entity);
                 await _dbContext.SaveChangesAsync();
                 return entity;
             }
@@ -37,7 +39,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PaymentStatu
             }
         }
 
-        public Task<IEnumerable<PaymentStatusModel>> GetAllAsync(Expression<Func<PaymentStatusModel, bool>>? expression = null)
+        public Task<IEnumerable<PaymentModel>> GetAllAsync(Expression<Func<PaymentModel, bool>>? expression = null)
         {
 
             _logger.LogInformation($"Executing {nameof(GetAllAsync)} method...");
@@ -45,10 +47,10 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PaymentStatu
             {
                 if (expression == null)
                 {
-                    return Task.FromResult<IEnumerable<PaymentStatusModel>>(_dbContext.PaymentStatuses.AsNoTracking());
+                    return Task.FromResult<IEnumerable<PaymentModel>>(_dbContext.Payments.AsNoTracking());
                 }
 
-                return Task.FromResult<IEnumerable<PaymentStatusModel>>(_dbContext.PaymentStatuses.AsNoTracking().Where(expression));
+                return Task.FromResult<IEnumerable<PaymentModel>>(_dbContext.Payments.AsNoTracking().Where(expression));
             }
             catch (Exception ex)
             {
@@ -57,13 +59,13 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PaymentStatu
             }
         }
 
-        public async Task<PaymentStatusModel?> GetByIdAsync(Guid id)
+        public async Task<PaymentModel?> GetByIdAsync(Guid id)
         {
             _logger.LogInformation($"Executing {nameof(GetByIdAsync)} method...");
 
             try
             {
-                 return await  _dbContext.PaymentStatuses.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+                 return await  _dbContext.Payments.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
             }
             catch (Exception ex)
             {
@@ -72,12 +74,12 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PaymentStatu
             }
         }
 
-        public async Task RemoveAsync(PaymentStatusModel entity)
+        public async Task RemoveAsync(PaymentModel entity)
         {
             _logger.LogInformation($"Executing {nameof(RemoveAsync)} method...");
             try
             {
-                _dbContext.PaymentStatuses.Remove(entity);
+                _dbContext.Payments.Remove(entity);
                 await _dbContext.SaveChangesAsync();
             }
             catch (Exception ex)
@@ -87,13 +89,13 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PaymentStatu
             }
         }
 
-        public async Task UpdateAsync(PaymentStatusModel entity)
+        public async Task UpdateAsync(PaymentModel entity)
         {
             _logger.LogInformation($"Executing {nameof(UpdateAsync)} method...");
 
             try
             {
-                _dbContext.PaymentStatuses.Update(entity);
+                _dbContext.Payments.Update(entity);
                 await _dbContext.SaveChangesAsync();
             }
             catch (ETCEPAYCoreAPIException ex)
