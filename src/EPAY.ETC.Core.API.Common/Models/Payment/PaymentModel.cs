@@ -1,4 +1,5 @@
 ﻿using EPAY.ETC.Core.API.Core.Entities;
+using EPAY.ETC.Core.API.Core.Models.Fusion;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -9,6 +10,8 @@ namespace EPAY.ETC.Core.API.Core.Models.Payment
     {
         [MaxLength(10)]
         public string? LaneInId { get; set; }
+
+        public Guid? FeeId { get; set; }
 
         [MaxLength(10)]
         public string? LaneOutId { get; set; }
@@ -25,5 +28,7 @@ namespace EPAY.ETC.Core.API.Core.Models.Payment
         public Guid? CustomVehicleTypeId { get; set; }
 
         public double Amount { get; set; }
+
+        public virtual ICollection<PaymentStatus.PaymentStatusModel>? PaymentStatuses { get; set; }
     }
 }

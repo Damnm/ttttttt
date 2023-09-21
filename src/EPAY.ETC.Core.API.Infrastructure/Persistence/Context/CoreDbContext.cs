@@ -546,6 +546,25 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
             modelBuilder.Entity<FeeModel>().HasIndex(x => x.LaneOutDate);
             modelBuilder.Entity<FeeModel>().HasIndex(x => x.LaneOutEpoch);
             #endregion
+
+            #region PaymentStatus configuration
+            modelBuilder.Entity<Core.Models.PaymentStatus.PaymentStatusModel>().HasKey(x => x.Id);
+            modelBuilder.Entity<Core.Models.PaymentStatus.PaymentStatusModel>()
+                .HasOne(x => x.Payment)
+                .WithMany(x => x.PaymentStatuses)
+                .HasForeignKey(x => x.PaymentId);
+            modelBuilder.Entity<Core.Models.PaymentStatus.PaymentStatusModel>().HasIndex(x => x.PaymentId);
+            modelBuilder.Entity<Core.Models.PaymentStatus.PaymentStatusModel>().HasIndex(x => x.PaymentReferenceId);
+            #endregion
+
+            #region Payment configuration
+            modelBuilder.Entity<Core.Models.Payment.PaymentModel>().HasKey(x => x.Id);
+            modelBuilder.Entity<Core.Models.Payment.PaymentModel>().HasIndex(x => x.FeeId);
+            modelBuilder.Entity<Core.Models.Payment.PaymentModel>().HasIndex(x => x.LaneInId);
+            modelBuilder.Entity<Core.Models.Payment.PaymentModel>().HasIndex(x => x.LaneOutId);
+            modelBuilder.Entity<Core.Models.Payment.PaymentModel>().HasIndex(x => x.RFID);
+            modelBuilder.Entity<Core.Models.Payment.PaymentModel>().HasIndex(x => x.PlateNumber);
+            #endregion
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
