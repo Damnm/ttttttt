@@ -1,20 +1,10 @@
 ﻿using AutoMapper;
-using EPAY.ETC.Core.API.Core.Interfaces.Repositories;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.PaymentStatus;
-using EPAY.ETC.Core.API.Core.Models.Fusion;
-using EPAY.ETC.Core.API.Core.Models.PaymentStatus;
-using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Fusion;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PaymentStatus;
-using EPAY.ETC.Core.API.Infrastructure.Services.Fusion;
 using EPAY.ETC.Core.Models.Request;
 using EPAY.ETC.Core.Models.Validation;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using PaymentStatusModel = EPAY.ETC.Core.API.Core.Models.PaymentStatus.PaymentStatusModel;
 
 namespace EPAY.ETC.Core.API.Infrastructure.Services.PaymentStatus
@@ -131,7 +121,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.PaymentStatus
                 }
                 if (oldRecord.Id != id)
                 {
-                    return ValidationResult.Failed<Core.Models.PaymentStatus.PaymentStatusModel>(new List<ValidationError>()
+                    return ValidationResult.Failed<PaymentStatusModel>(new List<ValidationError>()
                     {
                         new ValidationError("Giá trị đã có trên hệ thống", ValidationError.Conflict.Code)
                     });
