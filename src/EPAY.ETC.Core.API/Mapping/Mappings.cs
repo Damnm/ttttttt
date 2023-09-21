@@ -32,11 +32,17 @@ namespace EPAY.ETC.Core.API.Mapping
             CreateMap<PaymentStatusAddRequestModel, Core.Models.PaymentStatus.PaymentStatusModel>()
                .ForMember(e => e.Id, act => act.MapFrom(src => src.PaymentStatusId))
                .ReverseMap();
+            CreateMap<PaymentAddRequestModel, Core.Models.Payment.PaymentModel>()
+              .ForMember(e => e.Id, act => act.MapFrom(src => src.PaymentId))
+              .ReverseMap();
             CreateMap<FusionUpdateRequestModel, FusionModel>()
                 .ReverseMap();
             CreateMap<PaymentStatusUpdateRequestModel, Core.Models.PaymentStatus.PaymentStatusModel>()
                  .ForMember(e => e.Status, act => act.MapFrom(src => src.Status))
                  .ForMember(e => e.PaymentMethod, act => act.MapFrom(src => src.PaymentMethod))
+               .ReverseMap();
+            CreateMap<PaymentUpdateRequestModel, Core.Models.Payment.PaymentModel>()
+                 .ForMember(e => e.Amount, act => act.MapFrom(src => src.Amount))
                .ReverseMap();
             CreateMap<CoreModel.FeeModel, FeeModel>()
                 .ForMember(e => e.Id, act => act.MapFrom(src => src.FeeId.HasValue ? src.FeeId : Guid.NewGuid()))
