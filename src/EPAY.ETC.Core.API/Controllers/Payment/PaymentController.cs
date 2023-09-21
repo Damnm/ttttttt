@@ -3,9 +3,9 @@ using EPAY.ETC.Core.Models.Request;
 using EPAY.ETC.Core.Models.Validation;
 using Microsoft.AspNetCore.Mvc;
 
-namespace EPAY.ETC.Core.API.Controllers.PaymentStatus
+namespace EPAY.ETC.Core.API.Controllers.Payment
 {
-    public class PaymentController: ControllerBase
+    public class PaymentController : ControllerBase
     {
         #region Variables
         private readonly ILogger<PaymentController> _logger;
@@ -67,13 +67,13 @@ namespace EPAY.ETC.Core.API.Controllers.PaymentStatus
         /// <summary>
         /// Get Fusion Detail
         /// </summary>
-        [HttpGet("api/payment/v1/payments/{objectId}")]
-        public async Task<IActionResult> GetByIdAsync(Guid objectId)
+        [HttpGet("api/payment/v1/payments/{paymentid}")]
+        public async Task<IActionResult> GetByIdAsync(Guid paymentId)
         {
             try
             {
                 _logger.LogInformation($"Executing {nameof(GetByIdAsync)}...");
-                var result = await _paymentService.GetByIdAsync(objectId);
+                var result = await _paymentService.GetByIdAsync(paymentId);
 
                 return Ok(result);
             }

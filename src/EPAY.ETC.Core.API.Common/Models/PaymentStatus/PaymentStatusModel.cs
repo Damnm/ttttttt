@@ -23,7 +23,8 @@ namespace EPAY.ETC.Core.API.Core.Models.PaymentStatus
 
         public PaymentStatusEnum Status { get; set; }
 
-        public string PaymentReferenceId { get; set; }
+        [MaxLength(50)]
+        public string? PaymentReferenceId { get; set; }
 
 
     }

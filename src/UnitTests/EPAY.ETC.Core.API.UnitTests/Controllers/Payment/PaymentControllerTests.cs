@@ -1,4 +1,4 @@
-﻿using EPAY.ETC.Core.API.Controllers.PaymentStatus;
+﻿using EPAY.ETC.Core.API.Controllers.Payment;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Payment;
 using EPAY.ETC.Core.API.UnitTests.Helpers;
 using EPAY.ETC.Core.Models.Request;

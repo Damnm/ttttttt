@@ -1,5 +1,7 @@
 ﻿using EPAY.ETC.Core.API.Core.Interfaces.Services.Fees;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Fusion;
+using EPAY.ETC.Core.API.Core.Interfaces.Services.Payment;
+using EPAY.ETC.Core.API.Core.Interfaces.Services.PaymentStatus;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Vehicles;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Context;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.CustomVehicleTypes;
@@ -7,12 +9,16 @@ using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Fees;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.FeeTypes;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.FeeVehicleCategories;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Fusion;
+using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Payment;
+using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PaymentStatus;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.TimeBlockFees;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Vehicle;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.VehicleCategories;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.VehicleGroups;
 using EPAY.ETC.Core.API.Infrastructure.Services.Fees;
 using EPAY.ETC.Core.API.Infrastructure.Services.Fusion;
+using EPAY.ETC.Core.API.Infrastructure.Services.Payment;
+using EPAY.ETC.Core.API.Infrastructure.Services.PaymentStatus;
 using EPAY.ETC.Core.API.Infrastructure.Services.Vehicles;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -44,12 +50,16 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence
             services.AddScoped<IVehicleCategoryRepository, VehicleCategoryRepository>();
             services.AddScoped<IVehicleGroupRepository, VehicleGroupRepository>();
             services.AddScoped<IFeeRepository, FeeRepository>();
+            services.AddScoped<IPaymentStatusRepository, PaymentStatusRepository>();
+            services.AddScoped<IPaymentRepository, PaymentRepository>();
 
             ////Add Services
             services.AddScoped<IVehicleService, VehicleService>();
             services.AddScoped<IFusionService, FusionService>();
             services.AddScoped<IFeeCalculationService, FeeCalculationService>();
             services.AddScoped<IFeeService, FeeService>();
+            services.AddScoped<IPaymentStatusService, PaymentStatusService>();
+            services.AddScoped<IPaymentService, PaymentService>();
 
             return services;
         }

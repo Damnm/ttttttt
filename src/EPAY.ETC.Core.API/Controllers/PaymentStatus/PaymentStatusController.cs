@@ -121,7 +121,7 @@ namespace EPAY.ETC.Core.API.Controllers.PaymentStatus
         /// <summary>
         /// Update Fusion Detail
         /// </summary>
-        [HttpPut("api/paymentstatus/v1/paymentstatuses/{objectId}")]
+        [HttpPut("api/paymentstatus/v1/paymentstatuses/{paymentstatusId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> UpdateAsync(Guid objectId, [FromBody] PaymentStatusUpdateRequestModel request)
