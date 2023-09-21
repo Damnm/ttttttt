@@ -1,8 +1,10 @@
 ﻿using EPAY.ETC.Core.API.Core.Entities;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EPAY.ETC.Core.API.Core.Models.Payment
 {
+    [Table("Payment")]
     public class PaymentModel: BaseEntity<Guid>
     {
         [MaxLength(10)]

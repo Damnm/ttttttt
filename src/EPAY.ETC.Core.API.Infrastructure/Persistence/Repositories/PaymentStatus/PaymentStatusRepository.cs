@@ -63,7 +63,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PaymentStatu
 
             try
             {
-                 return await  _dbContext.PaymentStatuses.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+                 return  _dbContext.PaymentStatuses.AsNoTracking().FirstOrDefault(x => x.Id == id);
             }
             catch (Exception ex)
             {
