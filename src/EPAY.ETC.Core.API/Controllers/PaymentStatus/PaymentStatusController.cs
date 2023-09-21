@@ -68,13 +68,13 @@ namespace EPAY.ETC.Core.API.Controllers.PaymentStatus
         /// <summary>
         /// Get Fusion Detail
         /// </summary>
-        [HttpGet("api/paymentstatus/v1/paymentstatuses/{objectId}")]
-        public async Task<IActionResult> GetByIdAsync(Guid objectId)
+        [HttpGet("api/paymentstatus/v1/paymentstatuses/{paymentstatusId}")]
+        public async Task<IActionResult> GetByIdAsync(Guid paymentstatusId)
         {
             try
             {
                 _logger.LogInformation($"Executing {nameof(GetByIdAsync)}...");
-                var result = await _paymentStatusService.GetByIdAsync(objectId);
+                var result = await _paymentStatusService.GetByIdAsync(paymentstatusId);
 
                 return Ok(result);
             }
@@ -92,13 +92,13 @@ namespace EPAY.ETC.Core.API.Controllers.PaymentStatus
         /// <summary>
         /// Remove Fusion
         /// </summary>
-        [HttpDelete("api/paymentstatus/v1/paymentstatuses/{objectId}")]
-        public async Task<IActionResult> RemoveAsync(Guid objectId)
+        [HttpDelete("api/paymentstatus/v1/paymentstatuses/{paymentstatusId}")]
+        public async Task<IActionResult> RemoveAsync(Guid paymentstatusId)
         {
             try
             {
                 _logger.LogInformation($"Executing {nameof(RemoveAsync)}...");
-                var data = await _paymentStatusService.RemoveAsync(objectId);
+                var data = await _paymentStatusService.RemoveAsync(paymentstatusId);
 
                 if (!data.Succeeded && data.Errors.Any(x => x.Code == StatusCodes.Status404NotFound))
                 {
@@ -124,14 +124,14 @@ namespace EPAY.ETC.Core.API.Controllers.PaymentStatus
         [HttpPut("api/paymentstatus/v1/paymentstatuses/{paymentstatusId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> UpdateAsync(Guid objectId, [FromBody] PaymentStatusUpdateRequestModel request)
+        public async Task<IActionResult> UpdateAsync(Guid paymentstatusId, [FromBody] PaymentStatusUpdateRequestModel request)
         {
             try
             {
                 _logger.LogInformation($"Executing {nameof(UpdateAsync)}...");
 
 
-                var data = await _paymentStatusService.UpdateAsync(objectId, request);
+                var data = await _paymentStatusService.UpdateAsync(paymentstatusId, request);
 
                 if (!data.Succeeded)
                 {

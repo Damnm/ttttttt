@@ -91,13 +91,13 @@ namespace EPAY.ETC.Core.API.Controllers.Payment
         /// <summary>
         /// Remove Fusion
         /// </summary>
-        [HttpDelete("api/payment/v1/payments/{objectId}")]
-        public async Task<IActionResult> RemoveAsync(Guid objectId)
+        [HttpDelete("api/payment/v1/payments/{paymentid}")]
+        public async Task<IActionResult> RemoveAsync(Guid paymentId)
         {
             try
             {
                 _logger.LogInformation($"Executing {nameof(RemoveAsync)}...");
-                var data = await _paymentService.RemoveAsync(objectId);
+                var data = await _paymentService.RemoveAsync(paymentId);
 
                 if (!data.Succeeded && data.Errors.Any(x => x.Code == StatusCodes.Status404NotFound))
                 {
@@ -120,17 +120,17 @@ namespace EPAY.ETC.Core.API.Controllers.Payment
         /// <summary>
         /// Update Fusion Detail
         /// </summary>
-        [HttpPut("api/payment/v1/payments/{objectId}")]
+        [HttpPut("api/payment/v1/payments/{paymentid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> UpdateAsync(Guid objectId, [FromBody] PaymentUpdateRequestModel request)
+        public async Task<IActionResult> UpdateAsync(Guid paymentId, [FromBody] PaymentUpdateRequestModel request)
         {
             try
             {
                 _logger.LogInformation($"Executing {nameof(UpdateAsync)}...");
 
 
-                var data = await _paymentService.UpdateAsync(objectId, request);
+                var data = await _paymentService.UpdateAsync(paymentId, request);
 
                 if (!data.Succeeded)
                 {
