@@ -85,7 +85,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
             }
         }
 
-        public async Task<ValidationResult<FeeModel?>> GetByObjectIdAsync(string objectId)
+        public async Task<ValidationResult<CoreModel.FeeModel?>> GetByObjectIdAsync(string objectId)
         {
             try
             {
@@ -94,7 +94,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
                 Guid.TryParse(objectId, out Guid guid);
                 var result = await _repository.GetByObjectIdAsync(guid);
 
-                return ValidationResult.Success(result);
+                return ValidationResult.Success(_mapper.Map<CoreModel.FeeModel?>(result));
             }
             catch (Exception ex)
             {

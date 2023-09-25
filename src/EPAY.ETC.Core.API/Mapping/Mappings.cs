@@ -56,8 +56,30 @@ namespace EPAY.ETC.Core.API.Mapping
                 .ForMember(e => e.PlateColour, act => act.MapFrom(src => src.LaneOutVehicle != null && src.LaneOutVehicle.VehicleInfo != null ? src.LaneOutVehicle.VehicleInfo.PlateColour : (src.LaneInVehicle != null && src.LaneInVehicle.VehicleInfo != null ? src.LaneInVehicle.VehicleInfo.PlateColour : null)))
                 .ForMember(e => e.ConfidenceScore, act => act.MapFrom(src => src.LaneOutVehicle != null && src.LaneOutVehicle.VehicleInfo != null ? (float?)src.LaneOutVehicle.VehicleInfo.ConfidenceScore : (src.LaneInVehicle != null && src.LaneInVehicle.VehicleInfo != null ? (float?)src.LaneInVehicle.VehicleInfo.ConfidenceScore : null)))
                 .ForMember(e => e.Seat, act => act.MapFrom(src => src.LaneOutVehicle != null && src.LaneOutVehicle.VehicleInfo != null ? src.LaneOutVehicle.VehicleInfo.Seat : (src.LaneInVehicle != null && src.LaneInVehicle.VehicleInfo != null ? src.LaneInVehicle.VehicleInfo.Seat : null)))
-                .ForMember(e => e.Weight, act => act.MapFrom(src => src.LaneOutVehicle != null && src.LaneOutVehicle.VehicleInfo != null ? src.LaneOutVehicle.VehicleInfo.Weight : (src.LaneInVehicle != null && src.LaneInVehicle.VehicleInfo != null ? src.LaneInVehicle.VehicleInfo.Weight : null)))
-                .ReverseMap();
+                .ForMember(e => e.Weight, act => act.MapFrom(src => src.LaneOutVehicle != null && src.LaneOutVehicle.VehicleInfo != null ? src.LaneOutVehicle.VehicleInfo.Weight : (src.LaneInVehicle != null && src.LaneInVehicle.VehicleInfo != null ? src.LaneInVehicle.VehicleInfo.Weight : null)));
+            CreateMap<FeeModel, CoreModel.FeeModel>()
+                .ForMember(e => e.FeeId, act => act.MapFrom(src => src.Id))
+                .ForPath(e => e.LaneInVehicle.LaneInId, act => act.MapFrom(src => src.LaneInId))
+                .ForPath(e => e.LaneInVehicle.Epoch, act => act.MapFrom(src => src.LaneInEpoch))
+                .ForPath(e => e.LaneOutVehicle.LaneOutId, act => act.MapFrom(src => src.LaneOutId))
+                .ForPath(e => e.LaneOutVehicle.Epoch, act => act.MapFrom(src => src.LaneOutEpoch))
+                .ForPath(e => e.Payment.RFID, act => act.MapFrom(src => src.RFID))
+                .ForPath(e => e.Payment.Make, act => act.MapFrom(src => src.Make))
+                .ForPath(e => e.Payment.Model, act => act.MapFrom(src => src.Model))
+                .ForPath(e => e.Payment.PlateNumber, act => act.MapFrom(src => src.PlateNumber))
+                .ForPath(e => e.Payment.CustomVehicleTypeId, act => act.MapFrom(src => src.CustomVehicleTypeId))
+                .ForPath(e => e.Payment.CustomVehicleTypeCode, act => act.MapFrom(src => src.CustomVehicleType.Name.ToString()))
+                .ForPath(e => e.Payment.Amount, act => act.MapFrom(src => src.Amount))
+                .ForPath(e => e.Payment.VehicleCategoryId, act => act.MapFrom(src => src.VehicleCategoryId))
+                .ForPath(e => e.Payment.TicketTypeId, act => act.MapFrom(src => src.TicketTypeId))
+                .ForPath(e => e.Payment.TicketId, act => act.MapFrom(src => src.TicketId))
+                .ForPath(e => e.Payment.Duration, act => act.MapFrom(src => src.Duration))
+                .ForPath(e => e.LaneInVehicle.VehicleInfo.VehiclePhotoUrl, act => act.MapFrom(src => src.LaneInVehiclePhotoUrl))
+                .ForPath(e => e.LaneInVehicle.VehicleInfo.PlateNumberPhotoUrl, act => act.MapFrom(src => src.LaneInPlateNumberPhotoUrl))
+                .ForPath(e => e.LaneInVehicle.VehicleInfo.PlateNumber, act => act.MapFrom(src => src.PlateNumber))
+                .ForPath(e => e.LaneOutVehicle.VehicleInfo.VehiclePhotoUrl, act => act.MapFrom(src => src.LaneOutVehiclePhotoUrl))
+                .ForPath(e => e.LaneOutVehicle.VehicleInfo.PlateNumberPhotoUrl, act => act.MapFrom(src => src.LaneOutPlateNumberPhotoUrl))
+                .ForPath(e => e.LaneOutVehicle.VehicleInfo.PlateNumber, act => act.MapFrom(src => src.PlateNumber));
         }
     }
 }

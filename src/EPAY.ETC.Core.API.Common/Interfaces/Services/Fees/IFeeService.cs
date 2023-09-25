@@ -12,6 +12,6 @@ namespace EPAY.ETC.Core.API.Core.Interfaces.Services.Fees
         public Task<ValidationResult<IEnumerable<FeeModel>>> GetAllAsync(Expression<Func<FeeModel, bool>>? expressison = null);
         public Task<ValidationResult<FeeModel>> UpdateAsync(Guid id, CoreModel.FeeModel request);
         public Task<ValidationResult<FeeModel?>> RemoveAsync(Guid id);
-        public Task<ValidationResult<FeeModel?>> GetByObjectIdAsync(string objectId);
+        public Task<ValidationResult<CoreModel.FeeModel?>> GetByObjectIdAsync(string objectId);
     }
 }

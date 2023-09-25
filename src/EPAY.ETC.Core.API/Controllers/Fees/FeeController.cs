@@ -197,7 +197,7 @@ namespace EPAY.ETC.Core.API.Controllers.Fees
         /// <summary>
         /// Get one fee object by Id
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="objectId"></param>
         /// <returns></returns>
         [HttpGet("v1/fees/objectId/{objectId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
