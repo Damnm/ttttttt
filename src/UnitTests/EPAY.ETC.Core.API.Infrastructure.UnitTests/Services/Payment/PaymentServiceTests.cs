@@ -16,18 +16,16 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Payment
         private readonly Mock<ILogger<PaymentService>> _loggerMock = new();
         private readonly Mock<IPaymentRepository> _paymentRepositoryMock = new();
         private static Guid id = Guid.NewGuid();
-        private PaymentAddRequestModel addRequest = new PaymentAddRequestModel()
+        private PaymentAddOrUpdateRequestModel addRequest = new PaymentAddOrUpdateRequestModel()
         {
-            PaymentId = id,
             LaneInId = "1",
             LaneOutId = "1",
             RFID = "dfsdfdsfds",
             Make = "Toyota",
             Amount = 300
         };
-        private PaymentUpdateRequestModel updateRequest = new PaymentUpdateRequestModel()
+        private PaymentAddOrUpdateRequestModel updateRequest = new PaymentAddOrUpdateRequestModel()
         {
-            PaymentId = Guid.NewGuid(),
             LaneInId = "1",
             LaneOutId = "1",
             RFID = "dfsdfdsfds",

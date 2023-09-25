@@ -5,6 +5,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EPAY.ETC.Core.API.Controllers.Payment
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    [ApiController]
+    [Route("~/api/[controller]")]
     public class PaymentController : ControllerBase
     {
         #region Variables
@@ -27,14 +32,14 @@ namespace EPAY.ETC.Core.API.Controllers.Payment
         #endregion
         #region AddAsync
         /// <summary>
-        /// Create new fusion
+        /// Create new Payment
         /// </summary>
-        /// <param name="input"></param>
+        /// <param name="request"></param>
         /// <returns></returns>
-        [HttpPost("api/payment/v1/payments")]
+        [HttpPost("v1/payments")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> AddAsync([FromBody] PaymentAddRequestModel request)
+        public async Task<IActionResult> AddAsync([FromBody] PaymentAddOrUpdateRequestModel request)
         {
             try
             {
@@ -65,9 +70,9 @@ namespace EPAY.ETC.Core.API.Controllers.Payment
         #endregion
         #region GetByIdAsync
         /// <summary>
-        /// Get Fusion Detail
+        /// Get Payment Detail
         /// </summary>
-        [HttpGet("api/payment/v1/payments/{paymentid}")]
+        [HttpGet("v1/payments/{paymentId}")]
         public async Task<IActionResult> GetByIdAsync(Guid paymentId)
         {
             try
@@ -89,9 +94,9 @@ namespace EPAY.ETC.Core.API.Controllers.Payment
         #endregion
         #region RemoveAsync
         /// <summary>
-        /// Remove Fusion
+        /// Remove Payment
         /// </summary>
-        [HttpDelete("api/payment/v1/payments/{paymentid}")]
+        [HttpDelete("v1/payments/{paymentId}")]
         public async Task<IActionResult> RemoveAsync(Guid paymentId)
         {
             try
@@ -118,12 +123,12 @@ namespace EPAY.ETC.Core.API.Controllers.Payment
         #endregion
         #region UpdateAsync
         /// <summary>
-        /// Update Fusion Detail
+        /// Update Payment Detail
         /// </summary>
-        [HttpPut("api/payment/v1/payments/{paymentid}")]
+        [HttpPut("v1/payments/{paymentId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> UpdateAsync(Guid paymentId, [FromBody] PaymentUpdateRequestModel request)
+        public async Task<IActionResult> UpdateAsync(Guid paymentId, [FromBody] PaymentAddOrUpdateRequestModel request)
         {
             try
             {

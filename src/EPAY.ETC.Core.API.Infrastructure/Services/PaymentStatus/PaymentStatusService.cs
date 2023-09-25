@@ -9,7 +9,7 @@ using PaymentStatusModel = EPAY.ETC.Core.API.Core.Models.PaymentStatus.PaymentSt
 
 namespace EPAY.ETC.Core.API.Infrastructure.Services.PaymentStatus
 {
-    public class PaymentStatusService: IPaymentStatusService
+    public class PaymentStatusService : IPaymentStatusService
     {
 
         #region Variables 
@@ -127,7 +127,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.PaymentStatus
                     });
                 }
                 _mapper.Map(request, oldRecord);
-                
+
                 await _repository.UpdateAsync(oldRecord);
                 return ValidationResult.Success(oldRecord);
             }
@@ -144,7 +144,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.PaymentStatus
         private async Task<bool> GetExistingRecordAsync(PaymentStatusAddRequestModel input, string? id = null)
         {
             Expression<Func<PaymentStatusModel, bool>> expression = s =>
-                s.Id == input.PaymentStatusId;
+                s.PaymentId == input.PaymentId;
 
             var result = await _repository.GetAllAsync(expression);
 

@@ -5,6 +5,7 @@ using Microsoft.OpenApi.Models;
 using NLog;
 using NLog.Web;
 using System.Reflection;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 ConfigurationManager config = builder.Configuration;
@@ -23,11 +24,18 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 });
 
 builder.Services.AddScoped<ValidationFilterAttribute>();
+
 // Add services to the container.
-builder.Services.AddControllers(options =>
-{
-    options.Filters.Add(new ValidationFilterAttribute());
-});
+builder.Services
+    .AddControllers(options =>
+    {
+        options.Filters.Add(new ValidationFilterAttribute());
+    })
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
+
 // Configuration for swagger
 builder.Services.AddSwaggerGen(c =>
 {
@@ -80,8 +88,6 @@ builder.Logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
 builder.Host.UseNLog();
 builder.Services.AddInfrastructure(config);
 
-
-builder.Services.AddControllers();
 var app = builder.Build();
 
 // Configuration for NLog

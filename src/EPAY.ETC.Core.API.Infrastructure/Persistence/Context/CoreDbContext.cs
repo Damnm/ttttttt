@@ -554,6 +554,14 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                 .HasForeignKey(x => x.PaymentId);
             modelBuilder.Entity<Core.Models.PaymentStatus.PaymentStatusModel>().HasIndex(x => x.PaymentId);
             modelBuilder.Entity<Core.Models.PaymentStatus.PaymentStatusModel>().HasIndex(x => x.PaymentReferenceId);
+            modelBuilder.Entity<Core.Models.PaymentStatus.PaymentStatusModel>()
+               .Property(x => x.PaymentMethod)
+               .HasMaxLength(50)
+               .HasConversion(new EnumToStringConverter<PaymentMethodEnum>());
+            modelBuilder.Entity<Core.Models.PaymentStatus.PaymentStatusModel>()
+               .Property(x => x.Status)
+               .HasMaxLength(50)
+               .HasConversion(new EnumToStringConverter<PaymentStatusEnum>());
             #endregion
 
             #region Payment configuration

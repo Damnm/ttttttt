@@ -1,12 +1,16 @@
 ﻿using EPAY.ETC.Core.API.Core.Exceptions;
-using EPAY.ETC.Core.API.Core.Models.Fusion;
 using EPAY.ETC.Core.Models.Request;
 using EPAY.ETC.Core.Models.Validation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EPAY.ETC.Core.API.Controllers.PaymentStatus
 {
-    public class PaymentStatusController: ControllerBase
+    /// <summary>
+    /// 
+    /// </summary>
+    [ApiController]
+    [Route("~/api/[controller]")]
+    public class PaymentStatusController : ControllerBase
     {
         #region Variables
         private readonly ILogger<PaymentStatusController> _logger;
@@ -28,11 +32,11 @@ namespace EPAY.ETC.Core.API.Controllers.PaymentStatus
         #endregion
         #region AddAsync
         /// <summary>
-        /// Create new fusion
+        /// Create new Payment status
         /// </summary>
-        /// <param name="input"></param>
+        /// <param name="request"></param>
         /// <returns></returns>
-        [HttpPost("api/paymentstatus/v1/paymentstatuses")]
+        [HttpPost("v1/paymentstatuses")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> AddAsync([FromBody] PaymentStatusAddRequestModel request)
@@ -66,9 +70,9 @@ namespace EPAY.ETC.Core.API.Controllers.PaymentStatus
         #endregion
         #region GetByIdAsync
         /// <summary>
-        /// Get Fusion Detail
+        /// Get Payment status Detail
         /// </summary>
-        [HttpGet("api/paymentstatus/v1/paymentstatuses/{paymentstatusId}")]
+        [HttpGet("v1/paymentstatuses/{paymentstatusId}")]
         public async Task<IActionResult> GetByIdAsync(Guid paymentstatusId)
         {
             try
@@ -90,9 +94,9 @@ namespace EPAY.ETC.Core.API.Controllers.PaymentStatus
         #endregion
         #region RemoveAsync
         /// <summary>
-        /// Remove Fusion
+        /// Remove Payment status
         /// </summary>
-        [HttpDelete("api/paymentstatus/v1/paymentstatuses/{paymentstatusId}")]
+        [HttpDelete("v1/paymentstatuses/{paymentstatusId}")]
         public async Task<IActionResult> RemoveAsync(Guid paymentstatusId)
         {
             try
@@ -119,9 +123,9 @@ namespace EPAY.ETC.Core.API.Controllers.PaymentStatus
         #endregion
         #region UpdateAsync
         /// <summary>
-        /// Update Fusion Detail
+        /// Update Payment status Detail
         /// </summary>
-        [HttpPut("api/paymentstatus/v1/paymentstatuses/{paymentstatusId}")]
+        [HttpPut("v1/paymentstatuses/{paymentstatusId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> UpdateAsync(Guid paymentstatusId, [FromBody] PaymentStatusUpdateRequestModel request)

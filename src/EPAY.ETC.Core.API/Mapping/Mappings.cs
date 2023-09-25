@@ -29,27 +29,13 @@ namespace EPAY.ETC.Core.API.Mapping
             CreateMap<FusionAddRequestModel, FusionModel>()
                 .ForMember(e => e.Id, act => act.MapFrom(src => src.ObjectId))
                 .ReverseMap();
-            CreateMap<PaymentStatusAddRequestModel, Core.Models.PaymentStatus.PaymentStatusModel>()
-               .ForMember(e => e.Id, act => act.MapFrom(src => src.PaymentStatusId))
-               .ReverseMap();
-            CreateMap<PaymentAddRequestModel, Core.Models.Payment.PaymentModel>()
-              .ForMember(e => e.Id, act => act.MapFrom(src => src.PaymentId))
-              .ReverseMap();
-            CreateMap<FusionUpdateRequestModel, FusionModel>()
-                .ReverseMap();
-            CreateMap<PaymentStatusUpdateRequestModel, Core.Models.PaymentStatus.PaymentStatusModel>()
-                 .ForMember(e => e.Status, act => act.MapFrom(src => src.Status))
-                 .ForMember(e => e.PaymentMethod, act => act.MapFrom(src => src.PaymentMethod))
-               .ReverseMap();
-            CreateMap<PaymentUpdateRequestModel, Core.Models.Payment.PaymentModel>()
-                 .ForMember(e => e.Amount, act => act.MapFrom(src => src.Amount))
-               .ReverseMap();
+            CreateMap<PaymentStatusAddRequestModel, Core.Models.PaymentStatus.PaymentStatusModel>().ReverseMap();
+            CreateMap<PaymentAddOrUpdateRequestModel, Core.Models.Payment.PaymentModel>().ReverseMap();
+            CreateMap<FusionUpdateRequestModel, FusionModel>().ReverseMap();
+            CreateMap<PaymentStatusUpdateRequestModel, Core.Models.PaymentStatus.PaymentStatusModel>().ReverseMap();
+            CreateMap<PaymentAddOrUpdateRequestModel, Core.Models.Payment.PaymentModel>().ReverseMap();
             CreateMap<CoreModel.FeeModel, FeeModel>()
                 .ForMember(e => e.Id, act => act.MapFrom(src => src.FeeId.HasValue ? src.FeeId : Guid.NewGuid()))
-                .ForMember(e => e.ObjectId, act => act.MapFrom(src => src.ObjectId))
-                .ForMember(e => e.ShiftId, act => act.MapFrom(src => src.ShiftId))
-                .ForMember(e => e.EmployeeId, act => act.MapFrom(src => src.EmployeeId))
-                .ForMember(e => e.CreatedDate, act => act.MapFrom(src => src.CreatedDate))
                 .ForMember(e => e.LaneInId, act => act.MapFrom(src => src.LaneInVehicle != null ? src.LaneInVehicle.LaneInId : null))
                 .ForMember(e => e.LaneInEpoch, act => act.MapFrom(src => src.LaneInVehicle != null ? (long?)src.LaneInVehicle.Epoch : null))
                 .ForMember(e => e.LaneInDate, act => act.MapFrom(src => src.LaneInVehicle != null ? (DateTime?)src.LaneInVehicle.Epoch.FromUnixTime() : null))

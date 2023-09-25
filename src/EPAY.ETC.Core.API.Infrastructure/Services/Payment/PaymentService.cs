@@ -9,7 +9,7 @@ using PaymentModel = EPAY.ETC.Core.API.Core.Models.Payment.PaymentModel;
 
 namespace EPAY.ETC.Core.API.Infrastructure.Services.Payment
 {
-    public class PaymentService: IPaymentService
+    public class PaymentService : IPaymentService
     {
 
         #region Variables
@@ -26,7 +26,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Payment
         }
         #endregion
         #region AddAsync
-        public async Task<ValidationResult<PaymentModel>> AddAsync(PaymentAddRequestModel input)
+        public async Task<ValidationResult<PaymentModel>> AddAsync(PaymentAddOrUpdateRequestModel input)
         {
             _logger.LogInformation($"Executing {nameof(AddAsync)} method...");
             try
@@ -106,11 +106,20 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Payment
         #endregion
 
         #region UpdateAsync
-        public async Task<ValidationResult<PaymentModel>> UpdateAsync(Guid id, PaymentUpdateRequestModel request)
+        public async Task<ValidationResult<PaymentModel>> UpdateAsync(Guid id, PaymentAddOrUpdateRequestModel request)
         {
             _logger.LogInformation($"Executing {nameof(UpdateAsync)} method...");
             try
             {
+                var existingRecords = await GetExistingRecordAsync(request, id);
+                if (existingRecords)
+                {
+                    return ValidationResult.Failed<PaymentModel>(new List<ValidationError>()
+                    {
+                        new ValidationError("Gía trị đã có trên hệ thống", ValidationError.Conflict.Code)
+                    });
+                }
+
                 var oldRecord = await _repository.GetByIdAsync(id);
                 if (oldRecord == null)
                 {
@@ -127,7 +136,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Payment
                     });
                 }
                 _mapper.Map(request, oldRecord);
-                
+
                 await _repository.UpdateAsync(oldRecord);
                 return ValidationResult.Success(oldRecord);
             }
@@ -141,14 +150,14 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Payment
         #endregion
 
         #region Private method
-        private async Task<bool> GetExistingRecordAsync(PaymentAddRequestModel input, string? id = null)
+        private async Task<bool> GetExistingRecordAsync(PaymentAddOrUpdateRequestModel input, Guid? id = null)
         {
             Expression<Func<PaymentModel, bool>> expression = s =>
-                s.Id == input.PaymentId;
+                s.FeeId == input.FeeId;
 
             var result = await _repository.GetAllAsync(expression);
 
-            return result.Any(x => !x.Id.ToString().Equals(id));
+            return result.Any(x => !x.Id.Equals(id));
         }
         #endregion
     }

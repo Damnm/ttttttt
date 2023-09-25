@@ -22,24 +22,22 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Payment
         {
             Id = Guid.NewGuid(),
             LaneInId = "1",
-            LaneOutId ="1",
+            LaneOutId = "1",
             RFID = "dfsdfdsfds",
             Make = "Toyota",
             Amount = 300
-           
+
         });
-        private PaymentAddRequestModel addRequestMock = new PaymentAddRequestModel()
+        private PaymentAddOrUpdateRequestModel addRequestMock = new PaymentAddOrUpdateRequestModel()
         {
-            PaymentId = Guid.NewGuid(),
             LaneInId = "1",
             LaneOutId = "1",
             RFID = "dfsdfdsfds",
             Make = "Toyota",
             Amount = 300
         };
-        private PaymentUpdateRequestModel updateRequestMock = new PaymentUpdateRequestModel()
+        private PaymentAddOrUpdateRequestModel updateRequestMock = new PaymentAddOrUpdateRequestModel()
         {
-            PaymentId = Guid.NewGuid(),
             LaneInId = "1",
             LaneOutId = "1",
             RFID = "dfsdfdsfds",
@@ -65,11 +63,11 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Payment
         public async Task GivenValidRequest_WhenAddAsyncIsCalled_ThenReturnCorrectResult()
         {
             // Arrange
-            _paymentServiceMock.Setup(x => x.AddAsync(It.IsAny<PaymentAddRequestModel>())).ReturnsAsync(responseMock);
+            _paymentServiceMock.Setup(x => x.AddAsync(It.IsAny<PaymentAddOrUpdateRequestModel>())).ReturnsAsync(responseMock);
 
             // Act
             var paymentController = new PaymentController(_loggerMock.Object, _paymentServiceMock.Object);
-            var actualResult = await paymentController.AddAsync(It.IsAny<PaymentAddRequestModel>());
+            var actualResult = await paymentController.AddAsync(It.IsAny<PaymentAddOrUpdateRequestModel>());
             var data = ((ObjectResult)actualResult).Value as ValidationResult<PaymentModel>;
 
             // Assert
@@ -92,15 +90,15 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Payment
             {
                 ValidationError.Conflict
             });
-            _paymentServiceMock.Setup(x => x.AddAsync(It.IsAny<PaymentAddRequestModel>())).ReturnsAsync(responseMock);
+            _paymentServiceMock.Setup(x => x.AddAsync(It.IsAny<PaymentAddOrUpdateRequestModel>())).ReturnsAsync(responseMock);
 
             // Act
             var paymentController = new PaymentController(_loggerMock.Object, _paymentServiceMock.Object);
-            var actualResult = await paymentController.AddAsync(It.IsAny<PaymentAddRequestModel>());
+            var actualResult = await paymentController.AddAsync(It.IsAny<PaymentAddOrUpdateRequestModel>());
             var data = actualResult as ConflictObjectResult;
             var actualResultRespone = data!.Value as ValidationResult<PaymentModel>;
             // Assert
-            _paymentServiceMock.Verify(x => x.AddAsync(It.IsAny<PaymentAddRequestModel>()), Times.Once);
+            _paymentServiceMock.Verify(x => x.AddAsync(It.IsAny<PaymentAddOrUpdateRequestModel>()), Times.Once);
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(paymentController.AddAsync)}...", Times.Once, _exception);
             _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(paymentController.AddAsync)} method", Times.Never, _exception);
             ((ObjectResult)actualResult).StatusCode.Should().Be(StatusCodes.Status409Conflict);
@@ -113,11 +111,11 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Payment
         {
             // Arrange
             var someEx = new Exception("An error occurred when calling AddAsync method");
-            _paymentServiceMock.Setup(x => x.AddAsync(It.IsAny<PaymentAddRequestModel>())).ThrowsAsync(someEx);
+            _paymentServiceMock.Setup(x => x.AddAsync(It.IsAny<PaymentAddOrUpdateRequestModel>())).ThrowsAsync(someEx);
 
             // Act
             var paymentController = new PaymentController(_loggerMock.Object, _paymentServiceMock.Object);
-            var actualResult = await paymentController.AddAsync(It.IsAny<PaymentAddRequestModel>());
+            var actualResult = await paymentController.AddAsync(It.IsAny<PaymentAddOrUpdateRequestModel>());
             var actualResultRespone = ((ObjectResult)actualResult).Value as ValidationResult<string>;
 
             // Assert
@@ -136,12 +134,12 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Payment
         public async Task GivenValidRequest_WhenUpdateAsyncIsCalled_ThenReturnCorrectResult()
         {
             // Arrange
-            _paymentServiceMock.Setup(x => x.UpdateAsync(It.IsAny<Guid>(), It.IsAny<PaymentUpdateRequestModel>())).ReturnsAsync(responseMock);
+            _paymentServiceMock.Setup(x => x.UpdateAsync(It.IsAny<Guid>(), It.IsAny<PaymentAddOrUpdateRequestModel>())).ReturnsAsync(responseMock);
 
             // Act
             var vehicleController = new PaymentController(_loggerMock.Object
                 , _paymentServiceMock.Object);
-            var actualResult = await vehicleController.UpdateAsync(It.IsAny<Guid>(), It.IsAny<PaymentUpdateRequestModel>());
+            var actualResult = await vehicleController.UpdateAsync(It.IsAny<Guid>(), It.IsAny<PaymentAddOrUpdateRequestModel>());
             var data = ((OkObjectResult)actualResult).Value as ValidationResult<PaymentModel>;
             // Assert
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleController.UpdateAsync)}...", Times.Once, _exception);
@@ -168,17 +166,17 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Payment
             {
                 ValidationError.NotFound
             });
-            _paymentServiceMock.Setup(x => x.UpdateAsync(It.IsAny<Guid>(), It.IsAny<PaymentUpdateRequestModel>())).ReturnsAsync(responseMock);
+            _paymentServiceMock.Setup(x => x.UpdateAsync(It.IsAny<Guid>(), It.IsAny<PaymentAddOrUpdateRequestModel>())).ReturnsAsync(responseMock);
 
             // Act
             var vehicleController = new PaymentController(_loggerMock.Object
                 , _paymentServiceMock.Object);
-            var actualResult = await vehicleController.UpdateAsync(It.IsAny<Guid>(), It.IsAny<PaymentUpdateRequestModel>());
+            var actualResult = await vehicleController.UpdateAsync(It.IsAny<Guid>(), It.IsAny<PaymentAddOrUpdateRequestModel>());
             var data = actualResult as NotFoundObjectResult;
             var actualResultRespone = data!.Value as ValidationResult<PaymentModel>;
 
             // Assert
-            _paymentServiceMock.Verify(x => x.UpdateAsync(It.IsAny<Guid>(), It.IsAny<PaymentUpdateRequestModel>()), Times.Once);
+            _paymentServiceMock.Verify(x => x.UpdateAsync(It.IsAny<Guid>(), It.IsAny<PaymentAddOrUpdateRequestModel>()), Times.Once);
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleController.UpdateAsync)}...", Times.Once, _exception);
             _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleController.UpdateAsync)} method", Times.Never, _exception);
             ((ObjectResult)actualResult).StatusCode.Should().Be(StatusCodes.Status404NotFound);
@@ -195,12 +193,12 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Payment
                 Id = Guid.NewGuid()
             };
             var someEx = new Exception("An error occurred when calling UpdateAsync method");
-            _paymentServiceMock.Setup(x => x.UpdateAsync(Guid.NewGuid(), new PaymentUpdateRequestModel())).ThrowsAsync(someEx);
+            _paymentServiceMock.Setup(x => x.UpdateAsync(Guid.NewGuid(), new PaymentAddOrUpdateRequestModel())).ThrowsAsync(someEx);
 
             // Act
             var vehicleController = new PaymentController(_loggerMock.Object
                 , _paymentServiceMock.Object);
-            var actualResult = await vehicleController.UpdateAsync(Guid.NewGuid(), It.IsAny<PaymentUpdateRequestModel>());
+            var actualResult = await vehicleController.UpdateAsync(Guid.NewGuid(), It.IsAny<PaymentAddOrUpdateRequestModel>());
             var actualResultRespone = ((ObjectResult)actualResult).Value as ValidationResult<string>;
 
             // Assert
@@ -270,7 +268,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Payment
             // Act
             var paymentController = new PaymentController(_loggerMock.Object, _paymentServiceMock.Object);
             var actualResult = await paymentController.RemoveAsync(It.IsNotNull<Guid>());
-            var data = ((ObjectResult)actualResult).Value as ValidationResult<PaymentAddRequestModel>;
+            var data = ((ObjectResult)actualResult).Value as ValidationResult<PaymentAddOrUpdateRequestModel>;
             var actualResultRespone = ((ObjectResult)actualResult).Value as ValidationResult<string>;
 
             // Assert

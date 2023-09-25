@@ -19,7 +19,6 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.PaymentStatus
         private static Guid id = Guid.NewGuid();
         private PaymentStatusAddRequestModel addRequest = new PaymentStatusAddRequestModel()
         {
-            PaymentStatusId = id,
             PaymentId = Guid.NewGuid(),
             Amount = 300,
             Currency = "vnd",
@@ -27,7 +26,6 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.PaymentStatus
         };
         private PaymentStatusUpdateRequestModel updateRequest = new PaymentStatusUpdateRequestModel()
         {
-            PaymentStatusId = Guid.NewGuid(),
             PaymentId = Guid.NewGuid(),
             Amount = 300,
             Currency = "vnd",
