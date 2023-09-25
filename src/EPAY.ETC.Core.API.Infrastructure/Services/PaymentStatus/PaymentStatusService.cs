@@ -141,14 +141,14 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.PaymentStatus
         #endregion
 
         #region Private method
-        private async Task<bool> GetExistingRecordAsync(PaymentStatusAddRequestModel input, string? id = null)
+        private async Task<bool> GetExistingRecordAsync(PaymentStatusAddRequestModel input)
         {
             Expression<Func<PaymentStatusModel, bool>> expression = s =>
                 s.Id == input.PaymentStatusId;
 
             var result = await _repository.GetAllAsync(expression);
 
-            return result.Any(x => !x.Id.ToString().Equals(id));
+            return result.Any();
         }
         #endregion
     }

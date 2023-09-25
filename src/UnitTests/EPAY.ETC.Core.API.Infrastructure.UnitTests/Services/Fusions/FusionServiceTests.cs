@@ -18,7 +18,6 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fusions
         private static Guid id = Guid.NewGuid();
         private FusionAddRequestModel addRequest = new FusionAddRequestModel()
         {
-            ObjectId = id,
             Epoch = 100,
             Loop1 = true,
             RFID = false,

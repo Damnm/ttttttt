@@ -146,14 +146,14 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fusion
         }
         #endregion
         #region Private method
-        async Task<bool> GetExistingRecordAsync(FusionAddRequestModel input, string? id = null)
+        async Task<bool> GetExistingRecordAsync(FusionAddRequestModel input)
         {
             Expression<Func<FusionModel, bool>> expression = s =>
-                s.Id == input.ObjectId;
+                s.Cam1 == input.Cam1 || s.Cam2 == input.Cam2;
 
             var result = await _repository.GetAllAsync(expression);
 
-            return result.Any(x => !x.Id.ToString().Equals(id));
+            return result.Any();
         }
         #endregion
     }

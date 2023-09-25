@@ -17,7 +17,6 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Controllers.Fusions
 
         private static FusionAddRequestModel request = new FusionAddRequestModel()
         {
-            ObjectId = _fusionId,
             Epoch = 01524,
             Loop1 = true,
             RFID = false,

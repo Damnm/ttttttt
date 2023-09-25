@@ -27,10 +27,10 @@ namespace EPAY.ETC.Core.API.Mapping
                 .ForMember(e => e.Id, act => act.MapFrom(src => Guid.NewGuid()))
                 .ReverseMap();
             CreateMap<FusionAddRequestModel, FusionModel>()
-                .ForMember(e => e.Id, act => act.MapFrom(src => src.ObjectId))
+                .ForMember(e => e.Id, act => act.MapFrom(src => Guid.NewGuid()))
                 .ReverseMap();
             CreateMap<PaymentStatusAddRequestModel, Core.Models.PaymentStatus.PaymentStatusModel>()
-               .ForMember(e => e.Id, act => act.MapFrom(src => src.PaymentStatusId))
+               .ForMember(e => e.Id, act => act.MapFrom(src => Guid.NewGuid()))
                .ReverseMap();
             CreateMap<PaymentAddRequestModel, Core.Models.Payment.PaymentModel>()
               .ForMember(e => e.Id, act => act.MapFrom(src => src.PaymentId))
@@ -56,7 +56,7 @@ namespace EPAY.ETC.Core.API.Mapping
                 .ForMember(e => e.LaneOutId, act => act.MapFrom(src => src.LaneOutVehicle != null ? src.LaneOutVehicle.LaneOutId : null))
                 .ForMember(e => e.LaneOutEpoch, act => act.MapFrom(src => src.LaneOutVehicle != null ? (long?)src.LaneOutVehicle.Epoch : null))
                 .ForMember(e => e.LaneOutDate, act => act.MapFrom(src => src.LaneOutVehicle != null ? (DateTime?)src.LaneOutVehicle.Epoch.FromUnixTime() : null))
-                .ForMember(e => e.RFID, act => act.MapFrom(src => src.Payment != null ? src.Payment.RFID : null))
+                .ForMember(e => e.RFID, act => act.MapFrom(src => src.RFID != null ? src.Payment.RFID : null))
                 .ForMember(e => e.Make, act => act.MapFrom(src => src.Payment != null ? src.Payment.Make : null))
                 .ForMember(e => e.Model, act => act.MapFrom(src => src.Payment != null ? src.Payment.Model : null))
                 .ForMember(e => e.PlateNumber, act => act.MapFrom(src => src.Payment != null ? src.Payment.PlateNumber : null))
