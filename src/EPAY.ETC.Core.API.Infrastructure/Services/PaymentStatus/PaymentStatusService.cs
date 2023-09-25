@@ -40,6 +40,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.PaymentStatus
                     });
                 }
                 var entity = _mapper.Map<PaymentStatusModel>(input);
+                entity.Id = Guid.NewGuid();
+                entity.CreatedDate = DateTime.Now;
 
                 var result = await _repository.AddAsync(entity);
                 return ValidationResult.Success(result);
