@@ -7,10 +7,9 @@ namespace EPAY.ETC.Core.API.Core.Models.Fusion
     public class FusionAddRequestModel
     {
         
-        public Guid ObjectId { get; set; }
+        //public Guid ObjectId { get; set; }
         public long Epoch { get; set; }
         public bool Loop1 { get; set; }
-        [Required(ErrorMessage = "RFID required!")]
         public bool RFID { get; set; }
         [StringLength(15)]
         [Required(ErrorMessage = "PlateNumber required!")]
