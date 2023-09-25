@@ -48,26 +48,6 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Controllers.Fusions
             data.Should().NotBeNull();
             _fusionId = data?["id"]?.GetValue<Guid?>() ?? Guid.NewGuid();
         }
-        [Fact, Order(2)]
-        public async Task GivenRequestIsValidAndVehiclesAlreadyExists_WhenAddAsyncIsCalled_ThenReturnConflict()
-        {
-            // Arrange
-            HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", JWTToken);
-
-            // Act
-            var result = await HttpClient.PostAsJsonAsync($"/api/Fusion/v1/fusions", request);
-            var content = await result.Content.ReadAsStringAsync();
-
-            var reports = JsonNode.Parse(content);
-            var data = reports?["data"]?.AsObject();
-            var successful = reports?["succeeded"]?.AsValue();
-
-            // Assert
-            result.StatusCode.Should().Be(HttpStatusCode.Conflict);
-            content.Should().NotBeEmpty();
-            successful?.GetValue<bool>().Should().BeFalse();
-            data.Should().BeNull();
-        }
 
         [Fact, Order(2)]
         public async Task GivenRequestIsInValid_WhenAddAsyncIsCalled_ThenReturnBadRequest()

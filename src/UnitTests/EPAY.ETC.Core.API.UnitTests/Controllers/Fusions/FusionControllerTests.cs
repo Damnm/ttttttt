@@ -95,29 +95,6 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Fusions
             data?.Data.ReversedLoop1.Should().Be(addRequestMock.ReversedLoop1);
             data?.Data.ReversedLoop2.Should().Be(addRequestMock.ReversedLoop2);
         }
-        [Fact]
-        public async Task GivenValidRequestAndSettingsAlreadyExists_WhenAddAsyncIsCalled_ThenReturnConflict()
-        {
-            // Arrange
-            responseMock = new ValidationResult<FusionModel>(null!, new List<ValidationError>()
-            {
-                ValidationError.Conflict
-            });
-            _fusionServiceMock.Setup(x => x.AddAsync(It.IsAny<FusionAddRequestModel>())).ReturnsAsync(responseMock);
-
-            // Act
-            var fusionsController = new FusionController(_loggerMock.Object, _fusionServiceMock.Object);
-            var actualResult = await fusionsController.AddAsync(It.IsAny<FusionAddRequestModel>());
-            var data = actualResult as ConflictObjectResult;
-            var actualResultRespone = data!.Value as ValidationResult<FusionModel>;
-            // Assert
-            _fusionServiceMock.Verify(x => x.AddAsync(It.IsAny<FusionAddRequestModel>()), Times.Once);
-            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(fusionsController.AddAsync)}...", Times.Once, _exception);
-            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(fusionsController.AddAsync)} method", Times.Never, _exception);
-            ((ObjectResult)actualResult).StatusCode.Should().Be(StatusCodes.Status409Conflict);
-            actualResultRespone!.Succeeded.Should().BeFalse();
-            Assert.True(actualResultRespone.Errors.Count(x => x.Code == StatusCodes.Status409Conflict) > 0);
-        }
         // Unhappy case 400
         [Fact]
         public async Task GivenValidRequestAndSettingsServiceIsDown_WhenAddAsyncIsCalled_ThenReturnInternalServerError()

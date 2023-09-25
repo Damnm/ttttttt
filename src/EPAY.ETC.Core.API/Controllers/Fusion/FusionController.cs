@@ -49,11 +49,6 @@ namespace EPAY.ETC.Core.API.Controllers.Fusion
 
                 var fusionResult = await _fusionService.AddAsync(request);
 
-                if (!fusionResult.Succeeded && fusionResult.Errors.Any(x => x.Code == StatusCodes.Status409Conflict))
-                {
-                    return Conflict(fusionResult);
-                }
-
                 return new ObjectResult(fusionResult)
                 {
                     StatusCode = StatusCodes.Status201Created

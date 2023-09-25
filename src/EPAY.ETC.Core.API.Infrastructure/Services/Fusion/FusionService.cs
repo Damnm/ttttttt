@@ -4,7 +4,6 @@ using EPAY.ETC.Core.API.Core.Models.Fusion;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Fusion;
 using EPAY.ETC.Core.Models.Validation;
 using Microsoft.Extensions.Logging;
-using System.Linq.Expressions;
 
 namespace EPAY.ETC.Core.API.Infrastructure.Services.Fusion
 {
@@ -29,14 +28,6 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fusion
             _logger.LogInformation($"Executing {nameof(AddAsync)} method...");
             try
             {
-                var existingRecords = await GetExistingRecordAsync(input);
-                if (existingRecords)
-                {
-                    return ValidationResult.Failed<FusionModel>(new List<ValidationError>()
-                    {
-                        new ValidationError("Dữ liệu đã có trên hệ thống", ValidationError.Conflict.Code)
-                    });
-                }
                 var entity = _mapper.Map<FusionModel>(input);
 
                 var result = await _repository.AddAsync(entity);
@@ -143,17 +134,6 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fusion
                 _logger.LogError($"Failed to run {nameof(UpdateAsync)} method. Error: {ex.Message}");
                 throw;
             }
-        }
-        #endregion
-        #region Private method
-        async Task<bool> GetExistingRecordAsync(FusionAddRequestModel input)
-        {
-            Expression<Func<FusionModel, bool>> expression = s =>
-                s.Cam1 == input.Cam1 || s.Cam2 == input.Cam2;
-
-            var result = await _repository.GetAllAsync(expression);
-
-            return result.Any();
         }
         #endregion
     }

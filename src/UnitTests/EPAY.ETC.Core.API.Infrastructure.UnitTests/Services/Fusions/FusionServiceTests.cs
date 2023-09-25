@@ -75,27 +75,6 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fusions
             _loggerMock.VerifyLog(LogLevel.Error, $"Failed to run {nameof(service.AddAsync)} method", Times.Never, _exception);
         }
 
-        //[Fact]
-        //public async Task GivenValidRequestAndExistingFusion_WhenAddAsyncIsCalled_ThenReturnConflict()
-        //{
-        //    // Arrange
-        //    id = Guid.Parse("47610194-3f8d-44c1-90d5-87bec44a9dd2");
-        //    _fusionRepositoryMock.Setup(x => x.AddAsync(It.IsNotNull<FusionModel>())).ReturnsAsync(fusion);
-
-        //    // Act
-        //    var service = new FusionService(_loggerMock.Object, _fusionRepositoryMock.Object, _mapper);
-        //    var result = await service.AddAsync(request);
-
-        //    // Assert
-        //    result.Should().NotBeNull();
-        //    result.Data.Should().NotBeNull();
-        //    result.Succeeded.Should().BeTrue();
-        //    result.Errors.Count(x => x.Code == StatusCodes.Status409Conflict).Should().Be(1);
-        //    _fusionRepositoryMock.Verify(x => x.AddAsync(It.IsNotNull<FusionModel>()), Times.Never);
-        //    _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.AddAsync)} method...", Times.Once, _exception);
-        //    _loggerMock.VerifyLog(LogLevel.Error, $"Failed to run {nameof(service.AddAsync)} method", Times.Never, _exception);
-        //}
-
         [Fact]
         public async Task GivenValidRequestAndRepositoryIsDown_WhenAddAsyncIsCalled_ThenThrowException()
         {

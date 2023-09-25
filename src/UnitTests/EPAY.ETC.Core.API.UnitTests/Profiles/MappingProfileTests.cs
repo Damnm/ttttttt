@@ -54,7 +54,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Profiles
             {
                 Loop1 = true,
                 Epoch = 123456,
-                
+
             };
 
             // Act            
@@ -62,7 +62,6 @@ namespace EPAY.ETC.Core.API.UnitTests.Profiles
 
             // Assert
             result.Should().NotBeNull();
-            result.Id.Should().Be(Guid.NewGuid());
             result.Loop1.Should().Be(vehicleType.Loop1);
             result.Loop2.Should().Be(vehicleType.Loop2);
             result.Epoch.Should().Be(vehicleType.Epoch);
