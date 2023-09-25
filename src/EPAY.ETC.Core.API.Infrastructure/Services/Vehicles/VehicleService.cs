@@ -40,7 +40,6 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Vehicles
                     });
                 }
                 var entity = _mapper.Map<VehicleModel>(input);
-                //input.CreatedDate = DateTime.Now.ConvertToAsianTime(DateTimeKind.Local);
                 var result = await _repository.AddAsync(entity);
                 return ValidationResult.Success(result);
             }

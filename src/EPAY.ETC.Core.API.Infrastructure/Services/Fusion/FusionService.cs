@@ -34,7 +34,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fusion
                 {
                     return ValidationResult.Failed<FusionModel>(new List<ValidationError>()
                     {
-                        new ValidationError("Gía trị đã có trên hệ thống", ValidationError.Conflict.Code)
+                        new ValidationError("Dữ liệu đã có trên hệ thống", ValidationError.Conflict.Code)
                     });
                 }
                 var entity = _mapper.Map<FusionModel>(input);
@@ -117,7 +117,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fusion
                 {
                     return ValidationResult.Failed<FusionModel>(new List<ValidationError>()
                     {
-                        new ValidationError("Giá trị đã có trên hệ thống", ValidationError.Conflict.Code)
+                        new ValidationError("Dữ liệu đã có trên hệ thống", ValidationError.Conflict.Code)
                     });
                 }
                 //oldRecord.Id = request.ObjectId;
