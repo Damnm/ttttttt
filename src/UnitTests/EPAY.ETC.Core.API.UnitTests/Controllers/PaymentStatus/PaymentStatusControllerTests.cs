@@ -70,9 +70,9 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.PaymentStatus
             ((ObjectResult)actualResult).StatusCode.Should().Be(StatusCodes.Status201Created);
             data?.Succeeded.Should().BeTrue();
             data?.Data.Should().NotBeNull();
-            data?.Data.Amount.Should().Be(addRequestMock.Amount);
-            data?.Data.Currency.Should().Be(addRequestMock.Currency);
-            data?.Data.PaymentId.Should().Be(addRequestMock.PaymentId);
+            data?.Data?.Amount.Should().Be(addRequestMock.Amount);
+            data?.Data?.Currency.Should().Be(addRequestMock.Currency);
+            data?.Data?.PaymentId.Should().Be(addRequestMock.PaymentId);
         }
         [Fact]
         public async Task GivenValidRequestAndSettingsAlreadyExists_WhenAddAsyncIsCalled_ThenReturnConflict()
@@ -139,9 +139,9 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.PaymentStatus
             ((OkObjectResult)actualResult).StatusCode.Should().Be(StatusCodes.Status200OK);
             data?.Succeeded.Should().BeTrue();
             data?.Data.Should().NotBeNull();
-            data?.Data.Amount.Should().Be(addRequestMock.Amount);
-            data?.Data.Currency.Should().Be(addRequestMock.Currency);
-            data?.Data.PaymentId.Should().Be(addRequestMock.PaymentId);
+            data?.Data?.Amount.Should().Be(addRequestMock.Amount);
+            data?.Data?.Currency.Should().Be(addRequestMock.Currency);
+            data?.Data?.PaymentId.Should().Be(addRequestMock.PaymentId);
 
         }
         [Fact]
@@ -288,9 +288,9 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.PaymentStatus
             ((ObjectResult)actualResult).StatusCode.Should().Be(StatusCodes.Status200OK);
             data?.Succeeded.Should().BeTrue();
             data?.Data.Should().NotBeNull();
-            data?.Data.Amount.Should().Be(addRequestMock.Amount);
-            data?.Data.Currency.Should().Be(addRequestMock.Currency);
-            data?.Data.PaymentId.Should().Be(addRequestMock.PaymentId);
+            data?.Data?.Amount.Should().Be(addRequestMock.Amount);
+            data?.Data?.Currency.Should().Be(addRequestMock.Currency);
+            data?.Data?.PaymentId.Should().Be(addRequestMock.PaymentId);
         }
 
         // Unhappy case 400

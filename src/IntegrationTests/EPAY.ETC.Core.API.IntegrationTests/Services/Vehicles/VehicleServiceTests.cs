@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using XUnitPriorityOrderer;
 
-namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Services.Vehicles
+namespace EPAY.ETC.Core.API.IntegrationTests.Services.Vehicles
 {
     [TestCaseOrderer(CasePriorityOrderer.TypeName, CasePriorityOrderer.AssembyName)]
     public class VehicleServiceTests : IntegrationTestBase
@@ -46,7 +46,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Services.Vehicles
             result.Succeeded.Should().BeTrue();
             expected.Should().NotBeNull();
             expected.Succeeded.Should().BeTrue();
-            result!.Data.Id.Should().Be((Guid)expected!.Data!.Id);
+            result!.Data.Id.Should().Be(expected!.Data!.Id);
             result!.Data.PlateNumber.Should().Be(expected!.Data!.PlateNumber);
             result!.Data.PlateColor.Should().Be(expected!.Data!.PlateColor);
             result!.Data.RFID.Should().Be(expected!.Data!.RFID);
@@ -120,7 +120,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Services.Vehicles
             result.Succeeded.Should().BeTrue();
             expected.Should().NotBeNull();
             expected.Succeeded.Should().BeTrue();
-            result!.Data?.Id.Should().Be((Guid)expected!.Data!.Id);
+            result!.Data?.Id.Should().Be(expected!.Data!.Id);
             result!.Data?.RFID.Should().Be(expected!.Data!.RFID);
             result!.Data?.PlateNumber.Should().Be(expected!.Data!.PlateNumber);
             result!.Data?.PlateColor.Should().Be(expected!.Data!.PlateColor);

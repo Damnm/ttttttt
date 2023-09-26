@@ -45,7 +45,11 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fees
             Duration = 32541,
             Model = "Some model",
             PlateNumber = "Some plate number",
-            Amount = 9000
+            Amount = 9000,
+            LaneInDate = DateTimeOffset.FromUnixTimeSeconds(0).DateTime,
+            LaneInEpoch = 0,
+            LaneOutDate = DateTimeOffset.FromUnixTimeSeconds(0).DateTime,
+            LaneOutEpoch = 0
         };
         private Exception _exception = null!;
         #endregion

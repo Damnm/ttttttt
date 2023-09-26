@@ -1,370 +1,874 @@
 SET search_path = dbtest;
 
--- Table: public.CustomVehicleType
-CREATE TABLE IF NOT EXISTS public."CustomVehicleType"
-(
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- TOC entry 221 (class 1259 OID 25096)
+-- Name: CustomVehicleType; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."CustomVehicleType" (
     "Id" uuid NOT NULL,
-    "Name" character varying(50) COLLATE pg_catalog."default" NOT NULL,
-    "Desc" character varying(255) COLLATE pg_catalog."default",
-    "CreatedDate" timestamp without time zone,
-    CONSTRAINT "PK_CustomVehicleType" PRIMARY KEY ("Id")
-)
+    "Name" character varying(50) NOT NULL,
+    "Desc" character varying(255),
+    "CreatedDate" timestamp without time zone
+);
 
-TABLESPACE pg_default;
 
-ALTER TABLE IF EXISTS public."CustomVehicleType"
-    OWNER to postgres;
+ALTER TABLE public."CustomVehicleType" OWNER TO postgres;
 
--- Table: public.FeeType
-CREATE TABLE IF NOT EXISTS public."FeeType"
-(
+--
+-- TOC entry 231 (class 1259 OID 25679)
+-- Name: ETCCheckout; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."ETCCheckout" (
     "Id" uuid NOT NULL,
-    "Name" character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    "PaymentId" uuid NOT NULL,
+    "ServiceProvider" character varying(50) NOT NULL,
+    "TransactionId" character varying(50) NOT NULL,
+    "TransactionStatus" character varying(50) NOT NULL,
+    "Amount" double precision NOT NULL,
+    "RFID" character varying(50),
+    "PlateNumber" character varying(20),
+    "CreatedDate" timestamp without time zone
+);
+
+
+ALTER TABLE public."ETCCheckout" OWNER TO postgres;
+
+--
+-- TOC entry 228 (class 1259 OID 25203)
+-- Name: Fee; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."Fee" (
+    "Id" uuid NOT NULL,
+    "ObjectId" uuid NOT NULL,
+    "LaneInId" character varying(10),
+    "LaneInDate" timestamp without time zone,
+    "LaneInEpoch" bigint,
+    "LaneOutId" character varying(10),
+    "LaneOutDate" timestamp without time zone,
+    "LaneOutEpoch" bigint,
+    "Duration" integer NOT NULL,
+    "RFID" character varying(50),
+    "Make" character varying(150),
+    "Model" character varying(150),
+    "PlateNumber" character varying(20),
+    "PlateColour" character varying(50),
+    "CustomVehicleTypeId" uuid,
+    "Seat" integer,
+    "Weight" integer,
+    "LaneInPlateNumberPhotoUrl" character varying(255),
+    "LaneInVehiclePhotoUrl" character varying(255),
+    "LaneOutPlateNumberPhotoUrl" character varying(255),
+    "LaneOutVehiclePhotoUrl" character varying(255),
+    "ConfidenceScore" real,
+    "Amount" double precision NOT NULL,
+    "VehicleCategoryId" uuid,
+    "TicketTypeId" character varying(50),
+    "TicketId" character varying(50),
+    "ShiftId" uuid,
+    "EmployeeId" character varying(20),
+    "CreatedDate" timestamp without time zone
+);
+
+
+ALTER TABLE public."Fee" OWNER TO postgres;
+
+--
+-- TOC entry 222 (class 1259 OID 25101)
+-- Name: FeeType; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."FeeType" (
+    "Id" uuid NOT NULL,
+    "Name" character varying(50) NOT NULL,
     "Amount" double precision,
-    "Desc" character varying(255) COLLATE pg_catalog."default",
-    "CreatedDate" timestamp without time zone,
-    CONSTRAINT "PK_FeeType" PRIMARY KEY ("Id")
-)
-
-TABLESPACE pg_default;
-
-ALTER TABLE IF EXISTS public."FeeType"
-    OWNER to postgres;
+    "Desc" character varying(255),
+    "CreatedDate" timestamp without time zone
+);
 
 
--- Table: public.VehicleCategory
-CREATE TABLE IF NOT EXISTS public."VehicleCategory"
-(
-    "Id" uuid NOT NULL,
-    "Name" character varying(100) COLLATE pg_catalog."default",
-    "Desc" character varying(255) COLLATE pg_catalog."default",
-    "CreatedDate" timestamp without time zone,
-    CONSTRAINT "PK_VehicleCategory" PRIMARY KEY ("Id")
-)
+ALTER TABLE public."FeeType" OWNER TO postgres;
 
-TABLESPACE pg_default;
+--
+-- TOC entry 226 (class 1259 OID 25126)
+-- Name: FeeVehicleCategory; Type: TABLE; Schema: public; Owner: postgres
+--
 
-ALTER TABLE IF EXISTS public."VehicleCategory"
-    OWNER to postgres;
-
-
--- Table: public.VehicleGroup
-CREATE TABLE IF NOT EXISTS public."VehicleGroup"
-(
-    "Id" uuid NOT NULL,
-    "Name" character varying(100) COLLATE pg_catalog."default",
-    "Desc" character varying(255) COLLATE pg_catalog."default",
-    "CreatedDate" timestamp without time zone,
-    CONSTRAINT "PK_VehicleGroup" PRIMARY KEY ("Id")
-)
-
-TABLESPACE pg_default;
-
-ALTER TABLE IF EXISTS public."VehicleGroup"
-    OWNER to postgres;
-
--- Table: public.TimeBlockFee
-CREATE TABLE IF NOT EXISTS public."TimeBlockFee"
-(
-    "Id" uuid NOT NULL,
-    "CustomVehicleTypeId" uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid NOT NULL,
-    "FromSecond" bigint NOT NULL,
-    "ToSecond" bigint NOT NULL,
-    "BlockDurationInSeconds" integer,
-    "Amount" double precision,
-    "CreatedDate" timestamp without time zone,
-    "BlockNumber" integer DEFAULT 0 NOT NULL,
-    CONSTRAINT "PK_TimeBlockFee" PRIMARY KEY ("Id"),
-    CONSTRAINT "FK_TimeBlockFee_CustomVehicleType_CustomVehicleTypeId" FOREIGN KEY ("CustomVehicleTypeId")
-        REFERENCES public."CustomVehicleType" ("Id") MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE CASCADE
-)
-
-TABLESPACE pg_default;
-
-ALTER TABLE IF EXISTS public."TimeBlockFee"
-    OWNER to postgres;
--- Index: IX_TimeBlockFee_CustomVehicleTypeId
-CREATE INDEX IF NOT EXISTS "IX_TimeBlockFee_CustomVehicleTypeId"
-    ON public."TimeBlockFee" USING btree
-    ("CustomVehicleTypeId" ASC NULLS LAST)
-    TABLESPACE pg_default;
--- Index: IX_TimeBlockFee_FromSecond_ToSecond
-CREATE INDEX IF NOT EXISTS "IX_TimeBlockFee_FromSecond_ToSecond"
-    ON public."TimeBlockFee" USING btree
-    ("FromSecond" ASC NULLS LAST, "ToSecond" ASC NULLS LAST)
-    TABLESPACE pg_default;
-
-
--- Table: public.FeeVehicleCategory
-CREATE TABLE IF NOT EXISTS public."FeeVehicleCategory"
-(
+CREATE TABLE public."FeeVehicleCategory" (
     "Id" uuid NOT NULL,
     "VehicleCategoryId" uuid NOT NULL,
     "FeeTypeId" uuid NOT NULL,
     "VehicleGroupId" uuid NOT NULL,
     "CustomVehicleTypeId" uuid NOT NULL,
-    "PlateNumber" character varying(20) COLLATE pg_catalog."default",
-    "RFID" character varying(50) COLLATE pg_catalog."default",
+    "PlateNumber" character varying(20),
+    "RFID" character varying(50),
     "IsTCPVehicle" boolean NOT NULL,
     "ValidFrom" timestamp without time zone NOT NULL,
     "ValidTo" timestamp without time zone,
-    "CreatedDate" timestamp without time zone,
-    CONSTRAINT "PK_FeeVehicleCategory" PRIMARY KEY ("Id"),
-    CONSTRAINT "FK_FeeVehicleCategory_CustomVehicleType_CustomVehicleTypeId" FOREIGN KEY ("CustomVehicleTypeId")
-        REFERENCES public."CustomVehicleType" ("Id") MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE CASCADE,
-    CONSTRAINT "FK_FeeVehicleCategory_FeeType_FeeTypeId" FOREIGN KEY ("FeeTypeId")
-        REFERENCES public."FeeType" ("Id") MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE CASCADE,
-    CONSTRAINT "FK_FeeVehicleCategory_VehicleCategory_VehicleCategoryId" FOREIGN KEY ("VehicleCategoryId")
-        REFERENCES public."VehicleCategory" ("Id") MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE CASCADE,
-    CONSTRAINT "FK_FeeVehicleCategory_VehicleGroup_VehicleGroupId" FOREIGN KEY ("VehicleGroupId")
-        REFERENCES public."VehicleGroup" ("Id") MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE CASCADE
-)
-
-TABLESPACE pg_default;
-
-ALTER TABLE IF EXISTS public."FeeVehicleCategory"
-    OWNER to postgres;
--- Index: IX_FeeVehicleCategory_CustomVehicleTypeId
-CREATE INDEX IF NOT EXISTS "IX_FeeVehicleCategory_CustomVehicleTypeId"
-    ON public."FeeVehicleCategory" USING btree
-    ("CustomVehicleTypeId" ASC NULLS LAST)
-    TABLESPACE pg_default;
--- Index: IX_FeeVehicleCategory_FeeTypeId
-CREATE INDEX IF NOT EXISTS "IX_FeeVehicleCategory_FeeTypeId"
-    ON public."FeeVehicleCategory" USING btree
-    ("FeeTypeId" ASC NULLS LAST)
-    TABLESPACE pg_default;
--- Index: IX_FeeVehicleCategory_PlateNumber
-CREATE INDEX IF NOT EXISTS "IX_FeeVehicleCategory_PlateNumber"
-    ON public."FeeVehicleCategory" USING btree
-    ("PlateNumber" COLLATE pg_catalog."default" ASC NULLS LAST)
-    TABLESPACE pg_default;
--- Index: IX_FeeVehicleCategory_RFID
-CREATE INDEX IF NOT EXISTS "IX_FeeVehicleCategory_RFID"
-    ON public."FeeVehicleCategory" USING btree
-    ("RFID" COLLATE pg_catalog."default" ASC NULLS LAST)
-    TABLESPACE pg_default;
--- Index: IX_FeeVehicleCategory_VehicleCategoryId
-CREATE INDEX IF NOT EXISTS "IX_FeeVehicleCategory_VehicleCategoryId"
-    ON public."FeeVehicleCategory" USING btree
-    ("VehicleCategoryId" ASC NULLS LAST)
-    TABLESPACE pg_default;
--- Index: IX_FeeVehicleCategory_VehicleGroupId
-CREATE INDEX IF NOT EXISTS "IX_FeeVehicleCategory_VehicleGroupId"
-    ON public."FeeVehicleCategory" USING btree
-    ("VehicleGroupId" ASC NULLS LAST)
-    TABLESPACE pg_default;
+    "CreatedDate" timestamp without time zone
+);
 
 
--- Table: public.Vehicles
-CREATE TABLE IF NOT EXISTS public."Vehicles"
-(
+ALTER TABLE public."FeeVehicleCategory" OWNER TO postgres;
+
+--
+-- TOC entry 220 (class 1259 OID 24638)
+-- Name: Fusions; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."Fusions" (
     "Id" uuid NOT NULL,
-    "RFID" text COLLATE pg_catalog."default",
-    "PlateNumber" text COLLATE pg_catalog."default",
-    "PlateColor" text COLLATE pg_catalog."default",
-    "Make" text COLLATE pg_catalog."default",
-    "Seat" integer,
-    "Weight" integer,
-    "VehicleType" text COLLATE pg_catalog."default",
-    "CreatedDate" timestamp without time zone,
-    CONSTRAINT "PK_Vehicles" PRIMARY KEY ("Id")
-)
-
-TABLESPACE pg_default;
-
-ALTER TABLE IF EXISTS public."Vehicles"
-    OWNER to postgres;
-
--- Table: public.Fusions
-
--- DROP TABLE IF EXISTS public."Fusions";
-
-CREATE TABLE IF NOT EXISTS public."Fusions"
-(
-    "Id" uuid NOT NULL,
-    "Epoch" real NOT NULL,
+    "Epoch" bigint NOT NULL,
     "Loop1" boolean NOT NULL,
     "RFID" boolean NOT NULL,
-    "Cam1" character varying(15) COLLATE pg_catalog."default",
+    "Cam1" character varying(15),
     "Loop2" boolean NOT NULL,
-    "Cam2" character varying(15) COLLATE pg_catalog."default",
+    "Cam2" character varying(15),
     "Loop3" boolean NOT NULL,
     "ReversedLoop1" boolean NOT NULL,
-    "ReversedLoop2" boolean NOT NULL,
-    CONSTRAINT "PK_Fusions" PRIMARY KEY ("Id")
-)
+    "ReversedLoop2" boolean NOT NULL
+);
 
-TABLESPACE pg_default;
 
-ALTER TABLE IF EXISTS public."Fusions"
-    OWNER to postgres;
+ALTER TABLE public."Fusions" OWNER TO postgres;
 
--- Table: public.TimeBlockFeeFormulas
-CREATE TABLE IF NOT EXISTS public."TimeBlockFeeFormulas"
-(
+--
+-- TOC entry 215 (class 1259 OID 24596)
+-- Name: LaneInCameraTransactionLogs; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."LaneInCameraTransactionLogs" (
+    "Id" uuid NOT NULL,
+    "Epoch" double precision NOT NULL,
+    "RFID" text,
+    "CameraReaderMacAddr" text,
+    "CameraReaderIPAddr" text,
+    "LaneInId" uuid NOT NULL,
+    "Make" text,
+    "Model" text,
+    "PlateNumber" text,
+    "PlateColour" text,
+    "VehicleType" text,
+    "Seat" integer,
+    "Weight" integer,
+    "PlateNumberPhotoUrl" text,
+    "VehiclePhotoUrl" text,
+    "ConfidenceScore" double precision NOT NULL,
+    "CreatedDate" timestamp without time zone
+);
+
+
+ALTER TABLE public."LaneInCameraTransactionLogs" OWNER TO postgres;
+
+--
+-- TOC entry 216 (class 1259 OID 24603)
+-- Name: LaneInRFIDTransactionLogs; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."LaneInRFIDTransactionLogs" (
+    "Id" uuid NOT NULL,
+    "Epoch" double precision NOT NULL,
+    "RFID" text,
+    "RFIDReaderMacAddr" text,
+    "RFIDReaderIPAddr" text,
+    "LaneInId" uuid NOT NULL,
+    "Make" text,
+    "Model" text,
+    "PlateNumber" text,
+    "PlateColour" text,
+    "VehicleType" text,
+    "Seat" integer NOT NULL,
+    "Weight" integer NOT NULL,
+    "PlateNumberPhotoUrl" text,
+    "VehiclePhotoUrl" text,
+    "ConfidenceScore" double precision NOT NULL,
+    "CreatedDate" timestamp without time zone
+);
+
+
+ALTER TABLE public."LaneInRFIDTransactionLogs" OWNER TO postgres;
+
+--
+-- TOC entry 229 (class 1259 OID 25634)
+-- Name: Payment; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."Payment" (
+    "Id" uuid NOT NULL,
+    "LaneInId" character varying(10),
+    "FeeId" uuid,
+    "LaneOutId" character varying(10),
+    "Duration" integer NOT NULL,
+    "RFID" character varying(50),
+    "Make" character varying(150),
+    "Model" character varying(150),
+    "PlateNumber" character varying(20),
+    "VehicleTypeId" text,
+    "CustomVehicleTypeId" uuid,
+    "Amount" double precision NOT NULL,
+    "CreatedDate" timestamp without time zone
+);
+
+
+ALTER TABLE public."Payment" OWNER TO postgres;
+
+--
+-- TOC entry 230 (class 1259 OID 25641)
+-- Name: PaymentStatus; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."PaymentStatus" (
+    "Id" uuid NOT NULL,
+    "PaymentId" uuid NOT NULL,
+    "Amount" double precision NOT NULL,
+    "Currency" character varying(10) NOT NULL,
+    "PaymentMethod" character varying(50) NOT NULL,
+    "PaymentDate" timestamp without time zone NOT NULL,
+    "Status" character varying(50) NOT NULL,
+    "PaymentReferenceId" character varying(50),
+    "CreatedDate" timestamp without time zone
+);
+
+
+ALTER TABLE public."PaymentStatus" OWNER TO postgres;
+
+--
+-- TOC entry 225 (class 1259 OID 25116)
+-- Name: TimeBlockFee; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."TimeBlockFee" (
+    "Id" uuid NOT NULL,
+    "FromSecond" bigint NOT NULL,
+    "ToSecond" bigint NOT NULL,
+    "BlockDurationInSeconds" integer,
+    "Amount" double precision,
+    "CustomVehicleTypeId" uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid NOT NULL,
+    "CreatedDate" timestamp without time zone,
+    "BlockNumber" integer DEFAULT 0 NOT NULL
+);
+
+
+ALTER TABLE public."TimeBlockFee" OWNER TO postgres;
+
+--
+-- TOC entry 227 (class 1259 OID 25192)
+-- Name: TimeBlockFeeFormulas; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."TimeBlockFeeFormulas" (
     "Id" uuid NOT NULL,
     "CustomVehicleTypeId" uuid NOT NULL,
     "FromBlockNumber" integer NOT NULL,
     "Amount" double precision NOT NULL,
     "IntervalInSeconds" bigint NOT NULL,
     "ApplyDate" timestamp without time zone NOT NULL,
-    "CreatedDate" timestamp without time zone,
-    CONSTRAINT "PK_TimeBlockFeeFormulas" PRIMARY KEY ("Id"),
-    CONSTRAINT "FK_TimeBlockFeeFormulas_CustomVehicleType_CustomVehicleTypeId" FOREIGN KEY ("CustomVehicleTypeId")
-        REFERENCES public."CustomVehicleType" ("Id") MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE CASCADE
-)
-
-TABLESPACE pg_default;
-
-ALTER TABLE IF EXISTS public."TimeBlockFeeFormulas"
-    OWNER to postgres;
--- Index: IX_TimeBlockFeeFormulas_CustomVehicleTypeId
-CREATE INDEX IF NOT EXISTS "IX_TimeBlockFeeFormulas_CustomVehicleTypeId"
-    ON public."TimeBlockFeeFormulas" USING btree
-    ("CustomVehicleTypeId" ASC NULLS LAST)
-    TABLESPACE pg_default;
+    "CreatedDate" timestamp without time zone
+);
 
 
+ALTER TABLE public."TimeBlockFeeFormulas" OWNER TO postgres;
 
+--
+-- TOC entry 223 (class 1259 OID 25106)
+-- Name: VehicleCategory; Type: TABLE; Schema: public; Owner: postgres
+--
 
-
-
--- Table: public.Fee
-
--- DROP TABLE IF EXISTS public."Fee";
-
-CREATE TABLE IF NOT EXISTS public."Fee"
-(
+CREATE TABLE public."VehicleCategory" (
     "Id" uuid NOT NULL,
-    "ObjectId" uuid NOT NULL,
-    "LaneInId" character varying(10) COLLATE pg_catalog."default",
-    "LaneInDate" timestamp without time zone,
-    "LaneInEpoch" bigint,
-    "LaneOutId" character varying(10) COLLATE pg_catalog."default",
-    "LaneOutDate" timestamp without time zone,
-    "LaneOutEpoch" bigint,
+    "Name" character varying(100),
+    "Desc" character varying(255),
+    "CreatedDate" timestamp without time zone
+);
+
+
+ALTER TABLE public."VehicleCategory" OWNER TO postgres;
+
+--
+-- TOC entry 224 (class 1259 OID 25111)
+-- Name: VehicleGroup; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."VehicleGroup" (
+    "Id" uuid NOT NULL,
+    "Name" character varying(100),
+    "Desc" character varying(255),
+    "CreatedDate" timestamp without time zone
+);
+
+
+ALTER TABLE public."VehicleGroup" OWNER TO postgres;
+
+--
+-- TOC entry 217 (class 1259 OID 24610)
+-- Name: VehiclePaymentTransactions; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."VehiclePaymentTransactions" (
+    "Id" uuid NOT NULL,
+    "VehicleTransactionId" uuid NOT NULL,
+    "PaymentType" text,
+    "IsSuccessful" boolean NOT NULL,
+    "CreatedDate" timestamp without time zone
+);
+
+
+ALTER TABLE public."VehiclePaymentTransactions" OWNER TO postgres;
+
+--
+-- TOC entry 219 (class 1259 OID 24631)
+-- Name: VehicleTransactionModels; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."VehicleTransactionModels" (
+    "Id" uuid NOT NULL,
+    "LaneInId" uuid NOT NULL,
+    "LaneInDate" timestamp without time zone NOT NULL,
+    "LaneOutId" uuid NOT NULL,
+    "LaneOutDate" timestamp without time zone NOT NULL,
     "Duration" integer NOT NULL,
-    "RFID" character varying(50) COLLATE pg_catalog."default",
-    "Make" character varying(150) COLLATE pg_catalog."default",
-    "Model" character varying(150) COLLATE pg_catalog."default",
-    "PlateNumber" character varying(20) COLLATE pg_catalog."default",
-    "PlateColour" character varying(50) COLLATE pg_catalog."default",
-    "CustomVehicleTypeId" uuid,
+    "PlateNumber" text,
+    "RFID" text,
+    "LaneInPlateNumberPhotoURL" text,
+    "LaneInVehiclePhotoURL" text,
+    "LaneOutPlateNumberPhotoURL" text,
+    "LaneOutVehiclePhotoURL" text,
+    "PaymentMethod" text,
+    "Amount" double precision NOT NULL,
+    "TicketId" uuid NOT NULL,
+    "ExternalEmployeeId" uuid NOT NULL,
+    "ShiftId" uuid NOT NULL,
+    "VehicleId" uuid NOT NULL,
+    "CreatedDate" timestamp without time zone
+);
+
+
+ALTER TABLE public."VehicleTransactionModels" OWNER TO postgres;
+
+--
+-- TOC entry 218 (class 1259 OID 24624)
+-- Name: Vehicles; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."Vehicles" (
+    "Id" uuid NOT NULL,
+    "RFID" text,
+    "PlateNumber" text,
+    "PlateColor" text,
+    "Make" text,
     "Seat" integer,
     "Weight" integer,
-    "LaneInPlateNumberPhotoUrl" character varying(255) COLLATE pg_catalog."default",
-    "LaneInVehiclePhotoUrl" character varying(255) COLLATE pg_catalog."default",
-    "LaneOutPlateNumberPhotoUrl" character varying(255) COLLATE pg_catalog."default",
-    "LaneOutVehiclePhotoUrl" character varying(255) COLLATE pg_catalog."default",
-    "ConfidenceScore" real,
-    "Amount" double precision NOT NULL,
-    "VehicleCategoryId" uuid,
-    "TicketTypeId" character varying(50) COLLATE pg_catalog."default",
-    "TicketId" character varying(50) COLLATE pg_catalog."default",
-    "ShiftId" uuid,
-    "EmployeeId" character varying(20),
+    "VehicleType" text,
     "CreatedDate" timestamp without time zone,
-    CONSTRAINT "PK_Fee" PRIMARY KEY ("Id"),
-    CONSTRAINT "FK_Fee_CustomVehicleType_CustomVehicleTypeId" FOREIGN KEY ("CustomVehicleTypeId")
-        REFERENCES public."CustomVehicleType" ("Id") MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
-)
+    "Model" text
+);
 
-TABLESPACE pg_default;
 
-ALTER TABLE IF EXISTS public."Fee"
-    OWNER to postgres;
--- Index: IX_Fee_CustomVehicleTypeId
+ALTER TABLE public."Vehicles" OWNER TO postgres;
 
--- DROP INDEX IF EXISTS public."IX_Fee_CustomVehicleTypeId";
+--
+-- TOC entry 214 (class 1259 OID 24591)
+-- Name: __EFMigrationsHistory; Type: TABLE; Schema: public; Owner: postgres
+--
 
-CREATE INDEX IF NOT EXISTS "IX_Fee_CustomVehicleTypeId"
-    ON public."Fee" USING btree
-    ("CustomVehicleTypeId" ASC NULLS LAST)
-    TABLESPACE pg_default;
--- Index: IX_Fee_LaneInDate
+CREATE TABLE public."__EFMigrationsHistory" (
+    "MigrationId" character varying(150) NOT NULL,
+    "ProductVersion" character varying(32) NOT NULL
+);
 
--- DROP INDEX IF EXISTS public."IX_Fee_LaneInDate";
 
-CREATE INDEX IF NOT EXISTS "IX_Fee_LaneInDate"
-    ON public."Fee" USING btree
-    ("LaneInDate" ASC NULLS LAST)
-    TABLESPACE pg_default;
--- Index: IX_Fee_LaneInEpoch
+ALTER TABLE public."__EFMigrationsHistory" OWNER TO postgres;
 
--- DROP INDEX IF EXISTS public."IX_Fee_LaneInEpoch";
+--
+-- TOC entry 3257 (class 2606 OID 25100)
+-- Name: CustomVehicleType PK_CustomVehicleType; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
 
-CREATE INDEX IF NOT EXISTS "IX_Fee_LaneInEpoch"
-    ON public."Fee" USING btree
-    ("LaneInEpoch" ASC NULLS LAST)
-    TABLESPACE pg_default;
--- Index: IX_Fee_LaneInId
+ALTER TABLE ONLY public."CustomVehicleType"
+    ADD CONSTRAINT "PK_CustomVehicleType" PRIMARY KEY ("Id");
 
--- DROP INDEX IF EXISTS public."IX_Fee_LaneInId";
 
-CREATE INDEX IF NOT EXISTS "IX_Fee_LaneInId"
-    ON public."Fee" USING btree
-    ("LaneInId" COLLATE pg_catalog."default" ASC NULLS LAST)
-    TABLESPACE pg_default;
--- Index: IX_Fee_LaneOutDate
+--
+-- TOC entry 3306 (class 2606 OID 25683)
+-- Name: ETCCheckout PK_ETCCheckout; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
 
--- DROP INDEX IF EXISTS public."IX_Fee_LaneOutDate";
+ALTER TABLE ONLY public."ETCCheckout"
+    ADD CONSTRAINT "PK_ETCCheckout" PRIMARY KEY ("Id");
 
-CREATE INDEX IF NOT EXISTS "IX_Fee_LaneOutDate"
-    ON public."Fee" USING btree
-    ("LaneOutDate" ASC NULLS LAST)
-    TABLESPACE pg_default;
--- Index: IX_Fee_LaneOutEpoch
 
--- DROP INDEX IF EXISTS public."IX_Fee_LaneOutEpoch";
+--
+-- TOC entry 3290 (class 2606 OID 25445)
+-- Name: Fee PK_Fee; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
 
-CREATE INDEX IF NOT EXISTS "IX_Fee_LaneOutEpoch"
-    ON public."Fee" USING btree
-    ("LaneOutEpoch" ASC NULLS LAST)
-    TABLESPACE pg_default;
--- Index: IX_Fee_LaneOutId
+ALTER TABLE ONLY public."Fee"
+    ADD CONSTRAINT "PK_Fee" PRIMARY KEY ("Id");
 
--- DROP INDEX IF EXISTS public."IX_Fee_LaneOutId";
 
-CREATE INDEX IF NOT EXISTS "IX_Fee_LaneOutId"
-    ON public."Fee" USING btree
-    ("LaneOutId" COLLATE pg_catalog."default" ASC NULLS LAST)
-    TABLESPACE pg_default;
--- Index: IX_Fee_PlateNumber
+--
+-- TOC entry 3259 (class 2606 OID 25105)
+-- Name: FeeType PK_FeeType; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
 
--- DROP INDEX IF EXISTS public."IX_Fee_PlateNumber";
+ALTER TABLE ONLY public."FeeType"
+    ADD CONSTRAINT "PK_FeeType" PRIMARY KEY ("Id");
 
-CREATE INDEX IF NOT EXISTS "IX_Fee_PlateNumber"
-    ON public."Fee" USING btree
-    ("PlateNumber" COLLATE pg_catalog."default" ASC NULLS LAST)
-    TABLESPACE pg_default;
--- Index: IX_Fee_RFID
 
--- DROP INDEX IF EXISTS public."IX_Fee_RFID";
+--
+-- TOC entry 3275 (class 2606 OID 25130)
+-- Name: FeeVehicleCategory PK_FeeVehicleCategory; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
 
-CREATE INDEX IF NOT EXISTS "IX_Fee_RFID"
-    ON public."Fee" USING btree
-    ("RFID" COLLATE pg_catalog."default" ASC NULLS LAST)
-    TABLESPACE pg_default;
--- Index: IX_Fee_TicketId
+ALTER TABLE ONLY public."FeeVehicleCategory"
+    ADD CONSTRAINT "PK_FeeVehicleCategory" PRIMARY KEY ("Id");
 
--- DROP INDEX IF EXISTS public."IX_Fee_TicketId";
 
-CREATE INDEX IF NOT EXISTS "IX_Fee_TicketId"
-    ON public."Fee" USING btree
-    ("TicketId" COLLATE pg_catalog."default" ASC NULLS LAST)
-    TABLESPACE pg_default;
+--
+-- TOC entry 3255 (class 2606 OID 24642)
+-- Name: Fusions PK_Fusions; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Fusions"
+    ADD CONSTRAINT "PK_Fusions" PRIMARY KEY ("Id");
+
+
+--
+-- TOC entry 3245 (class 2606 OID 24602)
+-- Name: LaneInCameraTransactionLogs PK_LaneInCameraTransactionLogs; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."LaneInCameraTransactionLogs"
+    ADD CONSTRAINT "PK_LaneInCameraTransactionLogs" PRIMARY KEY ("Id");
+
+
+--
+-- TOC entry 3247 (class 2606 OID 24609)
+-- Name: LaneInRFIDTransactionLogs PK_LaneInRFIDTransactionLogs; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."LaneInRFIDTransactionLogs"
+    ADD CONSTRAINT "PK_LaneInRFIDTransactionLogs" PRIMARY KEY ("Id");
+
+
+--
+-- TOC entry 3297 (class 2606 OID 25640)
+-- Name: Payment PK_Payment; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Payment"
+    ADD CONSTRAINT "PK_Payment" PRIMARY KEY ("Id");
+
+
+--
+-- TOC entry 3301 (class 2606 OID 25647)
+-- Name: PaymentStatus PK_PaymentStatus; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."PaymentStatus"
+    ADD CONSTRAINT "PK_PaymentStatus" PRIMARY KEY ("Id");
+
+
+--
+-- TOC entry 3267 (class 2606 OID 25120)
+-- Name: TimeBlockFee PK_TimeBlockFee; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."TimeBlockFee"
+    ADD CONSTRAINT "PK_TimeBlockFee" PRIMARY KEY ("Id");
+
+
+--
+-- TOC entry 3278 (class 2606 OID 25196)
+-- Name: TimeBlockFeeFormulas PK_TimeBlockFeeFormulas; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."TimeBlockFeeFormulas"
+    ADD CONSTRAINT "PK_TimeBlockFeeFormulas" PRIMARY KEY ("Id");
+
+
+--
+-- TOC entry 3261 (class 2606 OID 25110)
+-- Name: VehicleCategory PK_VehicleCategory; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."VehicleCategory"
+    ADD CONSTRAINT "PK_VehicleCategory" PRIMARY KEY ("Id");
+
+
+--
+-- TOC entry 3263 (class 2606 OID 25115)
+-- Name: VehicleGroup PK_VehicleGroup; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."VehicleGroup"
+    ADD CONSTRAINT "PK_VehicleGroup" PRIMARY KEY ("Id");
+
+
+--
+-- TOC entry 3249 (class 2606 OID 24616)
+-- Name: VehiclePaymentTransactions PK_VehiclePaymentTransactions; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."VehiclePaymentTransactions"
+    ADD CONSTRAINT "PK_VehiclePaymentTransactions" PRIMARY KEY ("Id");
+
+
+--
+-- TOC entry 3253 (class 2606 OID 24637)
+-- Name: VehicleTransactionModels PK_VehicleTransactionModels; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."VehicleTransactionModels"
+    ADD CONSTRAINT "PK_VehicleTransactionModels" PRIMARY KEY ("Id");
+
+
+--
+-- TOC entry 3251 (class 2606 OID 24630)
+-- Name: Vehicles PK_Vehicles; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Vehicles"
+    ADD CONSTRAINT "PK_Vehicles" PRIMARY KEY ("Id");
+
+
+--
+-- TOC entry 3243 (class 2606 OID 24595)
+-- Name: __EFMigrationsHistory PK___EFMigrationsHistory; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."__EFMigrationsHistory"
+    ADD CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY ("MigrationId");
+
+
+--
+-- TOC entry 3302 (class 1259 OID 25689)
+-- Name: IX_ETCCheckout_PaymentId; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IX_ETCCheckout_PaymentId" ON public."ETCCheckout" USING btree ("PaymentId");
+
+
+--
+-- TOC entry 3303 (class 1259 OID 25690)
+-- Name: IX_ETCCheckout_TransactionId; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IX_ETCCheckout_TransactionId" ON public."ETCCheckout" USING btree ("TransactionId");
+
+
+--
+-- TOC entry 3304 (class 1259 OID 25691)
+-- Name: IX_ETCCheckout_TransactionId_RFID_PlateNumber; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IX_ETCCheckout_TransactionId_RFID_PlateNumber" ON public."ETCCheckout" USING btree ("TransactionId", "RFID", "PlateNumber");
+
+
+--
+-- TOC entry 3268 (class 1259 OID 25151)
+-- Name: IX_FeeVehicleCategory_CustomVehicleTypeId; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IX_FeeVehicleCategory_CustomVehicleTypeId" ON public."FeeVehicleCategory" USING btree ("CustomVehicleTypeId");
+
+
+--
+-- TOC entry 3269 (class 1259 OID 25152)
+-- Name: IX_FeeVehicleCategory_FeeTypeId; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IX_FeeVehicleCategory_FeeTypeId" ON public."FeeVehicleCategory" USING btree ("FeeTypeId");
+
+
+--
+-- TOC entry 3270 (class 1259 OID 25153)
+-- Name: IX_FeeVehicleCategory_PlateNumber; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IX_FeeVehicleCategory_PlateNumber" ON public."FeeVehicleCategory" USING btree ("PlateNumber");
+
+
+--
+-- TOC entry 3271 (class 1259 OID 25154)
+-- Name: IX_FeeVehicleCategory_RFID; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IX_FeeVehicleCategory_RFID" ON public."FeeVehicleCategory" USING btree ("RFID");
+
+
+--
+-- TOC entry 3272 (class 1259 OID 25155)
+-- Name: IX_FeeVehicleCategory_VehicleCategoryId; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IX_FeeVehicleCategory_VehicleCategoryId" ON public."FeeVehicleCategory" USING btree ("VehicleCategoryId");
+
+
+--
+-- TOC entry 3273 (class 1259 OID 25156)
+-- Name: IX_FeeVehicleCategory_VehicleGroupId; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IX_FeeVehicleCategory_VehicleGroupId" ON public."FeeVehicleCategory" USING btree ("VehicleGroupId");
+
+
+--
+-- TOC entry 3279 (class 1259 OID 25215)
+-- Name: IX_Fee_CustomVehicleTypeId; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IX_Fee_CustomVehicleTypeId" ON public."Fee" USING btree ("CustomVehicleTypeId");
+
+
+--
+-- TOC entry 3280 (class 1259 OID 25576)
+-- Name: IX_Fee_LaneInDate; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IX_Fee_LaneInDate" ON public."Fee" USING btree ("LaneInDate");
+
+
+--
+-- TOC entry 3281 (class 1259 OID 25217)
+-- Name: IX_Fee_LaneInEpoch; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IX_Fee_LaneInEpoch" ON public."Fee" USING btree ("LaneInEpoch");
+
+
+--
+-- TOC entry 3282 (class 1259 OID 25443)
+-- Name: IX_Fee_LaneInId; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IX_Fee_LaneInId" ON public."Fee" USING btree ("LaneInId");
+
+
+--
+-- TOC entry 3283 (class 1259 OID 25559)
+-- Name: IX_Fee_LaneOutDate; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IX_Fee_LaneOutDate" ON public."Fee" USING btree ("LaneOutDate");
+
+
+--
+-- TOC entry 3284 (class 1259 OID 25220)
+-- Name: IX_Fee_LaneOutEpoch; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IX_Fee_LaneOutEpoch" ON public."Fee" USING btree ("LaneOutEpoch");
+
+
+--
+-- TOC entry 3285 (class 1259 OID 25442)
+-- Name: IX_Fee_LaneOutId; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IX_Fee_LaneOutId" ON public."Fee" USING btree ("LaneOutId");
+
+
+--
+-- TOC entry 3286 (class 1259 OID 25441)
+-- Name: IX_Fee_PlateNumber; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IX_Fee_PlateNumber" ON public."Fee" USING btree ("PlateNumber");
+
+
+--
+-- TOC entry 3287 (class 1259 OID 25440)
+-- Name: IX_Fee_RFID; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IX_Fee_RFID" ON public."Fee" USING btree ("RFID");
+
+
+--
+-- TOC entry 3288 (class 1259 OID 25439)
+-- Name: IX_Fee_TicketId; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IX_Fee_TicketId" ON public."Fee" USING btree ("TicketId");
+
+
+--
+-- TOC entry 3298 (class 1259 OID 25658)
+-- Name: IX_PaymentStatus_PaymentId; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IX_PaymentStatus_PaymentId" ON public."PaymentStatus" USING btree ("PaymentId");
+
+
+--
+-- TOC entry 3299 (class 1259 OID 25660)
+-- Name: IX_PaymentStatus_PaymentReferenceId; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IX_PaymentStatus_PaymentReferenceId" ON public."PaymentStatus" USING btree ("PaymentReferenceId");
+
+
+--
+-- TOC entry 3291 (class 1259 OID 25653)
+-- Name: IX_Payment_FeeId; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IX_Payment_FeeId" ON public."Payment" USING btree ("FeeId");
+
+
+--
+-- TOC entry 3292 (class 1259 OID 25654)
+-- Name: IX_Payment_LaneInId; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IX_Payment_LaneInId" ON public."Payment" USING btree ("LaneInId");
+
+
+--
+-- TOC entry 3293 (class 1259 OID 25655)
+-- Name: IX_Payment_LaneOutId; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IX_Payment_LaneOutId" ON public."Payment" USING btree ("LaneOutId");
+
+
+--
+-- TOC entry 3294 (class 1259 OID 25656)
+-- Name: IX_Payment_PlateNumber; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IX_Payment_PlateNumber" ON public."Payment" USING btree ("PlateNumber");
+
+
+--
+-- TOC entry 3295 (class 1259 OID 25657)
+-- Name: IX_Payment_RFID; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IX_Payment_RFID" ON public."Payment" USING btree ("RFID");
+
+
+--
+-- TOC entry 3276 (class 1259 OID 25202)
+-- Name: IX_TimeBlockFeeFormulas_CustomVehicleTypeId; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IX_TimeBlockFeeFormulas_CustomVehicleTypeId" ON public."TimeBlockFeeFormulas" USING btree ("CustomVehicleTypeId");
+
+
+--
+-- TOC entry 3264 (class 1259 OID 25185)
+-- Name: IX_TimeBlockFee_CustomVehicleTypeId; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IX_TimeBlockFee_CustomVehicleTypeId" ON public."TimeBlockFee" USING btree ("CustomVehicleTypeId");
+
+
+--
+-- TOC entry 3265 (class 1259 OID 25166)
+-- Name: IX_TimeBlockFee_FromSecond_ToSecond; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IX_TimeBlockFee_FromSecond_ToSecond" ON public."TimeBlockFee" USING btree ("FromSecond", "ToSecond");
+
+
+--
+-- TOC entry 3315 (class 2606 OID 25684)
+-- Name: ETCCheckout FK_ETCCheckout_Payment_PaymentId; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."ETCCheckout"
+    ADD CONSTRAINT "FK_ETCCheckout_Payment_PaymentId" FOREIGN KEY ("PaymentId") REFERENCES public."Payment"("Id") ON DELETE CASCADE;
+
+
+--
+-- TOC entry 3308 (class 2606 OID 25131)
+-- Name: FeeVehicleCategory FK_FeeVehicleCategory_CustomVehicleType_CustomVehicleTypeId; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."FeeVehicleCategory"
+    ADD CONSTRAINT "FK_FeeVehicleCategory_CustomVehicleType_CustomVehicleTypeId" FOREIGN KEY ("CustomVehicleTypeId") REFERENCES public."CustomVehicleType"("Id") ON DELETE CASCADE;
+
+
+--
+-- TOC entry 3309 (class 2606 OID 25136)
+-- Name: FeeVehicleCategory FK_FeeVehicleCategory_FeeType_FeeTypeId; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."FeeVehicleCategory"
+    ADD CONSTRAINT "FK_FeeVehicleCategory_FeeType_FeeTypeId" FOREIGN KEY ("FeeTypeId") REFERENCES public."FeeType"("Id") ON DELETE CASCADE;
+
+
+--
+-- TOC entry 3310 (class 2606 OID 25141)
+-- Name: FeeVehicleCategory FK_FeeVehicleCategory_VehicleCategory_VehicleCategoryId; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."FeeVehicleCategory"
+    ADD CONSTRAINT "FK_FeeVehicleCategory_VehicleCategory_VehicleCategoryId" FOREIGN KEY ("VehicleCategoryId") REFERENCES public."VehicleCategory"("Id") ON DELETE CASCADE;
+
+
+--
+-- TOC entry 3311 (class 2606 OID 25146)
+-- Name: FeeVehicleCategory FK_FeeVehicleCategory_VehicleGroup_VehicleGroupId; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."FeeVehicleCategory"
+    ADD CONSTRAINT "FK_FeeVehicleCategory_VehicleGroup_VehicleGroupId" FOREIGN KEY ("VehicleGroupId") REFERENCES public."VehicleGroup"("Id") ON DELETE CASCADE;
+
+
+--
+-- TOC entry 3313 (class 2606 OID 25446)
+-- Name: Fee FK_Fee_CustomVehicleType_CustomVehicleTypeId; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Fee"
+    ADD CONSTRAINT "FK_Fee_CustomVehicleType_CustomVehicleTypeId" FOREIGN KEY ("CustomVehicleTypeId") REFERENCES public."CustomVehicleType"("Id");
+
+
+--
+-- TOC entry 3314 (class 2606 OID 25648)
+-- Name: PaymentStatus FK_PaymentStatus_Payment_PaymentId; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."PaymentStatus"
+    ADD CONSTRAINT "FK_PaymentStatus_Payment_PaymentId" FOREIGN KEY ("PaymentId") REFERENCES public."Payment"("Id") ON DELETE CASCADE;
+
+
+--
+-- TOC entry 3312 (class 2606 OID 25197)
+-- Name: TimeBlockFeeFormulas FK_TimeBlockFeeFormulas_CustomVehicleType_CustomVehicleTypeId; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."TimeBlockFeeFormulas"
+    ADD CONSTRAINT "FK_TimeBlockFeeFormulas_CustomVehicleType_CustomVehicleTypeId" FOREIGN KEY ("CustomVehicleTypeId") REFERENCES public."CustomVehicleType"("Id") ON DELETE CASCADE;
+
+
+--
+-- TOC entry 3307 (class 2606 OID 25186)
+-- Name: TimeBlockFee FK_TimeBlockFee_CustomVehicleType_CustomVehicleTypeId; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."TimeBlockFee"
+    ADD CONSTRAINT "FK_TimeBlockFee_CustomVehicleType_CustomVehicleTypeId" FOREIGN KEY ("CustomVehicleTypeId") REFERENCES public."CustomVehicleType"("Id") ON DELETE CASCADE;
+
+
+

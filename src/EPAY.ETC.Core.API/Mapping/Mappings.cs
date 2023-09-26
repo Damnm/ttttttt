@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
+using EPAY.ETC.Core.API.Core.Models.ETCCheckOuts;
 using EPAY.ETC.Core.API.Core.Models.Fees;
 using EPAY.ETC.Core.API.Core.Models.Fusion;
-using EPAY.ETC.Core.API.Core.Models.PaymentStatus;
 using EPAY.ETC.Core.API.Core.Models.Vehicle;
 using EPAY.ETC.Core.API.Core.Utils;
 using EPAY.ETC.Core.Models.Request;
-using EPAY.ETC.Core.Models.UI;
 using System.Diagnostics.CodeAnalysis;
 using CoreModel = EPAY.ETC.Core.Models.Fees;
 
+#nullable disable
 namespace EPAY.ETC.Core.API.Mapping
 {
     /// <summary>
@@ -30,7 +30,6 @@ namespace EPAY.ETC.Core.API.Mapping
             CreateMap<PaymentAddOrUpdateRequestModel, Core.Models.Payment.PaymentModel>().ReverseMap();
             CreateMap<FusionUpdateRequestModel, FusionModel>().ReverseMap();
             CreateMap<PaymentStatusUpdateRequestModel, Core.Models.PaymentStatus.PaymentStatusModel>().ReverseMap();
-            CreateMap<PaymentAddOrUpdateRequestModel, Core.Models.Payment.PaymentModel>().ReverseMap();
             CreateMap<CoreModel.FeeModel, FeeModel>()
                 .ForMember(e => e.Id, act => act.MapFrom(src => src.FeeId.HasValue ? src.FeeId : Guid.NewGuid()))
                 .ForMember(e => e.LaneInId, act => act.MapFrom(src => src.LaneInVehicle != null ? src.LaneInVehicle.LaneInId : null))
@@ -80,6 +79,9 @@ namespace EPAY.ETC.Core.API.Mapping
                 .ForPath(e => e.LaneOutVehicle.VehicleInfo.VehiclePhotoUrl, act => act.MapFrom(src => src.LaneOutVehiclePhotoUrl))
                 .ForPath(e => e.LaneOutVehicle.VehicleInfo.PlateNumberPhotoUrl, act => act.MapFrom(src => src.LaneOutPlateNumberPhotoUrl))
                 .ForPath(e => e.LaneOutVehicle.VehicleInfo.PlateNumber, act => act.MapFrom(src => src.PlateNumber));
+
+            CreateMap<ETCCheckoutAddUpdateRequestModel, ETCCheckoutDataModel>().ReverseMap();
+            CreateMap<ETCCheckoutResponseModel, ETCCheckoutDataModel>().ReverseMap();
         }
     }
 }

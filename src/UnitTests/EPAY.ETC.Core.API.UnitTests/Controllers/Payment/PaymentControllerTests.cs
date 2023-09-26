@@ -77,10 +77,10 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Payment
             ((ObjectResult)actualResult).StatusCode.Should().Be(StatusCodes.Status201Created);
             data?.Succeeded.Should().BeTrue();
             data?.Data.Should().NotBeNull();
-            data?.Data.Amount.Should().Be(addRequestMock.Amount);
-            data?.Data.LaneInId.Should().Be(addRequestMock.LaneInId);
-            data?.Data.LaneOutId.Should().Be(addRequestMock.LaneOutId);
-            data?.Data.Make.Should().Be(addRequestMock.Make);
+            data?.Data?.Amount.Should().Be(addRequestMock.Amount);
+            data?.Data?.LaneInId.Should().Be(addRequestMock.LaneInId);
+            data?.Data?.LaneOutId.Should().Be(addRequestMock.LaneOutId);
+            data?.Data?.Make.Should().Be(addRequestMock.Make);
         }
         [Fact]
         public async Task GivenValidRequestAndSettingsAlreadyExists_WhenAddAsyncIsCalled_ThenReturnConflict()
@@ -148,10 +148,10 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Payment
             ((OkObjectResult)actualResult).StatusCode.Should().Be(StatusCodes.Status200OK);
             data?.Succeeded.Should().BeTrue();
             data?.Data.Should().NotBeNull();
-            data?.Data.Amount.Should().Be(addRequestMock.Amount);
-            data?.Data.LaneInId.Should().Be(addRequestMock.LaneInId);
-            data?.Data.LaneOutId.Should().Be(addRequestMock.LaneOutId);
-            data?.Data.Make.Should().Be(addRequestMock.Make);
+            data?.Data?.Amount.Should().Be(addRequestMock.Amount);
+            data?.Data?.LaneInId.Should().Be(addRequestMock.LaneInId);
+            data?.Data?.LaneOutId.Should().Be(addRequestMock.LaneOutId);
+            data?.Data?.Make.Should().Be(addRequestMock.Make);
 
         }
         [Fact]
@@ -300,10 +300,10 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Payment
             ((ObjectResult)actualResult).StatusCode.Should().Be(StatusCodes.Status200OK);
             data?.Succeeded.Should().BeTrue();
             data?.Data.Should().NotBeNull();
-            data?.Data.Amount.Should().Be(addRequestMock.Amount);
-            data?.Data.LaneInId.Should().Be(addRequestMock.LaneInId);
-            data?.Data.LaneOutId.Should().Be(addRequestMock.LaneOutId);
-            data?.Data.Make.Should().Be(addRequestMock.Make);
+            data?.Data?.Amount.Should().Be(addRequestMock.Amount);
+            data?.Data?.LaneInId.Should().Be(addRequestMock.LaneInId);
+            data?.Data?.LaneOutId.Should().Be(addRequestMock.LaneOutId);
+            data?.Data?.Make.Should().Be(addRequestMock.Make);
         }
 
         // Unhappy case 400

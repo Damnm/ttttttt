@@ -5,7 +5,7 @@ using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using XUnitPriorityOrderer;
 
-namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Services.Fees
+namespace EPAY.ETC.Core.API.IntegrationTests.Services.Fees
 {
     [TestCaseOrderer(CasePriorityOrderer.TypeName, CasePriorityOrderer.AssembyName)]
     public class FeeCalculationServiceTests : IntegrationTestBase
