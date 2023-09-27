@@ -569,12 +569,20 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
             #endregion
 
             #region Payment configuration
-            modelBuilder.Entity<Core.Models.Payment.PaymentModel>().HasKey(x => x.Id);
-            modelBuilder.Entity<Core.Models.Payment.PaymentModel>().HasIndex(x => x.FeeId);
-            modelBuilder.Entity<Core.Models.Payment.PaymentModel>().HasIndex(x => x.LaneInId);
-            modelBuilder.Entity<Core.Models.Payment.PaymentModel>().HasIndex(x => x.LaneOutId);
-            modelBuilder.Entity<Core.Models.Payment.PaymentModel>().HasIndex(x => x.RFID);
-            modelBuilder.Entity<Core.Models.Payment.PaymentModel>().HasIndex(x => x.PlateNumber);
+            modelBuilder.Entity<PaymentModel>().HasKey(x => x.Id);
+            modelBuilder.Entity<PaymentModel>().HasIndex(x => x.FeeId);
+            modelBuilder.Entity<PaymentModel>().HasIndex(x => x.LaneInId);
+            modelBuilder.Entity<PaymentModel>().HasIndex(x => x.LaneOutId);
+            modelBuilder.Entity<PaymentModel>().HasIndex(x => x.RFID);
+            modelBuilder.Entity<PaymentModel>().HasIndex(x => x.PlateNumber);
+            modelBuilder.Entity<PaymentModel>()
+                .HasOne(x => x.CustomVehicleType)
+                .WithMany(x => x.Payments)
+                .HasForeignKey(x => x.CustomVehicleTypeId);
+            modelBuilder.Entity<PaymentModel>()
+                .HasOne(x => x.Fee)
+                .WithMany(x => x.Payments)
+                .HasForeignKey(x => x.FeeId);
             #endregion
 
             #region ETCCheckout configuration

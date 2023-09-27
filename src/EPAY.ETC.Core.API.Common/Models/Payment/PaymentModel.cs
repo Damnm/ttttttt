@@ -1,6 +1,7 @@
 ﻿using EPAY.ETC.Core.API.Core.Entities;
+using EPAY.ETC.Core.API.Core.Models.CustomVehicleTypes;
 using EPAY.ETC.Core.API.Core.Models.ETCCheckOuts;
-using EPAY.ETC.Core.API.Core.Models.Fusion;
+using EPAY.ETC.Core.API.Core.Models.Fees;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -13,6 +14,8 @@ namespace EPAY.ETC.Core.API.Core.Models.Payment
         public string? LaneInId { get; set; }
 
         public Guid? FeeId { get; set; }
+        [ForeignKey(nameof(FeeId))]
+        public virtual FeeModel? Fee { get; set; }
 
         [MaxLength(10)]
         public string? LaneOutId { get; set; }
@@ -27,6 +30,8 @@ namespace EPAY.ETC.Core.API.Core.Models.Payment
         public string? PlateNumber { get; set; }
         public string? VehicleTypeId { get; set; }
         public Guid? CustomVehicleTypeId { get; set; }
+        [ForeignKey(nameof(CustomVehicleTypeId))]
+        public virtual CustomVehicleTypeModel? CustomVehicleType { get; set; }
 
         public double Amount { get; set; }
 

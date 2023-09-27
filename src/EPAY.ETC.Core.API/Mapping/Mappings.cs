@@ -82,6 +82,12 @@ namespace EPAY.ETC.Core.API.Mapping
 
             CreateMap<ETCCheckoutAddUpdateRequestModel, ETCCheckoutDataModel>().ReverseMap();
             CreateMap<ETCCheckoutResponseModel, ETCCheckoutDataModel>().ReverseMap();
+
+            CreateMap<PaymentStatusUIRequestModel, CoreModel.PaymenStatusResponseModel>()
+                .ForPath(e => e.PaymentStatus.Amount, act => act.MapFrom(src => src.Amount))
+                .ForPath(e => e.PaymentStatus.PaymentId, act => act.MapFrom(src => src.PaymentId))
+                .ForPath(e => e.PaymentStatus.PaymentMethod, act => act.MapFrom(src => src.PaymentMethod))
+                .ForPath(e => e.PaymentStatus.Status, act => act.MapFrom(src => src.Status));
         }
     }
 }

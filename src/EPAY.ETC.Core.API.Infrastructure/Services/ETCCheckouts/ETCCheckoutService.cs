@@ -156,7 +156,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.ETCCheckouts
             {
                 _logger.LogInformation($"Executing {nameof(CheckExistsRecordByPaymentIdAndTransactionId)} method...");
 
-                Expression<Func<ETCCheckoutDataModel, bool>> expression = s => (id.HasValue ? s.Id != id : true) && (s.PaymentId == paymentId || s.TransactionId.Equals(transactionId));
+                Expression<Func<ETCCheckoutDataModel, bool>> expression = s => (id.HasValue ? s.Id != id : true) && s.TransactionId.Equals(transactionId);
 
                 var result = await _repository.GetAllAsync(expression);
 

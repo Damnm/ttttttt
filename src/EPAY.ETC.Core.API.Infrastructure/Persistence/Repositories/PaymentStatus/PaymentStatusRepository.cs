@@ -48,7 +48,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PaymentStatu
                     return Task.FromResult<IEnumerable<PaymentStatusModel>>(_dbContext.PaymentStatuses.AsNoTracking());
                 }
 
-                return Task.FromResult<IEnumerable<PaymentStatusModel>>(_dbContext.PaymentStatuses.AsNoTracking().Where(expression));
+                return Task.FromResult<IEnumerable<PaymentStatusModel>>(_dbContext.PaymentStatuses.Include(x => x.Payment).Include(x => x.Payment).AsNoTracking().Where(expression));
             }
             catch (Exception ex)
             {
@@ -63,7 +63,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PaymentStatu
 
             try
             {
-                 return  _dbContext.PaymentStatuses.AsNoTracking().FirstOrDefault(x => x.Id == id);
+                return _dbContext.PaymentStatuses.AsNoTracking().FirstOrDefault(x => x.Id == id);
             }
             catch (Exception ex)
             {
