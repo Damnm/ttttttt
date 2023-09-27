@@ -1,4 +1,5 @@
 ﻿using EPAY.ETC.Core.API.Core.Extensions;
+using EPAY.ETC.Core.API.Core.Models.Configs;
 using EPAY.ETC.Core.API.Core.Models.CustomVehicleTypes;
 using EPAY.ETC.Core.API.Core.Models.Enum;
 using EPAY.ETC.Core.API.Core.Models.ETCCheckOuts;
@@ -47,6 +48,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
         public virtual DbSet<PaymentStatusModel> PaymentStatuses { get; set; }
         public virtual DbSet<PaymentModel> Payments { get; set; }
         public virtual DbSet<ETCCheckoutDataModel> ETCCheckOuts { get; set; }
+        public virtual DbSet<AppConfigModel> AppConfigs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -602,6 +604,25 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                .Property(x => x.TransactionStatus)
                .HasMaxLength(50)
                .HasConversion(new EnumToStringConverter<TransactionStatusEnum>());
+            #endregion
+
+            #region AppConfig configuration
+            modelBuilder.Entity<AppConfigModel>().HasIndex(x => x.IsApply);
+
+            modelBuilder.Entity<AppConfigModel>().HasData(
+                new AppConfigModel()
+                {
+                    Id = new Guid("2C0F4A72-0C59-4A76-A379-4BE0BC5EBD08"),
+                    CreatedDate = DateTime.Now,
+                    AppName = "Default app config",
+                    IsApply = true,
+                    HeaderHeading = "Cảng hàng không quốc tế Tân Sơn Nhất",
+                    HeaderSubHeading = "CN tổng Công ty hàng không việt - CTCP",
+                    HeaderLine1 = "ĐC: 58 Trường Sơn, Phường 2, Quận Tân Bình, TP. HCM",
+                    HeaderLine2 = "ĐT: 123456789 MST: 0312451145112",
+                    FooterLine1 = "TP HCM, ",
+                    FooterLine2 = "Người nộp"
+                });
             #endregion
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
