@@ -22,5 +22,7 @@ namespace EPAY.ETC.Core.API.Core.Models.Configs
         public string? FooterLine1 { get; set; }
         [MaxLength(250)]
         public string? FooterLine2 { get; set; }
+        [MaxLength(10)]
+        public string? StationCode { get; set; }
     }
 }

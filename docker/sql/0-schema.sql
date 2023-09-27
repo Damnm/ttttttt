@@ -396,7 +396,8 @@ CREATE TABLE public."AppConfig" (
     "HeaderLine2" character varying(250),
     "FooterLine1" character varying(250),
     "FooterLine2" character varying(250),
-    "CreatedDate" timestamp without time zone
+    "CreatedDate" timestamp without time zone,
+    "StationCode" character varying(10)
 );
 
 
