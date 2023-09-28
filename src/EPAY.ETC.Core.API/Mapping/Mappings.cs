@@ -2,6 +2,7 @@
 using EPAY.ETC.Core.API.Core.Models.ETCCheckOuts;
 using EPAY.ETC.Core.API.Core.Models.Fees;
 using EPAY.ETC.Core.API.Core.Models.Fusion;
+using EPAY.ETC.Core.API.Core.Models.ManualBarrierControl;
 using EPAY.ETC.Core.API.Core.Models.Vehicle;
 using EPAY.ETC.Core.API.Core.Utils;
 using EPAY.ETC.Core.Models.Request;
@@ -25,6 +26,7 @@ namespace EPAY.ETC.Core.API.Mapping
             CreateMap<VehicleRequestModel, VehicleModel>()
                 .ForMember(e => e.CreatedDate, act => act.MapFrom(src => DateTime.Now))
                 .ReverseMap();
+            CreateMap<ManualBarrierControlAddOrUpdateRequestModel, ManualBarrierControlModel>().ReverseMap();
             CreateMap<FusionAddRequestModel, FusionModel>().ReverseMap();
             CreateMap<PaymentStatusAddRequestModel, Core.Models.PaymentStatus.PaymentStatusModel>().ReverseMap();
             CreateMap<PaymentAddOrUpdateRequestModel, Core.Models.Payment.PaymentModel>().ReverseMap();

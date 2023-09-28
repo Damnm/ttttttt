@@ -32,6 +32,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\EPAY.ETC.Core.API.Infrastructure\EPAY.ETC.Core.API.Infrastructure.csproj" />
 		<ProjectReference Include="..\..\EPAY.ETC.Core.API\EPAY.ETC.Core.API.csproj" />
+		<ProjectReference Include="..\EPAY.ETC.Core.API.UnitTests\EPAY.ETC.Core.API.UnitTests.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 		<AssemblyAttribute Include="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute" />
