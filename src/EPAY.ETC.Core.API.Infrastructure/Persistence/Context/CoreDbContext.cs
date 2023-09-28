@@ -7,6 +7,7 @@ using EPAY.ETC.Core.API.Core.Models.Fees;
 using EPAY.ETC.Core.API.Core.Models.FeeTypes;
 using EPAY.ETC.Core.API.Core.Models.FeeVehicleCategories;
 using EPAY.ETC.Core.API.Core.Models.Fusion;
+using EPAY.ETC.Core.API.Core.Models.ManualBarrierControl;
 using EPAY.ETC.Core.API.Core.Models.Payment;
 using EPAY.ETC.Core.API.Core.Models.PaymentStatus;
 using EPAY.ETC.Core.API.Core.Models.TimeBlockFees;
@@ -49,6 +50,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
         public virtual DbSet<PaymentModel> Payments { get; set; }
         public virtual DbSet<ETCCheckoutDataModel> ETCCheckOuts { get; set; }
         public virtual DbSet<AppConfigModel> AppConfigs { get; set; }
+        public virtual DbSet<ManualBarrierControlModel> ManualBarrierControls { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -613,7 +616,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                 new AppConfigModel()
                 {
                     Id = new Guid("2C0F4A72-0C59-4A76-A379-4BE0BC5EBD08"),
-                    CreatedDate = DateTimeOffset.FromUnixTimeSeconds(1695800086).DateTime,
+                    CreatedDate = new DateTime(2023, 9, 27, 7, 34, 46, 0),
                     AppName = "Default app config",
                     IsApply = true,
                     HeaderHeading = "Cảng hàng không quốc tế Tân Sơn Nhất",

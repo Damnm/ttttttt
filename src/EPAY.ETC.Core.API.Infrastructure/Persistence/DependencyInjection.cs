@@ -13,6 +13,7 @@ using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Fees;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.FeeTypes;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.FeeVehicleCategories;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Fusion;
+using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.ManualBarrierControls;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Payment;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PaymentStatus;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.TimeBlockFees;
@@ -60,6 +61,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence
             services.AddScoped<IPaymentRepository, PaymentRepository>();
             services.AddScoped<IETCCheckoutRepository, ETCCheckoutRepository>();
             services.AddScoped<IETCCheckoutService, ETCCheckoutService>();
+            services.AddScoped<IManualBarrierControlRepository, ManualBarrierControlRepository>();
             services.AddScoped<IAppConfigRepository, AppConfigRepository>();
 
             ////Add Services
