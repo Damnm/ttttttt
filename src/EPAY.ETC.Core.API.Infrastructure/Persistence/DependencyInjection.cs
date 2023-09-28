@@ -3,8 +3,10 @@ using EPAY.ETC.Core.API.Core.Interfaces.Services.Fees;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Fusion;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Payment;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.PaymentStatus;
+using EPAY.ETC.Core.API.Core.Interfaces.Services.UIActions;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Vehicles;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Context;
+using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.AppConfigs;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.CustomVehicleTypes;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.ETCCheckouts;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Fees;
@@ -22,6 +24,7 @@ using EPAY.ETC.Core.API.Infrastructure.Services.Fees;
 using EPAY.ETC.Core.API.Infrastructure.Services.Fusion;
 using EPAY.ETC.Core.API.Infrastructure.Services.Payment;
 using EPAY.ETC.Core.API.Infrastructure.Services.PaymentStatus;
+using EPAY.ETC.Core.API.Infrastructure.Services.UIActions;
 using EPAY.ETC.Core.API.Infrastructure.Services.Vehicles;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -57,6 +60,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence
             services.AddScoped<IPaymentRepository, PaymentRepository>();
             services.AddScoped<IETCCheckoutRepository, ETCCheckoutRepository>();
             services.AddScoped<IETCCheckoutService, ETCCheckoutService>();
+            services.AddScoped<IAppConfigRepository, AppConfigRepository>();
 
             ////Add Services
             services.AddScoped<IVehicleService, VehicleService>();
@@ -65,6 +69,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence
             services.AddScoped<IFeeService, FeeService>();
             services.AddScoped<IPaymentStatusService, PaymentStatusService>();
             services.AddScoped<IPaymentService, PaymentService>();
+            services.AddScoped<IUIActionService, UIActionService>();
 
             return services;
         }

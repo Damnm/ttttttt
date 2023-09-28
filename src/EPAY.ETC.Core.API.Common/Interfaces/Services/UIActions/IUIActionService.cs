@@ -7,9 +7,9 @@ namespace EPAY.ETC.Core.API.Core.Interfaces.Services.UIActions
 {
     public interface IUIActionService
     {
-        Task<SessionReceiptModel> PrintLaneSessionReport(SessionReceiptRequestModel input);
+        Task<SessionReportModel> PrintLaneSessionReport(SessionReportRequestModel request);
         Task CreateDataInput();
-        Task<PaymenStatusResponseModel> UpdatePaymentMethod(PaymentStatusUIRequestModel input);
-        Task<BarrierModel> ManipulateBarrier(BarrierModel input);
+        Task<PaymenStatusResponseModel> UpdatePaymentMethod(PaymentStatusUIRequestModel request);
+        Task<BarrierModel> ManipulateBarrier(BarrierModel request);
     }
 }

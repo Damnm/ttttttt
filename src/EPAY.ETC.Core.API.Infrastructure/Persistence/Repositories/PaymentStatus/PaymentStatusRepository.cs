@@ -1,5 +1,6 @@
 ﻿using EPAY.ETC.Core.API.Core.Exceptions;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Context;
+using EPAY.ETC.Core.Models.Receipt.SessionReports;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Linq.Expressions;
@@ -48,11 +49,43 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PaymentStatu
                     return Task.FromResult<IEnumerable<PaymentStatusModel>>(_dbContext.PaymentStatuses.AsNoTracking());
                 }
 
-                return Task.FromResult<IEnumerable<PaymentStatusModel>>(_dbContext.PaymentStatuses.Include(x => x.Payment).Include(x => x.Payment).AsNoTracking().Where(expression));
+                return Task.FromResult<IEnumerable<PaymentStatusModel>>(_dbContext.PaymentStatuses.AsNoTracking().Where(expression));
             }
             catch (Exception ex)
             {
                 _logger.LogError($"An error occurred when calling {nameof(GetAllAsync)} method. Detail: {ex.Message}. Stack trace: {ex.StackTrace}");
+                throw;
+            }
+        }
+
+        public Task<IEnumerable<PaymentStatusModel>> GetAllWithNavigationAsync(SessionReportRequestModel request)
+        {
+
+            _logger.LogInformation($"Executing {nameof(GetAllWithNavigationAsync)} method...");
+            try
+            {
+#nullable disable
+                var result = _dbContext.PaymentStatuses
+                    .Include(x => x.Payment)
+                    .Include(x => x.Payment.Fee)
+                    .AsNoTracking()
+                    .Where(x =>
+                        request != null
+                        ? (
+                            (!string.IsNullOrEmpty(request.LaneId) ? x.Payment.Fee.LaneOutId == request.LaneId : true)
+                            && (!string.IsNullOrEmpty(request.EmployeeId) ? x.Payment.Fee.EmployeeId == request.EmployeeId : true)
+                            && (request.ShiftId != null && request.ShiftId != Guid.Empty ? x.Payment.Fee.ShiftId == request.ShiftId : true)
+                            && x.PaymentDate >= request.FromDate && x.PaymentDate <= request.ToDate
+                            && x.Status == Models.Enums.PaymentStatusEnum.Paid
+                        )
+                        : true
+                    );
+
+                return Task.FromResult<IEnumerable<PaymentStatusModel>>(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"An error occurred when calling {nameof(GetAllWithNavigationAsync)} method. Detail: {ex.Message}. Stack trace: {ex.StackTrace}");
                 throw;
             }
         }

@@ -613,7 +613,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                 new AppConfigModel()
                 {
                     Id = new Guid("2C0F4A72-0C59-4A76-A379-4BE0BC5EBD08"),
-                    CreatedDate = DateTime.Now,
+                    CreatedDate = DateTimeOffset.FromUnixTimeSeconds(1695800086).DateTime,
                     AppName = "Default app config",
                     IsApply = true,
                     HeaderHeading = "Cảng hàng không quốc tế Tân Sơn Nhất",
@@ -621,7 +621,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                     HeaderLine1 = "ĐC: 58 Trường Sơn, Phường 2, Quận Tân Bình, TP. HCM",
                     HeaderLine2 = "ĐT: 123456789 MST: 0312451145112",
                     FooterLine1 = "TP HCM, ",
-                    FooterLine2 = "Người nộp"
+                    FooterLine2 = "Người nộp",
+                    StationCode = "03"
                 });
             #endregion
         }
