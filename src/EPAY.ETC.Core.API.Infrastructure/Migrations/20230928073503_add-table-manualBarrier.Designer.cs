@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EPAY.ETC.Core.API.Infrastructure.Migrations
 {
     [DbContext(typeof(CoreDbContext))]
-    [Migration("20230928065754_add")]
-    partial class add
+    [Migration("20230928073503_add-table-manualBarrier")]
+    partial class addtablemanualBarrier
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -80,14 +80,15 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                         {
                             Id = new Guid("2c0f4a72-0c59-4a76-a379-4be0bc5ebd08"),
                             AppName = "Default app config",
-                            CreatedDate = new DateTime(2023, 9, 28, 13, 57, 53, 516, DateTimeKind.Local).AddTicks(5147),
+                            CreatedDate = new DateTime(2023, 9, 27, 7, 34, 46, 0, DateTimeKind.Unspecified),
                             FooterLine1 = "TP HCM, ",
                             FooterLine2 = "Người nộp",
                             HeaderHeading = "Cảng hàng không quốc tế Tân Sơn Nhất",
                             HeaderLine1 = "ĐC: 58 Trường Sơn, Phường 2, Quận Tân Bình, TP. HCM",
                             HeaderLine2 = "ĐT: 123456789 MST: 0312451145112",
                             HeaderSubHeading = "CN tổng Công ty hàng không việt - CTCP",
-                            IsApply = true
+                            IsApply = true,
+                            StationCode = "03"
                         });
                 });
 
@@ -529,6 +530,30 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Fusions");
+                });
+
+            modelBuilder.Entity("EPAY.ETC.Core.API.Core.Models.ManualBarrierControl.ManualBarrierControlModel", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Action")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<Guid?>("EmployeeId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("LaneOutId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ManualBarrierControl");
                 });
 
             modelBuilder.Entity("EPAY.ETC.Core.API.Core.Models.Payment.PaymentModel", b =>

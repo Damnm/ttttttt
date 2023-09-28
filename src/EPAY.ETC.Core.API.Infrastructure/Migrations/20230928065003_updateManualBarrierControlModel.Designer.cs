@@ -531,30 +531,6 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                     b.ToTable("Fusions");
                 });
 
-            modelBuilder.Entity("EPAY.ETC.Core.API.Core.Models.ManualBarrierControl.ManualBarrierControlModel", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("Action")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<Guid?>("EmployeeId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("LaneOutId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ManualBarrierControls");
-                });
-
             modelBuilder.Entity("EPAY.ETC.Core.API.Core.Models.Payment.PaymentModel", b =>
                 {
                     b.Property<Guid>("Id")
