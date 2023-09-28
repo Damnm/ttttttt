@@ -52,6 +52,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
         public virtual DbSet<AppConfigModel> AppConfigs { get; set; }
         public virtual DbSet<ManualBarrierControlModel> ManualBarrierControls { get; set; }
 
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);

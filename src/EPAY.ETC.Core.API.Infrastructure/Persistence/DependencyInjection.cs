@@ -61,8 +61,11 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence
             services.AddScoped<IPaymentRepository, PaymentRepository>();
             services.AddScoped<IETCCheckoutRepository, ETCCheckoutRepository>();
             services.AddScoped<IETCCheckoutService, ETCCheckoutService>();
-            services.AddScoped<IAppConfigRepository, AppConfigRepository>();
+<<<<<<< HEAD
             services.AddScoped<IManualBarrierControlRepository, ManualBarrierControlRepository>();
+=======
+            services.AddScoped<IAppConfigRepository, AppConfigRepository>();
+>>>>>>> 666e0b9dc210b03cac98ee6ceca608d507466c9b
 
             ////Add Services
             services.AddScoped<IVehicleService, VehicleService>();
