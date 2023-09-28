@@ -7,6 +7,7 @@ using EPAY.ETC.Core.API.Core.Models.Fees;
 using EPAY.ETC.Core.API.Core.Models.FeeTypes;
 using EPAY.ETC.Core.API.Core.Models.FeeVehicleCategories;
 using EPAY.ETC.Core.API.Core.Models.Fusion;
+using EPAY.ETC.Core.API.Core.Models.ManualBarrierControl;
 using EPAY.ETC.Core.API.Core.Models.Payment;
 using EPAY.ETC.Core.API.Core.Models.PaymentStatus;
 using EPAY.ETC.Core.API.Core.Models.TimeBlockFees;
@@ -49,6 +50,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
         public virtual DbSet<PaymentModel> Payments { get; set; }
         public virtual DbSet<ETCCheckoutDataModel> ETCCheckOuts { get; set; }
         public virtual DbSet<AppConfigModel> AppConfigs { get; set; }
+        public virtual DbSet<ManualBarrierControlModel> ManualBarrierControls { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

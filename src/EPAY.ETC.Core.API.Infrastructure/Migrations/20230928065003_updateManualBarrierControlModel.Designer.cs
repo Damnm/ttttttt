@@ -3,6 +3,7 @@ using System;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EPAY.ETC.Core.API.Infrastructure.Migrations
 {
     [DbContext(typeof(CoreDbContext))]
-    partial class CoreDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230928065003_updateManualBarrierControlModel")]
+    partial class updateManualBarrierControlModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -78,7 +80,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                         {
                             Id = new Guid("2c0f4a72-0c59-4a76-a379-4be0bc5ebd08"),
                             AppName = "Default app config",
-                            CreatedDate = new DateTime(2023, 9, 28, 13, 57, 53, 516, DateTimeKind.Local).AddTicks(5147),
+                            CreatedDate = new DateTime(2023, 9, 28, 13, 50, 2, 906, DateTimeKind.Local).AddTicks(5983),
                             FooterLine1 = "TP HCM, ",
                             FooterLine2 = "Người nộp",
                             HeaderHeading = "Cảng hàng không quốc tế Tân Sơn Nhất",

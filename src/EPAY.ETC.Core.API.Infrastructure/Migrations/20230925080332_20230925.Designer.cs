@@ -3,6 +3,7 @@ using System;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,83 +12,18 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EPAY.ETC.Core.API.Infrastructure.Migrations
 {
     [DbContext(typeof(CoreDbContext))]
-    partial class CoreDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230925080332_20230925")]
+    partial class _20230925
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.22")
+                .HasAnnotation("ProductVersion", "7.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("EPAY.ETC.Core.API.Core.Models.Configs.AppConfigModel", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("AppName")
-                        .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("character varying(250)");
-
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("FooterLine1")
-                        .HasMaxLength(250)
-                        .HasColumnType("character varying(250)");
-
-                    b.Property<string>("FooterLine2")
-                        .HasMaxLength(250)
-                        .HasColumnType("character varying(250)");
-
-                    b.Property<string>("HeaderHeading")
-                        .HasMaxLength(250)
-                        .HasColumnType("character varying(250)");
-
-                    b.Property<string>("HeaderLine1")
-                        .HasMaxLength(250)
-                        .HasColumnType("character varying(250)");
-
-                    b.Property<string>("HeaderLine2")
-                        .HasMaxLength(250)
-                        .HasColumnType("character varying(250)");
-
-                    b.Property<string>("HeaderSubHeading")
-                        .HasMaxLength(250)
-                        .HasColumnType("character varying(250)");
-
-                    b.Property<bool>("IsApply")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("StationCode")
-                        .HasMaxLength(10)
-                        .HasColumnType("character varying(10)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IsApply");
-
-                    b.ToTable("AppConfig");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("2c0f4a72-0c59-4a76-a379-4be0bc5ebd08"),
-                            AppName = "Default app config",
-                            CreatedDate = new DateTime(2023, 9, 28, 13, 57, 53, 516, DateTimeKind.Local).AddTicks(5147),
-                            FooterLine1 = "TP HCM, ",
-                            FooterLine2 = "Người nộp",
-                            HeaderHeading = "Cảng hàng không quốc tế Tân Sơn Nhất",
-                            HeaderLine1 = "ĐC: 58 Trường Sơn, Phường 2, Quận Tân Bình, TP. HCM",
-                            HeaderLine2 = "ĐT: 123456789 MST: 0312451145112",
-                            HeaderSubHeading = "CN tổng Công ty hàng không việt - CTCP",
-                            IsApply = true
-                        });
-                });
 
             modelBuilder.Entity("EPAY.ETC.Core.API.Core.Models.CustomVehicleTypes.CustomVehicleTypeModel", b =>
                 {
@@ -140,184 +76,6 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                             Desc = "Xe loại 4",
                             Name = "Type4"
                         });
-                });
-
-            modelBuilder.Entity("EPAY.ETC.Core.API.Core.Models.ETCCheckOuts.ETCCheckoutDataModel", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<double>("Amount")
-                        .HasColumnType("double precision");
-
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<Guid>("PaymentId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("PlateNumber")
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
-
-                    b.Property<string>("RFID")
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<string>("ServiceProvider")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<string>("TransactionId")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<string>("TransactionStatus")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PaymentId");
-
-                    b.HasIndex("TransactionId");
-
-                    b.HasIndex("TransactionId", "RFID", "PlateNumber");
-
-                    b.ToTable("ETCCheckout");
-                });
-
-            modelBuilder.Entity("EPAY.ETC.Core.API.Core.Models.Fees.FeeModel", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<double>("Amount")
-                        .HasColumnType("double precision");
-
-                    b.Property<float?>("ConfidenceScore")
-                        .HasColumnType("real");
-
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<Guid?>("CustomVehicleTypeId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("Duration")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("EmployeeId")
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
-
-                    b.Property<DateTime?>("LaneInDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<long?>("LaneInEpoch")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("LaneInId")
-                        .HasMaxLength(10)
-                        .HasColumnType("character varying(10)");
-
-                    b.Property<string>("LaneInPlateNumberPhotoUrl")
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<string>("LaneInVehiclePhotoUrl")
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<DateTime?>("LaneOutDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<long?>("LaneOutEpoch")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("LaneOutId")
-                        .HasMaxLength(10)
-                        .HasColumnType("character varying(10)");
-
-                    b.Property<string>("LaneOutPlateNumberPhotoUrl")
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<string>("LaneOutVehiclePhotoUrl")
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<string>("Make")
-                        .HasMaxLength(150)
-                        .HasColumnType("character varying(150)");
-
-                    b.Property<string>("Model")
-                        .HasMaxLength(150)
-                        .HasColumnType("character varying(150)");
-
-                    b.Property<Guid>("ObjectId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("PlateColour")
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<string>("PlateNumber")
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
-
-                    b.Property<string>("RFID")
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<int?>("Seat")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid?>("ShiftId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("TicketId")
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<string>("TicketTypeId")
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<Guid?>("VehicleCategoryId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int?>("Weight")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CustomVehicleTypeId");
-
-                    b.HasIndex("LaneInDate");
-
-                    b.HasIndex("LaneInEpoch");
-
-                    b.HasIndex("LaneInId");
-
-                    b.HasIndex("LaneOutDate");
-
-                    b.HasIndex("LaneOutEpoch");
-
-                    b.HasIndex("LaneOutId");
-
-                    b.HasIndex("PlateNumber");
-
-                    b.HasIndex("RFID");
-
-                    b.HasIndex("TicketId");
-
-                    b.ToTable("Fee");
                 });
 
             modelBuilder.Entity("EPAY.ETC.Core.API.Core.Models.FeeTypes.FeeTypeModel", b =>
@@ -489,6 +247,135 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                         });
                 });
 
+            modelBuilder.Entity("EPAY.ETC.Core.API.Core.Models.Fees.FeeModel", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<double>("Amount")
+                        .HasColumnType("double precision");
+
+                    b.Property<float?>("ConfidenceScore")
+                        .HasColumnType("real");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<Guid?>("CustomVehicleTypeId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Duration")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("EmployeeId")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<DateTime?>("LaneInDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<long?>("LaneInEpoch")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("LaneInId")
+                        .HasMaxLength(10)
+                        .HasColumnType("character varying(10)");
+
+                    b.Property<string>("LaneInPlateNumberPhotoUrl")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<string>("LaneInVehiclePhotoUrl")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<DateTime?>("LaneOutDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<long?>("LaneOutEpoch")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("LaneOutId")
+                        .HasMaxLength(10)
+                        .HasColumnType("character varying(10)");
+
+                    b.Property<string>("LaneOutPlateNumberPhotoUrl")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<string>("LaneOutVehiclePhotoUrl")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<string>("Make")
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)");
+
+                    b.Property<string>("Model")
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)");
+
+                    b.Property<Guid>("ObjectId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("PlateColour")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<string>("PlateNumber")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<string>("RFID")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<int?>("Seat")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid?>("ShiftId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("TicketId")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<string>("TicketTypeId")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<Guid?>("VehicleCategoryId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int?>("Weight")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomVehicleTypeId");
+
+                    b.HasIndex("LaneInDate");
+
+                    b.HasIndex("LaneInEpoch");
+
+                    b.HasIndex("LaneInId");
+
+                    b.HasIndex("LaneOutDate");
+
+                    b.HasIndex("LaneOutEpoch");
+
+                    b.HasIndex("LaneOutId");
+
+                    b.HasIndex("PlateNumber");
+
+                    b.HasIndex("RFID");
+
+                    b.HasIndex("TicketId");
+
+                    b.ToTable("Fee");
+                });
+
             modelBuilder.Entity("EPAY.ETC.Core.API.Core.Models.Fusion.FusionModel", b =>
                 {
                     b.Property<Guid>("Id")
@@ -527,30 +414,6 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Fusions");
-                });
-
-            modelBuilder.Entity("EPAY.ETC.Core.API.Core.Models.ManualBarrierControl.ManualBarrierControlModel", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("Action")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<Guid?>("EmployeeId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("LaneOutId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ManualBarrierControls");
                 });
 
             modelBuilder.Entity("EPAY.ETC.Core.API.Core.Models.Payment.PaymentModel", b =>
@@ -602,8 +465,6 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CustomVehicleTypeId");
 
                     b.HasIndex("FeeId");
 
@@ -1291,26 +1152,6 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("EPAY.ETC.Core.API.Core.Models.ETCCheckOuts.ETCCheckoutDataModel", b =>
-                {
-                    b.HasOne("EPAY.ETC.Core.API.Core.Models.Payment.PaymentModel", "Payment")
-                        .WithMany("ETCCheckOuts")
-                        .HasForeignKey("PaymentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Payment");
-                });
-
-            modelBuilder.Entity("EPAY.ETC.Core.API.Core.Models.Fees.FeeModel", b =>
-                {
-                    b.HasOne("EPAY.ETC.Core.API.Core.Models.CustomVehicleTypes.CustomVehicleTypeModel", "CustomVehicleType")
-                        .WithMany("Fees")
-                        .HasForeignKey("CustomVehicleTypeId");
-
-                    b.Navigation("CustomVehicleType");
-                });
-
             modelBuilder.Entity("EPAY.ETC.Core.API.Core.Models.FeeVehicleCategories.FeeVehicleCategoryModel", b =>
                 {
                     b.HasOne("EPAY.ETC.Core.API.Core.Models.CustomVehicleTypes.CustomVehicleTypeModel", "CustomVehicleType")
@@ -1346,19 +1187,13 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                     b.Navigation("VehicleGroup");
                 });
 
-            modelBuilder.Entity("EPAY.ETC.Core.API.Core.Models.Payment.PaymentModel", b =>
+            modelBuilder.Entity("EPAY.ETC.Core.API.Core.Models.Fees.FeeModel", b =>
                 {
                     b.HasOne("EPAY.ETC.Core.API.Core.Models.CustomVehicleTypes.CustomVehicleTypeModel", "CustomVehicleType")
-                        .WithMany("Payments")
+                        .WithMany("Fees")
                         .HasForeignKey("CustomVehicleTypeId");
 
-                    b.HasOne("EPAY.ETC.Core.API.Core.Models.Fees.FeeModel", "Fee")
-                        .WithMany("Payments")
-                        .HasForeignKey("FeeId");
-
                     b.Navigation("CustomVehicleType");
-
-                    b.Navigation("Fee");
                 });
 
             modelBuilder.Entity("EPAY.ETC.Core.API.Core.Models.PaymentStatus.PaymentStatusModel", b =>
@@ -1400,16 +1235,9 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
 
                     b.Navigation("Fees");
 
-                    b.Navigation("Payments");
-
                     b.Navigation("TimeBlockFeeFormulas");
 
                     b.Navigation("TimeBlockFees");
-                });
-
-            modelBuilder.Entity("EPAY.ETC.Core.API.Core.Models.Fees.FeeModel", b =>
-                {
-                    b.Navigation("Payments");
                 });
 
             modelBuilder.Entity("EPAY.ETC.Core.API.Core.Models.FeeTypes.FeeTypeModel", b =>
@@ -1419,8 +1247,6 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
 
             modelBuilder.Entity("EPAY.ETC.Core.API.Core.Models.Payment.PaymentModel", b =>
                 {
-                    b.Navigation("ETCCheckOuts");
-
                     b.Navigation("PaymentStatuses");
                 });
 
