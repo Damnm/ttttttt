@@ -30,7 +30,7 @@ namespace EPAY.ETC.Core.API.Controllers.UIActions
 
         #region PrintLaneSessionReport
         /// <summary>
-        /// 
+        /// Print lane sesstion report
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>

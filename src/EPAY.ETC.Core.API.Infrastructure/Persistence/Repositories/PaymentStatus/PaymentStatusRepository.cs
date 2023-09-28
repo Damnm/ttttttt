@@ -74,7 +74,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PaymentStatu
                         ? (
                             (!string.IsNullOrEmpty(request.LaneId) ? x.Payment.Fee.LaneOutId == request.LaneId : true)
                             && (!string.IsNullOrEmpty(request.EmployeeId) ? x.Payment.Fee.EmployeeId == request.EmployeeId : true)
-                            && (request.ShiftId != null && request.ShiftId != Guid.Empty ? x.Payment.Fee.ShiftId == request.ShiftId : true)
+                            && (!string.IsNullOrEmpty(request.ShiftId) ? x.Payment.Fee.ShiftId.ToString() == request.ShiftId : true)
                             && x.PaymentDate >= request.FromDate && x.PaymentDate <= request.ToDate
                             && x.Status == Models.Enums.PaymentStatusEnum.Paid
                         )

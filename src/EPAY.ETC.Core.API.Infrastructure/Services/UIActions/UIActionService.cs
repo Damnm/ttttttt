@@ -10,6 +10,7 @@ using EPAY.ETC.Core.Models.Enums;
 using EPAY.ETC.Core.Models.Fees;
 using EPAY.ETC.Core.Models.Receipt.SessionReports;
 using EPAY.ETC.Core.Models.Request;
+using EPAY.ETC.Core.Models.Validation;
 using Microsoft.Extensions.Logging;
 using System.Linq.Expressions;
 
@@ -38,12 +39,12 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
             throw new NotImplementedException();
         }
 
-        public Task<BarrierModel> ManipulateBarrier(BarrierModel request)
+        public Task<ValidationResult<BarrierModel>> ManipulateBarrier(BarrierModel request)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<SessionReportModel> PrintLaneSessionReport(SessionReportRequestModel request)
+        public async Task<ValidationResult<SessionReportModel>> PrintLaneSessionReport(SessionReportRequestModel request)
         {
             try
             {
@@ -145,7 +146,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                     }
                 };
 
-                return result;
+                return ValidationResult.Success(result);
             }
             catch (Exception ex)
             {
@@ -154,7 +155,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
             }
         }
 
-        public Task<PaymenStatusResponseModel> UpdatePaymentMethod(PaymentStatusUIRequestModel request)
+        public Task<ValidationResult<PaymenStatusResponseModel>> UpdatePaymentMethod(PaymentStatusUIRequestModel request)
         {
             throw new NotImplementedException();
         }

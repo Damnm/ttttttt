@@ -559,7 +559,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                 .WithMany(x => x.PaymentStatuses)
                 .HasForeignKey(x => x.PaymentId);
             modelBuilder.Entity<PaymentStatusModel>().HasIndex(x => x.PaymentId);
-            modelBuilder.Entity<PaymentStatusModel>().HasIndex(x => x.PaymentReferenceId);
+            modelBuilder.Entity<PaymentStatusModel>().HasIndex(x => x.TransactionId);
             modelBuilder.Entity<PaymentStatusModel>()
                .Property(x => x.PaymentMethod)
                .HasMaxLength(50)
