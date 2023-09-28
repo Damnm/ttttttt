@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #thanhpmelb
-image="thinhnthh/epay.etc.core.api"
+image="thanhpmelb/epay.etc.core.api"
 
 #get timestamp for the tag  
 timestamp=$(date +%Y%m%d%H%M%S)

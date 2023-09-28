@@ -146,7 +146,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.PaymentStatus
         private async Task<bool> GetExistingRecordAsync(PaymentStatusAddRequestModel input)
         {
             Expression<Func<PaymentStatusModel, bool>> expression = s =>
-                s.PaymentReferenceId == input.TransactionId;
+                s.TransactionId == input.TransactionId;
 
             var result = await _repository.GetAllAsync(expression);
 

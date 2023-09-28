@@ -64,7 +64,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PaymentStatu
             _logger.LogInformation($"Executing {nameof(GetAllWithNavigationAsync)} method...");
             try
             {
-#nullable disable
+#pragma warning disable CS8602 // Disable warning nullable field
                 var result = _dbContext.PaymentStatuses
                     .Include(x => x.Payment)
                     .Include(x => x.Payment.Fee)
@@ -74,12 +74,13 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PaymentStatu
                         ? (
                             (!string.IsNullOrEmpty(request.LaneId) ? x.Payment.Fee.LaneOutId == request.LaneId : true)
                             && (!string.IsNullOrEmpty(request.EmployeeId) ? x.Payment.Fee.EmployeeId == request.EmployeeId : true)
-                            && (request.ShiftId != null && request.ShiftId != Guid.Empty ? x.Payment.Fee.ShiftId == request.ShiftId : true)
+                            && (!string.IsNullOrEmpty(request.ShiftId) ? x.Payment.Fee.ShiftId.ToString() == request.ShiftId : true)
                             && x.PaymentDate >= request.FromDate && x.PaymentDate <= request.ToDate
                             && x.Status == Models.Enums.PaymentStatusEnum.Paid
                         )
                         : true
                     );
+#pragma warning restore CS8602 // Disable warning nullable field
 
                 return Task.FromResult<IEnumerable<PaymentStatusModel>>(result);
             }
@@ -90,13 +91,13 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PaymentStatu
             }
         }
 
-        public async Task<PaymentStatusModel?> GetByIdAsync(Guid id)
+        public Task<PaymentStatusModel?> GetByIdAsync(Guid id)
         {
             _logger.LogInformation($"Executing {nameof(GetByIdAsync)} method...");
 
             try
             {
-                return _dbContext.PaymentStatuses.AsNoTracking().FirstOrDefault(x => x.Id == id);
+                return Task.FromResult(_dbContext.PaymentStatuses.AsNoTracking().FirstOrDefault(x => x.Id == id));
             }
             catch (Exception ex)
             {

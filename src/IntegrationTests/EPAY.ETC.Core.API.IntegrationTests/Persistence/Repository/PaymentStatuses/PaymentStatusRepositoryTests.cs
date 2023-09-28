@@ -36,7 +36,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Repository.PaymentStatu
             PaymentDate = new DateTime(2023, 9, 11, 15, 13, 39),
             Id = paymentStatusId,
             CreatedDate = new DateTime(2023, 9, 11),
-            PaymentReferenceId = "254652068068420856584"
+            TransactionId = "254652068068420856584"
         };
         #endregion
 
