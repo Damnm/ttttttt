@@ -1,5 +1,4 @@
-﻿using EPAY.ETC.Core.API.Core.Models.Enum;
-using EPAY.ETC.Core.API.Core.Models.FeeVehicleCategories;
+﻿using EPAY.ETC.Core.API.Core.Models.FeeVehicleCategories;
 using EPAY.ETC.Core.API.Core.Models.TimeBlockFees;
 using EPAY.ETC.Core.API.Core.Models.Vehicle;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.FeeVehicleCategories;
@@ -12,6 +11,7 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
 using System.Linq.Expressions;
+using FeeTypeEnum = EPAY.ETC.Core.API.Core.Models.Enum.FeeTypeEnum;
 
 namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fees
 {

@@ -3,6 +3,7 @@ using EPAY.ETC.Core.API.Core.Models.CustomVehicleTypes;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Context;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.CustomVehicleTypes;
 using EPAY.ETC.Core.API.Infrastructure.UnitTests.Helpers;
+using EPAY.ETC.Core.Models.Enums;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -25,7 +26,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.CustomVehicleT
             new CustomVehicleTypeModel()
             {
                 Id = Guid.NewGuid(),
-                Name = Models.Enums.CustomVehicleTypeEnum.Type1,
+                Name = CustomVehicleTypeEnum.Type1,
                 CreatedDate = new DateTime(2023,9,11)
             }
         };

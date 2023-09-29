@@ -4,28 +4,27 @@ using EPAY.ETC.Core.Models.Receipt.SessionReports;
 using EPAY.ETC.Core.Models.Validation;
 using Microsoft.AspNetCore.Mvc;
 
-namespace EPAY.ETC.Core.API.Controllers.UIActions
+namespace EPAY.ETC.Core.API.Controllers.Reports
 {
     /// <summary>
-    /// Control UI action
+    /// Report control
     /// </summary>
     [ApiController]
     [Route("~/api/[controller]")]
-    public class UIActionController : ControllerBase
+    public class ReportController : ControllerBase
     {
-        private readonly ILogger<UIActionController> _logger;
+        private readonly ILogger<ReportController> _logger;
         private readonly IUIActionService _uiActionService;
 
         /// <summary>
-        /// Constructor
+        /// Constructure Report control
         /// </summary>
         /// <param name="logger"></param>
-        /// <param name="uiActionService"></param>
-        /// <exception cref="ArgumentNullException"></exception>
-        public UIActionController(ILogger<UIActionController> logger, IUIActionService uiActionService)
+        /// <param name="uIActionService"></param>
+        public ReportController(ILogger<ReportController> logger, IUIActionService uIActionService)
         {
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _uiActionService = uiActionService ?? throw new ArgumentNullException(nameof(uiActionService));
+            _logger = logger;
+            _uiActionService = uIActionService;
         }
 
         #region PrintLaneSessionReport
@@ -34,7 +33,7 @@ namespace EPAY.ETC.Core.API.Controllers.UIActions
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        [HttpPost("v1/printLaneSessionReport")]
+        [HttpPost("/api/Report/v1/reports/lane-session")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> PrintLaneSessionReport([FromBody] SessionReportRequestModel request)

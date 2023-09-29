@@ -2,6 +2,7 @@
 using EPAY.ETC.Core.API.Core.Interfaces.Services.ETCCheckouts;
 using EPAY.ETC.Core.API.Core.Models.ETCCheckOuts;
 using EPAY.ETC.Core.API.UnitTests.Helpers;
+using EPAY.ETC.Core.Models.Enums;
 using EPAY.ETC.Core.Models.Request;
 using EPAY.ETC.Core.Models.Validation;
 using FluentAssertions;
@@ -30,8 +31,8 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.ETCCheckouts
             PlateNumber = "Some Plate",
             Amount = 7000,
             RFID = "Some RFID",
-            ServiceProvider = Models.Enums.ETCServiceProviderEnum.VETC,
-            TransactionStatus = Models.Enums.TransactionStatusEnum.CheckOut
+            ServiceProvider = ETCServiceProviderEnum.VETC,
+            TransactionStatus = TransactionStatusEnum.CheckOut
         };
         private static ETCCheckoutResponseModel etcCheckoutModel = new ETCCheckoutResponseModel()
         {
@@ -42,8 +43,8 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.ETCCheckouts
             PlateNumber = "Some Plate",
             Amount = 7000,
             RFID = "Some RFID",
-            ServiceProvider = Models.Enums.ETCServiceProviderEnum.VETC,
-            TransactionStatus = Models.Enums.TransactionStatusEnum.CheckOut
+            ServiceProvider = ETCServiceProviderEnum.VETC,
+            TransactionStatus = TransactionStatusEnum.CheckOut
         };
         private ValidationResult<ETCCheckoutResponseModel> response = ValidationResult.Success(etcCheckoutModel);
         private Exception _exception = null!;
@@ -97,7 +98,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.ETCCheckouts
         }
 
         [Fact]
-        public async Task GivenRequestIsValidAndETCCheckoutIsExists_WhenApiAddAsyncIsCalled_ThenReturnConflict()
+        public async Task GivenRequestIsValidAndETCCheckoutAlreadyExists_WhenApiAddAsyncIsCalled_ThenReturnConflict()
         {
             // Arrange
             var response = ValidationResult.Failed<ETCCheckoutResponseModel>(new List<ValidationError>() { ValidationError.Conflict });
@@ -116,6 +117,30 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.ETCCheckouts
 
             actualResult.Should().BeOfType<ConflictObjectResult>();
             ((ConflictObjectResult)actualResult).StatusCode.Should().Be(StatusCodes.Status409Conflict);
+            data?.Succeeded.Should().BeFalse();
+            data?.Data.Should().BeNull();
+        }
+
+        [Fact]
+        public async Task GivenRequestIsValidAndPaymentIdIsNotExists_WhenApiAddAsyncIsCalled_ThenReturnBadRequest()
+        {
+            // Arrange
+            var response = ValidationResult.Failed<ETCCheckoutResponseModel>(new List<ValidationError>() { ValidationError.BadRequest });
+            _etcCheckoutServiceMock.Setup(x => x.AddAsync(It.IsAny<ETCCheckoutAddUpdateRequestModel>())).ReturnsAsync(response);
+
+            // Act
+            var controller = new ETCCheckoutController(_loggerMock.Object, _etcCheckoutServiceMock.Object);
+            var actualResult = await controller.AddAsync(request);
+            var data = ((BadRequestObjectResult)actualResult).Value as ValidationResult<ETCCheckoutResponseModel>;
+
+            // Assert
+            _etcCheckoutServiceMock.Verify(x => x.AddAsync(It.IsAny<ETCCheckoutAddUpdateRequestModel>()), Times.Once);
+
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(controller.AddAsync)}...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(controller.AddAsync)} method", Times.Never, _exception);
+
+            actualResult.Should().BeOfType<BadRequestObjectResult>();
+            ((BadRequestObjectResult)actualResult).StatusCode.Should().Be(StatusCodes.Status400BadRequest);
             data?.Succeeded.Should().BeFalse();
             data?.Data.Should().BeNull();
         }
@@ -207,7 +232,31 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.ETCCheckouts
         }
 
         [Fact]
-        public async Task GivenRequestIsValidAndETCCheckoutIsExists_WhenApiUpdateAsyncIsCalled_ThenReturnConflict()
+        public async Task GivenRequestIsValidAndPaymentIdIsNotExists_WhenApiUpdateAsyncIsCalled_ThenReturnBadRequest()
+        {
+            // Arrange
+            var response = ValidationResult.Failed<ETCCheckoutResponseModel>(new List<ValidationError>() { ValidationError.BadRequest });
+            _etcCheckoutServiceMock.Setup(x => x.UpdateAsync(It.IsAny<Guid>(), It.IsAny<ETCCheckoutAddUpdateRequestModel>())).ReturnsAsync(response);
+
+            // Act
+            var controller = new ETCCheckoutController(_loggerMock.Object, _etcCheckoutServiceMock.Object);
+            var actualResult = await controller.UpdateAsync(etcCheckoutId, request);
+            var data = ((BadRequestObjectResult)actualResult).Value as ValidationResult<ETCCheckoutResponseModel>;
+
+            // Assert
+            _etcCheckoutServiceMock.Verify(x => x.UpdateAsync(It.IsAny<Guid>(), It.IsAny<ETCCheckoutAddUpdateRequestModel>()), Times.Once);
+
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(controller.UpdateAsync)}...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(controller.UpdateAsync)} method", Times.Never, _exception);
+
+            actualResult.Should().BeOfType<BadRequestObjectResult>();
+            ((BadRequestObjectResult)actualResult).StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+            data?.Succeeded.Should().BeFalse();
+            data?.Data.Should().BeNull();
+        }
+
+        [Fact]
+        public async Task GivenRequestIsValidAndETCCheckoutAlreadyExists_WhenApiUpdateAsyncIsCalled_ThenReturnConflict()
         {
             // Arrange
             var response = ValidationResult.Failed<ETCCheckoutResponseModel>(new List<ValidationError>() { ValidationError.Conflict });

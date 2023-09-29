@@ -1,18 +1,22 @@
 ﻿using EPAY.ETC.Core.API.Core.Models.Configs;
 using EPAY.ETC.Core.API.Core.Models.CustomVehicleTypes;
+using EPAY.ETC.Core.API.Core.Models.ManualBarrierControl;
 using EPAY.ETC.Core.API.Core.Models.Payment;
 using EPAY.ETC.Core.API.Core.Models.PaymentStatus;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.CustomVehicleTypes;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.ETCCheckouts;
+using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.ManualBarrierControls;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PaymentStatus;
 using EPAY.ETC.Core.API.Infrastructure.Services.UIActions;
 using EPAY.ETC.Core.API.Infrastructure.UnitTests.Common;
 using EPAY.ETC.Core.API.Infrastructure.UnitTests.Helpers;
 using EPAY.ETC.Core.Models.Enums;
 using EPAY.ETC.Core.Models.Receipt.SessionReports;
+using EPAY.ETC.Core.Models.Request;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
+using StackExchange.Redis;
 using System.Linq.Expressions;
 
 namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
@@ -23,6 +27,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
         private readonly Mock<IPaymentStatusRepository> _paymentStatusRepositoryMock = new();
         private readonly Mock<IAppConfigRepository> _appConfigRepositoryMock = new();
         private readonly Mock<ICustomVehicleTypeRepository> _customVehicleTypeRepositoryMock = new();
+        private readonly Mock<IManualBarrierControlRepository> _manualBarrierControlRepository = new();
+        private readonly Mock<IDatabase> _redisDatabaseMock = new();
         #endregion
 
         #region Init mock data
@@ -99,6 +105,13 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
             FromDate = new DateTime(2023, 9, 29, 15, 32, 19),
             ToDate = new DateTime(2023, 9, 29, 15, 43, 53)
         };
+        private BarrierRequestModel barrierRequest = new BarrierRequestModel()
+        {
+            Action = BarrierActionEnum.Open,
+            EmployeeId = "Some",
+            LaneId = "Some",
+            Limit = 1
+        };
         #endregion
 
         #region PrintLaneSessionReport
@@ -111,7 +124,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
             _paymentStatusRepositoryMock.Setup(x => x.GetAllWithNavigationAsync(It.IsAny<SessionReportRequestModel>())).ReturnsAsync(paymentStatuses);
 
             // Act
-            var service = new UIActionService(_loggerMock.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object); ;
+            var service = new UIActionService(_loggerMock.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _manualBarrierControlRepository.Object, _redisDatabaseMock.Object);
             var result = await service.PrintLaneSessionReport(sessionReportRequest);
 
             // Assert
@@ -135,7 +148,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
             _appConfigRepositoryMock.Setup(x => x.GetAllAsync(It.IsAny<Expression<Func<AppConfigModel, bool>>>())).ThrowsAsync(exception);
 
             // Act
-            var service = new UIActionService(_loggerMock.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object);
+            var service = new UIActionService(_loggerMock.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _manualBarrierControlRepository.Object, _redisDatabaseMock.Object);
             Func<Task> func = () => service.PrintLaneSessionReport(sessionReportRequest);
 
             // Assert
@@ -160,7 +173,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
             _customVehicleTypeRepositoryMock.Setup(x => x.GetAllAsync(It.IsAny<Expression<Func<CustomVehicleTypeModel, bool>>>())).ThrowsAsync(exception);
 
             // Act
-            var service = new UIActionService(_loggerMock.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object);
+            var service = new UIActionService(_loggerMock.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _manualBarrierControlRepository.Object, _redisDatabaseMock.Object);
             Func<Task> func = () => service.PrintLaneSessionReport(sessionReportRequest);
 
             // Assert
@@ -186,7 +199,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
             _paymentStatusRepositoryMock.Setup(x => x.GetAllWithNavigationAsync(It.IsAny<SessionReportRequestModel>())).ThrowsAsync(exception);
 
             // Act
-            var service = new UIActionService(_loggerMock.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object);
+            var service = new UIActionService(_loggerMock.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _manualBarrierControlRepository.Object, _redisDatabaseMock.Object);
             Func<Task> func = () => service.PrintLaneSessionReport(sessionReportRequest);
 
             // Assert
@@ -200,6 +213,78 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
 
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.PrintLaneSessionReport)} method...", Times.Once, _nullException);
             _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(service.PrintLaneSessionReport)} method", Times.Once, _nullException);
+        }
+        #endregion
+
+        #region ManipulateBarrier
+        [Fact]
+        public async Task GivenValidRequest_WhenManipulateBarrierIsCalled_ThenReturnCorrectResult()
+        {
+            // Arrange
+            _redisDatabaseMock.Setup(x => x.HashSetAsync(It.IsNotNull<RedisKey>(), It.IsNotNull<HashEntry[]>(), It.IsAny<CommandFlags>()));
+            _manualBarrierControlRepository.Setup(x => x.AddAsync(It.IsAny<ManualBarrierControlModel>()));
+
+            // Act
+            var service = new UIActionService(_loggerMock.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _manualBarrierControlRepository.Object, _redisDatabaseMock.Object);
+            var result = await service.ManipulateBarrier(barrierRequest);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Data.Should().NotBeNull();
+            result.Succeeded.Should().BeTrue();
+
+            _redisDatabaseMock.Verify(x => x.HashSetAsync(It.IsAny<RedisKey>(), It.IsAny<HashEntry[]>(), It.IsAny<CommandFlags>()), Times.Once);
+            _manualBarrierControlRepository.Verify(x => x.AddAsync(It.IsAny<ManualBarrierControlModel>()), Times.Once);
+
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.ManipulateBarrier)} method...", Times.Once, _nullException);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(service.ManipulateBarrier)} method", Times.Never, _nullException);
+        }
+
+        [Fact]
+        public async Task GivenValidRequestAndRedisDatabaseIsDown_WhenManipulateBarrierIsCalled_ThenThrowException()
+        {
+            // Arrange
+            var exception = new Exception("Some ex");
+            _redisDatabaseMock.Setup(x => x.HashSetAsync(It.IsAny<RedisKey>(), It.IsAny<HashEntry[]>(), It.IsAny<CommandFlags>())).ThrowsAsync(exception);
+
+            // Act
+            var service = new UIActionService(_loggerMock.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _manualBarrierControlRepository.Object, _redisDatabaseMock.Object);
+            Func<Task> func = () => service.ManipulateBarrier(barrierRequest);
+
+            // Assert
+            var ex = await Assert.ThrowsAsync<Exception>(func);
+            ex.Should().NotBeNull();
+            ex.Message.Should().Be(exception.Message);
+
+            _redisDatabaseMock.Verify(x => x.HashSetAsync(It.IsAny<RedisKey>(), It.IsAny<HashEntry[]>(), It.IsAny<CommandFlags>()), Times.Once);
+            _manualBarrierControlRepository.Verify(x => x.AddAsync(It.IsAny<ManualBarrierControlModel>()), Times.Never);
+
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.ManipulateBarrier)} method...", Times.Once, _nullException);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(service.ManipulateBarrier)} method", Times.Once, _nullException);
+        }
+
+        [Fact]
+        public async Task GivenValidRequestAndManualBarrierControlRepositoryIsDown_WhenManipulateBarrierIsCalled_ThenThrowException()
+        {
+            // Arrange
+            var exception = new Exception("Some ex");
+            _redisDatabaseMock.Setup(x => x.HashSetAsync(It.IsAny<RedisKey>(), It.IsAny<HashEntry[]>(), It.IsAny<CommandFlags>()));
+            _manualBarrierControlRepository.Setup(x => x.AddAsync(It.IsAny<ManualBarrierControlModel>())).ThrowsAsync(exception);
+
+            // Act
+            var service = new UIActionService(_loggerMock.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _manualBarrierControlRepository.Object, _redisDatabaseMock.Object);
+            Func<Task> func = () => service.ManipulateBarrier(barrierRequest);
+
+            // Assert
+            var ex = await Assert.ThrowsAsync<Exception>(func);
+            ex.Should().NotBeNull();
+            ex.Message.Should().Be(exception.Message);
+
+            _redisDatabaseMock.Verify(x => x.HashSetAsync(It.IsAny<RedisKey>(), It.IsAny<HashEntry[]>(), It.IsAny<CommandFlags>()), Times.Once);
+            _manualBarrierControlRepository.Verify(x => x.AddAsync(It.IsAny<ManualBarrierControlModel>()), Times.Once);
+
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.ManipulateBarrier)} method...", Times.Once, _nullException);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(service.ManipulateBarrier)} method", Times.Once, _nullException);
         }
         #endregion
     }

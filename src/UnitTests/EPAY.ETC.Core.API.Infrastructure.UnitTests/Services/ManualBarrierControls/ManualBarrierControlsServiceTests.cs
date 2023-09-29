@@ -1,21 +1,12 @@
 ﻿using EPAY.ETC.Core.API.Core.Models.ManualBarrierControl;
-using EPAY.ETC.Core.API.Infrastructure.Migrations;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.ManualBarrierControls;
-using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Payment;
 using EPAY.ETC.Core.API.Infrastructure.Services.ManualBarrierControls;
-using EPAY.ETC.Core.API.Infrastructure.Services.Payment;
 using EPAY.ETC.Core.API.Infrastructure.UnitTests.Common;
 using EPAY.ETC.Core.API.UnitTests.Helpers;
 using EPAY.ETC.Core.Models.Enums;
-using EPAY.ETC.Core.Models.Request;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.ManualBarrierControls
 {
@@ -28,7 +19,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.ManualBarrierContr
         private static Guid id = Guid.NewGuid();
         private ManualBarrierControlAddOrUpdateRequestModel addRequest = new ManualBarrierControlAddOrUpdateRequestModel()
         {
-            EmployeeId ="4512781e-4dc2-4ee3-acdd-a46becc08d6c",
+            EmployeeId = "4512781e-4dc2-4ee3-acdd-a46becc08d6c",
             Action = BarrierActionEnum.Open,
             LaneOutId = "0103"
         };

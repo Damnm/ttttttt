@@ -1,7 +1,9 @@
-﻿using EPAY.ETC.Core.API.Controllers.UIActions;
+﻿using EPAY.ETC.Core.API.Controllers.Reports;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.UIActions;
 using EPAY.ETC.Core.API.UnitTests.Common;
 using EPAY.ETC.Core.API.UnitTests.Helpers;
+using EPAY.ETC.Core.Models.Enums;
+using EPAY.ETC.Core.Models.Receipt;
 using EPAY.ETC.Core.Models.Receipt.SessionReports;
 using EPAY.ETC.Core.Models.Validation;
 using FluentAssertions;
@@ -10,35 +12,35 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 
-namespace EPAY.ETC.Core.API.UnitTests.Controllers.UIActions
+namespace EPAY.ETC.Core.API.UnitTests.Controllers.Reports
 {
-    public class UIActionControllerTests : TestBase<UIActionController>
+    public class ReportControllerTests : TestBase<ReportController>
     {
         #region Init mock instance
         private Mock<IUIActionService> _uiActionServiceMock = new();
         #endregion
 
         #region Init mock data
-        private SessionReportRequestModel request = new SessionReportRequestModel()
+        private SessionReportRequestModel sessionReportRequest = new SessionReportRequestModel()
         {
             FromDate = new DateTime(2023, 9, 29, 15, 32, 19),
             ToDate = new DateTime(2023, 9, 29, 15, 43, 53),
             EmployeeId = "Some employee",
             LaneId = "Some lane"
         };
-        private SessionReportModel response = new SessionReportModel()
+        private SessionReportModel sessionReportResponse = new SessionReportModel()
         {
-            PrintType = Models.Enums.ReceiptTypeEnum.SessionReport,
+            PrintType = ReceiptTypeEnum.SessionReport,
             Layout = new SessionLayoutModel()
             {
-                Header = new Models.Receipt.HeaderModel()
+                Header = new HeaderModel()
                 {
                     Heading = "Some heading",
                     Line1 = "Some line",
                     Line2 = "Some line",
                     SubHeading = "Some sub heading"
                 },
-                Footer = new Models.Receipt.FooterModel()
+                Footer = new FooterModel()
                 {
                     Line1 = "Some line",
                     Line2 = "Some line",
@@ -71,7 +73,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.UIActions
             //arrange
 
             //act
-            var actualResult = ValidateModelTest.ValidateModel(request);
+            var actualResult = ValidateModelTest.ValidateModel(sessionReportRequest);
 
             //assert 
             actualResult.Should().NotBeNull();
@@ -81,11 +83,11 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.UIActions
         public async Task GivenRequestIsValidAndCustomVehicleTypeIsNull_WhenPrintLaneSessionReportIsCalled_ThenReturnCorrectResult()
         {
             // Arrange
-            _uiActionServiceMock.Setup(x => x.PrintLaneSessionReport(It.IsAny<SessionReportRequestModel>())).ReturnsAsync(ValidationResult.Success(response));
+            _uiActionServiceMock.Setup(x => x.PrintLaneSessionReport(It.IsAny<SessionReportRequestModel>())).ReturnsAsync(ValidationResult.Success(sessionReportResponse));
 
             // Act
-            var controller = new UIActionController(_loggerMock.Object, _uiActionServiceMock.Object);
-            var actualResult = await controller.PrintLaneSessionReport(request);
+            var controller = new ReportController(_loggerMock.Object, _uiActionServiceMock.Object);
+            var actualResult = await controller.PrintLaneSessionReport(sessionReportRequest);
             var data = ((OkObjectResult)actualResult).Value as ValidationResult<SessionReportModel>;
 
             // Assert
@@ -98,7 +100,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.UIActions
             ((OkObjectResult)actualResult).StatusCode.Should().Be(StatusCodes.Status200OK);
             data?.Should().NotBeNull();
             data?.Succeeded.Should().BeTrue();
-            data?.Data.Should().BeEquivalentTo(response);
+            data?.Data.Should().BeEquivalentTo(sessionReportResponse);
         }
 
         // Unhappy case 400
@@ -106,10 +108,10 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.UIActions
         public void GiveRequestIsInValid_WhenApiPrintLaneSessionReportIsCalled_ThenReturnBadValidation()
         {
             //arrange
-            var request = new SessionReportRequestModel();
+            var sessionReportRequest = new SessionReportRequestModel();
 
             //act
-            var actualResult = ValidateModelTest.ValidateModel(request);
+            var actualResult = ValidateModelTest.ValidateModel(sessionReportRequest);
 
             //assert 
             actualResult.Should().NotBeNull();
@@ -123,8 +125,8 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.UIActions
             _uiActionServiceMock.Setup(x => x.PrintLaneSessionReport(It.IsAny<SessionReportRequestModel>())).ThrowsAsync(someEx);
 
             // Act
-            var controller = new UIActionController(_loggerMock.Object, _uiActionServiceMock.Object);
-            var actualResult = await controller.PrintLaneSessionReport(request);
+            var controller = new ReportController(_loggerMock.Object, _uiActionServiceMock.Object);
+            var actualResult = await controller.PrintLaneSessionReport(sessionReportRequest);
             var actualResultRespone = ((ObjectResult)actualResult).Value as ValidationResult<string>;
 
             // Assert

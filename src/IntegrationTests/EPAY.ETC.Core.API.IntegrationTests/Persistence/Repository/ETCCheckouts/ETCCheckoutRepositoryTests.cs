@@ -3,6 +3,7 @@ using EPAY.ETC.Core.API.Core.Models.Payment;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Context;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.ETCCheckouts;
 using EPAY.ETC.Core.API.IntegrationTests.Common;
+using EPAY.ETC.Core.Models.Enums;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,9 +30,9 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Repository.ETCCheckouts
             Id = Guid.Parse("14157FCF-1427-44F8-BEE0-31B99A493C0B"),
             CreatedDate = new DateTime(2023, 9, 11),
             PaymentId = paymentId,
-            ServiceProvider = Models.Enums.ETCServiceProviderEnum.VDTC,
+            ServiceProvider = ETCServiceProviderEnum.VDTC,
             TransactionId = "234556415843210682",
-            TransactionStatus = Models.Enums.TransactionStatusEnum.CheckOut,
+            TransactionStatus = TransactionStatusEnum.CheckOut,
             Amount = 15000,
             RFID = "023156456956875",
             PlateNumber = "29A23541"

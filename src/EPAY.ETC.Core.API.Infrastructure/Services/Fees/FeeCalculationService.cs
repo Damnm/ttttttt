@@ -1,6 +1,5 @@
 ﻿using EPAY.ETC.Core.API.Core.Extensions;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Fees;
-using EPAY.ETC.Core.API.Core.Models.Enum;
 using EPAY.ETC.Core.API.Core.Utils;
 using EPAY.ETC.Core.API.Infrastructure.Common.Utils;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.FeeVehicleCategories;
@@ -10,6 +9,7 @@ using EPAY.ETC.Core.Models.Enums;
 using EPAY.ETC.Core.Models.Validation;
 using EPAY.ETC.Core.Models.VehicleFee;
 using Microsoft.Extensions.Logging;
+using FeeTypeEnum = EPAY.ETC.Core.API.Core.Models.Enum.FeeTypeEnum;
 
 namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
 {

@@ -3,6 +3,7 @@ using EPAY.ETC.Core.API.Infrastructure.Persistence.Context;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PaymentStatus;
 using EPAY.ETC.Core.API.Infrastructure.UnitTests.Common;
 using EPAY.ETC.Core.API.Infrastructure.UnitTests.Helpers;
+using EPAY.ETC.Core.Models.Enums;
 using EPAY.ETC.Core.Models.Receipt.SessionReports;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
@@ -27,7 +28,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.PaymentStatus
                 PaymentId = Guid.NewGuid(),
                 Amount = 300,
                 Currency ="vnd",
-                PaymentMethod = Models.Enums.PaymentMethodEnum.RFID,
+                PaymentMethod = PaymentMethodEnum.RFID,
 
             }
         };
