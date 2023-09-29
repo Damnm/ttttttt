@@ -1,6 +1,7 @@
 ﻿using EPAY.ETC.Core.API.Core.Interfaces.Services.ETCCheckouts;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Fees;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Fusion;
+using EPAY.ETC.Core.API.Core.Interfaces.Services.ManualBarrierControls;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Payment;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.PaymentStatus;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.UIActions;
@@ -23,6 +24,7 @@ using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.VehicleGroups;
 using EPAY.ETC.Core.API.Infrastructure.Services.ETCCheckouts;
 using EPAY.ETC.Core.API.Infrastructure.Services.Fees;
 using EPAY.ETC.Core.API.Infrastructure.Services.Fusion;
+using EPAY.ETC.Core.API.Infrastructure.Services.ManualBarrierControls;
 using EPAY.ETC.Core.API.Infrastructure.Services.Payment;
 using EPAY.ETC.Core.API.Infrastructure.Services.PaymentStatus;
 using EPAY.ETC.Core.API.Infrastructure.Services.UIActions;
@@ -72,6 +74,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence
             services.AddScoped<IPaymentStatusService, PaymentStatusService>();
             services.AddScoped<IPaymentService, PaymentService>();
             services.AddScoped<IUIActionService, UIActionService>();
+            services.AddScoped<IManualBarrierControlsService, ManualBarrierControlsService>();
 
             return services;
         }

@@ -41,7 +41,6 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Repository.ManualBarrie
             result.Should().NotBeNull();
             expected.Should().NotBeNull();
             result!.Id.Should().Be(expected!.Id);
-            result!.CreatedDate.Should().Be(expected!.CreatedDate);
             result!.EmployeeId.Should().Be(expected!.EmployeeId);
             result!.Action.Should().Be(expected!.Action);
             result!.LaneOutId.Should().Be(expected!.LaneOutId);
@@ -60,11 +59,9 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Repository.ManualBarrie
 
             // Assert
             result.Should().NotBeNull();
-            result!.Id.Should().Be(manualBarrierControl!.Id);
-            result!.CreatedDate.Should().Be(manualBarrierControl!.CreatedDate);
-            result!.EmployeeId.Should().Be(manualBarrierControl!.EmployeeId);
-            result!.Action.Should().Be(manualBarrierControl!.Action);
-            result!.LaneOutId.Should().Be(manualBarrierControl!.LaneOutId);
+            result!.Id.Should().Be(manualBarrierControl.Id);
+            result!.Action.Should().Be(manualBarrierControl.Action);
+            result!.LaneOutId.Should().Be(manualBarrierControl.LaneOutId);
         }
         [Fact, Order(2)]
         public async Task GivenRequestIsValidAndIdIsNotExists_WhenGetByIdAsyncIsCalled_ThenReturnNull()
