@@ -1,7 +1,6 @@
 ﻿using EPAY.ETC.Core.API.Core.Extensions;
 using EPAY.ETC.Core.API.Core.Models.Configs;
 using EPAY.ETC.Core.API.Core.Models.CustomVehicleTypes;
-using EPAY.ETC.Core.API.Core.Models.Enum;
 using EPAY.ETC.Core.API.Core.Models.ETCCheckOuts;
 using EPAY.ETC.Core.API.Core.Models.Fees;
 using EPAY.ETC.Core.API.Core.Models.FeeTypes;
@@ -20,6 +19,7 @@ using EPAY.ETC.Core.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System.Diagnostics.CodeAnalysis;
+using FeeTypeEnum = EPAY.ETC.Core.API.Core.Models.Enum.FeeTypeEnum;
 
 namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
 {

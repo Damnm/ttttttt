@@ -130,5 +130,51 @@ namespace EPAY.ETC.Core.API.Controllers.UIActions
             }
         }
         #endregion
+
+        #region ManipulateBarrier
+        /// <summary>
+        /// Save barrier status to redis and main DB
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPost("v1/manipulateBarrier")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> ManipulateBarrier([FromBody] BarrierRequestModel request)
+        {
+            try
+            {
+                _logger.LogInformation($"Executing {nameof(ManipulateBarrier)}...");
+
+                var result = await _uiActionService.ManipulateBarrier(request);
+
+                if (result.Succeeded)
+                {
+                    var publisherOption = _publisherOptions.FirstOrDefault(x => x.PublisherTarget == ETC.Core.Models.Enums.PublisherTargetEnum.Barrier);
+                    RabbitMessageOutbound message = new RabbitMessageOutbound()
+                    {
+                        Message = JsonSerializer.Serialize(result.Data)
+                    };
+
+                    _publisherService.SendMessage(message, _mapper.Map<PublisherOptions>(publisherOption));
+                }
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                List<ValidationError> validationErrors = new();
+                string errorMessage = $"An error occurred when calling {nameof(ManipulateBarrier)} method: {ex.Message}. InnerException : {ApiExceptionMessages.ExceptionMessages(ex)}. Stack trace: {ex.StackTrace}";
+
+                _logger.LogError(errorMessage);
+                validationErrors.Add(ValidationError.InternalServerError);
+
+                return new ObjectResult(ValidationResult.Failed(errorMessage, validationErrors))
+                {
+                    StatusCode = StatusCodes.Status500InternalServerError
+                };
+            }
+        }
+        #endregion
     }
 }

@@ -139,7 +139,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.ETCCheckouts
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(controller.AddAsync)}...", Times.Once, _exception);
             _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(controller.AddAsync)} method", Times.Never, _exception);
 
-            actualResult.Should().BeOfType<ConflictObjectResult>();
+            actualResult.Should().BeOfType<BadRequestObjectResult>();
             ((BadRequestObjectResult)actualResult).StatusCode.Should().Be(StatusCodes.Status400BadRequest);
             data?.Succeeded.Should().BeFalse();
             data?.Data.Should().BeNull();
@@ -249,7 +249,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.ETCCheckouts
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(controller.UpdateAsync)}...", Times.Once, _exception);
             _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(controller.UpdateAsync)} method", Times.Never, _exception);
 
-            actualResult.Should().BeOfType<ConflictObjectResult>();
+            actualResult.Should().BeOfType<BadRequestObjectResult>();
             ((BadRequestObjectResult)actualResult).StatusCode.Should().Be(StatusCodes.Status400BadRequest);
             data?.Succeeded.Should().BeFalse();
             data?.Data.Should().BeNull();
