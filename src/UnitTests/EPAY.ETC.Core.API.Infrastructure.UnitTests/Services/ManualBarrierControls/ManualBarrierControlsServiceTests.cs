@@ -6,6 +6,7 @@ using EPAY.ETC.Core.API.Infrastructure.Services.ManualBarrierControls;
 using EPAY.ETC.Core.API.Infrastructure.Services.Payment;
 using EPAY.ETC.Core.API.Infrastructure.UnitTests.Common;
 using EPAY.ETC.Core.API.UnitTests.Helpers;
+using EPAY.ETC.Core.Models.Enums;
 using EPAY.ETC.Core.Models.Request;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
@@ -27,8 +28,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.ManualBarrierContr
         private static Guid id = Guid.NewGuid();
         private ManualBarrierControlAddOrUpdateRequestModel addRequest = new ManualBarrierControlAddOrUpdateRequestModel()
         {
-            EmployeeId = Guid.Parse("4512781e-4dc2-4ee3-acdd-a46becc08d6c"),
-            Action = ActionEnum.Open,
+            EmployeeId ="4512781e-4dc2-4ee3-acdd-a46becc08d6c",
+            Action = BarrierActionEnum.Open,
             LaneOutId = "0103"
         };
         private ManualBarrierControlAddOrUpdateRequestModel updateRequest = new ManualBarrierControlAddOrUpdateRequestModel()
