@@ -1,6 +1,7 @@
 ﻿using EPAY.ETC.Core.API.Core.Models.ManualBarrierControl;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.ManualBarrierControls;
 using EPAY.ETC.Core.API.IntegrationTests.Common;
+using EPAY.ETC.Core.Models.Enums;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using XUnitPriorityOrderer;
@@ -16,9 +17,9 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Repository.ManualBarrie
         private ManualBarrierControlModel manualBarrierControl = new ManualBarrierControlModel()
         {
             Id = manualBarrierControlId,
-            EmployeeId = Guid.NewGuid(),
+            EmployeeId = "650d28ea-4e1a-42e3-81a2-dd13a2a5d3c3",
             CreatedDate = DateTime.Now,
-            Action =ActionEnum.Close,
+            Action = BarrierActionEnum.Close,
             LaneOutId = "00314"
         };
         #endregion
@@ -88,8 +89,8 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Repository.ManualBarrie
             // Arrange
             //vehicle.Id =  vehicle.Id;
             //vehicle.CreatedDate = vehicle.CreatedDate;
-            manualBarrierControl.EmployeeId = Guid.Empty;
-            manualBarrierControl.Action = ActionEnum.Open;
+            manualBarrierControl.EmployeeId = manualBarrierControl.EmployeeId;
+            manualBarrierControl.Action = BarrierActionEnum.Open;
             manualBarrierControl.LaneOutId = "0015";
 
             // Act

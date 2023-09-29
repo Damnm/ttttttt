@@ -4,6 +4,7 @@ using EPAY.ETC.Core.API.Infrastructure.Persistence.Context;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.ManualBarrierControls;
 using EPAY.ETC.Core.API.Infrastructure.UnitTests.Common;
 using EPAY.ETC.Core.API.Infrastructure.UnitTests.Helpers;
+using EPAY.ETC.Core.Models.Enums;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -24,8 +25,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.ManualBarrierC
             {
                 Id = Guid.NewGuid(),
                 CreatedDate = DateTime.Now,
-                EmployeeId = Guid.NewGuid(),
-                Action =ActionEnum.Open,
+                EmployeeId = "650d28ea-4e1a-42e3-81a2-dd13a2a5d3c3",
+                Action =BarrierActionEnum.Open,
                 LaneOutId = "0011",
             }
         };
