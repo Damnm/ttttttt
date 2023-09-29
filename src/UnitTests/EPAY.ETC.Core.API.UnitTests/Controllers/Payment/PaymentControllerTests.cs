@@ -39,7 +39,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Payment
         private PaymentAddOrUpdateRequestModel updateRequestMock = new PaymentAddOrUpdateRequestModel()
         {
             LaneInId = "1",
-            LaneOutId = "1",
+            LaneOutId = "2",
             RFID = "dfsdfdsfds",
             Make = "Toyota",
             Amount = 300
