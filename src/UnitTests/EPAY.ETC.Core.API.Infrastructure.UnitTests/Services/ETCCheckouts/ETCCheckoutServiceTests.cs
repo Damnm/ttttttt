@@ -1,8 +1,11 @@
 ﻿using EPAY.ETC.Core.API.Core.Models.ETCCheckOuts;
+using EPAY.ETC.Core.API.Core.Models.Payment;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.ETCCheckouts;
+using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Payment;
 using EPAY.ETC.Core.API.Infrastructure.Services.ETCCheckouts;
 using EPAY.ETC.Core.API.Infrastructure.UnitTests.Common;
 using EPAY.ETC.Core.API.Infrastructure.UnitTests.Helpers;
+using EPAY.ETC.Core.Models.Enums;
 using EPAY.ETC.Core.Models.Request;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
@@ -17,6 +20,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.ETCCheckouts
         #region Init mock instance
         private readonly Mock<ILogger<ETCCheckoutService>> _loggerMock = new();
         private readonly Mock<IETCCheckoutRepository> _etcCheckOutRepositoryMock = new();
+        private readonly Mock<IPaymentRepository> _paymentRepositoryMock = new();
         #endregion
 
         #region Init test data
@@ -27,8 +31,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.ETCCheckouts
             PlateNumber = "Some Plate",
             Amount = 7000,
             RFID = "Some RFID",
-            ServiceProvider = Models.Enums.ETCServiceProviderEnum.VETC,
-            TransactionStatus = Models.Enums.TransactionStatusEnum.CheckOut
+            ServiceProvider = ETCServiceProviderEnum.VETC,
+            TransactionStatus = TransactionStatusEnum.CheckOut
         };
 
         private ETCCheckoutDataModel etcCheckOutModel = new ETCCheckoutDataModel()
@@ -40,8 +44,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.ETCCheckouts
             PlateNumber = "Some Plate",
             Amount = 7000,
             RFID = "Some RFID",
-            ServiceProvider = Models.Enums.ETCServiceProviderEnum.VETC,
-            TransactionStatus = Models.Enums.TransactionStatusEnum.CheckOut
+            ServiceProvider = ETCServiceProviderEnum.VETC,
+            TransactionStatus = TransactionStatusEnum.CheckOut
         };
         private Exception _exception = null!;
         #endregion
@@ -52,10 +56,11 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.ETCCheckouts
         {
             // Arrange
             _etcCheckOutRepositoryMock.Setup(x => x.GetAllAsync(It.IsAny<Expression<Func<ETCCheckoutDataModel, bool>>>())).ReturnsAsync(new List<ETCCheckoutDataModel>());
+            _paymentRepositoryMock.Setup(x => x.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(new PaymentModel());
             _etcCheckOutRepositoryMock.Setup(x => x.AddAsync(It.IsAny<ETCCheckoutDataModel>())).ReturnsAsync(etcCheckOutModel);
 
             // Act
-            var service = new ETCCheckoutService(_loggerMock.Object, _etcCheckOutRepositoryMock.Object, _mapper);
+            var service = new ETCCheckoutService(_loggerMock.Object, _etcCheckOutRepositoryMock.Object, _paymentRepositoryMock.Object, _mapper);
             var result = await service.AddAsync(request);
 
             // Assert
@@ -71,6 +76,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.ETCCheckouts
             result.Data?.TransactionStatus.Should().Be(request.TransactionStatus);
 
             _etcCheckOutRepositoryMock.Verify(x => x.GetAllAsync(It.IsAny<Expression<Func<ETCCheckoutDataModel, bool>>>()), Times.Once);
+            _paymentRepositoryMock.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
             _etcCheckOutRepositoryMock.Verify(x => x.AddAsync(It.IsAny<ETCCheckoutDataModel>()), Times.Once);
 
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.AddAsync)} method", Times.Once, _exception);
@@ -78,13 +84,13 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.ETCCheckouts
         }
 
         [Fact]
-        public async Task GivenValidRequestAndObjectIdIsExists_WhenAddAsyncIsCalled_ThenReturnConflict()
+        public async Task GivenValidRequestAndTransactionIdAlreadyExists_WhenAddAsyncIsCalled_ThenReturnConflict()
         {
             // Arrange
             _etcCheckOutRepositoryMock.Setup(x => x.GetAllAsync(It.IsAny<Expression<Func<ETCCheckoutDataModel, bool>>>())).ReturnsAsync(new List<ETCCheckoutDataModel>() { new ETCCheckoutDataModel() });
 
             // Act
-            var service = new ETCCheckoutService(_loggerMock.Object, _etcCheckOutRepositoryMock.Object, _mapper);
+            var service = new ETCCheckoutService(_loggerMock.Object, _etcCheckOutRepositoryMock.Object, _paymentRepositoryMock.Object, _mapper);
             var result = await service.AddAsync(request);
 
             // Assert
@@ -94,6 +100,32 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.ETCCheckouts
             result.Errors.Count(x => x.Code.Equals(StatusCodes.Status409Conflict)).Should().BeGreaterThan(0);
 
             _etcCheckOutRepositoryMock.Verify(x => x.GetAllAsync(It.IsAny<Expression<Func<ETCCheckoutDataModel, bool>>>()), Times.Once);
+            _paymentRepositoryMock.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Never);
+            _etcCheckOutRepositoryMock.Verify(x => x.AddAsync(It.IsAny<ETCCheckoutDataModel>()), Times.Never);
+
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.AddAsync)} method", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(service.AddAsync)} method", Times.Never, _exception);
+        }
+
+        [Fact]
+        public async Task GivenValidRequestAndPaymentIdIsNotExists_WhenAddAsyncIsCalled_ThenReturnBadRequest()
+        {
+            // Arrange
+            _etcCheckOutRepositoryMock.Setup(x => x.GetAllAsync(It.IsAny<Expression<Func<ETCCheckoutDataModel, bool>>>())).ReturnsAsync(new List<ETCCheckoutDataModel>());
+            _paymentRepositoryMock.Setup(x => x.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync((PaymentModel)null!);
+
+            // Act
+            var service = new ETCCheckoutService(_loggerMock.Object, _etcCheckOutRepositoryMock.Object, _paymentRepositoryMock.Object, _mapper);
+            var result = await service.AddAsync(request);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Succeeded.Should().BeFalse();
+            result.Data.Should().BeNull();
+            result.Errors.Count(x => x.Code.Equals(StatusCodes.Status400BadRequest)).Should().BeGreaterThan(0);
+
+            _etcCheckOutRepositoryMock.Verify(x => x.GetAllAsync(It.IsAny<Expression<Func<ETCCheckoutDataModel, bool>>>()), Times.Once);
+            _paymentRepositoryMock.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
             _etcCheckOutRepositoryMock.Verify(x => x.AddAsync(It.IsAny<ETCCheckoutDataModel>()), Times.Never);
 
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.AddAsync)} method", Times.Once, _exception);
@@ -108,7 +140,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.ETCCheckouts
             _etcCheckOutRepositoryMock.Setup(x => x.GetAllAsync(It.IsAny<Expression<Func<ETCCheckoutDataModel, bool>>>())).ThrowsAsync(exception);
 
             // Act
-            var service = new ETCCheckoutService(_loggerMock.Object, _etcCheckOutRepositoryMock.Object, _mapper);
+            var service = new ETCCheckoutService(_loggerMock.Object, _etcCheckOutRepositoryMock.Object, _paymentRepositoryMock.Object, _mapper);
             Func<Task> func = async () => await service.AddAsync(request);
 
             // Assert
@@ -116,6 +148,31 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.ETCCheckouts
             ex.Message.Should().Be(exception.Message);
 
             _etcCheckOutRepositoryMock.Verify(x => x.GetAllAsync(It.IsAny<Expression<Func<ETCCheckoutDataModel, bool>>>()), Times.Once);
+            _paymentRepositoryMock.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Never);
+            _etcCheckOutRepositoryMock.Verify(x => x.AddAsync(It.IsAny<ETCCheckoutDataModel>()), Times.Never);
+
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.AddAsync)} method", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(service.AddAsync)} method", Times.Once, _exception);
+        }
+
+        [Fact]
+        public async Task GivenValidRequestAndPaymentRepositoryIsDown_WhenAddAsyncIsCalled_ThenThrowException()
+        {
+            // Arrange
+            var exception = new Exception("Some ex");
+            _etcCheckOutRepositoryMock.Setup(x => x.GetAllAsync(It.IsAny<Expression<Func<ETCCheckoutDataModel, bool>>>())).ReturnsAsync(new List<ETCCheckoutDataModel>());
+            _paymentRepositoryMock.Setup(x => x.GetByIdAsync(It.IsAny<Guid>())).ThrowsAsync(exception);
+
+            // Act
+            var service = new ETCCheckoutService(_loggerMock.Object, _etcCheckOutRepositoryMock.Object, _paymentRepositoryMock.Object, _mapper);
+            Func<Task> func = async () => await service.AddAsync(request);
+
+            // Assert
+            var ex = await Assert.ThrowsAsync<Exception>(() => func());
+            ex.Message.Should().Be(exception.Message);
+
+            _etcCheckOutRepositoryMock.Verify(x => x.GetAllAsync(It.IsAny<Expression<Func<ETCCheckoutDataModel, bool>>>()), Times.Once);
+            _paymentRepositoryMock.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
             _etcCheckOutRepositoryMock.Verify(x => x.AddAsync(It.IsAny<ETCCheckoutDataModel>()), Times.Never);
 
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.AddAsync)} method", Times.Once, _exception);
@@ -130,10 +187,11 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.ETCCheckouts
             // Arrange
             _etcCheckOutRepositoryMock.Setup(x => x.GetAllAsync(It.IsAny<Expression<Func<ETCCheckoutDataModel, bool>>>())).ReturnsAsync(new List<ETCCheckoutDataModel>());
             _etcCheckOutRepositoryMock.Setup(x => x.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(new ETCCheckoutDataModel());
+            _paymentRepositoryMock.Setup(x => x.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(new PaymentModel());
             _etcCheckOutRepositoryMock.Setup(x => x.UpdateAsync(It.IsAny<ETCCheckoutDataModel>())).Callback<object>(s => { });
 
             // Act
-            var service = new ETCCheckoutService(_loggerMock.Object, _etcCheckOutRepositoryMock.Object, _mapper);
+            var service = new ETCCheckoutService(_loggerMock.Object, _etcCheckOutRepositoryMock.Object, _paymentRepositoryMock.Object, _mapper);
             var result = await service.UpdateAsync(etcCheckOutModel.Id, request);
 
             // Assert
@@ -149,6 +207,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.ETCCheckouts
 
             _etcCheckOutRepositoryMock.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
             _etcCheckOutRepositoryMock.Verify(x => x.GetAllAsync(It.IsAny<Expression<Func<ETCCheckoutDataModel, bool>>>()), Times.Once);
+            _paymentRepositoryMock.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
             _etcCheckOutRepositoryMock.Verify(x => x.UpdateAsync(It.IsAny<ETCCheckoutDataModel>()), Times.Once);
 
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.UpdateAsync)} method", Times.Once, _exception);
@@ -156,14 +215,14 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.ETCCheckouts
         }
 
         [Fact]
-        public async Task GivenValidRequestAndObjectIdIsExists_WhenUpdateAsyncIsCalled_ThenReturnConflict()
+        public async Task GivenValidRequestAndTransactionIdAlreadyExists_WhenUpdateAsyncIsCalled_ThenReturnConflict()
         {
             // Arrange
             _etcCheckOutRepositoryMock.Setup(x => x.GetAllAsync(It.IsAny<Expression<Func<ETCCheckoutDataModel, bool>>>())).ReturnsAsync(new List<ETCCheckoutDataModel>() { new ETCCheckoutDataModel() });
             _etcCheckOutRepositoryMock.Setup(x => x.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(new ETCCheckoutDataModel());
 
             // Act
-            var service = new ETCCheckoutService(_loggerMock.Object, _etcCheckOutRepositoryMock.Object, _mapper);
+            var service = new ETCCheckoutService(_loggerMock.Object, _etcCheckOutRepositoryMock.Object, _paymentRepositoryMock.Object, _mapper);
             var result = await service.UpdateAsync(It.IsAny<Guid>(), request);
 
             // Assert
@@ -174,6 +233,34 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.ETCCheckouts
 
             _etcCheckOutRepositoryMock.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
             _etcCheckOutRepositoryMock.Verify(x => x.GetAllAsync(It.IsAny<Expression<Func<ETCCheckoutDataModel, bool>>>()), Times.Once);
+            _paymentRepositoryMock.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Never);
+            _etcCheckOutRepositoryMock.Verify(x => x.UpdateAsync(It.IsAny<ETCCheckoutDataModel>()), Times.Never);
+
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.UpdateAsync)} method", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(service.UpdateAsync)} method", Times.Never, _exception);
+        }
+
+        [Fact]
+        public async Task GivenValidRequestAndPaymentIdIsNotExists_WhenUpdateAsyncIsCalled_ThenReturnBadRequest()
+        {
+            // Arrange
+            _etcCheckOutRepositoryMock.Setup(x => x.GetAllAsync(It.IsAny<Expression<Func<ETCCheckoutDataModel, bool>>>())).ReturnsAsync(new List<ETCCheckoutDataModel>());
+            _etcCheckOutRepositoryMock.Setup(x => x.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(new ETCCheckoutDataModel());
+            _paymentRepositoryMock.Setup(x => x.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync((PaymentModel)null!);
+
+            // Act
+            var service = new ETCCheckoutService(_loggerMock.Object, _etcCheckOutRepositoryMock.Object, _paymentRepositoryMock.Object, _mapper);
+            var result = await service.UpdateAsync(It.IsAny<Guid>(), request);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Succeeded.Should().BeFalse();
+            result.Data.Should().BeNull();
+            result.Errors.Count(x => x.Code.Equals(StatusCodes.Status400BadRequest)).Should().BeGreaterThan(0);
+
+            _etcCheckOutRepositoryMock.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+            _etcCheckOutRepositoryMock.Verify(x => x.GetAllAsync(It.IsAny<Expression<Func<ETCCheckoutDataModel, bool>>>()), Times.Once);
+            _paymentRepositoryMock.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
             _etcCheckOutRepositoryMock.Verify(x => x.UpdateAsync(It.IsAny<ETCCheckoutDataModel>()), Times.Never);
 
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.UpdateAsync)} method", Times.Once, _exception);
@@ -187,7 +274,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.ETCCheckouts
             _etcCheckOutRepositoryMock.Setup(x => x.GetByIdAsync(It.IsAny<Guid>()));
 
             // Act
-            var service = new ETCCheckoutService(_loggerMock.Object, _etcCheckOutRepositoryMock.Object, _mapper);
+            var service = new ETCCheckoutService(_loggerMock.Object, _etcCheckOutRepositoryMock.Object, _paymentRepositoryMock.Object, _mapper);
             var result = await service.UpdateAsync(It.IsAny<Guid>(), request);
 
             // Assert
@@ -198,6 +285,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.ETCCheckouts
 
             _etcCheckOutRepositoryMock.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
             _etcCheckOutRepositoryMock.Verify(x => x.GetAllAsync(It.IsAny<Expression<Func<ETCCheckoutDataModel, bool>>>()), Times.Never);
+            _paymentRepositoryMock.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Never);
             _etcCheckOutRepositoryMock.Verify(x => x.UpdateAsync(It.IsAny<ETCCheckoutDataModel>()), Times.Never);
 
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.UpdateAsync)} method", Times.Once, _exception);
@@ -212,7 +300,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.ETCCheckouts
             _etcCheckOutRepositoryMock.Setup(x => x.GetByIdAsync(It.IsAny<Guid>())).ThrowsAsync(exception);
 
             // Act
-            var service = new ETCCheckoutService(_loggerMock.Object, _etcCheckOutRepositoryMock.Object, _mapper);
+            var service = new ETCCheckoutService(_loggerMock.Object, _etcCheckOutRepositoryMock.Object, _paymentRepositoryMock.Object, _mapper);
             Func<Task> func = async () => await service.UpdateAsync(It.IsAny<Guid>(), request);
 
             // Assert
@@ -221,6 +309,33 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.ETCCheckouts
 
             _etcCheckOutRepositoryMock.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
             _etcCheckOutRepositoryMock.Verify(x => x.GetAllAsync(It.IsAny<Expression<Func<ETCCheckoutDataModel, bool>>>()), Times.Never);
+            _paymentRepositoryMock.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Never);
+            _etcCheckOutRepositoryMock.Verify(x => x.UpdateAsync(It.IsAny<ETCCheckoutDataModel>()), Times.Never);
+
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.UpdateAsync)} method", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(service.UpdateAsync)} method", Times.Once, _exception);
+        }
+
+        [Fact]
+        public async Task GivenValidRequestAndPaymentRepositoryIsDown_WhenUpdateAsyncIsCalled_ThenThrowException()
+        {
+            // Arrange
+            var exception = new Exception("Some ex");
+            _etcCheckOutRepositoryMock.Setup(x => x.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(new ETCCheckoutDataModel());
+            _etcCheckOutRepositoryMock.Setup(x => x.GetAllAsync(It.IsAny<Expression<Func<ETCCheckoutDataModel, bool>>>())).ReturnsAsync(new List<ETCCheckoutDataModel>());
+            _paymentRepositoryMock.Setup(x => x.GetByIdAsync(It.IsAny<Guid>())).ThrowsAsync(exception);
+
+            // Act
+            var service = new ETCCheckoutService(_loggerMock.Object, _etcCheckOutRepositoryMock.Object, _paymentRepositoryMock.Object, _mapper);
+            Func<Task> func = async () => await service.UpdateAsync(It.IsAny<Guid>(), request);
+
+            // Assert
+            var ex = await Assert.ThrowsAsync<Exception>(() => func());
+            ex.Message.Should().Be(exception.Message);
+
+            _etcCheckOutRepositoryMock.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+            _etcCheckOutRepositoryMock.Verify(x => x.GetAllAsync(It.IsAny<Expression<Func<ETCCheckoutDataModel, bool>>>()), Times.Once);
+            _paymentRepositoryMock.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
             _etcCheckOutRepositoryMock.Verify(x => x.UpdateAsync(It.IsAny<ETCCheckoutDataModel>()), Times.Never);
 
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.UpdateAsync)} method", Times.Once, _exception);
@@ -237,7 +352,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.ETCCheckouts
             _etcCheckOutRepositoryMock.Setup(x => x.RemoveAsync(It.IsAny<ETCCheckoutDataModel>())).Callback<object>(s => { });
 
             // Act
-            var service = new ETCCheckoutService(_loggerMock.Object, _etcCheckOutRepositoryMock.Object, _mapper);
+            var service = new ETCCheckoutService(_loggerMock.Object, _etcCheckOutRepositoryMock.Object, _paymentRepositoryMock.Object, _mapper);
             var result = await service.RemoveAsync(It.IsAny<Guid>());
 
             // Assert
@@ -259,7 +374,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.ETCCheckouts
             _etcCheckOutRepositoryMock.Setup(x => x.GetByIdAsync(It.IsAny<Guid>()));
 
             // Act
-            var service = new ETCCheckoutService(_loggerMock.Object, _etcCheckOutRepositoryMock.Object, _mapper);
+            var service = new ETCCheckoutService(_loggerMock.Object, _etcCheckOutRepositoryMock.Object, _paymentRepositoryMock.Object, _mapper);
             var result = await service.RemoveAsync(It.IsAny<Guid>());
 
             // Assert
@@ -283,7 +398,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.ETCCheckouts
             _etcCheckOutRepositoryMock.Setup(x => x.GetByIdAsync(It.IsAny<Guid>())).ThrowsAsync(exception);
 
             // Act
-            var service = new ETCCheckoutService(_loggerMock.Object, _etcCheckOutRepositoryMock.Object, _mapper);
+            var service = new ETCCheckoutService(_loggerMock.Object, _etcCheckOutRepositoryMock.Object, _paymentRepositoryMock.Object, _mapper);
             Func<Task> func = async () => await service.RemoveAsync(It.IsAny<Guid>());
 
             // Assert
@@ -306,7 +421,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.ETCCheckouts
             _etcCheckOutRepositoryMock.Setup(x => x.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(etcCheckOutModel);
 
             // Act
-            var service = new ETCCheckoutService(_loggerMock.Object, _etcCheckOutRepositoryMock.Object, _mapper);
+            var service = new ETCCheckoutService(_loggerMock.Object, _etcCheckOutRepositoryMock.Object, _paymentRepositoryMock.Object, _mapper);
             var result = await service.GetByIdAsync(It.IsAny<Guid>());
 
             // Assert
@@ -333,7 +448,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.ETCCheckouts
             _etcCheckOutRepositoryMock.Setup(x => x.GetByIdAsync(It.IsAny<Guid>()));
 
             // Act
-            var service = new ETCCheckoutService(_loggerMock.Object, _etcCheckOutRepositoryMock.Object, _mapper);
+            var service = new ETCCheckoutService(_loggerMock.Object, _etcCheckOutRepositoryMock.Object, _paymentRepositoryMock.Object, _mapper);
             var result = await service.GetByIdAsync(It.IsAny<Guid>());
 
             // Assert
@@ -355,7 +470,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.ETCCheckouts
             _etcCheckOutRepositoryMock.Setup(x => x.GetByIdAsync(It.IsAny<Guid>())).ThrowsAsync(exception);
 
             // Act
-            var service = new ETCCheckoutService(_loggerMock.Object, _etcCheckOutRepositoryMock.Object, _mapper);
+            var service = new ETCCheckoutService(_loggerMock.Object, _etcCheckOutRepositoryMock.Object, _paymentRepositoryMock.Object, _mapper);
             Func<Task> func = async () => await service.GetByIdAsync(It.IsAny<Guid>());
 
             // Assert
@@ -377,7 +492,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.ETCCheckouts
             _etcCheckOutRepositoryMock.Setup(x => x.GetAllAsync(It.IsAny<Expression<Func<ETCCheckoutDataModel, bool>>>())).ReturnsAsync(new List<ETCCheckoutDataModel>() { new ETCCheckoutDataModel() });
 
             // Act
-            var service = new ETCCheckoutService(_loggerMock.Object, _etcCheckOutRepositoryMock.Object, _mapper);
+            var service = new ETCCheckoutService(_loggerMock.Object, _etcCheckOutRepositoryMock.Object, _paymentRepositoryMock.Object, _mapper);
             var result = await service.GetAllAsync(It.IsAny<Expression<Func<ETCCheckoutDataModel, bool>>>());
 
             // Assert
@@ -399,7 +514,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.ETCCheckouts
             _etcCheckOutRepositoryMock.Setup(x => x.GetAllAsync(It.IsAny<Expression<Func<ETCCheckoutDataModel, bool>>>())).ThrowsAsync(exception);
 
             // Act
-            var service = new ETCCheckoutService(_loggerMock.Object, _etcCheckOutRepositoryMock.Object, _mapper);
+            var service = new ETCCheckoutService(_loggerMock.Object, _etcCheckOutRepositoryMock.Object, _paymentRepositoryMock.Object, _mapper);
             Func<Task> func = async () => await service.GetAllAsync(It.IsAny<Expression<Func<ETCCheckoutDataModel, bool>>>());
 
             // Assert

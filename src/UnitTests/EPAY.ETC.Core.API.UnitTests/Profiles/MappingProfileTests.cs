@@ -1,7 +1,9 @@
 ﻿using EPAY.ETC.Core.API.Core.Models.Fees;
 using EPAY.ETC.Core.API.Core.Models.Fusion;
 using EPAY.ETC.Core.API.Core.Models.Vehicle;
+using EPAY.ETC.Core.API.Models.Configs;
 using EPAY.ETC.Core.API.UnitTests.Common;
+using EPAY.ETC.Core.Publisher.Common.Options;
 using FluentAssertions;
 using CoreModel = EPAY.ETC.Core.Models.Fees;
 
@@ -151,6 +153,42 @@ namespace EPAY.ETC.Core.API.UnitTests.Profiles
 
             // Act
             var result = _mapper.Map<FeeModel>(vehicleType);
+
+            // Assert
+            result.Should().BeNull();
+        }
+        #endregion
+
+        #region Publisher Configuration Option
+        [Fact]
+        public void GivenValidPublisherConfigurationOption_WhenAutoMapperIsCalled_ThenCorrectResult()
+        {
+            // Arrange
+            var publisherConfigurationOption = new PublisherConfigurationOption()
+            {
+                PublisherTarget = ETC.Core.Models.Enums.PublisherTargetEnum.PaymentStatus,
+                DeadLetterExchange = "Some"
+            };
+
+            // Act            
+            var result = _mapper.Map<PublisherOptions>(publisherConfigurationOption);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.DeadLetterExchange.Should().Be(publisherConfigurationOption.DeadLetterExchange);
+            result.Durable.Should().Be(publisherConfigurationOption.Durable);
+            result.AlternateExchange.Should().Be(publisherConfigurationOption.AlternateExchange);
+            result.GetType().Should().Be(typeof(PublisherOptions));
+        }
+
+        [Fact]
+        public void GivenPublisherConfigurationOptionIsNull_WhenAutoMapperIsCalled_ThenEmptyResult()
+        {
+            // Arrange
+            PublisherConfigurationOption publisherConfigurationOption = null;
+
+            // Act
+            var result = _mapper.Map<PublisherOptions>(publisherConfigurationOption);
 
             // Assert
             result.Should().BeNull();

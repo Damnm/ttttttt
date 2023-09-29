@@ -4,6 +4,7 @@ using EPAY.ETC.Core.API.Core.Models.PaymentStatus;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Context;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PaymentStatus;
 using EPAY.ETC.Core.API.IntegrationTests.Common;
+using EPAY.ETC.Core.Models.Enums;
 using EPAY.ETC.Core.Models.Receipt.SessionReports;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
@@ -31,8 +32,8 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Repository.PaymentStatu
             PaymentId = paymentId,
             Amount = 10000,
             Currency = "VND",
-            PaymentMethod = Models.Enums.PaymentMethodEnum.Card,
-            Status = Models.Enums.PaymentStatusEnum.Paid,
+            PaymentMethod = PaymentMethodEnum.Card,
+            Status = PaymentStatusEnum.Paid,
             PaymentDate = new DateTime(2023, 9, 11, 15, 13, 39),
             Id = paymentStatusId,
             CreatedDate = new DateTime(2023, 9, 11),

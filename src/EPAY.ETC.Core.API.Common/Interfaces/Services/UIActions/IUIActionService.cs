@@ -11,6 +11,6 @@ namespace EPAY.ETC.Core.API.Core.Interfaces.Services.UIActions
         Task<ValidationResult<SessionReportModel>> PrintLaneSessionReport(SessionReportRequestModel request);
         Task CreateDataInput();
         Task<ValidationResult<PaymenStatusResponseModel>> UpdatePaymentMethod(PaymentStatusUIRequestModel request);
-        Task<ValidationResult<BarrierModel>> ManipulateBarrier(BarrierModel request);
+        Task<ValidationResult<BarrierModel>> ManipulateBarrier(BarrierRequestModel request);
     }
 }

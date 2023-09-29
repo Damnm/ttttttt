@@ -12,6 +12,7 @@ using EPAY.ETC.Core.Models.Receipt.SessionReports;
 using EPAY.ETC.Core.Models.Request;
 using EPAY.ETC.Core.Models.Validation;
 using Microsoft.Extensions.Logging;
+using StackExchange.Redis;
 using System.Linq.Expressions;
 
 namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
@@ -22,16 +23,19 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
         private readonly IPaymentStatusRepository _paymentStatusRepository;
         private readonly IAppConfigRepository _appConfigRepository;
         private readonly ICustomVehicleTypeRepository _customVehicleTypeRepository;
+        private readonly IDatabase _redisDB;
 
         public UIActionService(ILogger<UIActionService> logger,
                                IPaymentStatusRepository paymentStatusRepository,
                                IAppConfigRepository appConfigRepository,
-                               ICustomVehicleTypeRepository customVehicleTypeRepository)
+                               ICustomVehicleTypeRepository customVehicleTypeRepository,
+                               IDatabase redisDB)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _paymentStatusRepository = paymentStatusRepository ?? throw new ArgumentNullException(nameof(paymentStatusRepository));
             _appConfigRepository = appConfigRepository ?? throw new ArgumentNullException(nameof(appConfigRepository));
-            _customVehicleTypeRepository = customVehicleTypeRepository;
+            _customVehicleTypeRepository = customVehicleTypeRepository ?? throw new ArgumentNullException(nameof(customVehicleTypeRepository));
+            _redisDB = redisDB ?? throw new ArgumentNullException(nameof(redisDB));
         }
 
         public Task CreateDataInput()
@@ -39,9 +43,24 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
             throw new NotImplementedException();
         }
 
-        public Task<ValidationResult<BarrierModel>> ManipulateBarrier(BarrierModel request)
+        public Task<ValidationResult<BarrierModel>> ManipulateBarrier(BarrierRequestModel request)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _logger.LogInformation($"Executing {nameof(UpdatePaymentMethod)} method...");
+
+                BarrierModel result = new BarrierModel()
+                {
+                    Action = (BarrierActionEnum)request.Action!
+                };
+
+                return Task.FromResult(ValidationResult.Success(result));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"An error occurred when calling {nameof(UpdatePaymentMethod)} method. Details: {ex.Message}. Stack trace: {ex.StackTrace}");
+                throw;
+            }
         }
 
         public async Task<ValidationResult<SessionReportModel>> PrintLaneSessionReport(SessionReportRequestModel request)
@@ -157,7 +176,31 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
 
         public Task<ValidationResult<PaymenStatusResponseModel>> UpdatePaymentMethod(PaymentStatusUIRequestModel request)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _logger.LogInformation($"Executing {nameof(UpdatePaymentMethod)} method...");
+
+                PaymenStatusResponseModel result = new PaymenStatusResponseModel()
+                {
+                    ObjectId = request.ObjectId ?? Guid.Empty,
+                    PaymentStatus = new PaymentStatusModel()
+                    {
+                        PaymentId = request.PaymentId,
+                        Amount = request.Amount,
+                        PaymentMethod = request.PaymentMethod,
+                        Status = request.Status,
+                        CreatedDate = DateTime.Now,
+                        PaymentDate = DateTime.Now
+                    }
+                };
+
+                return Task.FromResult(ValidationResult.Success(result));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"An error occurred when calling {nameof(UpdatePaymentMethod)} method. Details: {ex.Message}. Stack trace: {ex.StackTrace}");
+                throw;
+            }
         }
     }
 }

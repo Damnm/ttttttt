@@ -34,6 +34,7 @@ namespace EPAY.ETC.Core.API.Controllers.ETCCheckouts
         /// <returns></returns>
         [HttpPost("v1/etcCheckouts")]
         [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> AddAsync(ETCCheckoutAddUpdateRequestModel input)
@@ -44,9 +45,13 @@ namespace EPAY.ETC.Core.API.Controllers.ETCCheckouts
 
                 var result = await _service.AddAsync(input);
 
-                if (!result.Succeeded && result.Errors.Any(x => x.Code == StatusCodes.Status409Conflict))
+                if (!result.Succeeded)
                 {
-                    return Conflict(result);
+                    if (result.Errors.Any(x => x.Code == StatusCodes.Status409Conflict))
+                        return Conflict(result);
+
+                    if (result.Errors.Any(x => x.Code == StatusCodes.Status400BadRequest))
+                        return BadRequest(result);
                 }
 
                 return Created(nameof(AddAsync), result);
@@ -74,8 +79,9 @@ namespace EPAY.ETC.Core.API.Controllers.ETCCheckouts
         /// <returns></returns>
         [HttpPut("v1/etcCheckouts/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> UpdateAsync(Guid id, ETCCheckoutAddUpdateRequestModel input)
         {
@@ -92,6 +98,9 @@ namespace EPAY.ETC.Core.API.Controllers.ETCCheckouts
 
                     if (result.Errors.Any(x => x.Code == StatusCodes.Status404NotFound))
                         return NotFound(result);
+
+                    if (result.Errors.Any(x => x.Code == StatusCodes.Status400BadRequest))
+                        return BadRequest(result);
                 }
 
                 return Ok(result);

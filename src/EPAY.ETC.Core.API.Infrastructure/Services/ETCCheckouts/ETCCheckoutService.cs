@@ -2,6 +2,7 @@
 using EPAY.ETC.Core.API.Core.Interfaces.Services.ETCCheckouts;
 using EPAY.ETC.Core.API.Core.Models.ETCCheckOuts;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.ETCCheckouts;
+using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Payment;
 using EPAY.ETC.Core.Models.Request;
 using EPAY.ETC.Core.Models.Validation;
 using Microsoft.Extensions.Logging;
@@ -13,14 +14,19 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.ETCCheckouts
     {
         private readonly ILogger<ETCCheckoutService> _logger;
         private readonly IETCCheckoutRepository _repository;
+        private readonly IPaymentRepository _paymentRepository;
         private readonly IMapper _mapper;
 
         public ETCCheckoutService(
-            ILogger<ETCCheckoutService> logger, IETCCheckoutRepository repository, IMapper mapper)
+            ILogger<ETCCheckoutService> logger,
+            IETCCheckoutRepository repository,
+            IPaymentRepository paymentRepository,
+            IMapper mapper)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
-            _mapper = mapper;
+            _paymentRepository = paymentRepository ?? throw new ArgumentNullException(nameof(paymentRepository));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
         public async Task<ValidationResult<ETCCheckoutResponseModel>> AddAsync(ETCCheckoutAddUpdateRequestModel input)
@@ -29,12 +35,21 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.ETCCheckouts
             {
                 _logger.LogInformation($"Executing {nameof(AddAsync)} method...");
 
-                bool existRecord = await CheckExistsRecordByPaymentIdAndTransactionId(null, input.PaymentId, input.TransactionId);
+                bool existRecord = await CheckExistsRecordByPaymentIdAndTransactionId(null, input.TransactionId);
                 if (existRecord)
                 {
                     return ValidationResult.Failed<ETCCheckoutResponseModel>(new List<ValidationError>()
                     {
                         ValidationError.Conflict
+                    });
+                }
+
+                bool existPayment = await CheckExistsPaymentId(input.PaymentId);
+                if (!existPayment)
+                {
+                    return ValidationResult.Failed<ETCCheckoutResponseModel>(new List<ValidationError>()
+                    {
+                        new ValidationError("PaymentId không tồn tại trên hệ thống.", ValidationError.BadRequest.Code)
                     });
                 }
 
@@ -126,12 +141,21 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.ETCCheckouts
                     });
                 }
 
-                bool existRecord = await CheckExistsRecordByPaymentIdAndTransactionId(id, request.PaymentId, request.TransactionId);
+                bool existRecord = await CheckExistsRecordByPaymentIdAndTransactionId(id, request.TransactionId);
                 if (existRecord)
                 {
                     return ValidationResult.Failed<ETCCheckoutResponseModel>(new List<ValidationError>()
                     {
                         ValidationError.Conflict
+                    });
+                }
+
+                bool existPayment = await CheckExistsPaymentId(request.PaymentId);
+                if (!existPayment)
+                {
+                    return ValidationResult.Failed<ETCCheckoutResponseModel>(new List<ValidationError>()
+                    {
+                        new ValidationError("PaymentId không tồn tại trên hệ thống.", ValidationError.BadRequest.Code)
                     });
                 }
 
@@ -150,7 +174,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.ETCCheckouts
         }
 
         #region Private method
-        private async Task<bool> CheckExistsRecordByPaymentIdAndTransactionId(Guid? id, Guid paymentId, string transactionId)
+        private async Task<bool> CheckExistsRecordByPaymentIdAndTransactionId(Guid? id, string transactionId)
         {
             try
             {
@@ -165,6 +189,22 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.ETCCheckouts
             catch (Exception ex)
             {
                 _logger.LogError($"An error occurred when calling {nameof(CheckExistsRecordByPaymentIdAndTransactionId)} method. Details: {ex.Message}. Stack trace: {ex.StackTrace}");
+                throw;
+            }
+        }
+        private async Task<bool> CheckExistsPaymentId(Guid paymentId)
+        {
+            try
+            {
+                _logger.LogInformation($"Executing {nameof(CheckExistsPaymentId)} method...");
+
+                var result = await _paymentRepository.GetByIdAsync(paymentId);
+
+                return result != null;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"An error occurred when calling {nameof(CheckExistsPaymentId)} method. Details: {ex.Message}. Stack trace: {ex.StackTrace}");
                 throw;
             }
         }

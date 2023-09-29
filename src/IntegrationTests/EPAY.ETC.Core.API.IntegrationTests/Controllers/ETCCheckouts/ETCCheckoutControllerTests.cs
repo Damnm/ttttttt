@@ -1,6 +1,7 @@
 ﻿using EPAY.ETC.Core.API.Core.Models.Payment;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Context;
 using EPAY.ETC.Core.API.IntegrationTests.Common;
+using EPAY.ETC.Core.Models.Enums;
 using EPAY.ETC.Core.Models.Request;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
@@ -29,8 +30,8 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Controllers.ETCCheckouts
             PlateNumber = "Some Plate",
             Amount = 7000,
             RFID = "Some RFID",
-            ServiceProvider = Models.Enums.ETCServiceProviderEnum.VETC,
-            TransactionStatus = Models.Enums.TransactionStatusEnum.CheckOut
+            ServiceProvider = ETCServiceProviderEnum.VETC,
+            TransactionStatus = TransactionStatusEnum.CheckOut
         };
         #endregion
 

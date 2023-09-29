@@ -4,7 +4,9 @@ using EPAY.ETC.Core.API.Core.Models.Fees;
 using EPAY.ETC.Core.API.Core.Models.Fusion;
 using EPAY.ETC.Core.API.Core.Models.Vehicle;
 using EPAY.ETC.Core.API.Core.Utils;
+using EPAY.ETC.Core.API.Models.Configs;
 using EPAY.ETC.Core.Models.Request;
+using EPAY.ETC.Core.Publisher.Common.Options;
 using System.Diagnostics.CodeAnalysis;
 using CoreModel = EPAY.ETC.Core.Models.Fees;
 
@@ -88,6 +90,8 @@ namespace EPAY.ETC.Core.API.Mapping
                 .ForPath(e => e.PaymentStatus.PaymentId, act => act.MapFrom(src => src.PaymentId))
                 .ForPath(e => e.PaymentStatus.PaymentMethod, act => act.MapFrom(src => src.PaymentMethod))
                 .ForPath(e => e.PaymentStatus.Status, act => act.MapFrom(src => src.Status));
+
+            CreateMap<PublisherConfigurationOption, PublisherOptions>().ReverseMap();
         }
     }
 }
