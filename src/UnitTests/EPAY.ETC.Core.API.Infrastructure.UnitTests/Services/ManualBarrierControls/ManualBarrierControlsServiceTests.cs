@@ -34,16 +34,16 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.ManualBarrierContr
         };
         private ManualBarrierControlAddOrUpdateRequestModel updateRequest = new ManualBarrierControlAddOrUpdateRequestModel()
         {
-            EmployeeId = Guid.Parse("4512781e-4dc2-4ee3-acdd-a46becc08d6c"),
-            Action = ActionEnum.Open,
+            EmployeeId = "4512781e-4dc2-4ee3-acdd-a46becc08d6c",
+            Action = BarrierActionEnum.Open,
             LaneOutId = "0103"
         };
         private ManualBarrierControlModel? paymentStatus = new ManualBarrierControlModel()
         {
             Id = id,
             CreatedDate = DateTime.Now,
-            EmployeeId = Guid.Parse("4512781e-4dc2-4ee3-acdd-a46becc08d6c"),
-            Action = ActionEnum.Open,
+            EmployeeId = "4512781e-4dc2-4ee3-acdd-a46becc08d6c",
+            Action = BarrierActionEnum.Open,
             LaneOutId = "0103"
         };
         #endregion
