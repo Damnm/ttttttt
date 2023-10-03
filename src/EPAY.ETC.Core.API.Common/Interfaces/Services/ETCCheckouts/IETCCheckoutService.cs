@@ -12,5 +12,6 @@ namespace EPAY.ETC.Core.API.Core.Interfaces.Services.ETCCheckouts
         public Task<ValidationResult<IEnumerable<ETCCheckoutResponseModel>>> GetAllAsync(Expression<Func<ETCCheckoutDataModel, bool>>? expressison = null);
         public Task<ValidationResult<ETCCheckoutResponseModel>> UpdateAsync(Guid id, ETCCheckoutAddUpdateRequestModel request);
         public Task<ValidationResult<ETCCheckoutResponseModel?>> RemoveAsync(Guid id);
+        public Task<ValidationResult<ETCCheckoutFilterResultDto>> GetAllByConditionAsync(ETCCheckoutFilterModel? expressison = null);
     }
 }

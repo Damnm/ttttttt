@@ -527,5 +527,56 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.ETCCheckouts
             data?.Data.Should().BeNull();
         }
         #endregion
+
+        #region GetAllByConditionAsync
+        // 200
+        [Fact]
+        public async Task GivenRequestIsValid_WhenApiGetAllByConditionAsyncIsCalled_ThenReturnCorrectResult()
+        {
+            // Arrange
+            var response = ValidationResult.Success(new ETCCheckoutFilterResultDto() { Items = new List<ETCCheckoutResponseModel>() });
+            _etcCheckoutServiceMock.Setup(x => x.GetAllByConditionAsync(It.IsAny<ETCCheckoutFilterModel>())).ReturnsAsync(response);
+
+            // Act
+            var controller = new ETCCheckoutController(_loggerMock.Object, _etcCheckoutServiceMock.Object);
+            var actualResult = await controller.GetAllByConditionAsync();
+            var data = ((OkObjectResult)actualResult).Value as ValidationResult<IEnumerable<ETCCheckoutFilterResultDto>>;
+
+            // Assert
+            _etcCheckoutServiceMock.Verify(x => x.GetAllByConditionAsync(It.IsAny<ETCCheckoutFilterModel>()), Times.Once);
+
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(controller.GetAllByConditionAsync)}...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(controller.GetAllByConditionAsync)} method", Times.Never, _exception);
+
+            actualResult.Should().BeOfType<OkObjectResult>();
+            ((OkObjectResult)actualResult).StatusCode.Should().Be(StatusCodes.Status200OK);
+            data?.Succeeded.Should().BeTrue();
+            data?.Data.Should().NotBeNull().And.HaveCount(1);
+        }
+
+        // 500
+        [Fact]
+        public async Task GivenRequestIsValidAndETCCheckoutServiceIsDown_WhenApiGetAllByConditionAsyncIsCalled_ThenReturnInternalServerError()
+        {
+            // Arrange
+            _etcCheckoutServiceMock.Setup(x => x.GetAllByConditionAsync(It.IsAny<ETCCheckoutFilterModel>())).ThrowsAsync(new Exception("Some ex"));
+
+            // Act
+            var controller = new ETCCheckoutController(_loggerMock.Object, _etcCheckoutServiceMock.Object);
+            var actualResult = await controller.GetAllByConditionAsync();
+            var data = ((ObjectResult)actualResult).Value as ValidationResult<ETCCheckoutFilterResultDto>;
+
+            // Assert
+            _etcCheckoutServiceMock.Verify(x => x.GetAllByConditionAsync(It.IsAny<ETCCheckoutFilterModel>()), Times.Once);
+
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(controller.GetAllByConditionAsync)}...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(controller.GetAllByConditionAsync)} method", Times.Once, _exception);
+
+            actualResult.Should().BeOfType<ObjectResult>();
+            ((ObjectResult)actualResult).StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+            data?.Succeeded.Should().BeFalse();
+            data?.Data.Should().BeNull();
+        }
+        #endregion
     }
 }

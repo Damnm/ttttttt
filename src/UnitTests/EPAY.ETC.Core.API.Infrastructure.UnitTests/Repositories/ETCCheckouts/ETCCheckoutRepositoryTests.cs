@@ -4,6 +4,7 @@ using EPAY.ETC.Core.API.Infrastructure.Persistence.Context;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.ETCCheckouts;
 using EPAY.ETC.Core.API.Infrastructure.UnitTests.Helpers;
 using EPAY.ETC.Core.Models.Enums;
+using EPAY.ETC.Core.Models.Request;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -273,6 +274,47 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.ETCCheckouts
             _dbContextMock.Verify(x => x.ETCCheckOuts, Times.Once);
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(repository.RemoveAsync)} method...", Times.Once, _exception);
             _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(repository.RemoveAsync)} method", Times.Once, _exception);
+        }
+        #endregion
+
+        #region GetAllByConditionAsync
+        [Fact]
+        public async void GivenRequestIsValid_WhenGetAllByConditionAsyncIsCalled_ThenReturnCorrectResult()
+        {
+            // Arrange
+            var data = entities.FirstOrDefault()!;
+            _dbSetMock = EFTestHelper.GetMockDbSet(entities);
+            _dbContextMock.Setup(x => x.ETCCheckOuts).Returns(_dbSetMock.Object);
+
+            // Act
+            var repository = new ETCCheckoutRepository(_loggerMock.Object, _dbContextMock.Object);
+            var result = await repository.GetAllByConditionAsync(It.IsAny<ETCCheckoutFilterModel>());
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Items.First().Should().BeEquivalentTo(data);
+            result.TotalItems.Should().Be(1);
+            _dbContextMock.Verify(x => x.ETCCheckOuts, Times.Once);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(repository.GetAllByConditionAsync)} method...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(repository.GetAllByConditionAsync)} method", Times.Never, _exception);
+        }
+
+        [Fact]
+        public async Task GivenRequestIsValidAndDBContextIsDown_WhenGetAllByConditionAsyncIsCalled_ThenThrowETCEPAYCoreAPIException()
+        {
+            // Arrange
+            var someEx = new ETCEPAYCoreAPIException(99, "Some exception");
+            _dbContextMock.Setup(x => x.ETCCheckOuts).Throws(someEx);
+
+            // Act
+            var repository = new ETCCheckoutRepository(_loggerMock.Object, _dbContextMock.Object);
+            Func<Task> func = async () => await repository.GetAllByConditionAsync(It.IsAny<ETCCheckoutFilterModel>());
+
+            // Assert
+            var ex = await Assert.ThrowsAsync<ETCEPAYCoreAPIException>(func);
+            _dbContextMock.Verify(x => x.ETCCheckOuts, Times.Once);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(repository.GetAllByConditionAsync)} method...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(repository.GetAllByConditionAsync)} method", Times.Once, _exception);
         }
         #endregion
     }

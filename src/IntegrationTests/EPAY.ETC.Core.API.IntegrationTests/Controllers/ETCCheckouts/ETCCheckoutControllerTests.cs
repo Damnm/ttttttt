@@ -263,6 +263,31 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Controllers.ETCCheckouts
         }
         #endregion
 
+        #region GetAllAsync
+        [Fact, Order(6)]
+        public async Task GivenValidRequest_WhenApiGetAllByConditionAsyncIsCalled_ThenReturnCorrectResult()
+        {
+            // Arrange
+            HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", JWTToken);
+
+            // Act
+            var result = await HttpClient.GetAsync($"/api/ETCCheckout/v1/etcCheckouts/advance-filter");
+            var content = await result.Content.ReadAsStringAsync();
+
+            var reports = JsonNode.Parse(content);
+            var count = reports?["data"]?["items"]?.AsArray().Count();
+            var successful = reports?["succeeded"]?.AsValue();
+            var totalItems = reports?["data"]?["totalItems"]?.AsValue();
+
+            // Assert
+            result.StatusCode.Should().Be(HttpStatusCode.OK);
+            content.Should().NotBeEmpty();
+            successful?.GetValue<bool>().Should().BeTrue();
+            totalItems?.GetValue<double>().Should().BeGreaterThanOrEqualTo(2);
+            count.Should().BeGreaterThanOrEqualTo(2);
+        }
+        #endregion
+
         #region GetByIdAsync
         [Fact, Order(6)]
         public async Task GivenValidRequest_WhenApiGetByIdAsyncIsCalled_ThenReturnCorrectResult()

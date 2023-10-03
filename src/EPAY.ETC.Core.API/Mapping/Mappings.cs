@@ -85,7 +85,28 @@ namespace EPAY.ETC.Core.API.Mapping
                 .ForPath(e => e.LaneOutVehicle.VehicleInfo.PlateNumber, act => act.MapFrom(src => src.PlateNumber));
 
             CreateMap<ETCCheckoutAddUpdateRequestModel, ETCCheckoutDataModel>().ReverseMap();
-            CreateMap<ETCCheckoutResponseModel, ETCCheckoutDataModel>().ReverseMap();
+            CreateMap<ETCCheckoutResponseModel, ETCCheckoutDataModel>();
+            CreateMap<ETCCheckoutDataModel, ETCCheckoutResponseModel>()
+                .ForPath(e => e.Payment.PaymentId, act => act.MapFrom(src => src.PaymentId))
+                .ForPath(e => e.Payment.FeeId, act => act.MapFrom(src => src.Payment.FeeId))
+                .ForPath(e => e.Payment.CreatedDate, act => act.MapFrom(src => src.Payment.CreatedDate))
+                .ForPath(e => e.Payment.LaneInId, act => act.MapFrom(src => src.Payment.LaneInId))
+                .ForPath(e => e.Payment.LaneOutId, act => act.MapFrom(src => src.Payment.LaneOutId))
+                .ForPath(e => e.Payment.Duration, act => act.MapFrom(src => src.Payment.Duration))
+                .ForPath(e => e.Payment.RFID, act => act.MapFrom(src => src.Payment.RFID))
+                .ForPath(e => e.Payment.Make, act => act.MapFrom(src => src.Payment.Make))
+                .ForPath(e => e.Payment.Model, act => act.MapFrom(src => src.Payment.Model))
+                .ForPath(e => e.Payment.PlateNumber, act => act.MapFrom(src => src.Payment.PlateNumber))
+                .ForPath(e => e.Payment.VehicleTypeId, act => act.MapFrom(src => src.Payment.VehicleTypeId))
+                .ForPath(e => e.Payment.Amount, act => act.MapFrom(src => src.Payment.Amount))
+                .ForPath(e => e.Payment.Currency, act => act.MapFrom(src => src.Payment.PaymentStatuses.FirstOrDefault().Currency))
+                .ForPath(e => e.Payment.TicketTypeId, act => act.MapFrom(src => src.Payment.Fee.TicketTypeId))
+                .ForPath(e => e.Payment.TicketId, act => act.MapFrom(src => src.Payment.Fee.TicketId))
+                .ForPath(e => e.Payment.VehicleCategoryId, act => act.MapFrom(src => src.Payment.Fee.VehicleCategoryId))
+                .ForPath(e => e.Payment.CustomVehicleTypeId, act => act.MapFrom(src => src.Payment.CustomVehicleTypeId))
+                .ForPath(e => e.Payment.CheckInTime, act => act.MapFrom(src => src.Payment.Fee.LaneInEpoch))
+                .ForPath(e => e.Payment.CheckOutTime, act => act.MapFrom(src => src.Payment.Fee.LaneOutDate))
+                .ForPath(e => e.Payment.ObjectId, act => act.MapFrom(src => src.Payment.Fee.ObjectId));
 
             CreateMap<PaymentStatusUIRequestModel, CoreModel.PaymenStatusResponseModel>()
                 .ForPath(e => e.PaymentStatus.Amount, act => act.MapFrom(src => src.Amount))
