@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EPAY.ETC.Core.API.Core.Models.Vehicle.ReconcileVehicle
 {
-    public class VehicleModel
+    public class ReconcileVehicleModel
     {
         public string? PlateNumber { get; set; }    
         public string? RFID { get; set; }

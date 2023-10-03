@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EPAY.ETC.Core.API.Core.Models.Vehicle.ReconcileVehicle
 {
-    public class PaymentModel
+    public class ReconcilePaymentModel
     {
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public PaymentMethodEnum PaymentMethod { get; set; }

@@ -5,7 +5,7 @@
         public Guid? ObjectId { get; set; }
         public string? EmployeeId { get; set; }
         
-        public VehicleModel? Vehicle { get; set; }  
-        public PaymentModel? Payment { get; set; }
+        public ReconcileVehicleModel? Vehicle { get; set; }  
+        public ReconcilePaymentModel? Payment { get; set; }
     }
 }
