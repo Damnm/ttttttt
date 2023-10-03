@@ -9,7 +9,7 @@ using System.Linq.Expressions;
 using XUnitPriorityOrderer;
 using CoreModel = EPAY.ETC.Core.Models.Fees;
 
-namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Services.Fees
+namespace EPAY.ETC.Core.API.IntegrationTests.Services.Fees
 {
     [TestCaseOrderer(CasePriorityOrderer.TypeName, CasePriorityOrderer.AssembyName)]
     public class FeeServiceTests : IntegrationTestBase

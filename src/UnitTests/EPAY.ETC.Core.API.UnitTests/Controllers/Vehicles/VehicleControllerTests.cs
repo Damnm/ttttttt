@@ -144,13 +144,13 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Vehicles
             ((OkObjectResult)actualResult).StatusCode.Should().Be(StatusCodes.Status200OK);
             data?.Succeeded.Should().BeTrue();
             data?.Data.Should().NotBeNull();
-            data?.Data.PlateNumber.Should().Be(responseMock.Data.PlateNumber);
-            data?.Data.PlateColor.Should().Be(responseMock.Data.PlateColor);
-            data?.Data.RFID.Should().Be(responseMock.Data.RFID);
-            data?.Data.Make.Should().Be(responseMock.Data.Make);
-            data?.Data.Seat.Should().Be(responseMock.Data.Seat);
-            data?.Data.VehicleType.Should().Be(responseMock.Data.VehicleType);
-            data?.Data.Weight.Should().Be(responseMock.Data.Weight);
+            data?.Data?.PlateNumber.Should().Be(responseMock.Data?.PlateNumber);
+            data?.Data?.PlateColor.Should().Be(responseMock.Data?.PlateColor);
+            data?.Data?.RFID.Should().Be(responseMock.Data?.RFID);
+            data?.Data?.Make.Should().Be(responseMock.Data?.Make);
+            data?.Data?.Seat.Should().Be(responseMock.Data?.Seat);
+            data?.Data?.VehicleType.Should().Be(responseMock.Data?.VehicleType);
+            data?.Data?.Weight.Should().Be(responseMock.Data?.Weight);
 
         }
         [Fact]
@@ -297,14 +297,14 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Vehicles
             actualResult.Should().BeOfType<OkObjectResult>();
             ((ObjectResult)actualResult).StatusCode.Should().Be(StatusCodes.Status200OK);
             data?.Succeeded.Should().BeTrue();
-            data?.Data.Should().NotBeNull();
-            data?.Data.PlateNumber.Should().Be(responseMock.Data.PlateNumber);
-            data?.Data.PlateColor.Should().Be(responseMock.Data.PlateColor);
-            data?.Data.RFID.Should().Be(responseMock.Data.RFID);
-            data?.Data.Make.Should().Be(responseMock.Data.Make);
-            data?.Data.Seat.Should().Be(responseMock.Data.Seat);
-            data?.Data.VehicleType.Should().Be(responseMock.Data.VehicleType);
-            data?.Data.Weight.Should().Be(responseMock.Data.Weight);
+            data?.Data?.Should().NotBeNull();
+            data?.Data?.PlateNumber.Should().Be(responseMock.Data?.PlateNumber);
+            data?.Data?.PlateColor.Should().Be(responseMock.Data?.PlateColor);
+            data?.Data?.RFID.Should().Be(responseMock.Data?.RFID);
+            data?.Data?.Make.Should().Be(responseMock.Data?.Make);
+            data?.Data?.Seat.Should().Be(responseMock.Data?.Seat);
+            data?.Data?.VehicleType.Should().Be(responseMock.Data?.VehicleType);
+            data?.Data?.Weight.Should().Be(responseMock.Data?.Weight);
         }
         // Unhappy case 400
         [Fact]

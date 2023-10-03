@@ -85,15 +85,15 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Fusions
             ((ObjectResult)actualResult).StatusCode.Should().Be(StatusCodes.Status201Created);
             data?.Succeeded.Should().BeTrue();
             data?.Data.Should().NotBeNull();
-            data?.Data.Epoch.Should().Be(addRequestMock.Epoch);
-            data?.Data.Loop1.Should().Be(addRequestMock.Loop1);
-            data?.Data.RFID.Should().Be(addRequestMock.RFID);
-            data?.Data.Cam1.Should().Be(addRequestMock.Cam1);
-            data?.Data.Loop2.Should().Be(addRequestMock.Loop2);
-            data?.Data.Cam2.Should().Be(addRequestMock.Cam2);
-            data?.Data.Loop3.Should().Be(addRequestMock.Loop3);
-            data?.Data.ReversedLoop1.Should().Be(addRequestMock.ReversedLoop1);
-            data?.Data.ReversedLoop2.Should().Be(addRequestMock.ReversedLoop2);
+            data?.Data?.Epoch.Should().Be(addRequestMock.Epoch);
+            data?.Data?.Loop1.Should().Be(addRequestMock.Loop1);
+            data?.Data?.RFID.Should().Be(addRequestMock.RFID);
+            data?.Data?.Cam1.Should().Be(addRequestMock.Cam1);
+            data?.Data?.Loop2.Should().Be(addRequestMock.Loop2);
+            data?.Data?.Cam2.Should().Be(addRequestMock.Cam2);
+            data?.Data?.Loop3.Should().Be(addRequestMock.Loop3);
+            data?.Data?.ReversedLoop1.Should().Be(addRequestMock.ReversedLoop1);
+            data?.Data?.ReversedLoop2.Should().Be(addRequestMock.ReversedLoop2);
         }
         // Unhappy case 400
         [Fact]
@@ -137,15 +137,15 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Fusions
             ((OkObjectResult)actualResult).StatusCode.Should().Be(StatusCodes.Status200OK);
             data?.Succeeded.Should().BeTrue();
             data?.Data.Should().NotBeNull();
-            data?.Data.Epoch.Should().Be(updateRequestMock.Epoch);
-            data?.Data.Loop1.Should().Be(updateRequestMock.Loop1);
-            data?.Data.RFID.Should().Be(updateRequestMock.RFID);
-            data?.Data.Cam1.Should().Be(updateRequestMock.Cam1);
-            data?.Data.Loop2.Should().Be(updateRequestMock.Loop2);
-            data?.Data.Cam2.Should().Be(updateRequestMock.Cam2);
-            data?.Data.Loop3.Should().Be(updateRequestMock.Loop3);
-            data?.Data.ReversedLoop1.Should().Be(updateRequestMock.ReversedLoop1);
-            data?.Data.ReversedLoop2.Should().Be(updateRequestMock.ReversedLoop2);
+            data?.Data?.Epoch.Should().Be(updateRequestMock.Epoch);
+            data?.Data?.Loop1.Should().Be(updateRequestMock.Loop1);
+            data?.Data?.RFID.Should().Be(updateRequestMock.RFID);
+            data?.Data?.Cam1.Should().Be(updateRequestMock.Cam1);
+            data?.Data?.Loop2.Should().Be(updateRequestMock.Loop2);
+            data?.Data?.Cam2.Should().Be(updateRequestMock.Cam2);
+            data?.Data?.Loop3.Should().Be(updateRequestMock.Loop3);
+            data?.Data?.ReversedLoop1.Should().Be(updateRequestMock.ReversedLoop1);
+            data?.Data?.ReversedLoop2.Should().Be(updateRequestMock.ReversedLoop2);
 
         }
         [Fact]
@@ -292,15 +292,15 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Fusions
             ((ObjectResult)actualResult).StatusCode.Should().Be(StatusCodes.Status200OK);
             data?.Succeeded.Should().BeTrue();
             data?.Data.Should().NotBeNull();
-            data?.Data.Epoch.Should().Be(addRequestMock.Epoch);
-            data?.Data.Loop1.Should().Be(addRequestMock.Loop1);
-            data?.Data.RFID.Should().Be(addRequestMock.RFID);
-            data?.Data.Cam1.Should().Be(addRequestMock.Cam1);
-            data?.Data.Loop2.Should().Be(addRequestMock.Loop2);
-            data?.Data.Cam2.Should().Be(addRequestMock.Cam2);
-            data?.Data.Loop3.Should().Be(addRequestMock.Loop3);
-            data?.Data.ReversedLoop1.Should().Be(addRequestMock.ReversedLoop1);
-            data?.Data.ReversedLoop2.Should().Be(addRequestMock.ReversedLoop2);
+            data?.Data?.Epoch.Should().Be(addRequestMock.Epoch);
+            data?.Data?.Loop1.Should().Be(addRequestMock.Loop1);
+            data?.Data?.RFID.Should().Be(addRequestMock.RFID);
+            data?.Data?.Cam1.Should().Be(addRequestMock.Cam1);
+            data?.Data?.Loop2.Should().Be(addRequestMock.Loop2);
+            data?.Data?.Cam2.Should().Be(addRequestMock.Cam2);
+            data?.Data?.Loop3.Should().Be(addRequestMock.Loop3);
+            data?.Data?.ReversedLoop1.Should().Be(addRequestMock.ReversedLoop1);
+            data?.Data?.ReversedLoop2.Should().Be(addRequestMock.ReversedLoop2);
         }
 
         // Unhappy case 400

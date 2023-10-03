@@ -6,7 +6,7 @@ using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using XUnitPriorityOrderer;
 
-namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Services.Fusions
+namespace EPAY.ETC.Core.API.IntegrationTests.Services.Fusions
 {
     [TestCaseOrderer(CasePriorityOrderer.TypeName, CasePriorityOrderer.AssembyName)]
     public class FusionServiceTests : IntegrationTestBase
@@ -60,7 +60,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Services.Fusions
             result.Succeeded.Should().BeTrue();
             expected.Should().NotBeNull();
             expected.Succeeded.Should().BeTrue();
-            result.Data?.Id.Should().Be((Guid)expected!.Data!.Id);
+            result.Data?.Id.Should().Be(expected!.Data!.Id);
             result.Data?.CreatedDate.Should().Be(expected!.Data!.CreatedDate);
             result.Data?.Epoch.Should().Be(expected!.Data!.Epoch);
             result.Data?.Loop1.Should().Be(expected!.Data!.Loop1);
@@ -170,7 +170,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Services.Fusions
             result.Succeeded.Should().BeTrue();
             expected.Should().NotBeNull();
             expected.Succeeded.Should().BeTrue();
-            result.Data?.Id.Should().Be((Guid)expected!.Data!.Id);
+            result.Data?.Id.Should().Be(expected!.Data!.Id);
             result.Data?.Epoch.Should().Be(expected!.Data!.Epoch);
             result.Data?.Loop1.Should().Be(expected!.Data!.Loop1);
             result.Data?.RFID.Should().Be(expected!.Data!.RFID);

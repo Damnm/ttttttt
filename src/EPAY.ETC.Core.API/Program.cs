@@ -1,9 +1,13 @@
 using EPAY.ETC.Core.API.Filters;
 using EPAY.ETC.Core.API.Infrastructure.Persistence;
+using EPAY.ETC.Core.API.Models.Configs;
+using EPAY.ETC.Core.Publisher.DependencyInjectionExtensions;
+using EPAY.ETC.Core.RabbitMQ.DependencyInjectionExtensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 using NLog;
 using NLog.Web;
+using StackExchange.Redis;
 using System.Reflection;
 using System.Text.Json.Serialization;
 
@@ -14,6 +18,9 @@ ConfigurationManager config = builder.Configuration;
 //builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 //    .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
 
+
+// Config IOptions
+builder.Services.Configure<List<PublisherConfigurationOption>>(builder.Configuration.GetSection("PublisherConfigurations"));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -87,6 +94,15 @@ builder.Logging.ClearProviders();
 builder.Logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
 builder.Host.UseNLog();
 builder.Services.AddInfrastructure(config);
+
+// RabbitMQ: Setup RabbitMQ for Dependency injection
+builder.Services
+    .AddRabbitMQCore(builder.Configuration)
+    .AddRabbitMQPublisher();
+
+// Init instance Redis
+var multiplexer = ConnectionMultiplexer.Connect(builder.Configuration.GetSection("RedisSettings").GetValue<string>("ConnectionString") ?? "localhost:6379");
+builder.Services.AddSingleton(multiplexer.GetDatabase(builder.Configuration.GetSection("RedisSettings").GetValue<int?>("db") ?? -1));
 
 var app = builder.Build();
 

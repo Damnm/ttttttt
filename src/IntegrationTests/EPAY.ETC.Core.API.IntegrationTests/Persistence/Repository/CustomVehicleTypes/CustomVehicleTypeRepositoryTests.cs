@@ -1,6 +1,7 @@
 ﻿using EPAY.ETC.Core.API.Core.Models.CustomVehicleTypes;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.CustomVehicleTypes;
 using EPAY.ETC.Core.API.IntegrationTests.Common;
+using EPAY.ETC.Core.Models.Enums;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq.Expressions;
@@ -38,7 +39,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Repository.CustomVehicl
             _repository = scope.ServiceProvider.GetRequiredService<ICustomVehicleTypeRepository>();
 
             // Arrange
-            Expression<Func<CustomVehicleTypeModel, bool>> expression = s => s.Name == Models.Enums.CustomVehicleTypeEnum.Type1;
+            Expression<Func<CustomVehicleTypeModel, bool>> expression = s => s.Name == CustomVehicleTypeEnum.Type1;
 
             // Act
             var result = await _repository.GetAllAsync(expression);

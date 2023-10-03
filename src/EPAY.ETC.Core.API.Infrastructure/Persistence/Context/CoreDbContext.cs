@@ -1,10 +1,14 @@
 ﻿using EPAY.ETC.Core.API.Core.Extensions;
+using EPAY.ETC.Core.API.Core.Models.Configs;
 using EPAY.ETC.Core.API.Core.Models.CustomVehicleTypes;
-using EPAY.ETC.Core.API.Core.Models.Enum;
+using EPAY.ETC.Core.API.Core.Models.ETCCheckOuts;
 using EPAY.ETC.Core.API.Core.Models.Fees;
 using EPAY.ETC.Core.API.Core.Models.FeeTypes;
 using EPAY.ETC.Core.API.Core.Models.FeeVehicleCategories;
 using EPAY.ETC.Core.API.Core.Models.Fusion;
+using EPAY.ETC.Core.API.Core.Models.ManualBarrierControl;
+using EPAY.ETC.Core.API.Core.Models.Payment;
+using EPAY.ETC.Core.API.Core.Models.PaymentStatus;
 using EPAY.ETC.Core.API.Core.Models.TimeBlockFees;
 using EPAY.ETC.Core.API.Core.Models.Transaction;
 using EPAY.ETC.Core.API.Core.Models.TransactionLog;
@@ -15,6 +19,7 @@ using EPAY.ETC.Core.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System.Diagnostics.CodeAnalysis;
+using FeeTypeEnum = EPAY.ETC.Core.API.Core.Models.Enum.FeeTypeEnum;
 
 namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
 {
@@ -41,8 +46,12 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
         public virtual DbSet<TimeBlockFeeFormulaModel> TimeBlockFeeFormulas { get; set; }
         public virtual DbSet<FeeVehicleCategoryModel> FeeVehicleCategories { get; set; }
         public virtual DbSet<FeeModel> Fees { get; set; }
-        public virtual DbSet<Core.Models.PaymentStatus.PaymentStatusModel> PaymentStatuses { get; set; }
-        public virtual DbSet<Core.Models.Payment.PaymentModel> Payments{ get; set; }
+        public virtual DbSet<PaymentStatusModel> PaymentStatuses { get; set; }
+        public virtual DbSet<PaymentModel> Payments { get; set; }
+        public virtual DbSet<ETCCheckoutDataModel> ETCCheckOuts { get; set; }
+        public virtual DbSet<AppConfigModel> AppConfigs { get; set; }
+        public virtual DbSet<ManualBarrierControlModel> ManualBarrierControls { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -547,30 +556,77 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
             #endregion
 
             #region PaymentStatus configuration
-            modelBuilder.Entity<Core.Models.PaymentStatus.PaymentStatusModel>().HasKey(x => x.Id);
-            modelBuilder.Entity<Core.Models.PaymentStatus.PaymentStatusModel>()
+            modelBuilder.Entity<PaymentStatusModel>().HasKey(x => x.Id);
+            modelBuilder.Entity<PaymentStatusModel>()
                 .HasOne(x => x.Payment)
                 .WithMany(x => x.PaymentStatuses)
                 .HasForeignKey(x => x.PaymentId);
-            modelBuilder.Entity<Core.Models.PaymentStatus.PaymentStatusModel>().HasIndex(x => x.PaymentId);
-            modelBuilder.Entity<Core.Models.PaymentStatus.PaymentStatusModel>().HasIndex(x => x.PaymentReferenceId);
-            modelBuilder.Entity<Core.Models.PaymentStatus.PaymentStatusModel>()
+            modelBuilder.Entity<PaymentStatusModel>().HasIndex(x => x.PaymentId);
+            modelBuilder.Entity<PaymentStatusModel>().HasIndex(x => x.TransactionId);
+            modelBuilder.Entity<PaymentStatusModel>()
                .Property(x => x.PaymentMethod)
                .HasMaxLength(50)
                .HasConversion(new EnumToStringConverter<PaymentMethodEnum>());
-            modelBuilder.Entity<Core.Models.PaymentStatus.PaymentStatusModel>()
+            modelBuilder.Entity<PaymentStatusModel>()
                .Property(x => x.Status)
                .HasMaxLength(50)
                .HasConversion(new EnumToStringConverter<PaymentStatusEnum>());
             #endregion
 
             #region Payment configuration
-            modelBuilder.Entity<Core.Models.Payment.PaymentModel>().HasKey(x => x.Id);
-            modelBuilder.Entity<Core.Models.Payment.PaymentModel>().HasIndex(x => x.FeeId);
-            modelBuilder.Entity<Core.Models.Payment.PaymentModel>().HasIndex(x => x.LaneInId);
-            modelBuilder.Entity<Core.Models.Payment.PaymentModel>().HasIndex(x => x.LaneOutId);
-            modelBuilder.Entity<Core.Models.Payment.PaymentModel>().HasIndex(x => x.RFID);
-            modelBuilder.Entity<Core.Models.Payment.PaymentModel>().HasIndex(x => x.PlateNumber);
+            modelBuilder.Entity<PaymentModel>().HasKey(x => x.Id);
+            modelBuilder.Entity<PaymentModel>().HasIndex(x => x.FeeId);
+            modelBuilder.Entity<PaymentModel>().HasIndex(x => x.LaneInId);
+            modelBuilder.Entity<PaymentModel>().HasIndex(x => x.LaneOutId);
+            modelBuilder.Entity<PaymentModel>().HasIndex(x => x.RFID);
+            modelBuilder.Entity<PaymentModel>().HasIndex(x => x.PlateNumber);
+            modelBuilder.Entity<PaymentModel>()
+                .HasOne(x => x.CustomVehicleType)
+                .WithMany(x => x.Payments)
+                .HasForeignKey(x => x.CustomVehicleTypeId);
+            modelBuilder.Entity<PaymentModel>()
+                .HasOne(x => x.Fee)
+                .WithMany(x => x.Payments)
+                .HasForeignKey(x => x.FeeId);
+            #endregion
+
+            #region ETCCheckout configuration
+            modelBuilder.Entity<ETCCheckoutDataModel>().HasKey(x => x.Id);
+            modelBuilder.Entity<ETCCheckoutDataModel>()
+                .HasOne(x => x.Payment)
+                .WithMany(x => x.ETCCheckOuts)
+                .HasForeignKey(x => x.PaymentId);
+            modelBuilder.Entity<ETCCheckoutDataModel>().HasIndex(x => x.PaymentId);
+            modelBuilder.Entity<ETCCheckoutDataModel>().HasIndex(x => x.TransactionId);
+            modelBuilder.Entity<ETCCheckoutDataModel>().HasIndex("TransactionId", "RFID", "PlateNumber");
+            modelBuilder.Entity<ETCCheckoutDataModel>()
+               .Property(x => x.ServiceProvider)
+               .HasMaxLength(50)
+               .HasConversion(new EnumToStringConverter<ETCServiceProviderEnum>());
+            modelBuilder.Entity<ETCCheckoutDataModel>()
+               .Property(x => x.TransactionStatus)
+               .HasMaxLength(50)
+               .HasConversion(new EnumToStringConverter<TransactionStatusEnum>());
+            #endregion
+
+            #region AppConfig configuration
+            modelBuilder.Entity<AppConfigModel>().HasIndex(x => x.IsApply);
+
+            modelBuilder.Entity<AppConfigModel>().HasData(
+                new AppConfigModel()
+                {
+                    Id = new Guid("2C0F4A72-0C59-4A76-A379-4BE0BC5EBD08"),
+                    CreatedDate = new DateTime(2023, 9, 27, 7, 34, 46, 0),
+                    AppName = "Default app config",
+                    IsApply = true,
+                    HeaderHeading = "Cảng hàng không quốc tế Tân Sơn Nhất",
+                    HeaderSubHeading = "CN tổng Công ty hàng không việt - CTCP",
+                    HeaderLine1 = "ĐC: 58 Trường Sơn, Phường 2, Quận Tân Bình, TP. HCM",
+                    HeaderLine2 = "ĐT: 123456789 MST: 0312451145112",
+                    FooterLine1 = "TP HCM, ",
+                    FooterLine2 = "Người nộp",
+                    StationCode = "03"
+                });
             #endregion
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

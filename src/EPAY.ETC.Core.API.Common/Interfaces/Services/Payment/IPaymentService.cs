@@ -11,3 +11,4 @@ namespace EPAY.ETC.Core.API.Core.Interfaces.Services.Payment
         public Task<ValidationResult<Models.Payment.PaymentModel>> RemoveAsync(Guid id);
     }
 }
+ 

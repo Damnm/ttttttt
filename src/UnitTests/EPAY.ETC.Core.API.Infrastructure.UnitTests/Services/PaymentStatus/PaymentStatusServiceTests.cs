@@ -2,6 +2,7 @@
 using EPAY.ETC.Core.API.Infrastructure.Services.PaymentStatus;
 using EPAY.ETC.Core.API.Infrastructure.UnitTests.Common;
 using EPAY.ETC.Core.API.Infrastructure.UnitTests.Helpers;
+using EPAY.ETC.Core.Models.Enums;
 using EPAY.ETC.Core.Models.Request;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
@@ -22,14 +23,14 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.PaymentStatus
             PaymentId = Guid.NewGuid(),
             Amount = 300,
             Currency = "vnd",
-            PaymentMethod = Models.Enums.PaymentMethodEnum.RFID,
+            PaymentMethod = PaymentMethodEnum.RFID,
         };
         private PaymentStatusUpdateRequestModel updateRequest = new PaymentStatusUpdateRequestModel()
         {
             PaymentId = Guid.NewGuid(),
             Amount = 300,
             Currency = "vnd",
-            PaymentMethod = Models.Enums.PaymentMethodEnum.RFID,
+            PaymentMethod = PaymentMethodEnum.RFID,
         };
         private PaymentStatusModel? paymentStatus = new PaymentStatusModel()
         {
@@ -37,7 +38,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.PaymentStatus
             PaymentId = Guid.NewGuid(),
             Amount = 300,
             Currency = "vnd",
-            PaymentMethod = Models.Enums.PaymentMethodEnum.RFID,
+            PaymentMethod = PaymentMethodEnum.RFID,
         };
         #endregion
 

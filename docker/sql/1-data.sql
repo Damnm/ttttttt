@@ -63,3 +63,8 @@ INSERT INTO public."Vehicles" ("Id", "RFID", "PlateNumber", "PlateColor", "Make"
 INSERT INTO public."Vehicles" ("Id", "RFID", "PlateNumber", "PlateColor", "Make", "Seat", "Weight", "VehicleType", "CreatedDate") VALUES ('3d21ec09-f271-4183-b691-477274f4d547', '12s4adsvsad', '12A12345', 'blue', 'Toyota', 5, 5000, 'Loai 1', NULL);
 INSERT INTO public."Vehicles" ("Id", "RFID", "PlateNumber", "PlateColor", "Make", "Seat", "Weight", "VehicleType", "CreatedDate") VALUES ('a18081f7-5706-499d-acf9-680d5f13502e', '12s4adsvsad', '12A12345', 'blue', 'Toyota', 5, 5000, 'Loai 1', NULL);
 INSERT INTO public."Vehicles" ("Id", "RFID", "PlateNumber", "PlateColor", "Make", "Seat", "Weight", "VehicleType", "CreatedDate") VALUES ('8fd84949-94b8-4607-856d-b38564fe7bac', '123asdas48v6aaswd', '12A123456', 'White', 'Toyotra', 5, 5000, 'Loai 2', '2023-09-13 10:11:58.84279+07');
+
+
+INSERT INTO public."AppConfig" ("Id", "IsApply", "AppName", "HeaderHeading", "HeaderSubHeading", "HeaderLine1", "HeaderLine2", "FooterLine1", "FooterLine2", "CreatedDate", "StationCode") VALUES ('2c0f4a72-0c59-4a76-a379-4be0bc5ebd08', true, 'Default app config', 'Cảng hàng không quốc tế Tân Sơn Nhất', 'CN tổng Công ty hàng không việt - CTCP', 'ĐC: 58 Trường Sơn, Phường 2, Quận Tân Bình, TP. HCM', 'ĐT: 123456789 MST: 0312451145112', 'TP HCM, ', 'Người nộp', '2023-09-27 13:55:24.173983', '03');
+
+

@@ -1,9 +1,10 @@
 ﻿using EPAY.ETC.Core.API.Core.Exceptions;
-using EPAY.ETC.Core.API.Core.Models.Fusion;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Context;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PaymentStatus;
 using EPAY.ETC.Core.API.Infrastructure.UnitTests.Common;
 using EPAY.ETC.Core.API.Infrastructure.UnitTests.Helpers;
+using EPAY.ETC.Core.Models.Enums;
+using EPAY.ETC.Core.Models.Receipt.SessionReports;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -27,14 +28,14 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.PaymentStatus
                 PaymentId = Guid.NewGuid(),
                 Amount = 300,
                 Currency ="vnd",
-                PaymentMethod = Models.Enums.PaymentMethodEnum.RFID,
-                
+                PaymentMethod = PaymentMethodEnum.RFID,
+
             }
         };
         #endregion
         #region AddAsync
         [Fact]
-        public  void GivenValidRequestAndData_WhenAddAsyncIsCalled_ThenReturnCorrectResult()
+        public void GivenValidRequestAndData_WhenAddAsyncIsCalled_ThenReturnCorrectResult()
         {
             // Arrange
             var data = paymentStatuses.FirstOrDefault();
@@ -140,7 +141,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.PaymentStatus
             var ex = await Assert.ThrowsAsync<ETCEPAYCoreAPIException>(func);
             _dbContextMock.Verify(x => x.PaymentStatuses, Times.Once);
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(paymentStatusRepository.RemoveAsync)} method...", Times.Once, _exception);
-            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(paymentStatusRepository.RemoveAsync)} method", Times.Once,_exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(paymentStatusRepository.RemoveAsync)} method", Times.Once, _exception);
         }
         #endregion
         #region UpdateAsync
@@ -178,6 +179,45 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.PaymentStatus
             _dbContextMock.Verify(x => x.PaymentStatuses, Times.Once);
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(paymentStatusRepository.UpdateAsync)} method...", Times.Once, _exception);
             _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(paymentStatusRepository.UpdateAsync)} method", Times.Once, _exception);
+        }
+        #endregion
+        #region GetAllWithNavigationAsync
+        [Fact]
+        public async void GivenValidRequest_WhenGetAllWithNavigationAsyncIsCalled_ThenReturnCorrectResult()
+        {
+            // Arrange
+            var data = paymentStatuses.FirstOrDefault()!;
+            _dbPaymentStatusSetMock = EFTestHelper.GetMockDbSet(paymentStatuses);
+            _dbContextMock.Setup(x => x.PaymentStatuses).Returns(_dbPaymentStatusSetMock.Object);
+
+            // Act
+            var paymentStatusRepository = new PaymentStatusRepository(_loggerMock.Object, _dbContextMock.Object);
+            var result = await paymentStatusRepository.GetAllWithNavigationAsync(It.IsAny<SessionReportRequestModel>());
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Count().Should().Be(1);
+            _dbContextMock.Verify(x => x.PaymentStatuses, Times.Once);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(paymentStatusRepository.GetAllWithNavigationAsync)} method...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(paymentStatusRepository.GetAllWithNavigationAsync)} method", Times.Never, _exception);
+        }
+
+        [Fact]
+        public async Task GivenValidRequestButFailedToConnectDatabase_WhenGetAllWithNavigationAsyncIsCalled_ThenThrowExceptionAsync()
+        {
+            // Arrange
+            var someEx = new ETCEPAYCoreAPIException(99, "Some exception");
+            _dbContextMock.Setup(x => x.PaymentStatuses).Throws(someEx);
+
+            // Act
+            var paymentStatusRepository = new PaymentStatusRepository(_loggerMock.Object, _dbContextMock.Object);
+            Func<Task> func = async () => await paymentStatusRepository.GetAllWithNavigationAsync(It.IsAny<SessionReportRequestModel>());
+
+            // Assert
+            var ex = await Assert.ThrowsAsync<ETCEPAYCoreAPIException>(func);
+            _dbContextMock.Verify(x => x.PaymentStatuses, Times.Once);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(paymentStatusRepository.GetAllWithNavigationAsync)} method...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(paymentStatusRepository.GetAllWithNavigationAsync)} method", Times.Once, _exception);
         }
         #endregion
     }

@@ -1,5 +1,6 @@
 ﻿using EPAY.ETC.Core.API.Core.Exceptions;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Context;
+using EPAY.ETC.Core.Models.Receipt.SessionReports;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Linq.Expressions;
@@ -57,13 +58,46 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PaymentStatu
             }
         }
 
-        public async Task<PaymentStatusModel?> GetByIdAsync(Guid id)
+        public Task<IEnumerable<PaymentStatusModel>> GetAllWithNavigationAsync(SessionReportRequestModel request)
+        {
+
+            _logger.LogInformation($"Executing {nameof(GetAllWithNavigationAsync)} method...");
+            try
+            {
+#pragma warning disable CS8602 // Disable warning nullable field
+                var result = _dbContext.PaymentStatuses
+                    .Include(x => x.Payment)
+                    .Include(x => x.Payment.Fee)
+                    .AsNoTracking()
+                    .Where(x =>
+                        request != null
+                        ? (
+                            (!string.IsNullOrEmpty(request.LaneId) ? x.Payment.Fee.LaneOutId == request.LaneId : true)
+                            && (!string.IsNullOrEmpty(request.EmployeeId) ? x.Payment.Fee.EmployeeId == request.EmployeeId : true)
+                            && (!string.IsNullOrEmpty(request.ShiftId) ? x.Payment.Fee.ShiftId.ToString() == request.ShiftId : true)
+                            && x.PaymentDate >= request.FromDate && x.PaymentDate <= request.ToDate
+                            && x.Status == Models.Enums.PaymentStatusEnum.Paid
+                        )
+                        : true
+                    );
+#pragma warning restore CS8602 // Disable warning nullable field
+
+                return Task.FromResult<IEnumerable<PaymentStatusModel>>(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"An error occurred when calling {nameof(GetAllWithNavigationAsync)} method. Detail: {ex.Message}. Stack trace: {ex.StackTrace}");
+                throw;
+            }
+        }
+
+        public Task<PaymentStatusModel?> GetByIdAsync(Guid id)
         {
             _logger.LogInformation($"Executing {nameof(GetByIdAsync)} method...");
 
             try
             {
-                 return  _dbContext.PaymentStatuses.AsNoTracking().FirstOrDefault(x => x.Id == id);
+                return Task.FromResult(_dbContext.PaymentStatuses.AsNoTracking().FirstOrDefault(x => x.Id == id));
             }
             catch (Exception ex)
             {
