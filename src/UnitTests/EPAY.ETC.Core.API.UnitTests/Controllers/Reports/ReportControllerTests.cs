@@ -21,17 +21,17 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Reports
         #endregion
 
         #region Init mock data
-        private SessionReportRequestModel sessionReportRequest = new SessionReportRequestModel()
+        private LaneSessionReportRequestModel sessionReportRequest = new LaneSessionReportRequestModel()
         {
             FromDate = new DateTime(2023, 9, 29, 15, 32, 19),
             ToDate = new DateTime(2023, 9, 29, 15, 43, 53),
             EmployeeId = "Some employee",
             LaneId = "Some lane"
         };
-        private SessionReportModel sessionReportResponse = new SessionReportModel()
+        private LaneSessionReportModel sessionReportResponse = new LaneSessionReportModel()
         {
             PrintType = ReceiptTypeEnum.SessionReport,
-            Layout = new SessionLayoutModel()
+            Layout = new LaneSessionLayoutModel()
             {
                 Header = new HeaderModel()
                 {
@@ -46,19 +46,19 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Reports
                     Line2 = "Some line",
                     Line3 = "Some line"
                 },
-                Body = new SessionBodyModel()
+                Body = new LaneSessionBodyModel()
                 {
                     Columns = new List<string>() { "Some column" },
                     Heading = "Some Heading",
                     SubHeading1 = "Some sub heading 1",
                     SubHeading2 = "Some sub heading 2",
                     SubHeading3 = "Some sub heading 3",
-                    Data = new SessionDataModel()
+                    Data = new LaneSessionDataModel()
                     {
                         BottomLine = "Some line",
                         GrandTotal = 153000,
                         Qty = 15,
-                        Payments = new List<SessionPaymentDataModel> { new SessionPaymentDataModel() }
+                        Payments = new List<LaneSessionPaymentDataModel> { new LaneSessionPaymentDataModel() }
                     }
                 }
             }
@@ -83,15 +83,15 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Reports
         public async Task GivenRequestIsValidAndCustomVehicleTypeIsNull_WhenPrintLaneSessionReportIsCalled_ThenReturnCorrectResult()
         {
             // Arrange
-            _uiActionServiceMock.Setup(x => x.PrintLaneSessionReport(It.IsAny<SessionReportRequestModel>())).ReturnsAsync(ValidationResult.Success(sessionReportResponse));
+            _uiActionServiceMock.Setup(x => x.PrintLaneSessionReport(It.IsAny<LaneSessionReportRequestModel>())).ReturnsAsync(ValidationResult.Success(sessionReportResponse));
 
             // Act
             var controller = new ReportController(_loggerMock.Object, _uiActionServiceMock.Object);
             var actualResult = await controller.PrintLaneSessionReport(sessionReportRequest);
-            var data = ((OkObjectResult)actualResult).Value as ValidationResult<SessionReportModel>;
+            var data = ((OkObjectResult)actualResult).Value as ValidationResult<LaneSessionReportModel>;
 
             // Assert
-            _uiActionServiceMock.Verify(x => x.PrintLaneSessionReport(It.IsAny<SessionReportRequestModel>()), Times.Once);
+            _uiActionServiceMock.Verify(x => x.PrintLaneSessionReport(It.IsAny<LaneSessionReportRequestModel>()), Times.Once);
 
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(controller.PrintLaneSessionReport)}...", Times.Once, _nullException);
             _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(controller.PrintLaneSessionReport)} method", Times.Never, _nullException);
@@ -108,7 +108,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Reports
         public void GiveRequestIsInValid_WhenApiPrintLaneSessionReportIsCalled_ThenReturnBadValidation()
         {
             //arrange
-            var sessionReportRequest = new SessionReportRequestModel();
+            var sessionReportRequest = new LaneSessionReportRequestModel();
 
             //act
             var actualResult = ValidateModelTest.ValidateModel(sessionReportRequest);
@@ -122,7 +122,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Reports
         {
             // Arrange
             var someEx = new Exception("An error occurred when calling PrintLaneSessionReport method");
-            _uiActionServiceMock.Setup(x => x.PrintLaneSessionReport(It.IsAny<SessionReportRequestModel>())).ThrowsAsync(someEx);
+            _uiActionServiceMock.Setup(x => x.PrintLaneSessionReport(It.IsAny<LaneSessionReportRequestModel>())).ThrowsAsync(someEx);
 
             // Act
             var controller = new ReportController(_loggerMock.Object, _uiActionServiceMock.Object);

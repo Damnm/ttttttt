@@ -58,7 +58,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PaymentStatu
             }
         }
 
-        public Task<IEnumerable<PaymentStatusModel>> GetAllWithNavigationAsync(SessionReportRequestModel request)
+        public Task<IEnumerable<PaymentStatusModel>> GetAllWithNavigationAsync(LaneSessionReportRequestModel request)
         {
 
             _logger.LogInformation($"Executing {nameof(GetAllWithNavigationAsync)} method...");

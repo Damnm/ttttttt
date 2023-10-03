@@ -192,7 +192,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.PaymentStatus
 
             // Act
             var paymentStatusRepository = new PaymentStatusRepository(_loggerMock.Object, _dbContextMock.Object);
-            var result = await paymentStatusRepository.GetAllWithNavigationAsync(It.IsAny<SessionReportRequestModel>());
+            var result = await paymentStatusRepository.GetAllWithNavigationAsync(It.IsAny<LaneSessionReportRequestModel>());
 
             // Assert
             result.Should().NotBeNull();
@@ -211,7 +211,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.PaymentStatus
 
             // Act
             var paymentStatusRepository = new PaymentStatusRepository(_loggerMock.Object, _dbContextMock.Object);
-            Func<Task> func = async () => await paymentStatusRepository.GetAllWithNavigationAsync(It.IsAny<SessionReportRequestModel>());
+            Func<Task> func = async () => await paymentStatusRepository.GetAllWithNavigationAsync(It.IsAny<LaneSessionReportRequestModel>());
 
             // Assert
             var ex = await Assert.ThrowsAsync<ETCEPAYCoreAPIException>(func);

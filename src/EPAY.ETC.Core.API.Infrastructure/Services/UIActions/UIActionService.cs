@@ -79,7 +79,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
             }
         }
 
-        public async Task<ValidationResult<SessionReportModel>> PrintLaneSessionReport(SessionReportRequestModel request)
+        public async Task<ValidationResult<LaneSessionReportModel>> PrintLaneSessionReport(LaneSessionReportRequestModel request)
         {
             try
             {
@@ -92,10 +92,10 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                 vehicleTypes = vehicleTypes.ToList().Where(x => !string.IsNullOrEmpty(x.Name.GetDescription())).OrderBy(x => x.Name);
 
                 var paymentStatuses = await _paymentStatusRepository.GetAllWithNavigationAsync(request);
-                SessionReportModel result = new SessionReportModel()
+                LaneSessionReportModel result = new LaneSessionReportModel()
                 {
                     PrintType = Models.Enums.ReceiptTypeEnum.SessionReport,
-                    Layout = new SessionLayoutModel()
+                    Layout = new LaneSessionLayoutModel()
                     {
                         Header = new Models.Receipt.HeaderModel
                         {
@@ -109,7 +109,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                             Line1 = $"{appConfig?.FooterLine1?.Trim()} Ngày {request.ToDate.Day} tháng {request.ToDate.Month} năm {request.ToDate.Year}",
                             Line2 = $"{appConfig?.FooterLine2?.Trim()}"
                         },
-                        Body = new SessionBodyModel()
+                        Body = new LaneSessionBodyModel()
                     }
                 };
 
@@ -130,7 +130,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                 result.Layout.Body.Columns = new List<string>() { "Số", "Loại xe", "Số lượng", "T.tiền" };
 
                 var grandTotal = paymentStatuses.Sum(x => x.Amount);
-                result.Layout.Body.Data = new SessionDataModel()
+                result.Layout.Body.Data = new LaneSessionDataModel()
                 {
                     Qty = paymentStatuses.Count(),
                     GrandTotal = grandTotal,
@@ -143,9 +143,9 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                 var paymentMethodNoneCashs = paymentStatuses
                     .Where(x => x.PaymentMethod != PaymentMethodEnum.Cash);
 
-                result.Layout.Body.Data.Payments = new List<SessionPaymentDataModel>()
+                result.Layout.Body.Data.Payments = new List<LaneSessionPaymentDataModel>()
                 {
-                    new SessionPaymentDataModel()
+                    new LaneSessionPaymentDataModel()
                     {
                         Name = $"Hình thức thu phí - Tiền mặt",
                         Qty = paymentMethodCashs.Count(),
@@ -154,7 +154,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                         {
                             var subPayments = paymentMethodCashs.Where(x => x.Payment?.CustomVehicleTypeId == s.Id);
 
-                            return new SessionPaymentDetailDataModel()
+                            return new LaneSessionPaymentDetailDataModel()
                             {
                                 Type = s.Name.GetDescription(),
                                 Qty = subPayments.Count(),
@@ -162,7 +162,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                             };
                         }).ToList()
                     },
-                    new SessionPaymentDataModel()
+                    new LaneSessionPaymentDataModel()
                     {
                         Name = $"Hình thức thu phí - Phi tiền mặt",
                         Qty = paymentMethodNoneCashs.Count(),
@@ -171,7 +171,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                         {
                             var subPayments = paymentMethodNoneCashs.Where(x => x.Payment?.CustomVehicleTypeId == s.Id);
 
-                            return new SessionPaymentDetailDataModel()
+                            return new LaneSessionPaymentDetailDataModel()
                             {
                                 Type = s.Name.GetDescription(),
                                 Qty = subPayments.Count(),
