@@ -28,7 +28,9 @@ namespace EPAY.ETC.Core.API.Mapping
             CreateMap<VehicleRequestModel, VehicleModel>()
                 .ForMember(e => e.CreatedDate, act => act.MapFrom(src => DateTime.Now))
                 .ReverseMap();
-            CreateMap<ManualBarrierControlAddOrUpdateRequestModel, ManualBarrierControlModel>().ReverseMap();
+            CreateMap<ManualBarrierControlAddOrUpdateRequestModel, ManualBarrierControlModel>()
+                .ForMember(e => e.CreatedDate, act => act.MapFrom(src => DateTime.Now))
+                .ReverseMap();
             CreateMap<FusionAddRequestModel, FusionModel>().ReverseMap();
             CreateMap<PaymentStatusAddRequestModel, Core.Models.PaymentStatus.PaymentStatusModel>().ReverseMap();
             CreateMap<PaymentAddOrUpdateRequestModel, Core.Models.Payment.PaymentModel>().ReverseMap();
