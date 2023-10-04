@@ -6,6 +6,7 @@ using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Payment;
 using EPAY.ETC.Core.Models.Request;
 using EPAY.ETC.Core.Models.Validation;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 
 namespace EPAY.ETC.Core.API.Infrastructure.Services.ETCCheckouts
@@ -169,6 +170,31 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.ETCCheckouts
             catch (Exception ex)
             {
                 _logger.LogError($"An error occurred when calling {nameof(UpdateAsync)} method. Details: {ex.Message}. Stack trace: {ex.StackTrace}");
+                throw;
+            }
+        }
+
+        public async Task<ValidationResult<ETCCheckoutFilterResultDto>> GetAllByConditionAsync(ETCCheckoutFilterModel? filter = null)
+        {
+            try
+            {
+                _logger.LogInformation($"Executing {nameof(GetAllByConditionAsync)} method...");
+
+                var result = await _repository.GetAllByConditionAsync(filter);
+
+                var itemsResult = result.Items.ToList();
+
+                var responseResult = new ETCCheckoutFilterResultDto()
+                {
+                    TotalItems = result.TotalItems,
+                    Items = _mapper.Map<List<ETCCheckoutDataModel>, List<ETCCheckoutResponseModel>>(itemsResult)
+                };
+
+                return ValidationResult.Success(responseResult);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"An error occurred when calling {nameof(GetAllByConditionAsync)} method. Details: {ex.Message}. Stack trace: {ex.StackTrace}");
                 throw;
             }
         }

@@ -109,6 +109,23 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Repository.ETCCheckouts
             result.Should().NotBeNull().And.HaveCount(1);
         }
 
+        [Fact, Order(3)]
+        public async Task GivenRequestIsValid_WhenGetAllByConditionAsyncIsCalled_ThenReturnCorrectResult()
+        {
+            using var scope = WebApplicationFactory.Services.CreateScope();
+            _etcCheckoutRepository = scope.ServiceProvider.GetRequiredService<IETCCheckoutRepository>();
+
+            // Arrange
+
+            // Act
+            var result = await _etcCheckoutRepository.GetAllByConditionAsync();
+
+            // Assert
+            result.Should().NotBeNull();
+            result.TotalItems.Should().Be(1);
+            result.Items.Should().NotBeNull().And.HaveCount(1);
+        }
+
         [Fact, Order(4)]
         public async Task GivenRequestIsValid_WhenGetByIdAsyncIsCalled_ThenReturnCorrectResult()
         {

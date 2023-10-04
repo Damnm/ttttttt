@@ -527,5 +527,51 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.ETCCheckouts
             _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(service.GetAllAsync)} method", Times.Once, _exception);
         }
         #endregion
+
+        #region GetAllByConditionAsync
+        [Fact]
+        public async Task GivenValidRequest_WhenGetAllByConditionAsyncIsCalled_ThenRemovedRecordSuccessfulAndReturnNull()
+        {
+            // Arrange
+            _etcCheckOutRepositoryMock.Setup(x => x.GetAllByConditionAsync(It.IsAny<ETCCheckoutFilterModel>())).ReturnsAsync(new Core.DtoModels.ETCCheckOuts.ETCCheckoutFilterResultDto() { TotalItems = 1, Items = new List<ETCCheckoutDataModel>() { new ETCCheckoutDataModel() } });
+
+            // Act
+            var service = new ETCCheckoutService(_loggerMock.Object, _etcCheckOutRepositoryMock.Object, _paymentRepositoryMock.Object, _mapper);
+            var result = await service.GetAllByConditionAsync(It.IsAny<ETCCheckoutFilterModel>());
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Succeeded.Should().BeTrue();
+            result.Data.Should().NotBeNull();
+            result.Data?.TotalItems.Should().Be(1);
+            result.Data?.Items.Should().NotBeNull().And.HaveCount(1);
+
+            _etcCheckOutRepositoryMock.Verify(x => x.GetAllByConditionAsync(It.IsAny<ETCCheckoutFilterModel>()), Times.Once);
+
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.GetAllByConditionAsync)} method", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(service.GetAllByConditionAsync)} method", Times.Never, _exception);
+        }
+
+        [Fact]
+        public async Task GivenValidRequestAndETCCheckOutRepositoryIsDown_WhenGetAllByConditionAsyncIsCalled_ThenThrowException()
+        {
+            // Arrange
+            var exception = new Exception("Some ex");
+            _etcCheckOutRepositoryMock.Setup(x => x.GetAllByConditionAsync(It.IsAny<ETCCheckoutFilterModel>())).ThrowsAsync(exception);
+
+            // Act
+            var service = new ETCCheckoutService(_loggerMock.Object, _etcCheckOutRepositoryMock.Object, _paymentRepositoryMock.Object, _mapper);
+            Func<Task> func = async () => await service.GetAllByConditionAsync(It.IsAny<ETCCheckoutFilterModel>());
+
+            // Assert
+            var ex = await Assert.ThrowsAsync<Exception>(() => func());
+            ex.Message.Should().Be(exception.Message);
+
+            _etcCheckOutRepositoryMock.Verify(x => x.GetAllByConditionAsync(It.IsAny<ETCCheckoutFilterModel>()), Times.Once);
+
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.GetAllByConditionAsync)} method", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(service.GetAllByConditionAsync)} method", Times.Once, _exception);
+        }
+        #endregion
     }
 }

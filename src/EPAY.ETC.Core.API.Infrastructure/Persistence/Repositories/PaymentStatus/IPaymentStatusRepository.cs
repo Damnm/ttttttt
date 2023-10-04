@@ -6,6 +6,6 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PaymentStatu
 {
     public interface IPaymentStatusRepository : IRepository<Core.Models.PaymentStatus.PaymentStatusModel, Guid>
     {
-        Task<IEnumerable<PaymentStatusModel>> GetAllWithNavigationAsync(SessionReportRequestModel request);
+        Task<IEnumerable<PaymentStatusModel>> GetAllWithNavigationAsync(LaneSessionReportRequestModel request);
     }
 }

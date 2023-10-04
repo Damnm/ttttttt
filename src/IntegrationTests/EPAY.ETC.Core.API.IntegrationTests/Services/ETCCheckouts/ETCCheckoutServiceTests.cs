@@ -190,6 +190,26 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Services.ETCCheckouts
         }
         #endregion
 
+        #region GetAllByConditionAsync
+        [Fact, Order(7)]
+        public async Task GivenRequestIsValid_WhenGetAllByConditionAsyncIsCalled_ThenReturnCorrectResult()
+        {
+            using var scope = WebApplicationFactory.Services.CreateScope();
+            _service = scope.ServiceProvider.GetRequiredService<IETCCheckoutService>();
+
+            // Arrange
+
+            // Act
+            var result = await _service.GetAllByConditionAsync();
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Succeeded.Should().BeTrue();
+            result.Data?.TotalItems.Should().Be(1);
+            result.Data?.Items.Should().NotBeNull().And.HaveCount(1);
+        }
+        #endregion
+
         #region GetAllAsync
         [Fact, Order(7)]
         public async Task GivenRequestIsValid_WhenGetAllAsyncIsCalled_ThenReturnCorrectResult()

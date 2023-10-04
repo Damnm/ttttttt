@@ -105,7 +105,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
                 PaymentDate = new DateTime(2023, 9, 29, 15, 35, 19)
             }
         };
-        private SessionReportRequestModel sessionReportRequest = new SessionReportRequestModel()
+        private LaneSessionReportRequestModel sessionReportRequest = new LaneSessionReportRequestModel()
         {
             FromDate = new DateTime(2023, 9, 29, 15, 32, 19),
             ToDate = new DateTime(2023, 9, 29, 15, 43, 53)
@@ -127,7 +127,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
             // Arrange
             _appConfigRepositoryMock.Setup(x => x.GetAllAsync(It.IsAny<Expression<Func<AppConfigModel, bool>>>())).ReturnsAsync(appConfigs);
             _customVehicleTypeRepositoryMock.Setup(x => x.GetAllAsync(It.IsAny<Expression<Func<CustomVehicleTypeModel, bool>>>())).ReturnsAsync(customVehicleTypes);
-            _paymentStatusRepositoryMock.Setup(x => x.GetAllWithNavigationAsync(It.IsAny<SessionReportRequestModel>())).ReturnsAsync(paymentStatuses);
+            _paymentStatusRepositoryMock.Setup(x => x.GetAllWithNavigationAsync(It.IsAny<LaneSessionReportRequestModel>())).ReturnsAsync(paymentStatuses);
 
             // Act
             var service = new UIActionService(_loggerMock.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _manualBarrierControlRepository.Object, _redisDatabaseMock.Object);
@@ -140,7 +140,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
 
             _appConfigRepositoryMock.Verify(x => x.GetAllAsync(It.IsAny<Expression<Func<AppConfigModel, bool>>>()), Times.Once);
             _customVehicleTypeRepositoryMock.Verify(x => x.GetAllAsync(It.IsAny<Expression<Func<CustomVehicleTypeModel, bool>>>()), Times.Once);
-            _paymentStatusRepositoryMock.Verify(x => x.GetAllWithNavigationAsync(It.IsAny<SessionReportRequestModel>()), Times.Once);
+            _paymentStatusRepositoryMock.Verify(x => x.GetAllWithNavigationAsync(It.IsAny<LaneSessionReportRequestModel>()), Times.Once);
 
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.PrintLaneSessionReport)} method...", Times.Once, _nullException);
             _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(service.PrintLaneSessionReport)} method", Times.Never, _nullException);
@@ -164,7 +164,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
 
             _appConfigRepositoryMock.Verify(x => x.GetAllAsync(It.IsAny<Expression<Func<AppConfigModel, bool>>>()), Times.Once);
             _customVehicleTypeRepositoryMock.Verify(x => x.GetAllAsync(It.IsAny<Expression<Func<CustomVehicleTypeModel, bool>>>()), Times.Never);
-            _paymentStatusRepositoryMock.Verify(x => x.GetAllWithNavigationAsync(It.IsAny<SessionReportRequestModel>()), Times.Never);
+            _paymentStatusRepositoryMock.Verify(x => x.GetAllWithNavigationAsync(It.IsAny<LaneSessionReportRequestModel>()), Times.Never);
 
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.PrintLaneSessionReport)} method...", Times.Once, _nullException);
             _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(service.PrintLaneSessionReport)} method", Times.Once, _nullException);
@@ -189,7 +189,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
 
             _appConfigRepositoryMock.Verify(x => x.GetAllAsync(It.IsAny<Expression<Func<AppConfigModel, bool>>>()), Times.Once);
             _customVehicleTypeRepositoryMock.Verify(x => x.GetAllAsync(It.IsAny<Expression<Func<CustomVehicleTypeModel, bool>>>()), Times.Once);
-            _paymentStatusRepositoryMock.Verify(x => x.GetAllWithNavigationAsync(It.IsAny<SessionReportRequestModel>()), Times.Never);
+            _paymentStatusRepositoryMock.Verify(x => x.GetAllWithNavigationAsync(It.IsAny<LaneSessionReportRequestModel>()), Times.Never);
 
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.PrintLaneSessionReport)} method...", Times.Once, _nullException);
             _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(service.PrintLaneSessionReport)} method", Times.Once, _nullException);
@@ -202,7 +202,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
             var exception = new Exception("Some ex");
             _appConfigRepositoryMock.Setup(x => x.GetAllAsync(It.IsAny<Expression<Func<AppConfigModel, bool>>>())).ReturnsAsync(appConfigs);
             _customVehicleTypeRepositoryMock.Setup(x => x.GetAllAsync(It.IsAny<Expression<Func<CustomVehicleTypeModel, bool>>>())).ReturnsAsync(customVehicleTypes);
-            _paymentStatusRepositoryMock.Setup(x => x.GetAllWithNavigationAsync(It.IsAny<SessionReportRequestModel>())).ThrowsAsync(exception);
+            _paymentStatusRepositoryMock.Setup(x => x.GetAllWithNavigationAsync(It.IsAny<LaneSessionReportRequestModel>())).ThrowsAsync(exception);
 
             // Act
             var service = new UIActionService(_loggerMock.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _manualBarrierControlRepository.Object, _redisDatabaseMock.Object);
@@ -215,7 +215,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
 
             _appConfigRepositoryMock.Verify(x => x.GetAllAsync(It.IsAny<Expression<Func<AppConfigModel, bool>>>()), Times.Once);
             _customVehicleTypeRepositoryMock.Verify(x => x.GetAllAsync(It.IsAny<Expression<Func<CustomVehicleTypeModel, bool>>>()), Times.Once);
-            _paymentStatusRepositoryMock.Verify(x => x.GetAllWithNavigationAsync(It.IsAny<SessionReportRequestModel>()), Times.Once);
+            _paymentStatusRepositoryMock.Verify(x => x.GetAllWithNavigationAsync(It.IsAny<LaneSessionReportRequestModel>()), Times.Once);
 
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.PrintLaneSessionReport)} method...", Times.Once, _nullException);
             _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(service.PrintLaneSessionReport)} method", Times.Once, _nullException);

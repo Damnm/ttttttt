@@ -89,7 +89,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Repository.PaymentStatu
             _paymentStatusRepository = scope.ServiceProvider.GetRequiredService<IPaymentStatusRepository>();
 
             // Arrange
-            SessionReportRequestModel request = new SessionReportRequestModel()
+            LaneSessionReportRequestModel request = new LaneSessionReportRequestModel()
             {
                 FromDate = new DateTime(2023, 9, 11),
                 ToDate = new DateTime(2023, 9, 11, 23, 59, 59),

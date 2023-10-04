@@ -1,9 +1,11 @@
 ﻿using EPAY.ETC.Core.API.Core.Exceptions;
 using EPAY.ETC.Core.API.Core.Models.ETCCheckOuts;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Context;
+using EPAY.ETC.Core.Models.Request;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Linq.Expressions;
+using ETCCheckoutFilterResultDto = EPAY.ETC.Core.API.Core.DtoModels.ETCCheckOuts.ETCCheckoutFilterResultDto;
 
 namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.ETCCheckouts
 {
@@ -58,6 +60,48 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.ETCCheckouts
             catch (ETCEPAYCoreAPIException ex)
             {
                 _logger.LogError($"An error occurred when calling {nameof(GetAllAsync)} method. Details: {ex.Message}. Stack trace: {ex.StackTrace}");
+                throw;
+            }
+        }
+
+        public Task<ETCCheckoutFilterResultDto> GetAllByConditionAsync(ETCCheckoutFilterModel? filter = null)
+        {
+            try
+            {
+                _logger.LogInformation($"Executing {nameof(GetAllByConditionAsync)} method...");
+
+                ETCCheckoutFilterResultDto result = new ETCCheckoutFilterResultDto();
+
+                var entities = _dbContext.ETCCheckOuts.AsNoTracking().Include(x => x.Payment).Include(x => x.Payment.Fee).AsQueryable();
+
+                if (filter != null)
+                {
+                    entities = entities.Where(s => (filter.PaymentId != null && filter.PaymentId != Guid.Empty ? s.PaymentId == filter.PaymentId : true)
+                        && (filter.ServiceProvider != null ? s.ServiceProvider == filter.ServiceProvider : true)
+                        && (filter.TransactionStatus != null ? s.TransactionStatus == filter.TransactionStatus : true)
+                        && (filter.Amount != null ? s.Amount == filter.Amount : true)
+                        && (!string.IsNullOrEmpty(filter.TransactionId) ? s.TransactionId.Contains(filter.TransactionId) : true)
+                        && (!string.IsNullOrEmpty(filter.RFID) ? !string.IsNullOrEmpty(s.RFID) && s.RFID.Contains(filter.RFID) : true)
+                        && (!string.IsNullOrEmpty(filter.PlateNumber) ? !string.IsNullOrEmpty(s.PlateNumber) && s.PlateNumber.Contains(filter.PlateNumber) : true)
+                    );
+
+                    result.TotalItems = entities.Count();
+
+                    if (filter.Take > 0)
+                    {
+                        entities = entities.Skip(filter.Skip).Take(filter.Take);
+                    }
+                }
+                else
+                    result.TotalItems = entities.Count();
+
+                result.Items = entities;
+
+                return Task.FromResult(result);
+            }
+            catch (ETCEPAYCoreAPIException ex)
+            {
+                _logger.LogError($"An error occurred when calling {nameof(GetAllByConditionAsync)} method. Details: {ex.Message}. Stack trace: {ex.StackTrace}");
                 throw;
             }
         }
