@@ -9,7 +9,6 @@ namespace EPAY.ETC.Core.API.Core.Interfaces.Services.UIActions
 {
     public interface IUIActionService
     {
-        Task<ValidationResult<SessionReportModel>> PrintLaneSessionReport(SessionReportRequestModel request);
         Task<ValidationResult<FeeModel>> ReconcileVehicleInfoAsync(ReconcileVehicleInfoModel reconcileVehicleInfo);
         Task<ValidationResult<LaneSessionReportModel>> PrintLaneSessionReport(LaneSessionReportRequestModel request);
         Task<ValidationResult<PaymenStatusResponseModel>> UpdatePaymentMethod(PaymentStatusUIRequestModel request);
