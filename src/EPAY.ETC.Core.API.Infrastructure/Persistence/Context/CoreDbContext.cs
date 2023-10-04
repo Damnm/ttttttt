@@ -1,4 +1,5 @@
 ﻿using EPAY.ETC.Core.API.Core.Extensions;
+using EPAY.ETC.Core.API.Core.Models.Barcode;
 using EPAY.ETC.Core.API.Core.Models.Configs;
 using EPAY.ETC.Core.API.Core.Models.CustomVehicleTypes;
 using EPAY.ETC.Core.API.Core.Models.ETCCheckOuts;
@@ -51,6 +52,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
         public virtual DbSet<ETCCheckoutDataModel> ETCCheckOuts { get; set; }
         public virtual DbSet<AppConfigModel> AppConfigs { get; set; }
         public virtual DbSet<ManualBarrierControlModel> ManualBarrierControls { get; set; }
+        public virtual DbSet<BarcodeModel> Barcodes { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -627,6 +629,13 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                     FooterLine2 = "Người nộp",
                     StationCode = "03"
                 });
+            #endregion
+
+            #region Barcode configuration
+            modelBuilder.Entity<BarcodeModel>().HasKey(x => x.Id);
+            modelBuilder.Entity<BarcodeModel>()
+               .Property(x => x.EmployeeId)
+               .HasMaxLength(50);
             #endregion
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

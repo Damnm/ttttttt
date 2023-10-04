@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EPAY.ETC.Core.API.Core.Models.Barcode;
 using EPAY.ETC.Core.API.Core.Models.ETCCheckOuts;
 using EPAY.ETC.Core.API.Core.Models.Fees;
 using EPAY.ETC.Core.API.Core.Models.Fusion;
@@ -117,6 +118,8 @@ namespace EPAY.ETC.Core.API.Mapping
                 .ForPath(e => e.PaymentStatus.Status, act => act.MapFrom(src => src.Status));
 
             CreateMap<PublisherConfigurationOption, PublisherOptions>().ReverseMap();
+            CreateMap<BarcodeAddRequestModel, BarcodeModel>().ReverseMap();
+            CreateMap<BarcodeUpdateRequestModel, BarcodeModel>().ReverseMap();
         }
     }
 }
