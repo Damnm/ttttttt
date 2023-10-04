@@ -1,4 +1,5 @@
-﻿using EPAY.ETC.Core.API.Core.Interfaces.Services.ETCCheckouts;
+﻿using EPAY.ETC.Core.API.Core.Interfaces.Services.Barcode;
+using EPAY.ETC.Core.API.Core.Interfaces.Services.ETCCheckouts;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Fees;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Fusion;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.ManualBarrierControls;
@@ -8,6 +9,7 @@ using EPAY.ETC.Core.API.Core.Interfaces.Services.UIActions;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Vehicles;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Context;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.AppConfigs;
+using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Barcode;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.CustomVehicleTypes;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.ETCCheckouts;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Fees;
@@ -21,6 +23,7 @@ using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.TimeBlockFees;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Vehicle;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.VehicleCategories;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.VehicleGroups;
+using EPAY.ETC.Core.API.Infrastructure.Services.Barcode;
 using EPAY.ETC.Core.API.Infrastructure.Services.ETCCheckouts;
 using EPAY.ETC.Core.API.Infrastructure.Services.Fees;
 using EPAY.ETC.Core.API.Infrastructure.Services.Fusion;
@@ -65,6 +68,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence
             services.AddScoped<IETCCheckoutService, ETCCheckoutService>();
             services.AddScoped<IManualBarrierControlRepository, ManualBarrierControlRepository>();
             services.AddScoped<IAppConfigRepository, AppConfigRepository>();
+            services.AddScoped<IBarcodeRepository, BarcodeRepository>();
 
             ////Add Services
             services.AddScoped<IVehicleService, VehicleService>();
@@ -75,6 +79,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence
             services.AddScoped<IPaymentService, PaymentService>();
             services.AddScoped<IUIActionService, UIActionService>();
             services.AddScoped<IManualBarrierControlsService, ManualBarrierControlsService>();
+            services.AddScoped<IBarcodeService, BarcodeService>();
 
             return services;
         }
