@@ -1,6 +1,7 @@
 using EPAY.ETC.Core.API.Filters;
 using EPAY.ETC.Core.API.Infrastructure.Persistence;
 using EPAY.ETC.Core.API.Models.Configs;
+using EPAY.ETC.Core.API.Services;
 using EPAY.ETC.Core.Publisher.DependencyInjectionExtensions;
 using EPAY.ETC.Core.RabbitMQ.DependencyInjectionExtensions;
 using Microsoft.AspNetCore.Mvc;
@@ -13,11 +14,6 @@ using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 ConfigurationManager config = builder.Configuration;
-
-// Add services to the container.
-//builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-//    .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
-
 
 // Config IOptions
 builder.Services.Configure<List<PublisherConfigurationOption>>(builder.Configuration.GetSection("PublisherConfigurations"));
@@ -103,6 +99,7 @@ builder.Services
 // Init instance Redis
 var multiplexer = ConnectionMultiplexer.Connect(builder.Configuration.GetSection("RedisSettings").GetValue<string>("ConnectionString") ?? "localhost:6379");
 builder.Services.AddSingleton(multiplexer.GetDatabase(builder.Configuration.GetSection("RedisSettings").GetValue<int?>("db") ?? -1));
+builder.Services.AddScoped<IRabbitMQPublisherService, RabbitMQPublisherService>();
 
 var app = builder.Build();
 

@@ -3,6 +3,8 @@ using EPAY.ETC.Core.API.Core.Models.CustomVehicleTypes;
 using EPAY.ETC.Core.API.Core.Models.ManualBarrierControl;
 using EPAY.ETC.Core.API.Core.Models.Payment;
 using EPAY.ETC.Core.API.Core.Models.PaymentStatus;
+using EPAY.ETC.Core.API.Core.Models.Vehicle.ReconcileVehicle;
+using EPAY.ETC.Core.API.Infrastructure.Migrations;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.CustomVehicleTypes;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.ETCCheckouts;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.ManualBarrierControls;
@@ -11,6 +13,7 @@ using EPAY.ETC.Core.API.Infrastructure.Services.UIActions;
 using EPAY.ETC.Core.API.Infrastructure.UnitTests.Common;
 using EPAY.ETC.Core.API.Infrastructure.UnitTests.Helpers;
 using EPAY.ETC.Core.Models.Enums;
+using EPAY.ETC.Core.Models.Fees;
 using EPAY.ETC.Core.Models.Receipt.SessionReports;
 using EPAY.ETC.Core.Models.Request;
 using FluentAssertions;
@@ -18,6 +21,8 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using StackExchange.Redis;
 using System.Linq.Expressions;
+using PaymentModel = EPAY.ETC.Core.API.Core.Models.Payment.PaymentModel;
+using PaymentStatusModel = EPAY.ETC.Core.API.Core.Models.PaymentStatus.PaymentStatusModel;
 
 namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
 {
@@ -112,6 +117,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
             LaneId = "Some",
             Limit = 1
         };
+        Guid guid = Guid.NewGuid();
         #endregion
 
         #region PrintLaneSessionReport
@@ -285,6 +291,155 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
 
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.ManipulateBarrier)} method...", Times.Once, _nullException);
             _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(service.ManipulateBarrier)} method", Times.Once, _nullException);
+        }
+        #endregion
+
+        #region ReconcileVehicleInfoAsync
+        [Fact]
+        public async Task GivenValidRequest_WhenReconcileVehicleInfoAsyncIsCalled_ThenReturnCorrectResult()
+        {
+            // Arrange
+            
+            ReconcileVehicleInfoModel reconcileVehicleInfo = new ReconcileVehicleInfoModel()
+            {
+                EmployeeId = "34343243",
+                ObjectId = guid,
+                 Vehicle = new ReconcileVehicleModel()
+                 {
+                      PlateNumber = "fffdsfdfd",
+                      VehicleType = "01",
+                       
+                      LandIn = new LandModel()
+                      {
+                          LandId = "01"
+                      },
+                      LandOut = new LandModel()
+                      {
+                          LandId = "06"
+                      }
+                 }
+            };
+           
+            string feeModel = "{\"FeeId\":null,\"ObjectId\":\"8034d7bb-e430-4305-b8b7-8a7f640d152b\",\"CreatedDate\":\"0001-01-01T00:00:00\",\"EmployeeId\":null,\"ShiftId\":null,\"LaneInVehicle\":{\"LaneInId\":\"1\",\"Epoch\":1695185974,\"RFID\":\"dddddddddddddd\",\"Device\":{\"MacAddr\":\"macaddress\",\"IpAddr\":\"127.0.0.1\"},\"VehicleInfo\":{\"Make\":\"Toyota\",\"Model\":\"S\",\"PlateNumber\":\"52H23232\",\"PlateColour\":\"red\",\"VehicleColour\":null,\"VehicleType\":\"1\",\"Seat\":10,\"Weight\":40,\"VehiclePhotoUrl\":null,\"PlateNumberPhotoUrl\":null,\"ConfidenceScore\":0.0}},\"LaneOutVehicle\":{\"LaneOutId\":\"1\",\"Epoch\":1695285974,\"RFID\":\"dddddddddddddd\",\"Device\":{\"MacAddr\":\"macaddressout\",\"IpAddr\":\"127.0.0.1\"},\"VehicleInfo\":{\"Make\":\"Toyota\",\"Model\":\"S\",\"PlateNumber\":\"52H23232\",\"PlateColour\":\"red\",\"VehicleColour\":null,\"VehicleType\":\"1\",\"Seat\":12,\"Weight\":50,\"VehiclePhotoUrl\":null,\"PlateNumberPhotoUrl\":null,\"ConfidenceScore\":0.0}},\"Payment\":null,\"FeeType\":0,\"ValidateObjectId\":1,\"ValidateCreatedDate\":0}";
+            _redisDatabaseMock.Setup(x => x.StringGetAsync(It.IsNotNull<RedisKey>(), It.IsAny<CommandFlags>())).ReturnsAsync(new RedisValue(feeModel));
+
+            // Act
+            var service = new UIActionService(_loggerMock.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _manualBarrierControlRepository.Object, _redisDatabaseMock.Object);
+            var result = await service.ReconcileVehicleInfoAsync(reconcileVehicleInfo);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Data.Should().NotBeNull();
+            result.Succeeded.Should().BeTrue();
+
+            _redisDatabaseMock.Verify(x => x.StringGetAsync(It.IsAny<RedisKey>(), It.IsAny<CommandFlags>()), Times.Once);
+
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.ReconcileVehicleInfoAsync)} method...", Times.Once, _nullException);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(service.ReconcileVehicleInfoAsync)} method", Times.Never, _nullException);
+        }
+
+        [Fact]
+        public async Task GivenValidRequestAndRedisDatabaseIsDown_WhenReconcileVehicleInfoAsyncIsCalled_ThenThrowException()
+        {
+            // Arrange
+            var exception = new Exception("Some ex");
+            _redisDatabaseMock.Setup(x => x.StringGetAsync(It.IsAny<RedisKey>(), It.IsAny<CommandFlags>())).ThrowsAsync(exception);
+
+            // Act
+            var service = new UIActionService(_loggerMock.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _manualBarrierControlRepository.Object, _redisDatabaseMock.Object);
+            Func<Task> func = () => service.ReconcileVehicleInfoAsync(null);
+
+            // Assert
+            var ex = await Assert.ThrowsAsync<Exception>(func);
+            ex.Should().NotBeNull();
+            ex.Message.Should().Be(exception.Message);
+
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.ReconcileVehicleInfoAsync)} method...", Times.Once, _nullException);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(service.ReconcileVehicleInfoAsync)} method", Times.Once, _nullException);
+        }
+
+        [Fact]
+        public async Task GivenValidRequestAndInputIsNull_WhenReconcileVehicleInfoAsyncIsCalled_ThenReturnCorrectResult()
+        {
+            // Arrange
+            ReconcileVehicleInfoModel reconcileVehicleInfo = new ReconcileVehicleInfoModel()
+            {
+                EmployeeId = "34343243",
+                ObjectId = guid,
+                Vehicle = new ReconcileVehicleModel()
+                {
+                    PlateNumber = "fffdsfdfd",
+                    VehicleType = "01",
+
+                    LandIn = new LandModel()
+                    {
+                        LandId = "01"
+                    },
+                    LandOut = new LandModel()
+                    {
+                        LandId = "06"
+                    }
+                }
+            };
+
+            string feeModel = "{\"FeeId\":null,\"ObjectId\":\"8034d7bb-e430-4305-b8b7-8a7f640d152b\",\"CreatedDate\":\"0001-01-01T00:00:00\",\"EmployeeId\":null,\"ShiftId\":null,\"LaneInVehicle\":{\"LaneInId\":\"1\",\"Epoch\":1695185974,\"RFID\":\"dddddddddddddd\",\"Device\":{\"MacAddr\":\"macaddress\",\"IpAddr\":\"127.0.0.1\"},\"VehicleInfo\":{\"Make\":\"Toyota\",\"Model\":\"S\",\"PlateNumber\":\"52H23232\",\"PlateColour\":\"red\",\"VehicleColour\":null,\"VehicleType\":\"1\",\"Seat\":10,\"Weight\":40,\"VehiclePhotoUrl\":null,\"PlateNumberPhotoUrl\":null,\"ConfidenceScore\":0.0}},\"LaneOutVehicle\":{\"LaneOutId\":\"1\",\"Epoch\":1695285974,\"RFID\":\"dddddddddddddd\",\"Device\":{\"MacAddr\":\"macaddressout\",\"IpAddr\":\"127.0.0.1\"},\"VehicleInfo\":{\"Make\":\"Toyota\",\"Model\":\"S\",\"PlateNumber\":\"52H23232\",\"PlateColour\":\"red\",\"VehicleColour\":null,\"VehicleType\":\"1\",\"Seat\":12,\"Weight\":50,\"VehiclePhotoUrl\":null,\"PlateNumberPhotoUrl\":null,\"ConfidenceScore\":0.0}},\"Payment\":null,\"FeeType\":0,\"ValidateObjectId\":1,\"ValidateCreatedDate\":0}";
+            _redisDatabaseMock.Setup(x => x.StringGetAsync(It.IsNotNull<RedisKey>(), It.IsAny<CommandFlags>())).ReturnsAsync(new RedisValue(feeModel));
+
+            // Act
+            var service = new UIActionService(_loggerMock.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _manualBarrierControlRepository.Object, _redisDatabaseMock.Object);
+            var result = await service.ReconcileVehicleInfoAsync(null);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Data.Should().NotBeNull();
+            result.Succeeded.Should().BeTrue();
+
+            _redisDatabaseMock.Verify(x => x.StringGetAsync(It.IsAny<RedisKey>(), It.IsAny<CommandFlags>()), Times.Once);
+
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.ReconcileVehicleInfoAsync)} method...", Times.Once, _nullException);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(service.ReconcileVehicleInfoAsync)} method", Times.Never, _nullException);
+        }
+
+        [Fact]
+        public async Task GivenValidRequestWithFeeObjectIsNull_WhenReconcileVehicleInfoAsyncIsCalled_ThenReturnCorrectResult()
+        {
+            // Arrange
+            ReconcileVehicleInfoModel reconcileVehicleInfo = new ReconcileVehicleInfoModel()
+            {
+                EmployeeId = "34343243",
+                ObjectId = guid,
+                Vehicle = new ReconcileVehicleModel()
+                {
+                    PlateNumber = "fffdsfdfd",
+                    VehicleType = "01",
+
+                    LandIn = new LandModel()
+                    {
+                        LandId = "01"
+                    },
+                    LandOut = new LandModel()
+                    {
+                        LandId = "06"
+                    }
+                }
+            };
+
+            string feeModel = null;
+            _redisDatabaseMock.Setup(x => x.StringGetAsync(It.IsNotNull<RedisKey>(), It.IsAny<CommandFlags>())).ReturnsAsync(new RedisValue(feeModel));
+
+            // Act
+            var service = new UIActionService(_loggerMock.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _manualBarrierControlRepository.Object, _redisDatabaseMock.Object);
+            var result = await service.ReconcileVehicleInfoAsync(reconcileVehicleInfo);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Data.Should().BeNull();
+            result.Succeeded.Should().BeTrue();
+
+            _redisDatabaseMock.Verify(x => x.StringGetAsync(It.IsAny<RedisKey>(), It.IsAny<CommandFlags>()), Times.Once);
+
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.ReconcileVehicleInfoAsync)} method...", Times.Once, _nullException);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(service.ReconcileVehicleInfoAsync)} method", Times.Never, _nullException);
         }
         #endregion
     }

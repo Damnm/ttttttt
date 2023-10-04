@@ -50,4 +50,8 @@
     </Content>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\Configs\" />
+  </ItemGroup>
+
 </Project>
