@@ -172,7 +172,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.PaymentStatus
                     });
                 }
 
-                return ValidationResult.Success(result.ToList());
+                return ValidationResult.Success(new List<PaymentStatusHistoryModel>());
             }
             catch (Exception ex)
             {
