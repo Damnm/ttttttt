@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Authentication;
+using EPAY.ETC.Core.API.Core.Models.Authentication;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Fusion;
 using EPAY.ETC.Core.API.Infrastructure.Services.Fusion;
+using EPAY.ETC.Core.Models.Enums;
 using EPAY.ETC.Core.Models.UI;
 using EPAY.ETC.Core.Models.Validation;
 using Microsoft.Extensions.Logging;
@@ -11,10 +13,11 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using AuthenticatedEmployeeModel = EPAY.ETC.Core.API.Core.Models.Authentication.AuthenticatedEmployeeModel;
 
 namespace EPAY.ETC.Core.API.Infrastructure.Services.Authentication
 {
-    public class AuthenticationService : IAuthenticationService<AuthenticatedEmployeeModel>
+    public class AuthenticationService : IAuthenticationService
     {
         #region Variables   -
         private readonly ILogger<AuthenticationService> _logger;
@@ -27,49 +30,59 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Authentication
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        public Task<ValidationResult<AuthenticatedEmployeeModel>> AuthenticateAsync(string employeeId, string pwd)
+        public async Task<ValidationResult<AuthenticatedEmployeeModel>> AuthenticateAsync(EmployeeLoginRequest input)
         {
-            if (employeeId == "123456" && pwd == "password") 
-            {
-                AuthenticatedEmployeeModel authenticatedEmployee = new AuthenticatedEmployeeModel
-                {
-                    EmployeeId = "123456",
-                    Username = "User",
-                    FirstName = "Khach",
-                    LastName = "Hang",
-                    JwtToken = "exampleJwtToken"
-                };
-                return Task.FromResult(ValidationResult.Success(authenticatedEmployee));
-            }
-            else
-            {
-                return Task.FromResult(ValidationResult.Failed<AuthenticatedEmployeeModel>(new List<ValidationError>()
-                {
-                    new ValidationError("Lỗi đăng nhập, vui lòng kiểm tra lại thông tin đăng nhập.", (int)HttpStatusCode.Unauthorized)
-                }));
-            }
-        }
-
-        public Task<ValidationResult<AuthenticatedEmployeeModel>> AutoAuthenticateAsync(string employeeId, string actionCode)
-        {
-            if (employeeId == "123456" && actionCode == "Login")
+            // Thực hiện xác thực dựa trên thông tin từ input
+            if (input.EmployeeId == "123456" && input.Password == "password")
             {
                 var authenticatedEmployee = new AuthenticatedEmployeeModel
                 {
+                    Id = Guid.Parse("4fd5cc23-0d90-451b-a748-5755376d635e"),
+                    CreatedDate = DateTime.Now,
+                    Action = LogonStatusEnum.Login,
                     EmployeeId = "123456",
                     Username = "User",
                     FirstName = "Khach",
                     LastName = "Hang",
                     JwtToken = "exampleJwtToken"
                 };
-                return Task.FromResult(ValidationResult.Success(authenticatedEmployee));
+
+                return ValidationResult.Success(authenticatedEmployee);
             }
             else
             {
-                return Task.FromResult(ValidationResult.Failed<AuthenticatedEmployeeModel>(new List<ValidationError>()
+                return ValidationResult.Failed<AuthenticatedEmployeeModel>(new List<ValidationError>()
+                {
+                    new ValidationError("Lỗi đăng nhập, vui lòng kiểm tra lại thông tin đăng nhập.", (int)HttpStatusCode.Unauthorized)
+                });
+            }
+        }
+
+        public async Task<ValidationResult<AuthenticatedEmployeeModel>> AutoAuthenticateAsync(EmployeeAutoLoginRequest request)
+        {
+            // Thực hiện tự động đăng nhập dựa trên thông tin từ request
+            if (request.EmployeeId == "123456" && request.ActionCode == "Login")
+            {
+                var authenticatedEmployee = new AuthenticatedEmployeeModel
+                {
+                    Id = Guid.Parse("4fd5cc23-0d90-451b-a748-5755376d635e"),
+                    CreatedDate = DateTime.Now,
+                    Action = LogonStatusEnum.Login,
+                    EmployeeId = "123456",
+                    Username = "User",
+                    FirstName = "Khach",
+                    LastName = "Hang",
+                    JwtToken = "exampleJwtToken"
+                };
+
+                return ValidationResult.Success(authenticatedEmployee);
+            }
+            else
+            {
+                return ValidationResult.Failed<AuthenticatedEmployeeModel>(new List<ValidationError>()
                 {
                     new ValidationError("Lỗi đăng nhập, vui lòng đăng nhập lại thông tin.", (int)HttpStatusCode.Unauthorized)
-                }));
+                });
             }
         }
         #endregion

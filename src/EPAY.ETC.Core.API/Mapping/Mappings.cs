@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EPAY.ETC.Core.API.Core.Models.Authentication;
 using EPAY.ETC.Core.API.Core.Models.Barcode;
 using EPAY.ETC.Core.API.Core.Models.ETCCheckOuts;
 using EPAY.ETC.Core.API.Core.Models.Fusion;
@@ -128,6 +129,9 @@ namespace EPAY.ETC.Core.API.Mapping
              .ForPath(e => e.PaymentStatus, act => act.MapFrom(src => src.Status))
              .ForPath(e => e.Reason, act => act.MapFrom(src => src.Reason))
              .ForPath(e => e.PaymentMethod, act => act.MapFrom(src => src.PaymentMethod));
+
+            CreateMap<EmployeeAutoLoginRequest, AuthenticatedEmployeeModel>().ReverseMap();
+            CreateMap<EmployeeLoginRequest, AuthenticatedEmployeeModel>().ReverseMap();
 
         }
     }

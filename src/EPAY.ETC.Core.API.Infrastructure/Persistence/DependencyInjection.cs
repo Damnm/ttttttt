@@ -1,4 +1,5 @@
-﻿using EPAY.ETC.Core.API.Core.Interfaces.Services.Barcode;
+﻿using EPAY.ETC.Core.API.Core.Interfaces.Services.Authentication;
+using EPAY.ETC.Core.API.Core.Interfaces.Services.Barcode;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.ETCCheckouts;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Fees;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Fusion;
@@ -23,6 +24,7 @@ using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.TimeBlockFees;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Vehicle;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.VehicleCategories;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.VehicleGroups;
+using EPAY.ETC.Core.API.Infrastructure.Services.Authentication;
 using EPAY.ETC.Core.API.Infrastructure.Services.Barcode;
 using EPAY.ETC.Core.API.Infrastructure.Services.ETCCheckouts;
 using EPAY.ETC.Core.API.Infrastructure.Services.Fees;
@@ -80,6 +82,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence
             services.AddScoped<IUIActionService, UIActionService>();
             services.AddScoped<IManualBarrierControlsService, ManualBarrierControlsService>();
             services.AddScoped<IBarcodeService, BarcodeService>();
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
 
             return services;
         }
