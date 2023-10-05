@@ -1,13 +1,8 @@
 ﻿using AutoMapper;
-using EPAY.ETC.Core.API.Controllers.Barcode;
 using EPAY.ETC.Core.API.Core.Exceptions;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Authentication;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Barcode;
 using EPAY.ETC.Core.API.Core.Models.Authentication;
-using EPAY.ETC.Core.API.Infrastructure.Services.Barcode;
-using EPAY.ETC.Core.Models.Request;
-using EPAY.ETC.Core.Models.Validation;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EPAY.ETC.Core.API.Controllers.Authentication
