@@ -2,6 +2,7 @@
 using EPAY.ETC.Core.API.Core.Exceptions;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Authentication;
 using EPAY.ETC.Core.API.Core.Models.Authentication;
+using EPAY.ETC.Core.Models.Validation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EPAY.ETC.Core.API.Controllers.Authentication
@@ -48,19 +49,30 @@ namespace EPAY.ETC.Core.API.Controllers.Authentication
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Authenticate([FromBody] EmployeeLoginRequest request)
         {
-            if (request == null)
+            try
             {
-                return BadRequest("Invalid request body.");
-            }
-            var validationResult = await _authenticationService.AuthenticateAsync(request);
+                if (request == null)
+                {
+                    return BadRequest("Invalid request body.");
+                }
+                var validationResult = await _authenticationService.AuthenticateAsync(request);
 
-            if (validationResult.Succeeded)
-            {
-                return Ok(validationResult.Data);
+                if (validationResult.Succeeded)
+                {
+                    return Ok(validationResult.Data);
+                }
+                else
+                {
+                    return BadRequest(validationResult.Errors);
+                }
             }
-            else
+            catch (Exception ex) 
             {
-                return BadRequest(validationResult.Errors);
+                List<ValidationError> validationErrors = new();
+                string errorMessage = $"An error occurred when calling {nameof(Authenticate)} method: {ex.Message}. InnerException : {ApiExceptionMessages.ExceptionMessages(ex)}. Stack trace: {ex.StackTrace}";
+                _logger.LogError(errorMessage);
+                validationErrors.Add(ValidationError.InternalServerError);
+                return StatusCode(StatusCodes.Status500InternalServerError, ValidationResult.Failed(errorMessage, validationErrors));
             }
         }
 
