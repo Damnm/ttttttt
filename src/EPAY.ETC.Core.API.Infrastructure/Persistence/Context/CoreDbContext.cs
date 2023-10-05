@@ -9,7 +9,6 @@ using EPAY.ETC.Core.API.Core.Models.FeeVehicleCategories;
 using EPAY.ETC.Core.API.Core.Models.Fusion;
 using EPAY.ETC.Core.API.Core.Models.ManualBarrierControl;
 using EPAY.ETC.Core.API.Core.Models.Payment;
-using EPAY.ETC.Core.API.Core.Models.PaymentStatus;
 using EPAY.ETC.Core.API.Core.Models.TimeBlockFees;
 using EPAY.ETC.Core.API.Core.Models.Transaction;
 using EPAY.ETC.Core.API.Core.Models.TransactionLog;
@@ -22,6 +21,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System.Diagnostics.CodeAnalysis;
 using FeeTypeEnum = EPAY.ETC.Core.API.Core.Models.Enum.FeeTypeEnum;
+using PaymentStatusModel = EPAY.ETC.Core.API.Core.Models.PaymentStatus.PaymentStatusModel;
 
 namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
 {
@@ -48,7 +48,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
         public virtual DbSet<TimeBlockFeeFormulaModel> TimeBlockFeeFormulas { get; set; }
         public virtual DbSet<FeeVehicleCategoryModel> FeeVehicleCategories { get; set; }
         public virtual DbSet<FeeModel> Fees { get; set; }
-        public virtual DbSet<PaymentStatusModel> PaymentStatuses { get; set; }
+        public virtual DbSet<Core.Models.PaymentStatus.PaymentStatusModel> PaymentStatuses { get; set; }
         public virtual DbSet<PaymentModel> Payments { get; set; }
         public virtual DbSet<ETCCheckoutDataModel> ETCCheckOuts { get; set; }
         public virtual DbSet<AppConfigModel> AppConfigs { get; set; }
