@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using EPAY.ETC.Core.API.Core.Exceptions;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Authentication;
-using EPAY.ETC.Core.API.Core.Interfaces.Services.Barcode;
 using EPAY.ETC.Core.API.Core.Models.Authentication;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,11 +11,11 @@ namespace EPAY.ETC.Core.API.Controllers.Authentication
     /// </summary>
     [ApiController]
     [Route("~/api/[controller]")]
-    public class AuthenticationController<T> : ControllerBase
+    public class AuthenticationController : ControllerBase
     {
         #region Variables
-        private readonly ILogger<AuthenticationController<T>> _logger;
-        private readonly IAuthenticationService<T> _authenticationService;
+        private readonly ILogger<AuthenticationController> _logger;
+        private readonly IAuthenticationService _authenticationService;
         private readonly IMapper _mapper;
         #endregion
         #region Constructor
@@ -29,8 +28,8 @@ namespace EPAY.ETC.Core.API.Controllers.Authentication
         /// <param name="mapper"></param>
         /// <exception cref="ArgumentNullException"></exception>
         public AuthenticationController(
-            ILogger<AuthenticationController<T>> logger,
-            IAuthenticationService<T> authenticationService,
+            ILogger<AuthenticationController> logger,
+            IAuthenticationService authenticationService,
             IMapper mapper)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -39,23 +38,21 @@ namespace EPAY.ETC.Core.API.Controllers.Authentication
         }
         #endregion
         #region AddAsync
-
         /// <summary>
         /// 
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        [HttpPost("v1/barcodes")]
+        [HttpPost("/api/Authentication/v1/employees/authenticate")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [HttpPost("authenticate")]
         public async Task<IActionResult> Authenticate([FromBody] EmployeeLoginRequest request)
         {
             if (request == null)
             {
                 return BadRequest("Invalid request body.");
             }
-            var validationResult = await _authenticationService.AuthenticateAsync(request.EmployeeId, request.Password);
+            var validationResult = await _authenticationService.AuthenticateAsync(request);
 
             if (validationResult.Succeeded)
             {
@@ -67,7 +64,14 @@ namespace EPAY.ETC.Core.API.Controllers.Authentication
             }
         }
 
-        [HttpPost("auto-authenticate")]
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPost("/api/Authentication/v1/employees/auto-authenticate")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> AutoAuthenticate([FromBody] EmployeeAutoLoginRequest request)
         {
             if (request == null)
@@ -75,7 +79,7 @@ namespace EPAY.ETC.Core.API.Controllers.Authentication
                 return BadRequest("Invalid request body.");
             }
 
-            var validationResult = await _authenticationService.AutoAuthenticateAsync(request.EmployeeId, request.ActionCode);
+            var validationResult = await _authenticationService.AutoAuthenticateAsync(request);
 
             if (validationResult.Succeeded)
             {
