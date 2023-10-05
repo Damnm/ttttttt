@@ -9,6 +9,7 @@ using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Moq;
+using System.Linq.Expressions;
 using PaymentStatusModel = EPAY.ETC.Core.API.Core.Models.PaymentStatus.PaymentStatusModel;
 
 namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.PaymentStatus
@@ -30,6 +31,31 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.PaymentStatus
                 Currency ="vnd",
                 PaymentMethod = PaymentMethodEnum.RFID,
 
+            }
+        };
+
+        private List<PaymentStatusModel> paymentSta = new List<PaymentStatusModel>()
+        {
+            new PaymentStatusModel()
+            {
+                PaymentDate = DateTime.Now,
+                Status = PaymentStatusEnum.Failed,
+                Reason = "dfd222fdsf",
+                PaymentMethod = PaymentMethodEnum.RFID,
+            },
+            new PaymentStatusModel()
+            {
+                PaymentDate = DateTime.Now,
+                Status = PaymentStatusEnum.Failed,
+                Reason = "dfd111fdsf",
+                PaymentMethod = PaymentMethodEnum.QRCode,
+            },
+            new PaymentStatusModel()
+            {
+                PaymentDate = DateTime.Now,
+                Status = PaymentStatusEnum.Failed,
+                Reason = "dfd66fdsf",
+                PaymentMethod = PaymentMethodEnum.Cash,
             }
         };
         #endregion
@@ -218,6 +244,46 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.PaymentStatus
             _dbContextMock.Verify(x => x.PaymentStatuses, Times.Once);
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(paymentStatusRepository.GetAllWithNavigationAsync)} method...", Times.Once, _exception);
             _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(paymentStatusRepository.GetAllWithNavigationAsync)} method", Times.Once, _exception);
+        }
+        #endregion
+
+        #region GetPaymentStatusHistoryAsync
+        [Fact]
+        public async void GivenValidRequest_WhenGetPaymentStatusHistoryAsyncIsCalled_ThenReturnCorrectResult()
+        {
+            // Arrange
+            var data = paymentSta.FirstOrDefault()!;
+            _dbPaymentStatusSetMock = EFTestHelper.GetMockDbSet(paymentSta);
+            _dbContextMock.Setup(x => x.PaymentStatuses).Returns(_dbPaymentStatusSetMock.Object);
+
+            // Act
+            var paymentStatusRepository = new PaymentStatusRepository(_loggerMock.Object, _dbContextMock.Object);
+            var result = await paymentStatusRepository.GetPaymentStatusHistoryAsync((Expression<Func<PaymentStatusModel, bool>>)((s) => s.PaymentId == data.PaymentId && s.Status == PaymentStatusEnum.Failed));
+
+            // Assert
+            result.Should().NotBeNull();
+            
+            _dbContextMock.Verify(x => x.PaymentStatuses, Times.Once);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(paymentStatusRepository.GetPaymentStatusHistoryAsync)} method...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(paymentStatusRepository.GetPaymentStatusHistoryAsync)} method", Times.Never, _exception);
+        }
+
+        [Fact]
+        public async Task GivenValidRequestButFailedToConnectDatabase_WhenGetPaymentStatusHistoryAsyncIsCalled_ThenThrowExceptionAsync()
+        {
+            // Arrange
+            var someEx = new ETCEPAYCoreAPIException(99, "Some exception");
+            _dbContextMock.Setup(x => x.PaymentStatuses).Throws(someEx);
+
+            // Act
+            var paymentStatusRepository = new PaymentStatusRepository(_loggerMock.Object, _dbContextMock.Object);
+            Func<Task> func = async () => await paymentStatusRepository.GetPaymentStatusHistoryAsync(It.IsNotNull<Expression<Func<PaymentStatusModel, bool>>>());
+
+            // Assert
+            var ex = await Assert.ThrowsAsync<ETCEPAYCoreAPIException>(func);
+            _dbContextMock.Verify(x => x.PaymentStatuses, Times.Once);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(paymentStatusRepository.GetPaymentStatusHistoryAsync)} method...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(paymentStatusRepository.GetPaymentStatusHistoryAsync)} method", Times.Once, _exception);
         }
         #endregion
     }

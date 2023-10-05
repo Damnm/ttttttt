@@ -307,5 +307,10 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                 throw;
             }
         }
+
+        public Task<ValidationResult<Models.UI.UIModel>> LoadCurrentUIAsync()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

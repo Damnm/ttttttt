@@ -6,6 +6,7 @@ using EPAY.ETC.Core.API.UnitTests.Common;
 using EPAY.ETC.Core.API.UnitTests.Helpers;
 using EPAY.ETC.Core.Models.Enums;
 using EPAY.ETC.Core.Models.Fees;
+using EPAY.ETC.Core.Models.Fees.PaymentStatusHistory;
 using EPAY.ETC.Core.Models.Request;
 using EPAY.ETC.Core.Models.Validation;
 using EPAY.ETC.Core.Publisher.Common.Options;
@@ -69,6 +70,35 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.PaymentStatus
             },
             ObjectId = objectId
         };
+
+        private ValidationResult<List<PaymentStatusHistoryModel>> paymentSta = new ValidationResult<List<PaymentStatusHistoryModel>>()
+        {
+            Data = new List<PaymentStatusHistoryModel>()
+            {
+                new PaymentStatusHistoryModel()
+            {
+                DateTimeEpoch = 324324343,
+                PaymentStatus = PaymentStatusEnum.Failed,
+                Reason = "dfd222fdsf",
+                PaymentMethod = PaymentMethodEnum.RFID,
+            },
+            new PaymentStatusHistoryModel()
+            {
+                DateTimeEpoch = 32443432,
+                PaymentStatus = PaymentStatusEnum.Failed,
+                Reason = "dfd111fdsf",
+                PaymentMethod = PaymentMethodEnum.QRCode,
+            },
+            new PaymentStatusHistoryModel()
+            {
+                DateTimeEpoch = 7657676,
+                PaymentStatus = PaymentStatusEnum.Failed,
+                Reason = "dfd66fdsf",
+                PaymentMethod = PaymentMethodEnum.Cash,
+            }
+            }
+        };
+       
         #region AddAsync
         // Happy case 200/201
         [Fact]
@@ -433,6 +463,52 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.PaymentStatus
             ((ObjectResult)actualResult).StatusCode.Should().Be(500);
             actualResultRespone?.Succeeded.Should().BeFalse();
             Assert.True(actualResultRespone?.Errors.Count > 0);
+        }
+        #endregion
+
+        #region GetPaymentStatusHistoryAsync
+        // Happy case 200
+        [Fact]
+        public async Task GivenValidRequest_WhenGetPaymentStatusHistoryAsyncIsCalled_ThenReturnCorrectResult()
+        {
+            // Arrange
+            _paymentStatusServiceMock.Setup(x => x.GetPaymentStatusHistoryAsync(It.IsNotNull<Guid>())).ReturnsAsync(paymentSta);
+
+            // Act
+            var PaymentStatusController = new PaymentStatusController(_loggerMock.Object, _paymentStatusServiceMock.Object, _uiActionServiceMock.Object, _publisherServiceMock.Object, _publisherOptions, _mapper);
+            var actualResult = await PaymentStatusController.GetPaymentStatusHistoryAsync(It.IsNotNull<Guid>());
+            var data = ((OkObjectResult)actualResult).Value as ValidationResult<List<PaymentStatusHistoryModel>>;
+
+            // Assert
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(PaymentStatusController.GetPaymentStatusHistoryAsync)}...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(PaymentStatusController.GetPaymentStatusHistoryAsync)} method", Times.Never, _exception);
+            actualResult.Should().BeOfType<OkObjectResult>();
+            ((ObjectResult)actualResult).StatusCode.Should().Be(StatusCodes.Status200OK);
+            data?.Succeeded.Should().BeTrue();
+            data?.Data.Should().NotBeNull();
+            data?.Data.Count.Should().Be(3);
+
+        }
+
+        // Unhappy case 400
+        [Fact]
+        public async Task GivenValidRequestAndSettingsServiceIsDown_WhenGetPaymentStatusHistoryAsyncIsCalled_ThenReturnInternalServerError()
+        {
+            // Arrange
+            var someEx = new Exception("An error occurred when calling GetByIdAsync method");
+            _paymentStatusServiceMock.Setup(x => x.GetPaymentStatusHistoryAsync(It.IsNotNull<Guid>())).ThrowsAsync(someEx);
+
+            // Act
+            var PaymentStatusController = new PaymentStatusController(_loggerMock.Object, _paymentStatusServiceMock.Object, _uiActionServiceMock.Object, _publisherServiceMock.Object, _publisherOptions, _mapper);
+            var actualResult = await PaymentStatusController.GetPaymentStatusHistoryAsync(It.IsNotNull<Guid>());
+            var actualResultRespone = ((ObjectResult)actualResult).Value as ValidationResult<string>;
+
+            // Assert
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(PaymentStatusController.GetPaymentStatusHistoryAsync)}...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(PaymentStatusController.GetPaymentStatusHistoryAsync)} method", Times.Once, _exception);
+            ((ObjectResult)actualResult).StatusCode.Should().Be(500);
+            actualResultRespone?.Succeeded.Should().BeFalse();
+            Assert.True(actualResultRespone?.Errors.Count() > 0);
         }
         #endregion
     }
