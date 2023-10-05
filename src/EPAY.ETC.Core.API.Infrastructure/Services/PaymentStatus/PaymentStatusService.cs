@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.PaymentStatus;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PaymentStatus;
+using EPAY.ETC.Core.Models.Enums;
+using EPAY.ETC.Core.Models.Fees.PaymentStatusHistory;
 using EPAY.ETC.Core.Models.Request;
 using EPAY.ETC.Core.Models.Validation;
 using Microsoft.Extensions.Logging;
@@ -77,6 +79,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.PaymentStatus
                 throw;
             }
         }
+
+        
         #endregion
 
         #region RemoveAsync
@@ -151,6 +155,35 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.PaymentStatus
             var result = await _repository.GetAllAsync(expression);
 
             return result.Any();
+        }
+        #endregion
+
+        #region GetPaymentStatusHistoryAsync
+        public async Task<ValidationResult<List<PaymentStatusHistoryModel>>> GetPaymentStatusHistoryAsync(Guid paymentId)
+        {
+            _logger.LogInformation($"Executing {nameof(GetPaymentStatusHistoryAsync)} method...");
+            try
+            {
+                var exp = (Expression<Func<PaymentStatusModel, bool>>)((s) => s.PaymentId == paymentId );
+
+                var res = new List<PaymentStatusHistoryModel>();
+                var result = await _repository.GetPaymentStatusHistoryAsync((Expression<Func<PaymentStatusModel, bool>>)((s) => s.PaymentId == paymentId && s.Status == PaymentStatusEnum.Failed));
+                if (result == null)
+                {
+                    return ValidationResult.Failed<List<PaymentStatusHistoryModel>>(null, new List<ValidationError>()
+                    {
+                        ValidationError.NotFound
+                    });
+                }
+
+                _mapper.Map(result.ToList(), res);
+                return ValidationResult.Success(res);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed to run {nameof(GetPaymentStatusHistoryAsync)} method. Error: {ex.Message}");
+                throw;
+            }
         }
         #endregion
     }

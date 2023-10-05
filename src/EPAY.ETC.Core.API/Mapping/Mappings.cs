@@ -1,15 +1,18 @@
 ﻿using AutoMapper;
+using EPAY.ETC.Core.API.Core.Models.Barcode;
 using EPAY.ETC.Core.API.Core.Models.ETCCheckOuts;
-using EPAY.ETC.Core.API.Core.Models.Fees;
 using EPAY.ETC.Core.API.Core.Models.Fusion;
 using EPAY.ETC.Core.API.Core.Models.ManualBarrierControl;
 using EPAY.ETC.Core.API.Core.Models.Vehicle;
 using EPAY.ETC.Core.API.Core.Utils;
 using EPAY.ETC.Core.API.Models.Configs;
+using EPAY.ETC.Core.Models.Fees;
+using EPAY.ETC.Core.Models.Fees.PaymentStatusHistory;
 using EPAY.ETC.Core.Models.Request;
 using EPAY.ETC.Core.Publisher.Common.Options;
 using System.Diagnostics.CodeAnalysis;
 using CoreModel = EPAY.ETC.Core.Models.Fees;
+using FeeModel = EPAY.ETC.Core.API.Core.Models.Fees.FeeModel;
 
 #nullable disable
 namespace EPAY.ETC.Core.API.Mapping
@@ -117,6 +120,14 @@ namespace EPAY.ETC.Core.API.Mapping
                 .ForPath(e => e.PaymentStatus.Status, act => act.MapFrom(src => src.Status));
 
             CreateMap<PublisherConfigurationOption, PublisherOptions>().ReverseMap();
+            CreateMap<BarcodeAddRequestModel, BarcodeModel>().ReverseMap();
+            CreateMap<BarcodeUpdateRequestModel, BarcodeModel>().ReverseMap();
+            CreateMap<PaymentStatusModel, PaymentStatusHistoryModel>()
+                  .ForPath(e => e.DateTimeEpoch, act => act.MapFrom(src => src.PaymentDate))
+             .ForPath(e => e.PaymentStatus, act => act.MapFrom(src => src.Status))
+             .ForPath(e => e.Reason, act => act.MapFrom(src => src.Reason))
+             .ForPath(e => e.PaymentMethod, act => act.MapFrom(src => src.PaymentMethod));
+
         }
     }
 }

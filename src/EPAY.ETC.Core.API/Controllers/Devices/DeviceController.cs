@@ -2,6 +2,7 @@
 using EPAY.ETC.Core.API.Core.Exceptions;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.UIActions;
 using EPAY.ETC.Core.API.Models.Configs;
+using EPAY.ETC.Core.API.Services;
 using EPAY.ETC.Core.Models.Request;
 using EPAY.ETC.Core.Models.Validation;
 using EPAY.ETC.Core.Publisher.Common.Options;
@@ -22,34 +23,21 @@ namespace EPAY.ETC.Core.API.Controllers.Devices
     {
         private readonly ILogger _logger;
         private readonly IUIActionService _uiActionService;
-        private readonly IPublisherService _publisherService;
-        private readonly List<PublisherConfigurationOption> _publisherOptions;
-        private readonly IMapper _mapper;
+        private readonly IRabbitMQPublisherService _rabbitMQPublisherService;
 
         /// <summary>
         /// Constructure
         /// </summary>
         /// <param name="logger"></param>
         /// <param name="uiActionService"></param>
-        /// <param name="publisherService"></param>
-        /// <param name="publisherOptions"></param>
-        /// <param name="mapper"></param>
+        /// <param name="rabbitMQPublisherService"></param>
         public DeviceController(ILogger logger,
                                 IUIActionService uiActionService,
-                                IPublisherService publisherService,
-                                IOptions<List<PublisherConfigurationOption>> publisherOptions,
-                                IMapper mapper)
+                                IRabbitMQPublisherService rabbitMQPublisherService)
         {
-            if (publisherOptions is null)
-            {
-                throw new ArgumentNullException(nameof(publisherOptions));
-            }
-
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _uiActionService = uiActionService ?? throw new ArgumentNullException(nameof(uiActionService));
-            _publisherService = publisherService ?? throw new ArgumentNullException(nameof(publisherService));
-            _publisherOptions = publisherOptions.Value;
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _rabbitMQPublisherService = rabbitMQPublisherService;
         }
 
         #region ManipulateBarrier
@@ -70,13 +58,7 @@ namespace EPAY.ETC.Core.API.Controllers.Devices
 
                 if (result.Succeeded)
                 {
-                    var publisherOption = _publisherOptions.FirstOrDefault(x => x.PublisherTarget == ETC.Core.Models.Enums.PublisherTargetEnum.Barrier);
-                    RabbitMessageOutbound message = new RabbitMessageOutbound()
-                    {
-                        Message = JsonSerializer.Serialize(result.Data)
-                    };
-
-                    _publisherService.SendMessage(message, _mapper.Map<PublisherOptions>(publisherOption));
+                    _rabbitMQPublisherService.SendMessage(JsonSerializer.Serialize(result.Data), ETC.Core.Models.Enums.PublisherTargetEnum.Barrier);
                 }
 
                 return Ok();

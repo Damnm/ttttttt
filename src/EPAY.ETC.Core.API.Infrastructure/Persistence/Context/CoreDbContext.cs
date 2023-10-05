@@ -1,4 +1,6 @@
 ﻿using EPAY.ETC.Core.API.Core.Extensions;
+using EPAY.ETC.Core.API.Core.Models.Authentication;
+using EPAY.ETC.Core.API.Core.Models.Barcode;
 using EPAY.ETC.Core.API.Core.Models.Configs;
 using EPAY.ETC.Core.API.Core.Models.CustomVehicleTypes;
 using EPAY.ETC.Core.API.Core.Models.ETCCheckOuts;
@@ -8,7 +10,6 @@ using EPAY.ETC.Core.API.Core.Models.FeeVehicleCategories;
 using EPAY.ETC.Core.API.Core.Models.Fusion;
 using EPAY.ETC.Core.API.Core.Models.ManualBarrierControl;
 using EPAY.ETC.Core.API.Core.Models.Payment;
-using EPAY.ETC.Core.API.Core.Models.PaymentStatus;
 using EPAY.ETC.Core.API.Core.Models.TimeBlockFees;
 using EPAY.ETC.Core.API.Core.Models.Transaction;
 using EPAY.ETC.Core.API.Core.Models.TransactionLog;
@@ -19,7 +20,9 @@ using EPAY.ETC.Core.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System.Diagnostics.CodeAnalysis;
+using System.Net.Security;
 using FeeTypeEnum = EPAY.ETC.Core.API.Core.Models.Enum.FeeTypeEnum;
+using PaymentStatusModel = EPAY.ETC.Core.API.Core.Models.PaymentStatus.PaymentStatusModel;
 
 namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
 {
@@ -46,11 +49,13 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
         public virtual DbSet<TimeBlockFeeFormulaModel> TimeBlockFeeFormulas { get; set; }
         public virtual DbSet<FeeVehicleCategoryModel> FeeVehicleCategories { get; set; }
         public virtual DbSet<FeeModel> Fees { get; set; }
-        public virtual DbSet<PaymentStatusModel> PaymentStatuses { get; set; }
+        public virtual DbSet<Core.Models.PaymentStatus.PaymentStatusModel> PaymentStatuses { get; set; }
         public virtual DbSet<PaymentModel> Payments { get; set; }
         public virtual DbSet<ETCCheckoutDataModel> ETCCheckOuts { get; set; }
         public virtual DbSet<AppConfigModel> AppConfigs { get; set; }
         public virtual DbSet<ManualBarrierControlModel> ManualBarrierControls { get; set; }
+        public virtual DbSet<BarcodeModel> Barcodes { get; set; }
+        public virtual DbSet<AuthenticatedEmployeeModel> AuthenticatedEmployees{ get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -627,6 +632,21 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                     FooterLine2 = "Người nộp",
                     StationCode = "03"
                 });
+            #endregion
+
+            #region Barcode configuration
+            modelBuilder.Entity<BarcodeModel>().HasKey(x => x.Id);
+            modelBuilder.Entity<BarcodeModel>()
+               .Property(x => x.EmployeeId)
+               .HasMaxLength(50);
+            #endregion
+
+            #region AuthenticatedEmployeeModel configuration
+            modelBuilder.Entity<AuthenticatedEmployeeModel>().HasKey(x => x.Id);
+            modelBuilder.Entity<AuthenticatedEmployeeModel>()
+               .Property(x => x.Action)
+               .HasMaxLength(50)
+               .HasConversion(new EnumToStringConverter<LogonStatusEnum>());
             #endregion
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
