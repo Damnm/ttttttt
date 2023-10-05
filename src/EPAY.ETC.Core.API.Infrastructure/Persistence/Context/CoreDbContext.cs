@@ -17,6 +17,7 @@ using EPAY.ETC.Core.API.Core.Models.Vehicle;
 using EPAY.ETC.Core.API.Core.Models.VehicleCategories;
 using EPAY.ETC.Core.API.Core.Models.VehicleGroups;
 using EPAY.ETC.Core.Models.Enums;
+using EPAY.ETC.Core.Models.UI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System.Diagnostics.CodeAnalysis;
@@ -53,6 +54,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
         public virtual DbSet<AppConfigModel> AppConfigs { get; set; }
         public virtual DbSet<ManualBarrierControlModel> ManualBarrierControls { get; set; }
         public virtual DbSet<BarcodeModel> Barcodes { get; set; }
+        public virtual DbSet<AuthenticatedEmployeeModel> AuthenticatedEmployees{ get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
