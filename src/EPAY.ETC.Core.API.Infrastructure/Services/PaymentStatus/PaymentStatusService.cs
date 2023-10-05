@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.PaymentStatus;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PaymentStatus;
+using EPAY.ETC.Core.Models.Enums;
 using EPAY.ETC.Core.Models.Fees.PaymentStatusHistory;
 using EPAY.ETC.Core.Models.Request;
 using EPAY.ETC.Core.Models.Validation;
@@ -163,7 +164,10 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.PaymentStatus
             _logger.LogInformation($"Executing {nameof(GetPaymentStatusHistoryAsync)} method...");
             try
             {
-                var result = await _repository.GetAllAsync();
+                var exp = (Expression<Func<PaymentStatusModel, bool>>)((s) => s.PaymentId == paymentId );
+
+                var res = new List<PaymentStatusHistoryModel>();
+                var result = await _repository.GetPaymentStatusHistoryAsync((Expression<Func<PaymentStatusModel, bool>>)((s) => s.PaymentId == paymentId && s.Status == PaymentStatusEnum.Failed));
                 if (result == null)
                 {
                     return ValidationResult.Failed<List<PaymentStatusHistoryModel>>(null, new List<ValidationError>()
@@ -172,7 +176,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.PaymentStatus
                     });
                 }
 
-                return ValidationResult.Success(new List<PaymentStatusHistoryModel>());
+                _mapper.Map(result.ToList(), res);
+                return ValidationResult.Success(res);
             }
             catch (Exception ex)
             {

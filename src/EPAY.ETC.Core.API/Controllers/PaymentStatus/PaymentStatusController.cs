@@ -233,5 +233,33 @@ namespace EPAY.ETC.Core.API.Controllers.PaymentStatus
             }
         }
         #endregion
+
+        #region GetPaymentStatusHistoryAsync
+        /// <summary>
+        /// Get Payment status Detail
+        /// </summary>
+        [HttpGet("v1/paymentstatuses/history/{paymentId}")]
+        public async Task<IActionResult> GetPaymentStatusHistoryAsync(string paymentId)
+        {
+            try
+            {
+                _logger.LogInformation($"Executing {nameof(GetPaymentStatusHistoryAsync)}...");
+                Guid.TryParse(paymentId, out var gPaymentId);
+                var result = await _paymentStatusService.GetPaymentStatusHistoryAsync(gPaymentId);
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                List<ValidationError> validationErrors = new();
+                string errorMessage = $"An error occurred when calling {nameof(GetPaymentStatusHistoryAsync)} method: {ex.Message}. InnerException : {ApiExceptionMessages.ExceptionMessages(ex)}. Stack trace: {ex.StackTrace}";
+                _logger.LogError(errorMessage);
+                validationErrors.Add(ValidationError.InternalServerError);
+                return StatusCode(StatusCodes.Status500InternalServerError, ValidationResult.Failed(errorMessage, validationErrors));
+            }
+        }
+        #endregion
+
+
     }
 }

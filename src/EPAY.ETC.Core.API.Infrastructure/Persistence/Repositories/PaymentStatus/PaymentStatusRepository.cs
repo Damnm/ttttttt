@@ -49,11 +49,25 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PaymentStatu
                     return Task.FromResult<IEnumerable<PaymentStatusModel>>(_dbContext.PaymentStatuses.AsNoTracking());
                 }
 
-                return Task.FromResult<IEnumerable<PaymentStatusModel>>(_dbContext.PaymentStatuses.AsNoTracking().Where(expression));
+                return Task.FromResult<IEnumerable<PaymentStatusModel>>(_dbContext.PaymentStatuses.AsNoTracking().Where(expression).OrderByDescending(x=> x.PaymentDate).Take(3));
             }
             catch (Exception ex)
             {
                 _logger.LogError($"An error occurred when calling {nameof(GetAllAsync)} method. Detail: {ex.Message}. Stack trace: {ex.StackTrace}");
+                throw;
+            }
+        }
+        public Task<IQueryable<PaymentStatusModel>> GetPaymentStatusHistoryAsync(Expression<Func<PaymentStatusModel, bool>> expression)
+        {
+
+            _logger.LogInformation($"Executing {nameof(GetPaymentStatusHistoryAsync)} method...");
+            try
+            {
+                return Task.FromResult(_dbContext.PaymentStatuses.AsNoTracking().Where(expression).OrderByDescending(x => x.PaymentDate).Take(3));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"An error occurred when calling {nameof(GetPaymentStatusHistoryAsync)} method. Detail: {ex.Message}. Stack trace: {ex.StackTrace}");
                 throw;
             }
         }
