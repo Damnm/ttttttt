@@ -2,10 +2,14 @@
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Fees;
 using EPAY.ETC.Core.API.Core.Models.Fees;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Fees;
+using EPAY.ETC.Core.Models.Constants;
+using EPAY.ETC.Core.Models.Fees;
 using EPAY.ETC.Core.Models.Validation;
 using Microsoft.Extensions.Logging;
+using StackExchange.Redis;
 using System.Linq.Expressions;
 using CoreModel = EPAY.ETC.Core.Models.Fees;
+using FeeModel = EPAY.ETC.Core.API.Core.Models.Fees.FeeModel;
 
 namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
 {
@@ -14,6 +18,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
         private readonly ILogger<FeeService> _logger;
         private readonly IFeeRepository _repository;
         private readonly IMapper _mapper;
+        private readonly IDatabase _redisDB;
 
         public FeeService(
             ILogger<FeeService> logger, IFeeRepository repository, IMapper mapper)
@@ -50,6 +55,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
                 throw;
             }
         }
+
+       
 
         public async Task<ValidationResult<IEnumerable<FeeModel>>> GetAllAsync(Expression<Func<FeeModel, bool>>? expressison = null)
         {
@@ -187,5 +194,41 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
             }
         }
         #endregion
+
+        public async Task<ValidationResult<List<CoreModel.LaneInVehicleModel>>> FindVehicleAsync(string numberPlate = null, string rfid = null)
+        {
+
+            return ValidationResult.Failed<List<LaneInVehicleModel>>(new List<ValidationError>()
+                    {
+                        ValidationError.NotFound
+                    });
+
+            //_logger.LogInformation($"Executing {nameof(FindVehicleAsync)} method...");
+
+            //try
+            //{
+            //    if (!string.IsNullOrEmpty(rfid))
+            //    {
+            //        var landInVehicle = await _redisDB.StringGetAsync(RedisConstant.StringType_RFIDInKey(rfid));
+
+            //        return;
+            //    }
+            //    else if (!string.IsNullOrEmpty(numberPlate))
+            //    {
+            //        var landInVehicle = await _redisDB.StringGetAsync(RedisConstant.StringType_CameraInKey(numberPlate));
+            //        return;
+            //    }
+
+            //    return ValidationResult.Failed<List<LaneInVehicleModel>>(new List<ValidationError>()
+            //        {
+            //            ValidationError.NotFound
+            //        });
+            //}
+            //catch (Exception ex)
+            //{
+            //    _logger.LogError($"An error occurred when calling {nameof(FindVehicleAsync)} method. Details: {ex.Message}. Stack trace: {ex.StackTrace}");
+            //    throw;
+            //}
+        }
     }
 }

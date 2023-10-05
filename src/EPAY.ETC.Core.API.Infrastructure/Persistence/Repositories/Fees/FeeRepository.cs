@@ -1,9 +1,12 @@
 ﻿using EPAY.ETC.Core.API.Core.Exceptions;
 using EPAY.ETC.Core.API.Core.Models.Fees;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Context;
+using EPAY.ETC.Core.Models.Fees;
+using EPAY.ETC.Core.Models.Validation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Linq.Expressions;
+using FeeModel = EPAY.ETC.Core.API.Core.Models.Fees.FeeModel;
 
 namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Fees
 {
