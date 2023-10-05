@@ -3,6 +3,7 @@ using EPAY.ETC.Core.API.Infrastructure.Persistence.Context;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Payment;
 using EPAY.ETC.Core.API.Infrastructure.UnitTests.Common;
 using EPAY.ETC.Core.API.Infrastructure.UnitTests.Helpers;
+using EPAY.ETC.Core.Models.Fees.PaidVehicleHistory;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;

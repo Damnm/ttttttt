@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Payment;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Payment;
+using EPAY.ETC.Core.Models.Fees.PaidVehicleHistory;
 using EPAY.ETC.Core.Models.Request;
 using EPAY.ETC.Core.Models.Validation;
 using Microsoft.Extensions.Logging;
@@ -75,6 +76,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Payment
                 throw;
             }
         }
+
+       
         #endregion
 
         #region RemoveAsync
@@ -158,6 +161,31 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Payment
             var result = await _repository.GetAllAsync(expression);
 
             return result.Any(x => !x.Id.Equals(id));
+        }
+        #endregion
+
+        #region GetPaidVehicleHistoryAsync
+        public async Task<ValidationResult<List<PaidVehicleHistoryModel>>> GetPaidVehicleHistoryAsync()
+        {
+            _logger.LogInformation($"Executing {nameof(GetPaidVehicleHistoryAsync)} method...");
+            try
+            {
+                var result = await _repository.GetPaidVehicleHistoryAsync();
+                if (result == null)
+                {
+                    return ValidationResult.Failed<List<PaidVehicleHistoryModel>>(null, new List<ValidationError>()
+                    {
+                        ValidationError.NotFound
+                    });
+                }
+
+                return ValidationResult.Success(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed to run {nameof(GetPaidVehicleHistoryAsync)} method. Error: {ex.Message}");
+                throw;
+            }
         }
         #endregion
     }

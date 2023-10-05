@@ -1,8 +1,12 @@
 ﻿using EPAY.ETC.Core.API.Core.Exceptions;
+using EPAY.ETC.Core.API.Core.Utils;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Context;
+using EPAY.ETC.Core.Models.Fees.PaidVehicleHistory;
+using EPAY.ETC.Core.Models.Validation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Linq.Expressions;
+using System.Security.Cryptography.X509Certificates;
 using PaymentModel = EPAY.ETC.Core.API.Core.Models.Payment.PaymentModel;
 
 namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Payment
@@ -74,6 +78,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Payment
             }
         }
 
+        
+
         public async Task RemoveAsync(PaymentModel entity)
         {
             _logger.LogInformation($"Executing {nameof(RemoveAsync)} method...");
@@ -101,6 +107,40 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Payment
             catch (ETCEPAYCoreAPIException ex)
             {
                 _logger.LogError($"An error occurred when calling {nameof(UpdateAsync)} method. Details: {ex.Message}. Stack trace: {ex.StackTrace}");
+                throw;
+            }
+        }
+
+        public async Task<List<PaidVehicleHistoryModel>?> GetPaidVehicleHistoryAsync()
+        {
+            _logger.LogInformation($"Executing {nameof(GetPaidVehicleHistoryAsync)} method...");
+
+            try
+            {
+                var result = _dbContext.PaymentStatuses
+                   .Include(x => x.Payment)
+                   .Include(x => x.Payment.Fee)
+                   .Include(x => x.Payment.CustomVehicleType)
+                   .AsNoTracking()
+                   .Where(x => x.Status == Models.Enums.PaymentStatusEnum.Paid).OrderByDescending(x=> x.PaymentDate).Take(3)
+                   .Select(x => new PaidVehicleHistoryModel()
+                   {
+                        PlateNumber = x.Payment.PlateNumber,
+                        RFID = x.Payment.RFID,
+                        PaymentMethod = x.PaymentMethod,
+                        PaidDateTimeEpoch = x.PaymentDate.ToUnixTime(),
+                        LaneinDateTimeEpoch = x.Payment.Fee.LaneInEpoch,
+                        LaneoutDateTimeEpoch = x.Payment.Fee.LaneOutEpoch,
+                        CustomVehicleType = x.Payment.CustomVehicleType.Name,
+                        LaneinVehiclePhotoUrl = x.Payment.Fee.LaneInVehiclePhotoUrl,
+                        LaneoutVehiclePhotoUrl = x.Payment.Fee.LaneOutVehiclePhotoUrl,
+                   });
+               
+                return result?.ToList();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"An error occurred when calling {nameof(GetPaidVehicleHistoryAsync)} method. Details: {ex.Message}. Stack trace: {ex.StackTrace}");
                 throw;
             }
         }

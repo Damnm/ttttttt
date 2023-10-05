@@ -157,5 +157,30 @@ namespace EPAY.ETC.Core.API.Controllers.Payment
             }
         }
         #endregion
+
+        #region GetPaidVehicleHistoryAsync
+        /// <summary>
+        /// Get Payment Detail
+        /// </summary>
+        [HttpGet("v1/payments/paidvehicles")]
+        public async Task<IActionResult> GetPaidVehicleHistoryAsync()
+        {
+            try
+            {
+                _logger.LogInformation($"Executing {nameof(GetPaidVehicleHistoryAsync)}...");
+                var result = await _paymentService.GetPaidVehicleHistoryAsync();
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                List<ValidationError> validationErrors = new();
+                string errorMessage = $"An error occurred when calling {nameof(GetPaidVehicleHistoryAsync)} method: {ex.Message}. InnerException : {ApiExceptionMessages.ExceptionMessages(ex)}. Stack trace: {ex.StackTrace}";
+                _logger.LogError(errorMessage);
+                validationErrors.Add(ValidationError.InternalServerError);
+                return StatusCode(StatusCodes.Status500InternalServerError, ValidationResult.Failed(errorMessage, validationErrors));
+            }
+        }
+        #endregion
     }
 }

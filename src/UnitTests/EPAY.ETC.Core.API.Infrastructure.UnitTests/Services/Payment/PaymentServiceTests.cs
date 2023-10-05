@@ -2,6 +2,7 @@
 using EPAY.ETC.Core.API.Infrastructure.Services.Payment;
 using EPAY.ETC.Core.API.Infrastructure.UnitTests.Common;
 using EPAY.ETC.Core.API.Infrastructure.UnitTests.Helpers;
+using EPAY.ETC.Core.Models.Fees.PaidVehicleHistory;
 using EPAY.ETC.Core.Models.Request;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
@@ -40,6 +41,14 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Payment
             RFID = "dfsdfdsfds",
             Make = "Toyota",
             Amount = 300
+        };
+        private List<PaidVehicleHistoryModel> paidVehicleHistory = new List<PaidVehicleHistoryModel>()
+        {
+            new PaidVehicleHistoryModel()
+            {
+                 RFID= "1",
+                 PlateNumber = "2",
+            }
         };
         #endregion
 
@@ -262,6 +271,64 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Payment
             _paymentRepositoryMock.Verify(x => x.GetByIdAsync(It.IsNotNull<Guid>()), Times.Once);
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.GetByIdAsync)} method...", Times.Once, _exception);
             _loggerMock.VerifyLog(LogLevel.Error, $"Failed to run {nameof(service.GetByIdAsync)} method", Times.Once, _exception);
+        }
+        #endregion
+
+        #region GetPaidVehicleHistoryAsync
+        [Fact]
+        public async Task GivenValidRequest_WhenGetPaidVehicleHistoryAsyncIsCalled_ThenReturnCorrectResult()
+        {
+            // Arrange
+            _paymentRepositoryMock.Setup(x => x.GetPaidVehicleHistoryAsync()).ReturnsAsync(paidVehicleHistory);
+
+            // Act
+            var service = new PaymentService(_loggerMock.Object, _paymentRepositoryMock.Object, _mapper);
+            var result = await service.GetPaidVehicleHistoryAsync();
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Data.Should().NotBeNull();
+            result.Succeeded.Should().BeTrue();
+            _paymentRepositoryMock.Verify(x => x.GetPaidVehicleHistoryAsync(), Times.Once);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.GetPaidVehicleHistoryAsync)} method...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"Failed to run {nameof(service.GetPaidVehicleHistoryAsync)} method", Times.Never, _exception);
+        }
+
+        [Fact]
+        public async Task GivenValidRequestButNotFound_WhenGetPaidVehicleHistoryAsyncIsCalled_ThenReturnCorrectResult()
+        {
+            // Arrange
+            List<PaidVehicleHistoryModel> paidVehicleHis = null;
+            _paymentRepositoryMock.Setup(x => x.GetPaidVehicleHistoryAsync()).ReturnsAsync(paidVehicleHis);
+
+            // Act
+            var service = new PaymentService(_loggerMock.Object, _paymentRepositoryMock.Object, _mapper);
+            var result = await service.GetPaidVehicleHistoryAsync();
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Data.Should().BeNull();
+            result.Succeeded.Should().BeFalse();
+            _paymentRepositoryMock.Verify(x => x.GetPaidVehicleHistoryAsync(), Times.Once);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.GetPaidVehicleHistoryAsync)} method...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"Failed to run {nameof(service.GetPaidVehicleHistoryAsync)} method", Times.Never, _exception);
+        }
+
+        [Fact]
+        public async Task GivenValidRequestAndRepositoryIsDown_WhenGetPaidVehicleHistoryAsyncIsCalled_ThenThrowException()
+        {
+            // Arrange
+            _paymentRepositoryMock.Setup(x => x.GetPaidVehicleHistoryAsync()).ThrowsAsync(new Exception());
+
+            // Act
+            var service = new PaymentService(_loggerMock.Object, _paymentRepositoryMock.Object, _mapper);
+            Func<Task> func = () => service.GetPaidVehicleHistoryAsync();
+
+            // Assert
+            var ex = await Assert.ThrowsAsync<Exception>(func);
+            _paymentRepositoryMock.Verify(x => x.GetPaidVehicleHistoryAsync(), Times.Once);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.GetPaidVehicleHistoryAsync)} method...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"Failed to run {nameof(service.GetPaidVehicleHistoryAsync)} method", Times.Once, _exception);
         }
         #endregion
     }

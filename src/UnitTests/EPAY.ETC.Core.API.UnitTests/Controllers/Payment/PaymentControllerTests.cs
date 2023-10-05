@@ -1,6 +1,7 @@
 ﻿using EPAY.ETC.Core.API.Controllers.Payment;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Payment;
 using EPAY.ETC.Core.API.UnitTests.Helpers;
+using EPAY.ETC.Core.Models.Fees.PaidVehicleHistory;
 using EPAY.ETC.Core.Models.Request;
 using EPAY.ETC.Core.Models.Validation;
 using FluentAssertions;
@@ -44,6 +45,19 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Payment
             Make = "Toyota",
             Amount = 300
         };
+
+        private ValidationResult<List<PaidVehicleHistoryModel>> paidVehicleHistory = new ValidationResult<List<PaidVehicleHistoryModel>>()
+        {
+            Data = new List<PaidVehicleHistoryModel>()
+                {
+                    new PaidVehicleHistoryModel()
+                    {
+                         RFID= "1",
+                         PlateNumber = "2",
+                    }
+                }
+        };
+
 
         #region AddAsync
         // Happy case 200/201
@@ -322,6 +336,51 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Payment
             // Assert
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(paymentController.GetByIdAsync)}...", Times.Once, _exception);
             _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(paymentController.GetByIdAsync)} method", Times.Once, _exception);
+            ((ObjectResult)actualResult).StatusCode.Should().Be(500);
+            actualResultRespone?.Succeeded.Should().BeFalse();
+            Assert.True(actualResultRespone?.Errors.Count() > 0);
+        }
+        #endregion
+
+        #region GetPaidVehicleHistoryAsync
+        // Happy case 200
+        [Fact]
+        public async Task GivenValidRequest_WhenGetPaidVehicleHistoryAsyncIsCalled_ThenReturnCorrectResult()
+        {
+            // Arrange
+            _paymentServiceMock.Setup(x => x.GetPaidVehicleHistoryAsync()).ReturnsAsync(paidVehicleHistory);
+
+            // Act
+            var paymentController = new PaymentController(_loggerMock.Object, _paymentServiceMock.Object);
+            var actualResult = await paymentController.GetPaidVehicleHistoryAsync();
+            var data = (((OkObjectResult)actualResult).Value) as ValidationResult<List<PaidVehicleHistoryModel>>;
+
+            // Assert
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(paymentController.GetPaidVehicleHistoryAsync)}...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(paymentController.GetPaidVehicleHistoryAsync)} method", Times.Never, _exception);
+            actualResult.Should().BeOfType<OkObjectResult>();
+            ((ObjectResult)actualResult).StatusCode.Should().Be(StatusCodes.Status200OK);
+            data?.Succeeded.Should().BeTrue();
+            data?.Data.Should().NotBeNull();
+            data?.Data?.Count.Should().Be(1);
+        }
+
+        // Unhappy case 400
+        [Fact]
+        public async Task GivenValidRequestAndSettingsServiceIsDown_WhenGetPaidVehicleHistoryAsyncIsCalled_ThenReturnInternalServerError()
+        {
+            // Arrange
+            var someEx = new Exception("An error occurred when calling GetByIdAsync method");
+            _paymentServiceMock.Setup(x => x.GetPaidVehicleHistoryAsync()).ThrowsAsync(someEx);
+
+            // Act
+            var paymentController = new PaymentController(_loggerMock.Object, _paymentServiceMock.Object);
+            var actualResult = await paymentController.GetPaidVehicleHistoryAsync();
+            var actualResultRespone = ((ObjectResult)actualResult).Value as ValidationResult<string>;
+
+            // Assert
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(paymentController.GetPaidVehicleHistoryAsync)}...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(paymentController.GetPaidVehicleHistoryAsync)} method", Times.Once, _exception);
             ((ObjectResult)actualResult).StatusCode.Should().Be(500);
             actualResultRespone?.Succeeded.Should().BeFalse();
             Assert.True(actualResultRespone?.Errors.Count() > 0);
