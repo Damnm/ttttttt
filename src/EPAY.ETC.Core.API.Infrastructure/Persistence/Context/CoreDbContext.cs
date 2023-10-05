@@ -57,7 +57,6 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
         public virtual DbSet<BarcodeModel> Barcodes { get; set; }
         public virtual DbSet<AuthenticatedEmployeeModel> AuthenticatedEmployees{ get; set; }
 
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);

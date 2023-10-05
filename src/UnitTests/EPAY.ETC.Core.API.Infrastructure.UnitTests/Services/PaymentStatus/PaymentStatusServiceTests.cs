@@ -7,6 +7,7 @@ using EPAY.ETC.Core.Models.Request;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
+using System.Linq.Expressions;
 using PaymentStatusModel = EPAY.ETC.Core.API.Core.Models.PaymentStatus.PaymentStatusModel;
 
 namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.PaymentStatus
@@ -40,6 +41,31 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.PaymentStatus
             Currency = "vnd",
             PaymentMethod = PaymentMethodEnum.RFID,
         };
+
+        private IQueryable<PaymentStatusModel> paymentStatuses = new List<PaymentStatusModel>()
+        {
+            new PaymentStatusModel()
+            {
+                PaymentDate = DateTime.Now,
+                Status = PaymentStatusEnum.Failed,
+                Reason = "dfd222fdsf",
+                PaymentMethod = PaymentMethodEnum.RFID,
+            },
+            new PaymentStatusModel()
+            {
+                PaymentDate = DateTime.Now,
+                Status = PaymentStatusEnum.Failed,
+                Reason = "dfd111fdsf",
+                PaymentMethod = PaymentMethodEnum.QRCode,
+            },
+            new PaymentStatusModel()
+            {
+                PaymentDate = DateTime.Now,
+                Status = PaymentStatusEnum.Failed,
+                Reason = "dfd66fdsf",
+                PaymentMethod = PaymentMethodEnum.Cash,
+            }
+        }.AsQueryable();
         #endregion
 
         #region AddAsync
@@ -261,6 +287,65 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.PaymentStatus
             _paymentStatusRepositoryMock.Verify(x => x.GetByIdAsync(It.IsNotNull<Guid>()), Times.Once);
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.GetByIdAsync)} method...", Times.Once, _exception);
             _loggerMock.VerifyLog(LogLevel.Error, $"Failed to run {nameof(service.GetByIdAsync)} method", Times.Once, _exception);
+        }
+        #endregion
+
+        #region GetPaymentStatusHistoryAsync
+        [Fact]
+        public async Task GivenValidRequest_WhenGetPaymentStatusHistoryAsyncIsCalled_ThenReturnCorrectResult()
+        {
+            // Arrange
+            _paymentStatusRepositoryMock.Setup(x => x.GetPaymentStatusHistoryAsync(It.IsNotNull<Expression<Func<PaymentStatusModel, bool>>>())).ReturnsAsync(paymentStatuses);
+
+            // Act
+            var service = new PaymentStatusService(_loggerMock.Object, _paymentStatusRepositoryMock.Object, _mapper);
+            var result = await service.GetPaymentStatusHistoryAsync(id);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Data.Should().NotBeNull();
+            result.Succeeded.Should().BeTrue();
+            result.Data.Count.Should().Be(3);
+            _paymentStatusRepositoryMock.Verify(x => x.GetPaymentStatusHistoryAsync(It.IsNotNull<Expression<Func<PaymentStatusModel, bool>>>()), Times.Once);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.GetPaymentStatusHistoryAsync)} method...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"Failed to run {nameof(service.GetPaymentStatusHistoryAsync)} method", Times.Never, _exception);
+        }
+
+        [Fact]
+        public async Task GivenValidRequestButNotFound_WhenGetPaymentStatusHistoryAsyncIsCalled_ThenReturnCorrectResult()
+        {
+            IQueryable<PaymentStatusModel> paymentStat = null;
+            // Arrange
+            _paymentStatusRepositoryMock.Setup(x => x.GetPaymentStatusHistoryAsync(It.IsNotNull<Expression<Func<PaymentStatusModel, bool>>>())).ReturnsAsync(paymentStat);
+
+            // Act
+            var service = new PaymentStatusService(_loggerMock.Object, _paymentStatusRepositoryMock.Object, _mapper);
+            var result = await service.GetPaymentStatusHistoryAsync(id);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Data.Should().BeNull();
+            result.Succeeded.Should().BeFalse();
+            _paymentStatusRepositoryMock.Verify(x => x.GetPaymentStatusHistoryAsync(It.IsNotNull<Expression<Func<PaymentStatusModel, bool>>>()), Times.Once);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.GetPaymentStatusHistoryAsync)} method...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"Failed to run {nameof(service.GetPaymentStatusHistoryAsync)} method", Times.Never, _exception);
+        }
+
+        [Fact]
+        public async Task GivenValidRequestAndRepositoryIsDown_WhenGetPaymentStatusHistoryAsyncIsCalled_ThenThrowException()
+        {
+            // Arrange
+            _paymentStatusRepositoryMock.Setup(x => x.GetPaymentStatusHistoryAsync(It.IsNotNull<Expression<Func<PaymentStatusModel, bool>>>())).ThrowsAsync(new Exception());
+
+            // Act
+            var service = new PaymentStatusService(_loggerMock.Object, _paymentStatusRepositoryMock.Object, _mapper);
+            Func<Task> func = () => service.GetPaymentStatusHistoryAsync(id);
+
+            // Assert
+            var ex = await Assert.ThrowsAsync<Exception>(func);
+            _paymentStatusRepositoryMock.Verify(x => x.GetPaymentStatusHistoryAsync(It.IsNotNull<Expression<Func<PaymentStatusModel, bool>>>()), Times.Once);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.GetPaymentStatusHistoryAsync)} method...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"Failed to run {nameof(service.GetPaymentStatusHistoryAsync)} method", Times.Once, _exception);
         }
         #endregion
     }

@@ -3,6 +3,7 @@ using EPAY.ETC.Core.API.Core.Models.Barcode;
 using EPAY.ETC.Core.API.Core.Models.ETCCheckOuts;
 using EPAY.ETC.Core.API.Core.Models.Fusion;
 using EPAY.ETC.Core.API.Core.Models.ManualBarrierControl;
+using EPAY.ETC.Core.API.Core.Models.PaymentStatus;
 using EPAY.ETC.Core.API.Core.Models.Vehicle;
 using EPAY.ETC.Core.API.Core.Utils;
 using EPAY.ETC.Core.API.Models.Configs;
@@ -110,7 +111,7 @@ namespace EPAY.ETC.Core.API.Mapping
                 .ForPath(e => e.Payment.VehicleCategoryId, act => act.MapFrom(src => src.Payment.Fee.VehicleCategoryId))
                 .ForPath(e => e.Payment.CustomVehicleTypeId, act => act.MapFrom(src => src.Payment.CustomVehicleTypeId))
                 .ForPath(e => e.Payment.CheckInTime, act => act.MapFrom(src => src.Payment.Fee.LaneInEpoch))
-                .ForPath(e => e.Payment.CheckOutTime, act => act.MapFrom(src => src.Payment.Fee.LaneOutDate))
+                .ForPath(e => e.Payment.CheckOutTime, act => act.MapFrom(src => src.Payment.Fee.LaneOutEpoch))
                 .ForPath(e => e.Payment.ObjectId, act => act.MapFrom(src => src.Payment.Fee.ObjectId));
 
             CreateMap<PaymentStatusUIRequestModel, CoreModel.PaymenStatusResponseModel>()
@@ -122,8 +123,8 @@ namespace EPAY.ETC.Core.API.Mapping
             CreateMap<PublisherConfigurationOption, PublisherOptions>().ReverseMap();
             CreateMap<BarcodeAddRequestModel, BarcodeModel>().ReverseMap();
             CreateMap<BarcodeUpdateRequestModel, BarcodeModel>().ReverseMap();
-            CreateMap<PaymentStatusModel, PaymentStatusHistoryModel>()
-                  .ForPath(e => e.DateTimeEpoch, act => act.MapFrom(src => src.PaymentDate))
+            CreateMap<Core.Models.PaymentStatus.PaymentStatusModel, PaymentStatusHistoryModel>()
+             .ForPath(e => e.DateTimeEpoch, act => act.MapFrom(src => src.PaymentDate.ToUnixTime()))
              .ForPath(e => e.PaymentStatus, act => act.MapFrom(src => src.Status))
              .ForPath(e => e.Reason, act => act.MapFrom(src => src.Reason))
              .ForPath(e => e.PaymentMethod, act => act.MapFrom(src => src.PaymentMethod));

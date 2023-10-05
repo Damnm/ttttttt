@@ -26,6 +26,7 @@ namespace EPAY.ETC.Core.API.Core.Models.PaymentStatus
         [MaxLength(50)]
         public string? TransactionId { get; set; }
 
-
+        [MaxLength(255)]
+        public string? Reason { get; set; }
     }
 }

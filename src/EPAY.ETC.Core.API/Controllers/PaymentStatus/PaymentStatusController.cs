@@ -239,13 +239,12 @@ namespace EPAY.ETC.Core.API.Controllers.PaymentStatus
         /// Get Payment status Detail
         /// </summary>
         [HttpGet("v1/paymentstatuses/history/{paymentId}")]
-        public async Task<IActionResult> GetPaymentStatusHistoryAsync(string paymentId)
+        public async Task<IActionResult> GetPaymentStatusHistoryAsync(Guid paymentId)
         {
             try
             {
                 _logger.LogInformation($"Executing {nameof(GetPaymentStatusHistoryAsync)}...");
-                Guid.TryParse(paymentId, out var gPaymentId);
-                var result = await _paymentStatusService.GetPaymentStatusHistoryAsync(gPaymentId);
+                var result = await _paymentStatusService.GetPaymentStatusHistoryAsync(paymentId);
 
                 return Ok(result);
             }

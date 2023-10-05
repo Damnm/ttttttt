@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.PaymentStatus;
+using EPAY.ETC.Core.API.Core.Models.ETCCheckOuts;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PaymentStatus;
 using EPAY.ETC.Core.Models.Enums;
 using EPAY.ETC.Core.Models.Fees.PaymentStatusHistory;
@@ -176,8 +177,10 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.PaymentStatus
                     });
                 }
 
-                _mapper.Map(result.ToList(), res);
-                return ValidationResult.Success(res);
+                var items = result.ToList();
+                res = _mapper.Map<List<PaymentStatusModel>, List<PaymentStatusHistoryModel>>(items);
+               
+               return ValidationResult.Success(res);
             }
             catch (Exception ex)
             {
