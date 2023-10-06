@@ -10,20 +10,16 @@ using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.ManualBarrierCon
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PaymentStatus;
 using EPAY.ETC.Core.Models.BarrierOpenStatus;
 using EPAY.ETC.Core.Models.Constants;
-using EPAY.ETC.Core.Models.Devices;
 using EPAY.ETC.Core.Models.Enums;
 using EPAY.ETC.Core.Models.Fees;
 using EPAY.ETC.Core.Models.Receipt.SessionReports;
 using EPAY.ETC.Core.Models.Request;
 using EPAY.ETC.Core.Models.Validation;
-using EPAY.ETC.Core.Publisher.Interface;
 using Microsoft.Extensions.Logging;
-using Microsoft.VisualBasic;
+using Microsoft.Extensions.Options;
 using StackExchange.Redis;
-using System.ComponentModel.DataAnnotations;
 using System.Linq.Expressions;
 using System.Text.Json;
-using static System.Net.WebRequestMethods;
 using ValidationResult = EPAY.ETC.Core.Models.Validation.ValidationResult;
 
 namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
@@ -36,13 +32,15 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
         private readonly ICustomVehicleTypeRepository _customVehicleTypeRepository;
         private readonly IManualBarrierControlRepository _manualBarrierControlRepository;
         private readonly IDatabase _redisDB;
+        private readonly IOptions<Models.UI.UIModel> _uiOptions;
 
         public UIActionService(ILogger<UIActionService> logger,
                                IPaymentStatusRepository paymentStatusRepository,
                                IAppConfigRepository appConfigRepository,
                                ICustomVehicleTypeRepository customVehicleTypeRepository,
                                IManualBarrierControlRepository manualBarrierControlRepository,
-                               IDatabase redisDB)
+                               IDatabase redisDB,
+                               IOptions<Models.UI.UIModel> uiOptions)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _paymentStatusRepository = paymentStatusRepository ?? throw new ArgumentNullException(nameof(paymentStatusRepository));
@@ -50,6 +48,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
             _customVehicleTypeRepository = customVehicleTypeRepository ?? throw new ArgumentNullException(nameof(customVehicleTypeRepository));
             _manualBarrierControlRepository = manualBarrierControlRepository ?? throw new ArgumentNullException(nameof(manualBarrierControlRepository));
             _redisDB = redisDB ?? throw new ArgumentNullException(nameof(redisDB));
+            _uiOptions = uiOptions ?? throw new ArgumentNullException(nameof(uiOptions));
         }
 
         public async Task<ValidationResult<FeeModel?>> ReconcileVehicleInfoAsync(ReconcileVehicleInfoModel reconcileVehicleInfo)
@@ -59,7 +58,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
             try
             {
                 // Get FeeModel object from Redis.
-                FeeModel feeModel = null;
+                FeeModel? feeModel = null;
                 var feeObject = await _redisDB.StringGetAsync(RedisConstant.StringType_FeeModules(reconcileVehicleInfo?.ObjectId.ToString() ?? string.Empty));
                 if(!string.IsNullOrEmpty(feeObject.ToString()))
                 {
@@ -68,6 +67,15 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                     {
                         // EmployeeId
                         feeModel.EmployeeId = !string.IsNullOrEmpty(reconcileVehicleInfo?.EmployeeId) ? reconcileVehicleInfo?.EmployeeId : feeModel.EmployeeId;
+
+                        if (feeModel.LaneInVehicle == null)
+                            feeModel.LaneInVehicle = new LaneInVehicleModel();
+                        if (feeModel.LaneInVehicle.VehicleInfo == null)
+                            feeModel.LaneInVehicle.VehicleInfo = new Models.VehicleInfoModel();
+                        if (feeModel.LaneOutVehicle == null)
+                            feeModel.LaneOutVehicle = new LaneOutVehicleModel();
+                        if (feeModel.LaneOutVehicle.VehicleInfo == null)
+                            feeModel.LaneOutVehicle.VehicleInfo = new Models.VehicleInfoModel();
 
                         // Platenumber
                         feeModel.LaneInVehicle.VehicleInfo.PlateNumber = !string.IsNullOrEmpty(reconcileVehicleInfo?.Vehicle?.PlateNumber) 
@@ -116,7 +124,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                             ? reconcileVehicleInfo?.Vehicle?.LandOut?.LanePhotoUrl
                             : feeModel.LaneOutVehicle.VehicleInfo.VehiclePhotoUrl;
 
-                        return ValidationResult.Success(feeModel);
+                        return ValidationResult.Success<FeeModel?>(feeModel);
                     }
                     else
                     {
@@ -308,9 +316,42 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
             }
         }
 
-        public Task<ValidationResult<Models.UI.UIModel>> LoadCurrentUIAsync()
+        public async Task<ValidationResult<Models.UI.UIModel>> LoadCurrentUIAsync()
         {
-            throw new NotImplementedException();
+            try
+            {
+                _logger.LogInformation($"Executing {nameof(LoadCurrentUIAsync)} method...");
+                var uiModelStr = await _redisDB.StringGetAsync(RedisConstant.UI_MODEL_KEY);
+
+                Models.UI.UIModel? result = null;
+
+                if (!string.IsNullOrEmpty(uiModelStr.ToString()))
+                {
+                    result = JsonSerializer.Deserialize<Models.UI.UIModel>(uiModelStr.ToString());
+                }
+
+                if (result == null)
+                {
+                    uiModelStr = await _redisDB.StringGetAsync(RedisConstant.UI_MODEL_TEMPLATE_KEY);
+
+                    if (!string.IsNullOrEmpty(uiModelStr.ToString()))
+                    {
+                        result = JsonSerializer.Deserialize<Models.UI.UIModel>(uiModelStr.ToString());
+                    }
+                }
+
+                if (result == null)
+                    result = _uiOptions.Value;
+
+                await _redisDB.StringSetAsync(RedisConstant.UI_MODEL_KEY, JsonSerializer.Serialize(result));
+
+                return ValidationResult.Success(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"An error occurred when calling {nameof(LoadCurrentUIAsync)} method. Details: {ex.Message}. Stack trace: {ex.StackTrace}");
+                throw;
+            }
         }
     }
 }

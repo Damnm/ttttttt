@@ -17,6 +17,7 @@ ConfigurationManager config = builder.Configuration;
 
 // Config IOptions
 builder.Services.Configure<List<PublisherConfigurationOption>>(builder.Configuration.GetSection("PublisherConfigurations"));
+builder.Services.Configure<EPAY.ETC.Core.Models.UI.UIModel>(builder.Configuration.GetSection("UITemplate"));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

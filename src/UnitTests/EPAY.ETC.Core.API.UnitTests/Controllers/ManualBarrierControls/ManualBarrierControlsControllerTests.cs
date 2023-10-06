@@ -287,6 +287,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.ManualBarrierControls
         public async Task GivenValidRequest_WhenGetByIdAsyncIsCalled_ThenReturnCorrectResult()
         {
             // Arrange
+            responseMock.Data.Action = BarrierActionEnum.Open;
             _manualBarrierControlsServiceMock.Setup(x => x.GetByIdAsync(It.IsNotNull<Guid>())).ReturnsAsync(responseMock);
 
             // Act
