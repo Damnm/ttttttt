@@ -57,8 +57,6 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
             }
         }
 
-       
-
         public async Task<ValidationResult<IEnumerable<FeeModel>>> GetAllAsync(Expression<Func<FeeModel, bool>>? expressison = null)
         {
             try

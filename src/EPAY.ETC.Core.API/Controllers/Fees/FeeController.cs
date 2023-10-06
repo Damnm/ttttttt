@@ -264,15 +264,15 @@ namespace EPAY.ETC.Core.API.Controllers.Fees
 
         #region FindVehicleAsync
 
-        [HttpGet("v1/vehicles/{inputVehicle}")]
+        [HttpGet("v1/vehicles/{rfidOrNumberPlate}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> FindVehicleAsync(string inputVehicle)
+        public async Task<IActionResult> FindVehicleAsync(string rfidOrNumberPlate)
         {
             try
             {
                 _logger.LogInformation($"Executing {nameof(FindVehicleAsync)}...");
-                var result = await _service.FindVehicleAsync(inputVehicle);
+                var result = await _service.FindVehicleAsync(rfidOrNumberPlate);
 
                 return Ok(result);
             }
