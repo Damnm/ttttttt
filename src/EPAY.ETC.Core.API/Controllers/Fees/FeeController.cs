@@ -261,5 +261,35 @@ namespace EPAY.ETC.Core.API.Controllers.Fees
             }
         }
         #endregion
+
+        #region FindVehicleAsync
+
+        [HttpGet("v1/vehicles/{inputVehicle}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> FindVehicleAsync(string inputVehicle)
+        {
+            try
+            {
+                _logger.LogInformation($"Executing {nameof(FindVehicleAsync)}...");
+                var result = await _service.FindVehicleAsync(inputVehicle);
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                List<ValidationError> validationErrors = new();
+                string errorMessage = $"An error occurred when calling {nameof(FindVehicleAsync)} method: {ex.Message}. InnerException : {ApiExceptionMessages.ExceptionMessages(ex)}. Stack trace: {ex.StackTrace}";
+
+                _logger.LogError(errorMessage);
+                validationErrors.Add(ValidationError.InternalServerError);
+
+                return new ObjectResult(ValidationResult.Failed(errorMessage, validationErrors))
+                {
+                    StatusCode = StatusCodes.Status500InternalServerError
+                };
+            }
+        }
+        #endregion
     }
 }
