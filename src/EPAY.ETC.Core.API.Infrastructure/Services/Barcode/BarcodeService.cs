@@ -25,7 +25,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Barcode
         }
         #endregion
         #region AddAsync
-        public async Task<ValidationResult<BarcodeModel>> AddAsync(BarcodeAddRequestModel input)
+        public async Task<ValidationResult<BarcodeModel>> AddAsync(BarcodeAddOrUpdateRequestModel input)
         {
             _logger.LogInformation($"Executing {nameof(AddAsync)} method...");
             try
@@ -107,7 +107,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Barcode
         #endregion
 
         #region UpdateAsync
-        public async Task<ValidationResult<BarcodeModel>> UpdateAsync(Guid id, BarcodeUpdateRequestModel request)
+        public async Task<ValidationResult<BarcodeModel>> UpdateAsync(Guid id, BarcodeAddOrUpdateRequestModel request)
         {
             _logger.LogInformation($"Executing {nameof(UpdateAsync)} method...");
             try
@@ -142,7 +142,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Barcode
         #endregion
 
         #region Private method
-        private async Task<bool> GetExistingRecordAsync(BarcodeAddRequestModel input)
+        private async Task<bool> GetExistingRecordAsync(BarcodeAddOrUpdateRequestModel input)
         {
             Expression<Func<BarcodeModel, bool>> expression = s =>
                 s.ActionCode == input.ActionCode;

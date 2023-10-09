@@ -1,55 +1,37 @@
-﻿using AutoMapper;
-using EPAY.ETC.Core.API.Controllers.Barcode;
-using EPAY.ETC.Core.API.Controllers.PaymentStatus;
+﻿using EPAY.ETC.Core.API.Controllers.Barcode;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Barcode;
-using EPAY.ETC.Core.API.Core.Interfaces.Services.PaymentStatus;
-using EPAY.ETC.Core.API.Core.Interfaces.Services.UIActions;
 using EPAY.ETC.Core.API.Core.Models.Barcode;
-using EPAY.ETC.Core.API.Infrastructure.Services.Barcode;
-using EPAY.ETC.Core.API.Models.Configs;
 using EPAY.ETC.Core.API.UnitTests.Common;
 using EPAY.ETC.Core.API.UnitTests.Helpers;
-using EPAY.ETC.Core.Models.Enums;
-using EPAY.ETC.Core.Models.Fees;
 using EPAY.ETC.Core.Models.Request;
 using EPAY.ETC.Core.Models.Validation;
-using EPAY.ETC.Core.Publisher.Interface;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Moq;
 
 namespace EPAY.ETC.Core.API.UnitTests.Controllers.Barcode
 {
-    public class BarcodeControllerTests: TestBase<BarcodeController>
+    public class BarcodeControllerTests : TestBase<BarcodeController>
     {
         private readonly Exception _exception = null!;
         private Mock<IBarcodeService> _barcodeServiceMock = new Mock<IBarcodeService>();
         private static Guid id = Guid.NewGuid();
         private ValidationResult<BarcodeModel> responseMock = new ValidationResult<BarcodeModel>(new BarcodeModel()
         {
-            Id = Guid.NewGuid(),
             ActionCode = "111",
             ActionDesc = "Open Barrier",
             EmployeeId = "23232"
         });
-        private BarcodeAddRequestModel addRequestMock = new BarcodeAddRequestModel()
-        {
-            Id = Guid.NewGuid(),
-            ActionCode = "111",
-            ActionDesc = "Open Barrier",
-            EmployeeId = "23232"
-        };
-        private BarcodeUpdateRequestModel updateRequestMock = new BarcodeUpdateRequestModel()
+        private BarcodeAddOrUpdateRequestModel addRequestMock = new BarcodeAddOrUpdateRequestModel()
         {
             ActionCode = "111",
             ActionDesc = "Open Barrier",
             EmployeeId = "23232"
         };
 
-       
+
         #region AddAsync
         // Happy case 200/201
         [Fact]
@@ -68,10 +50,10 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Barcode
         public async Task GivenValidRequest_WhenAddAsyncIsCalled_ThenReturnCorrectResult()
         {
             // Arrange
-            _barcodeServiceMock.Setup(x => x.AddAsync(It.IsAny<BarcodeAddRequestModel>())).ReturnsAsync(responseMock);
+            _barcodeServiceMock.Setup(x => x.AddAsync(It.IsAny<BarcodeAddOrUpdateRequestModel>())).ReturnsAsync(responseMock);
             // Act
             var barcodeController = new BarcodeController(_loggerMock.Object, _barcodeServiceMock.Object, _mapper);
-            var actualResult = await barcodeController.AddAsync(It.IsAny<BarcodeAddRequestModel>());
+            var actualResult = await barcodeController.AddAsync(It.IsAny<BarcodeAddOrUpdateRequestModel>());
             var data = ((ObjectResult)actualResult).Value as ValidationResult<BarcodeModel>;
 
             // Assert
@@ -93,15 +75,15 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Barcode
             {
                 ValidationError.Conflict
             });
-            _barcodeServiceMock.Setup(x => x.AddAsync(It.IsAny<BarcodeAddRequestModel>())).ReturnsAsync(responseMock);
+            _barcodeServiceMock.Setup(x => x.AddAsync(It.IsAny<BarcodeAddOrUpdateRequestModel>())).ReturnsAsync(responseMock);
 
             // Act
             var barcodeController = new BarcodeController(_loggerMock.Object, _barcodeServiceMock.Object, _mapper);
-            var actualResult = await barcodeController.AddAsync(It.IsAny<BarcodeAddRequestModel>());
+            var actualResult = await barcodeController.AddAsync(It.IsAny<BarcodeAddOrUpdateRequestModel>());
             var data = actualResult as ConflictObjectResult;
             var actualResultRespone = data!.Value as ValidationResult<BarcodeModel>;
             // Assert
-            _barcodeServiceMock.Verify(x => x.AddAsync(It.IsAny<BarcodeAddRequestModel>()), Times.Once);
+            _barcodeServiceMock.Verify(x => x.AddAsync(It.IsAny<BarcodeAddOrUpdateRequestModel>()), Times.Once);
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(barcodeController.AddAsync)}...", Times.Once, _exception);
             _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(barcodeController.AddAsync)} method", Times.Never, _exception);
             ((ObjectResult)actualResult).StatusCode.Should().Be(StatusCodes.Status409Conflict);
@@ -114,11 +96,11 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Barcode
         {
             // Arrange
             var someEx = new Exception("An error occurred when calling AddAsync method");
-            _barcodeServiceMock.Setup(x => x.AddAsync(It.IsAny<BarcodeAddRequestModel>())).ThrowsAsync(someEx);
+            _barcodeServiceMock.Setup(x => x.AddAsync(It.IsAny<BarcodeAddOrUpdateRequestModel>())).ThrowsAsync(someEx);
 
             // Act
             var barcodeController = new BarcodeController(_loggerMock.Object, _barcodeServiceMock.Object, _mapper);
-            var actualResult = await barcodeController.AddAsync(It.IsAny<BarcodeAddRequestModel>());
+            var actualResult = await barcodeController.AddAsync(It.IsAny<BarcodeAddOrUpdateRequestModel>());
             var actualResultRespone = ((ObjectResult)actualResult).Value as ValidationResult<string>;
 
             // Assert
@@ -136,11 +118,11 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Barcode
         public async Task GivenValidRequest_WhenUpdateAsyncIsCalled_ThenReturnCorrectResult()
         {
             // Arrange
-            _barcodeServiceMock.Setup(x => x.UpdateAsync(It.IsAny<Guid>(), It.IsAny<BarcodeUpdateRequestModel>())).ReturnsAsync(responseMock);
+            _barcodeServiceMock.Setup(x => x.UpdateAsync(It.IsAny<Guid>(), It.IsAny<BarcodeAddOrUpdateRequestModel>())).ReturnsAsync(responseMock);
 
             // Act
             var vehicleController = new BarcodeController(_loggerMock.Object, _barcodeServiceMock.Object, _mapper);
-            var actualResult = await vehicleController.UpdateAsync(It.IsAny<string>(), It.IsAny<BarcodeUpdateRequestModel>());
+            var actualResult = await vehicleController.UpdateAsync(It.IsAny<string>(), It.IsAny<BarcodeAddOrUpdateRequestModel>());
             var data = ((OkObjectResult)actualResult).Value as ValidationResult<BarcodeModel>;
             // Assert
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleController.UpdateAsync)}...", Times.Once, _exception);
@@ -154,7 +136,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Barcode
             data?.Data?.EmployeeId.Should().Be(addRequestMock.EmployeeId);
 
         }
-        
+
         // Unhappy case 400
         [Fact]
         public async Task GivenValidRequestAndServiceIsDown_WhenApiUpdateAsyncIsCalled_ThenReturnInternalServerError()
@@ -165,11 +147,11 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Barcode
                 Id = Guid.NewGuid()
             };
             var someEx = new Exception("An error occurred when calling UpdateAsync method");
-            _barcodeServiceMock.Setup(x => x.UpdateAsync(Guid.NewGuid(), new BarcodeUpdateRequestModel())).ThrowsAsync(someEx);
+            _barcodeServiceMock.Setup(x => x.UpdateAsync(Guid.NewGuid(), new BarcodeAddOrUpdateRequestModel())).ThrowsAsync(someEx);
 
             // Act
             var vehicleController = new BarcodeController(_loggerMock.Object, _barcodeServiceMock.Object, _mapper);
-            var actualResult = await vehicleController.UpdateAsync("", It.IsAny<BarcodeUpdateRequestModel>());
+            var actualResult = await vehicleController.UpdateAsync("", It.IsAny<BarcodeAddOrUpdateRequestModel>());
             var actualResultRespone = ((ObjectResult)actualResult).Value as ValidationResult<string>;
 
             // Assert
@@ -239,7 +221,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Barcode
             // Act
             var barcodeController = new BarcodeController(_loggerMock.Object, _barcodeServiceMock.Object, _mapper);
             var actualResult = await barcodeController.RemoveAsync(It.IsNotNull<string>());
-            var data = ((ObjectResult)actualResult).Value as ValidationResult<BarcodeAddRequestModel>;
+            var data = ((ObjectResult)actualResult).Value as ValidationResult<BarcodeAddOrUpdateRequestModel>;
             var actualResultRespone = ((ObjectResult)actualResult).Value as ValidationResult<string>;
 
             // Assert

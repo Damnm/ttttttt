@@ -10,21 +10,14 @@ using Moq;
 
 namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Barcode
 {
-    public class BarcodeServiceTests: AutoMapperTestBase
+    public class BarcodeServiceTests : AutoMapperTestBase
     {
         #region Init mock data
         private readonly Exception _exception = null!;
         private readonly Mock<ILogger<BarcodeService>> _loggerMock = new();
         private readonly Mock<IBarcodeRepository> _barcodeRepositoryMock = new();
         private static Guid id = Guid.NewGuid();
-        private BarcodeAddRequestModel addRequest = new BarcodeAddRequestModel()
-        {
-            Id = id,
-            ActionCode = "111",
-            ActionDesc = "Open Barrier",
-            EmployeeId = "23232"
-        };
-        private BarcodeUpdateRequestModel updateRequest = new BarcodeUpdateRequestModel()
+        private BarcodeAddOrUpdateRequestModel addRequest = new BarcodeAddOrUpdateRequestModel()
         {
             ActionCode = "111",
             ActionDesc = "Open Barrier",
@@ -87,7 +80,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Barcode
 
             // Act
             var service = new BarcodeService(_loggerMock.Object, _barcodeRepositoryMock.Object, _mapper);
-            var result = await service.UpdateAsync(id, updateRequest);
+            var result = await service.UpdateAsync(id, addRequest);
 
             // Assert
             result.Should().NotBeNull();
@@ -108,7 +101,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Barcode
 
             // Act
             var service = new BarcodeService(_loggerMock.Object, _barcodeRepositoryMock.Object, _mapper);
-            var result = await service.UpdateAsync(id, updateRequest);
+            var result = await service.UpdateAsync(id, addRequest);
 
             // Assert
             result.Should().NotBeNull();
@@ -130,7 +123,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Barcode
 
             // Act
             var service = new BarcodeService(_loggerMock.Object, _barcodeRepositoryMock.Object, _mapper);
-            Func<Task> func = () => service.UpdateAsync(id, updateRequest);
+            Func<Task> func = () => service.UpdateAsync(id, addRequest);
 
             // Assert
             var ex = await Assert.ThrowsAsync<Exception>(func);
