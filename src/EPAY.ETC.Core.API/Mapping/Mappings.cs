@@ -122,8 +122,7 @@ namespace EPAY.ETC.Core.API.Mapping
                 .ForPath(e => e.PaymentStatus.Status, act => act.MapFrom(src => src.Status));
 
             CreateMap<PublisherConfigurationOption, PublisherOptions>().ReverseMap();
-            CreateMap<BarcodeAddRequestModel, BarcodeModel>().ReverseMap();
-            CreateMap<BarcodeUpdateRequestModel, BarcodeModel>().ReverseMap();
+            CreateMap<BarcodeAddOrUpdateRequestModel, BarcodeModel>().ReverseMap();
             CreateMap<Core.Models.PaymentStatus.PaymentStatusModel, PaymentStatusHistoryModel>()
              .ForPath(e => e.DateTimeEpoch, act => act.MapFrom(src => src.PaymentDate.ToUnixTime()))
              .ForPath(e => e.PaymentStatus, act => act.MapFrom(src => src.Status))

@@ -49,7 +49,7 @@ namespace EPAY.ETC.Core.API.Controllers.Barcode
         [HttpPost("v1/barcodes")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> AddAsync([FromBody] BarcodeAddRequestModel request)
+        public async Task<IActionResult> AddAsync([FromBody] BarcodeAddOrUpdateRequestModel request)
         {
             try
             {
@@ -140,7 +140,7 @@ namespace EPAY.ETC.Core.API.Controllers.Barcode
         [HttpPut("v1/barcodes/{barcodeId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> UpdateAsync(string barcodeId, [FromBody] BarcodeUpdateRequestModel request)
+        public async Task<IActionResult> UpdateAsync(string barcodeId, [FromBody] BarcodeAddOrUpdateRequestModel request)
         {
             try
             {
