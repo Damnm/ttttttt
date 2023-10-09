@@ -1,0 +1,42 @@
+[
+  {
+    "Id": "030001",
+    "FirstName": "Lưu Trần",
+    "LastName": "Anh Tuấn",
+    "NickName": "",
+    "Email": "",
+    "UserName": "030001",
+    "Password": "ZKRzY9wePs9bLlW6s2LmyJ9maCC4Btjokyidl5fEbUFQDNd1",
+    "Salt": "ZKRzY9wePs9bLlW6s2LmyM1TFO2/pyub5xfQQn8wBnU="
+  },
+  {
+    "Id": "030002",
+    "FirstName": "Nguyễn Thị",
+    "LastName": "Vân",
+    "NickName": "",
+    "Email": "",
+    "UserName": "030002",
+    "Password": "LOqVtyysqta73U1QsPYxqMXtLd0o/QotuaSPdmt1o+4N+ilN",
+    "Salt": "LOqVtyysqta73U1QsPYxqNlQJTBJn949gzxWsIv3z3s="
+  },
+  {
+    "Id": "030003",
+    "FirstName": "Nguyễn Văn",
+    "LastName": "Thịnh",
+    "NickName": "",
+    "Email": "",
+    "UserName": "030003",
+    "Password": "OJ/8JpbZknSyOZHuH+lAq4AXeI/36qonfMwZaCE0Sikp2t67",
+    "Salt": "OJ/8JpbZknSyOZHuH+lAq7iZNOp5wZlJckr3V8OA3m0="
+  },
+  {
+    "Id": "030004",
+    "FirstName": "Hoàng Văn",
+    "LastName": "Tân",
+    "NickName": "",
+    "Email": "",
+    "UserName": "030004",
+    "Password": "2mvR66QrMUxbg7NmhSP8NgaLWTf1RX+SMuRw7MyJi6uPEK8v",
+    "Salt": "2mvR66QrMUxbg7NmhSP8NvSuVD31xTcmPx3QvyQ7gTs="
+  }
+]

@@ -1,15 +1,19 @@
 using EPAY.ETC.Core.API.Filters;
+using EPAY.ETC.Core.API.Infrastructure.Models.Configs;
 using EPAY.ETC.Core.API.Infrastructure.Persistence;
 using EPAY.ETC.Core.API.Models.Configs;
 using EPAY.ETC.Core.API.Services;
 using EPAY.ETC.Core.Publisher.DependencyInjectionExtensions;
 using EPAY.ETC.Core.RabbitMQ.DependencyInjectionExtensions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NLog;
 using NLog.Web;
 using StackExchange.Redis;
 using System.Reflection;
+using System.Text;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +22,7 @@ ConfigurationManager config = builder.Configuration;
 // Config IOptions
 builder.Services.Configure<List<PublisherConfigurationOption>>(builder.Configuration.GetSection("PublisherConfigurations"));
 builder.Services.Configure<EPAY.ETC.Core.Models.UI.UIModel>(builder.Configuration.GetSection("UITemplate"));
+builder.Services.Configure<JWTSettingsConfig>(builder.Configuration.GetSection("JwtSettings"));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -101,6 +106,23 @@ builder.Services
 var multiplexer = ConnectionMultiplexer.Connect(builder.Configuration.GetSection("RedisSettings").GetValue<string>("ConnectionString") ?? "localhost:6379");
 builder.Services.AddSingleton(multiplexer.GetDatabase(builder.Configuration.GetSection("RedisSettings").GetValue<int?>("db") ?? -1));
 builder.Services.AddScoped<IRabbitMQPublisherService, RabbitMQPublisherService>();
+
+// Config authentication
+builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
+            ValidAudience = builder.Configuration["JwtSettings:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:SecretKey"]))
+        };
+    });
 
 var app = builder.Build();
 

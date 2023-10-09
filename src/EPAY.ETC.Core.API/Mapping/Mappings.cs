@@ -4,13 +4,13 @@ using EPAY.ETC.Core.API.Core.Models.Barcode;
 using EPAY.ETC.Core.API.Core.Models.ETCCheckOuts;
 using EPAY.ETC.Core.API.Core.Models.Fusion;
 using EPAY.ETC.Core.API.Core.Models.ManualBarrierControl;
-using EPAY.ETC.Core.API.Core.Models.PaymentStatus;
 using EPAY.ETC.Core.API.Core.Models.Vehicle;
 using EPAY.ETC.Core.API.Core.Utils;
 using EPAY.ETC.Core.API.Models.Configs;
 using EPAY.ETC.Core.Models.Fees;
 using EPAY.ETC.Core.Models.Fees.PaymentStatusHistory;
 using EPAY.ETC.Core.Models.Request;
+using EPAY.ETC.Core.Models.UI;
 using EPAY.ETC.Core.Publisher.Common.Options;
 using System.Diagnostics.CodeAnalysis;
 using CoreModel = EPAY.ETC.Core.Models.Fees;
@@ -130,8 +130,8 @@ namespace EPAY.ETC.Core.API.Mapping
              .ForPath(e => e.Reason, act => act.MapFrom(src => src.Reason))
              .ForPath(e => e.PaymentMethod, act => act.MapFrom(src => src.PaymentMethod));
 
-            CreateMap<EmployeeAutoLoginRequest, AuthenticatedEmployeeModel>().ReverseMap();
-            CreateMap<EmployeeLoginRequest, AuthenticatedEmployeeModel>().ReverseMap();
+            CreateMap<EmployeeAutoLoginRequest, AuthenticatedEmployeeResponseModel>().ReverseMap();
+            CreateMap<EmployeeLoginRequest, AuthenticatedEmployeeResponseModel>().ReverseMap();
             CreateMap<Core.Models.Devices.RFID.RFIDModel, LaneInVehicleModel>()
                 .ForPath(e => e.Epoch, act => act.MapFrom(src => src.Epoch))
                 .ForPath(e => e.RFID, act => act.MapFrom(src => src.TagId))

@@ -83,6 +83,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence
             services.AddScoped<IManualBarrierControlsService, ManualBarrierControlsService>();
             services.AddScoped<IBarcodeService, BarcodeService>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddScoped<IPasswordService, PasswordService>();
 
             return services;
         }

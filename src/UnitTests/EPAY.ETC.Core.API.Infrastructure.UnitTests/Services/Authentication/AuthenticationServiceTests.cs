@@ -1,21 +1,16 @@
-﻿using Azure.Core;
-using EPAY.ETC.Core.API.Core.Interfaces.Services.Authentication;
+﻿using EPAY.ETC.Core.API.Core.Interfaces.Services.Authentication;
 using EPAY.ETC.Core.API.Core.Models.Authentication;
-using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Fees;
+using EPAY.ETC.Core.API.Infrastructure.Models.Configs;
 using EPAY.ETC.Core.API.Infrastructure.Services.Authentication;
-using EPAY.ETC.Core.API.Infrastructure.Services.Fees;
 using EPAY.ETC.Core.API.Infrastructure.UnitTests.Common;
 using EPAY.ETC.Core.API.Infrastructure.UnitTests.Helpers;
 using EPAY.ETC.Core.Models.Enums;
+using EPAY.ETC.Core.Models.UI;
+using EPAY.ETC.Core.Models.Validation;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Authentication
 {
@@ -24,69 +19,154 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Authentication
         #region Init mock instance
         private readonly Exception _exception = null!;
         private readonly Mock<ILogger<AuthenticationService>> _loggerMock = new();
-        private readonly IAuthenticationService _authenticationService;
-        private readonly Mock<IAuthenticationService> _authenticationServiceMock = new();
+        private readonly Mock<IPasswordService> _passwordServiceMock = new();
+        private readonly IOptions<JWTSettingsConfig> jwtSettingsOption = Options.Create(new JWTSettingsConfig()
+        {
+            Audience = "Some",
+            ExpiresInDays = 1,
+            ExpiresInHours = 1,
+            ExpiresInMinutes = 1,
+            Issuer = "Some",
+            SecretKey = "L%PdPk!F7lZ0pd6s2Mi32G#ib%wdo*Lm"
+        });
         #endregion
         #region Init test data
-        private AuthenticatedEmployeeModel request = new AuthenticatedEmployeeModel()
+        private AuthenticatedEmployeeResponseModel response = new AuthenticatedEmployeeResponseModel()
         {
-            Id = Guid.Parse("4fd5cc23-0d90-451b-a748-5755376d635e"),
-            CreatedDate = DateTime.Now,
-            Action = LogonStatusEnum.Login,
-            EmployeeId = "123456",
-            Username = "User",
-            FirstName = "Khach",
-            LastName = "Hang",
-            JwtToken = "exampleJwtToken"
+            EmployeeId = "030001",
+            Username = "030001",
+            FirstName = "Lưu Trần",
+            LastName = "Anh Tuấn"
         };
         private EmployeeLoginRequest login = new EmployeeLoginRequest()
         {
-            EmployeeId = "123456",
-            Password = "password"
+            EmployeeId = "030001",
+            Password = "Abc@123"
         };
         #endregion
+
+        #region AuthenticateAsync
         [Fact]
-        public async Task GivenValidRequest_WhenAddAsyncIsCalled_ThenAddedRecordSuccessfulAndReturnCorrectResult()
+        public async Task GivenValidRequest_WhenAuthenticateAsyncIsCalled_ThenAuthorizedAndReturnCorrectResult()
         {
             // Arrange
+            _passwordServiceMock.Setup(x => x.IsMatched(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(ValidationResult.Success(true));
 
             // Act
-            var service = new AuthenticationService(_loggerMock.Object, _mapper);
+            var service = new AuthenticationService(_loggerMock.Object, _passwordServiceMock.Object, jwtSettingsOption);
             var result = await service.AuthenticateAsync(login);
 
             // Assert
             result.Should().NotBeNull();
             result.Data.Should().NotBeNull();
             result.Succeeded.Should().BeTrue();
-            result.Data.EmployeeId.Should().Be("123456");
-            result.Data.Username.Should().Be("User");
-            result.Data.FirstName.Should().Be("Khach");
-            result.Data.LastName.Should().Be("Hang");
-            result.Data.JwtToken.Should().Be("exampleJwtToken");
-            result.Data.Action.Should().Be(LogonStatusEnum.Login);
-            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(_authenticationService.AuthenticateAsync)} method", Times.Once, _exception);
-            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(_authenticationService.AuthenticateAsync)} method", Times.Never, _exception);
+            result.Data?.EmployeeId.Should().Be(response.EmployeeId);
+            result.Data?.Username.Should().Be(response.Username);
+            result.Data?.FirstName.Should().Be(response.FirstName);
+            result.Data?.LastName.Should().Be(response.LastName);
+            result.Data?.JwtToken.Should().NotBeEmpty();
+
+            _passwordServiceMock.Verify(x => x.IsMatched(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.AuthenticateAsync)} method", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(service.AuthenticateAsync)} method", Times.Never, _exception);
         }
 
         [Fact]
-        public async Task AuthenticateAsync_InvalidCredentials_ReturnsUnauthorized()
+        public async Task GivenValidRequestAndPasswordIsInValidOrEmployeeIdIsInValid_WhenAuthenticateAsyncIsCalled_ThenReturnUnauthorize()
         {
             // Arrange
-            var invalidInput = new EmployeeLoginRequest
-            {
-                EmployeeId = "invalid_id",
-                Password = "invalid_password"
-            };
+            _passwordServiceMock.Setup(x => x.IsMatched(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(ValidationResult.Success(false));
 
             // Act
-            var result = await _authenticationService.AuthenticateAsync(invalidInput);
+            var service = new AuthenticationService(_loggerMock.Object, _passwordServiceMock.Object, jwtSettingsOption);
+            var result = await service.AuthenticateAsync(login);
 
             // Assert
             result.Should().NotBeNull();
             result.Data.Should().BeNull();
             result.Succeeded.Should().BeFalse();
-            result.Errors.Should().NotBeEmpty();
+
+            _passwordServiceMock.Verify(x => x.IsMatched(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.AuthenticateAsync)} method", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(service.AuthenticateAsync)} method", Times.Never, _exception);
         }
 
+        [Fact]
+        public async Task GivenValidRequestPasswordServiceIsDown_WhenAuthenticateAsyncIsCalled_ThenThrowException()
+        {
+            // Arrange
+            var someEx = new Exception("Some ex");
+            _passwordServiceMock.Setup(x => x.IsMatched(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Throws(someEx);
+
+            // Act
+            var service = new AuthenticationService(_loggerMock.Object, _passwordServiceMock.Object, jwtSettingsOption);
+            Func<Task> func = async () => await service.AuthenticateAsync(login);
+
+            // Assert
+            var ex = await Assert.ThrowsAsync<Exception>(() => func());
+            ex.Should().NotBeNull();
+            ex.Should().BeEquivalentTo(someEx);
+
+            _passwordServiceMock.Verify(x => x.IsMatched(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.AuthenticateAsync)} method", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(service.AuthenticateAsync)} method", Times.Once, _exception);
+        }
+        #endregion
+
+        #region AutoAuthenticateAsync
+        [Fact]
+        public async Task GivenValidRequest_WhenAutoAuthenticateAsyncIsCalled_ThenAuthorizedAndReturnCorrectResult()
+        {
+            // Arrange
+            EmployeeAutoLoginRequest login = new EmployeeAutoLoginRequest()
+            {
+                EmployeeId = "030001",
+                ActionCode = LogonStatusEnum.Login.ToString()
+            };
+
+            // Act
+            var service = new AuthenticationService(_loggerMock.Object, _passwordServiceMock.Object, jwtSettingsOption);
+            var result = await service.AutoAuthenticateAsync(login);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Data.Should().NotBeNull();
+            result.Succeeded.Should().BeTrue();
+            result.Data?.EmployeeId.Should().Be(response.EmployeeId);
+            result.Data?.Username.Should().Be(response.Username);
+            result.Data?.FirstName.Should().Be(response.FirstName);
+            result.Data?.LastName.Should().Be(response.LastName);
+            result.Data?.JwtToken.Should().NotBeEmpty();
+
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.AutoAuthenticateAsync)} method", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(service.AutoAuthenticateAsync)} method", Times.Never, _exception);
+        }
+
+        [Fact]
+        public async Task GivenValidRequestAndEmployeeIdIsInValid_WhenAutoAuthenticateAsyncIsCalled_ThenReturnUnauthorize()
+        {
+            // Arrange
+            EmployeeAutoLoginRequest login = new EmployeeAutoLoginRequest()
+            {
+                EmployeeId = "030001",
+                ActionCode = "asdasd"
+            };
+
+            // Act
+            var service = new AuthenticationService(_loggerMock.Object, _passwordServiceMock.Object, jwtSettingsOption);
+            var result = await service.AutoAuthenticateAsync(login);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Data.Should().BeNull();
+            result.Succeeded.Should().BeFalse();
+
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.AutoAuthenticateAsync)} method", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(service.AutoAuthenticateAsync)} method", Times.Never, _exception);
+        }
+        #endregion
     }
 }

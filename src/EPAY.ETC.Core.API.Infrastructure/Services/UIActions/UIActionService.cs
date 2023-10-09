@@ -32,7 +32,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
         private readonly ICustomVehicleTypeRepository _customVehicleTypeRepository;
         private readonly IManualBarrierControlRepository _manualBarrierControlRepository;
         private readonly IDatabase _redisDB;
-        private readonly IOptions<Models.UI.UIModel> _uiOptions;
+        private readonly IOptions<ETC.Core.Models.UI.UIModel> _uiOptions;
 
         public UIActionService(ILogger<UIActionService> logger,
                                IPaymentStatusRepository paymentStatusRepository,
@@ -40,7 +40,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                                ICustomVehicleTypeRepository customVehicleTypeRepository,
                                IManualBarrierControlRepository manualBarrierControlRepository,
                                IDatabase redisDB,
-                               IOptions<Models.UI.UIModel> uiOptions)
+                               IOptions<ETC.Core.Models.UI.UIModel> uiOptions)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _paymentStatusRepository = paymentStatusRepository ?? throw new ArgumentNullException(nameof(paymentStatusRepository));
@@ -60,10 +60,10 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                 // Get FeeModel object from Redis.
                 FeeModel? feeModel = null;
                 var feeObject = await _redisDB.StringGetAsync(RedisConstant.StringType_FeeModules(reconcileVehicleInfo?.ObjectId.ToString() ?? string.Empty));
-                if(!string.IsNullOrEmpty(feeObject.ToString()))
+                if (!string.IsNullOrEmpty(feeObject.ToString()))
                 {
                     feeModel = JsonSerializer.Deserialize<FeeModel>(feeObject.ToString());
-                    if(feeModel != null)
+                    if (feeModel != null)
                     {
                         // EmployeeId
                         feeModel.EmployeeId = !string.IsNullOrEmpty(reconcileVehicleInfo?.EmployeeId) ? reconcileVehicleInfo?.EmployeeId : feeModel.EmployeeId;
@@ -71,15 +71,15 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                         if (feeModel.LaneInVehicle == null)
                             feeModel.LaneInVehicle = new LaneInVehicleModel();
                         if (feeModel.LaneInVehicle.VehicleInfo == null)
-                            feeModel.LaneInVehicle.VehicleInfo = new Models.VehicleInfoModel();
+                            feeModel.LaneInVehicle.VehicleInfo = new ETC.Core.Models.VehicleInfoModel();
                         if (feeModel.LaneOutVehicle == null)
                             feeModel.LaneOutVehicle = new LaneOutVehicleModel();
                         if (feeModel.LaneOutVehicle.VehicleInfo == null)
-                            feeModel.LaneOutVehicle.VehicleInfo = new Models.VehicleInfoModel();
+                            feeModel.LaneOutVehicle.VehicleInfo = new ETC.Core.Models.VehicleInfoModel();
 
                         // Platenumber
-                        feeModel.LaneInVehicle.VehicleInfo.PlateNumber = !string.IsNullOrEmpty(reconcileVehicleInfo?.Vehicle?.PlateNumber) 
-                            ? reconcileVehicleInfo?.Vehicle?.PlateNumber 
+                        feeModel.LaneInVehicle.VehicleInfo.PlateNumber = !string.IsNullOrEmpty(reconcileVehicleInfo?.Vehicle?.PlateNumber)
+                            ? reconcileVehicleInfo?.Vehicle?.PlateNumber
                             : feeModel.LaneInVehicle.VehicleInfo.PlateNumber;
                         feeModel.LaneOutVehicle.VehicleInfo.PlateNumber = !string.IsNullOrEmpty(reconcileVehicleInfo?.Vehicle?.PlateNumber)
                             ? reconcileVehicleInfo?.Vehicle?.PlateNumber
@@ -129,13 +129,13 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                     else
                     {
                         _logger.LogError($"Fee object from Redis is null {nameof(ReconcileVehicleInfoAsync)} method.");
-                       return ValidationResult.Success(feeModel);
+                        return ValidationResult.Success(feeModel);
                     }
                 }
                 else
                 {
                     _logger.LogError($"Fee object from Redis is null {nameof(ReconcileVehicleInfoAsync)} method.");
-                   return ValidationResult.Success(feeModel);
+                    return ValidationResult.Success(feeModel);
                 }
             }
             catch (Exception ex)
@@ -157,7 +157,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                     Limit = request.Limit
                 };
 
-                await _redisDB.HashSetAsync(Models.Constants.Constant.HASH_BARRIER_OPEN_STATUS, result.ToHashEntries());
+                await _redisDB.HashSetAsync(Constant.HASH_BARRIER_OPEN_STATUS, result.ToHashEntries());
                 await _manualBarrierControlRepository.AddAsync(new Core.Models.ManualBarrierControl.ManualBarrierControlModel()
                 {
                     Action = request.Action,
@@ -191,17 +191,17 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                 var paymentStatuses = await _paymentStatusRepository.GetAllWithNavigationAsync(request);
                 LaneSessionReportModel result = new LaneSessionReportModel()
                 {
-                    PrintType = Models.Enums.ReceiptTypeEnum.SessionReport,
+                    PrintType = ReceiptTypeEnum.SessionReport,
                     Layout = new LaneSessionLayoutModel()
                     {
-                        Header = new Models.Receipt.HeaderModel
+                        Header = new ETC.Core.Models.Receipt.HeaderModel
                         {
                             Heading = appConfig?.HeaderHeading?.ToUpper(),
                             SubHeading = appConfig?.HeaderSubHeading?.ToUpper(),
                             Line1 = appConfig?.HeaderLine1,
                             Line2 = appConfig?.HeaderLine2
                         },
-                        Footer = new Models.Receipt.FooterModel()
+                        Footer = new ETC.Core.Models.Receipt.FooterModel()
                         {
                             Line1 = $"{appConfig?.FooterLine1?.Trim()} Ngày {request.ToDate.Day} tháng {request.ToDate.Month} năm {request.ToDate.Year}",
                             Line2 = $"{appConfig?.FooterLine2?.Trim()}"
@@ -215,7 +215,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                 // TODO: Need to get fullname of employee
                 result.Layout.Footer.Line3 = "Nguyen Van A";
 
-                result.Layout.Body.Heading = Models.Enums.ReceiptTypeEnum.SessionReport.ToEnumMemberAttrValue().ToUpper();
+                result.Layout.Body.Heading = ReceiptTypeEnum.SessionReport.ToEnumMemberAttrValue().ToUpper();
 
                 // TODO: Need to get name of Shift
                 result.Layout.Body.SubHeading1 = $"Ngày: {request.FromDate.ToString("dd/MM/yyyy")}  Ca: 01  Trạm: {firstPaymentStatus?.Payment.LaneOutId}";
@@ -316,18 +316,18 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
             }
         }
 
-        public async Task<ValidationResult<Models.UI.UIModel>> LoadCurrentUIAsync()
+        public async Task<ValidationResult<ETC.Core.Models.UI.UIModel>> LoadCurrentUIAsync()
         {
             try
             {
                 _logger.LogInformation($"Executing {nameof(LoadCurrentUIAsync)} method...");
                 var uiModelStr = await _redisDB.StringGetAsync(RedisConstant.UI_MODEL_KEY);
 
-                Models.UI.UIModel? result = null;
+                ETC.Core.Models.UI.UIModel? result = null;
 
                 if (!string.IsNullOrEmpty(uiModelStr.ToString()))
                 {
-                    result = JsonSerializer.Deserialize<Models.UI.UIModel>(uiModelStr.ToString());
+                    result = JsonSerializer.Deserialize<ETC.Core.Models.UI.UIModel>(uiModelStr.ToString());
                 }
 
                 if (result == null)
@@ -336,7 +336,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
 
                     if (!string.IsNullOrEmpty(uiModelStr.ToString()))
                     {
-                        result = JsonSerializer.Deserialize<Models.UI.UIModel>(uiModelStr.ToString());
+                        result = JsonSerializer.Deserialize<ETC.Core.Models.UI.UIModel>(uiModelStr.ToString());
                     }
                 }
 

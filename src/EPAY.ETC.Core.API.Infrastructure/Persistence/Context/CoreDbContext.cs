@@ -1,5 +1,4 @@
 ﻿using EPAY.ETC.Core.API.Core.Extensions;
-using EPAY.ETC.Core.API.Core.Models.Authentication;
 using EPAY.ETC.Core.API.Core.Models.Barcode;
 using EPAY.ETC.Core.API.Core.Models.Configs;
 using EPAY.ETC.Core.API.Core.Models.CustomVehicleTypes;
@@ -20,7 +19,6 @@ using EPAY.ETC.Core.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System.Diagnostics.CodeAnalysis;
-using System.Net.Security;
 using FeeTypeEnum = EPAY.ETC.Core.API.Core.Models.Enum.FeeTypeEnum;
 using PaymentStatusModel = EPAY.ETC.Core.API.Core.Models.PaymentStatus.PaymentStatusModel;
 
@@ -55,7 +53,6 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
         public virtual DbSet<AppConfigModel> AppConfigs { get; set; }
         public virtual DbSet<ManualBarrierControlModel> ManualBarrierControls { get; set; }
         public virtual DbSet<BarcodeModel> Barcodes { get; set; }
-        public virtual DbSet<AuthenticatedEmployeeModel> AuthenticatedEmployees{ get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -638,14 +635,6 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
             modelBuilder.Entity<BarcodeModel>()
                .Property(x => x.EmployeeId)
                .HasMaxLength(50);
-            #endregion
-
-            #region AuthenticatedEmployeeModel configuration
-            modelBuilder.Entity<AuthenticatedEmployeeModel>().HasKey(x => x.Id);
-            modelBuilder.Entity<AuthenticatedEmployeeModel>()
-               .Property(x => x.Action)
-               .HasMaxLength(50)
-               .HasConversion(new EnumToStringConverter<LogonStatusEnum>());
             #endregion
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

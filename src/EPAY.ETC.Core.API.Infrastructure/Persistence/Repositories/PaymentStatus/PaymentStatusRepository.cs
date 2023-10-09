@@ -1,5 +1,6 @@
 ﻿using EPAY.ETC.Core.API.Core.Exceptions;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Context;
+using EPAY.ETC.Core.Models.Enums;
 using EPAY.ETC.Core.Models.Receipt.SessionReports;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -49,7 +50,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PaymentStatu
                     return Task.FromResult<IEnumerable<PaymentStatusModel>>(_dbContext.PaymentStatuses.AsNoTracking());
                 }
 
-                return Task.FromResult<IEnumerable<PaymentStatusModel>>(_dbContext.PaymentStatuses.AsNoTracking().Where(expression).OrderByDescending(x=> x.PaymentDate).Take(3));
+                return Task.FromResult<IEnumerable<PaymentStatusModel>>(_dbContext.PaymentStatuses.AsNoTracking().Where(expression).OrderByDescending(x => x.PaymentDate).Take(3));
             }
             catch (Exception ex)
             {
@@ -57,13 +58,16 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PaymentStatu
                 throw;
             }
         }
-        public Task<IQueryable<PaymentStatusModel>> GetPaymentStatusHistoryAsync(Expression<Func<PaymentStatusModel, bool>> expression)
+        public Task<IQueryable<PaymentStatusModel>> GetPaymentStatusHistoryAsync(Expression<Func<PaymentStatusModel, bool>>? expression)
         {
 
             _logger.LogInformation($"Executing {nameof(GetPaymentStatusHistoryAsync)} method...");
             try
             {
-                return Task.FromResult(_dbContext.PaymentStatuses.AsNoTracking().Where(expression).OrderByDescending(x => x.PaymentDate).Take(3));
+                if (expression != null)
+                    return Task.FromResult(_dbContext.PaymentStatuses.AsNoTracking().Where(expression).OrderByDescending(x => x.PaymentDate).Take(3));
+
+                return Task.FromResult(_dbContext.PaymentStatuses.AsNoTracking().OrderByDescending(x => x.PaymentDate).Take(3));
             }
             catch (Exception ex)
             {
@@ -90,7 +94,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PaymentStatu
                             && (!string.IsNullOrEmpty(request.EmployeeId) ? x.Payment.Fee.EmployeeId == request.EmployeeId : true)
                             && (!string.IsNullOrEmpty(request.ShiftId) ? x.Payment.Fee.ShiftId.ToString() == request.ShiftId : true)
                             && x.PaymentDate >= request.FromDate && x.PaymentDate <= request.ToDate
-                            && x.Status == Models.Enums.PaymentStatusEnum.Paid
+                            && x.Status == PaymentStatusEnum.Paid
                         )
                         : true
                     );
