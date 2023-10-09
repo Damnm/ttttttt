@@ -43,6 +43,11 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Authentication
             EmployeeId = "030001",
             Password = "Abc@123"
         };
+        private EmployeeAutoLoginRequest autoLogin = new EmployeeAutoLoginRequest()
+        {
+            EmployeeId ="123456",
+            ActionCode = "Login",
+        };
         #endregion
 
         #region AuthenticateAsync
