@@ -32,8 +32,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Authentication
 
         public async Task<ValidationResult<AuthenticatedEmployeeModel>> AuthenticateAsync(EmployeeLoginRequest input)
         {
-            // Thực hiện xác thực dựa trên thông tin từ input
-            if (input.EmployeeId == "123456" && input.Password == "password")
+            if (input.EmployeeId == "123456" && input.Username=="Admin" && input.Password == "password")
             {
                 var authenticatedEmployee = new AuthenticatedEmployeeModel
                 {
@@ -41,7 +40,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Authentication
                     CreatedDate = DateTime.Now,
                     Action = LogonStatusEnum.Login,
                     EmployeeId = "123456",
-                    Username = "User",
+                    Username = "Admin",
                     FirstName = "Khach",
                     LastName = "Hang",
                     JwtToken = "exampleJwtToken"
@@ -69,7 +68,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Authentication
                     CreatedDate = DateTime.Now,
                     Action = LogonStatusEnum.Login,
                     EmployeeId = "123456",
-                    Username = "User",
+                    Username = "Admin",
                     FirstName = "Khach",
                     LastName = "Hang",
                     JwtToken = "exampleJwtToken"

@@ -6,6 +6,7 @@ using EPAY.ETC.Core.API.Infrastructure.Services.Authentication;
 using EPAY.ETC.Core.API.Infrastructure.Services.Fees;
 using EPAY.ETC.Core.API.Infrastructure.UnitTests.Common;
 using EPAY.ETC.Core.API.Infrastructure.UnitTests.Helpers;
+using EPAY.ETC.Core.API.IntegrationTests.Common;
 using EPAY.ETC.Core.Models.Enums;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
@@ -16,10 +17,12 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using XUnitPriorityOrderer;
 
-namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Authentication
+namespace EPAY.ETC.Core.API.IntegrationTests.Services.Authentication
 {
-    public class AuthenticationServiceTests : AutoMapperTestBase
+    [TestCaseOrderer(CasePriorityOrderer.TypeName, CasePriorityOrderer.AssembyName)]
+    public class AuthenticationServiceTests : IntegrationTestBase
     {
         #region Init mock instance
         private readonly Exception _exception = null!;
