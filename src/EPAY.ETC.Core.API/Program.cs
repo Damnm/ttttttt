@@ -124,6 +124,18 @@ builder.Services
         };
     });
 
+builder.Services.AddCors(options => 
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy
+        .WithOrigins("*")
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials();
+    });
+});
+
 var app = builder.Build();
 
 // Configuration for NLog
