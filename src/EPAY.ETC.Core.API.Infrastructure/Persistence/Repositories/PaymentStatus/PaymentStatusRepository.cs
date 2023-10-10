@@ -82,6 +82,9 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PaymentStatu
             _logger.LogInformation($"Executing {nameof(GetAllWithNavigationAsync)} method...");
             try
             {
+                DateTime fromDate = DateTimeOffset.FromUnixTimeSeconds(request.FromDateTimeEpoch).DateTime;
+                DateTime toDate = DateTimeOffset.FromUnixTimeSeconds(request.ToDateTimeEpoch).DateTime;
+
 #pragma warning disable CS8602 // Disable warning nullable field
                 var result = _dbContext.PaymentStatuses
                     .Include(x => x.Payment)
@@ -90,10 +93,10 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PaymentStatu
                     .Where(x =>
                         request != null
                         ? (
-                            (!string.IsNullOrEmpty(request.LaneId) ? x.Payment.Fee.LaneOutId == request.LaneId : true)
+                            (!string.IsNullOrEmpty(request.LaneOutId) ? x.Payment.Fee.LaneOutId == request.LaneOutId : true)
                             && (!string.IsNullOrEmpty(request.EmployeeId) ? x.Payment.Fee.EmployeeId == request.EmployeeId : true)
                             && (!string.IsNullOrEmpty(request.ShiftId) ? x.Payment.Fee.ShiftId.ToString() == request.ShiftId : true)
-                            && x.PaymentDate >= request.FromDate && x.PaymentDate <= request.ToDate
+                            && x.PaymentDate >= fromDate && x.PaymentDate <= toDate
                             && x.Status == PaymentStatusEnum.Paid
                         )
                         : true

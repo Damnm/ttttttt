@@ -109,8 +109,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
         };
         private LaneSessionReportRequestModel sessionReportRequest = new LaneSessionReportRequestModel()
         {
-            FromDate = new DateTime(2023, 9, 29, 15, 32, 19),
-            ToDate = new DateTime(2023, 9, 29, 15, 43, 53)
+            FromDateTimeEpoch = 1696909646,
+            ToDateTimeEpoch = 1696909646
         };
         private BarrierRequestModel barrierRequest = new BarrierRequestModel()
         {
@@ -301,27 +301,27 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
         public async Task GivenValidRequest_WhenReconcileVehicleInfoAsyncIsCalled_ThenReturnCorrectResult()
         {
             // Arrange
-            
+
             ReconcileVehicleInfoModel reconcileVehicleInfo = new ReconcileVehicleInfoModel()
             {
                 EmployeeId = "34343243",
                 ObjectId = guid,
-                 Vehicle = new ReconcileVehicleModel()
-                 {
-                      PlateNumber = "fffdsfdfd",
-                      VehicleType = "01",
-                       
-                      LandIn = new LandModel()
-                      {
-                          LandId = "01"
-                      },
-                      LandOut = new LandModel()
-                      {
-                          LandId = "06"
-                      }
-                 }
+                Vehicle = new ReconcileVehicleModel()
+                {
+                    PlateNumber = "fffdsfdfd",
+                    VehicleType = "01",
+
+                    LandIn = new LandModel()
+                    {
+                        LandId = "01"
+                    },
+                    LandOut = new LandModel()
+                    {
+                        LandId = "06"
+                    }
+                }
             };
-           
+
             string feeModel = "{\"FeeId\":null,\"ObjectId\":\"8034d7bb-e430-4305-b8b7-8a7f640d152b\",\"CreatedDate\":\"0001-01-01T00:00:00\",\"EmployeeId\":null,\"ShiftId\":null,\"LaneInVehicle\":{\"LaneInId\":\"1\",\"Epoch\":1695185974,\"RFID\":\"dddddddddddddd\",\"Device\":{\"MacAddr\":\"macaddress\",\"IpAddr\":\"127.0.0.1\"},\"VehicleInfo\":{\"Make\":\"Toyota\",\"Model\":\"S\",\"PlateNumber\":\"52H23232\",\"PlateColour\":\"red\",\"VehicleColour\":null,\"VehicleType\":\"1\",\"Seat\":10,\"Weight\":40,\"VehiclePhotoUrl\":null,\"PlateNumberPhotoUrl\":null,\"ConfidenceScore\":0.0}},\"LaneOutVehicle\":{\"LaneOutId\":\"1\",\"Epoch\":1695285974,\"RFID\":\"dddddddddddddd\",\"Device\":{\"MacAddr\":\"macaddressout\",\"IpAddr\":\"127.0.0.1\"},\"VehicleInfo\":{\"Make\":\"Toyota\",\"Model\":\"S\",\"PlateNumber\":\"52H23232\",\"PlateColour\":\"red\",\"VehicleColour\":null,\"VehicleType\":\"1\",\"Seat\":12,\"Weight\":50,\"VehiclePhotoUrl\":null,\"PlateNumberPhotoUrl\":null,\"ConfidenceScore\":0.0}},\"Payment\":null,\"FeeType\":0,\"ValidateObjectId\":1,\"ValidateCreatedDate\":0}";
             _redisDatabaseMock.Setup(x => x.StringGetAsync(It.IsNotNull<RedisKey>(), It.IsAny<CommandFlags>())).ReturnsAsync(new RedisValue(feeModel));
 
@@ -349,7 +349,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
 
             // Act
             var service = new UIActionService(_loggerMock.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _manualBarrierControlRepository.Object, _redisDatabaseMock.Object, _uiOptions);
-            Func<Task> func = () => service.ReconcileVehicleInfoAsync(null);
+            Func<Task> func = () => service.ReconcileVehicleInfoAsync(null!);
 
             // Assert
             var ex = await Assert.ThrowsAsync<Exception>(func);
@@ -389,7 +389,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
 
             // Act
             var service = new UIActionService(_loggerMock.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _manualBarrierControlRepository.Object, _redisDatabaseMock.Object, _uiOptions);
-            var result = await service.ReconcileVehicleInfoAsync(null);
+            var result = await service.ReconcileVehicleInfoAsync(null!);
 
             // Assert
             result.Should().NotBeNull();
@@ -426,7 +426,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
                 }
             };
 
-            string feeModel = null;
+            string feeModel = null!;
             _redisDatabaseMock.Setup(x => x.StringGetAsync(It.IsNotNull<RedisKey>(), It.IsAny<CommandFlags>())).ReturnsAsync(new RedisValue(feeModel));
 
             // Act
