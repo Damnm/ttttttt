@@ -40,7 +40,7 @@ namespace EPAY.ETC.Core.API.Controllers.Devices
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        [HttpPost("/api/Device/v1/barrier")]
+        [HttpPost("v1/barrier")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> ManipulateBarrier([FromBody] BarrierRequestModel request)
