@@ -189,6 +189,10 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                 vehicleTypes = vehicleTypes.ToList().Where(x => !string.IsNullOrEmpty(x.Name.GetDescription())).OrderBy(x => x.Name);
 
                 var paymentStatuses = await _paymentStatusRepository.GetAllWithNavigationAsync(request);
+
+                DateTime fromDate = DateTimeOffset.FromUnixTimeSeconds(request.FromDateTimeEpoch).DateTime;
+                DateTime toDate = DateTimeOffset.FromUnixTimeSeconds(request.ToDateTimeEpoch).DateTime;
+
                 LaneSessionReportModel result = new LaneSessionReportModel()
                 {
                     PrintType = ReceiptTypeEnum.SessionReport,
@@ -203,7 +207,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                         },
                         Footer = new ETC.Core.Models.Receipt.FooterModel()
                         {
-                            Line1 = $"{appConfig?.FooterLine1?.Trim()} Ngày {request.ToDate.Day} tháng {request.ToDate.Month} năm {request.ToDate.Year}",
+                            Line1 = $"{appConfig?.FooterLine1?.Trim()} Ngày {toDate.Day} tháng {toDate.Month} năm {toDate.Year}",
                             Line2 = $"{appConfig?.FooterLine2?.Trim()}"
                         },
                         Body = new LaneSessionBodyModel()
@@ -218,8 +222,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                 result.Layout.Body.Heading = ReceiptTypeEnum.SessionReport.ToEnumMemberAttrValue().ToUpper();
 
                 // TODO: Need to get name of Shift
-                result.Layout.Body.SubHeading1 = $"Ngày: {request.FromDate.ToString("dd/MM/yyyy")}  Ca: 01  Trạm: {firstPaymentStatus?.Payment.LaneOutId}";
-                result.Layout.Body.SubHeading2 = $"Từ giờ: {request.FromDate.ToString("HH:mm:ss")}  Đến giờ: {request.ToDate.ToString("HH:mm:ss")}";
+                result.Layout.Body.SubHeading1 = $"Ngày: {fromDate.ToString("dd/MM/yyyy")}  Ca: 01  Trạm: {firstPaymentStatus?.Payment.LaneOutId}";
+                result.Layout.Body.SubHeading2 = $"Từ giờ: {fromDate.ToString("HH:mm:ss")}  Đến giờ: {toDate.ToString("HH:mm:ss")}";
 
                 // TODO: Need to get fullname of employee
                 result.Layout.Body.SubHeading3 = $"Nguyen Van A";

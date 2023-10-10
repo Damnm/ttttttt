@@ -91,8 +91,8 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Repository.PaymentStatu
             // Arrange
             LaneSessionReportRequestModel request = new LaneSessionReportRequestModel()
             {
-                FromDate = new DateTime(2023, 9, 11),
-                ToDate = new DateTime(2023, 9, 11, 23, 59, 59),
+                FromDateTimeEpoch = 1696909646,
+                ToDateTimeEpoch = 1696909646,
             };
 
             // Act

@@ -33,7 +33,7 @@ namespace EPAY.ETC.Core.API.Controllers.Reports
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        [HttpPost("/api/Report/v1/reports/lane-session")]
+        [HttpPost("v1/reports/lane-session")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> PrintLaneSessionReport([FromBody] LaneSessionReportRequestModel request)

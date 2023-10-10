@@ -23,10 +23,10 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Reports
         #region Init mock data
         private LaneSessionReportRequestModel sessionReportRequest = new LaneSessionReportRequestModel()
         {
-            FromDate = new DateTime(2023, 9, 29, 15, 32, 19),
-            ToDate = new DateTime(2023, 9, 29, 15, 43, 53),
+            FromDateTimeEpoch = 1696909646,
+            ToDateTimeEpoch = 1696909646,
             EmployeeId = "Some employee",
-            LaneId = "Some lane"
+            LaneOutId = "Some lane"
         };
         private LaneSessionReportModel sessionReportResponse = new LaneSessionReportModel()
         {
