@@ -272,5 +272,62 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Vehicles
             _loggerMock.VerifyLog(LogLevel.Error, $"Failed to run {nameof(service.GetByIdAsync)} method", Times.Once, _exception);
         }
         #endregion
+
+        #region GetVehicleByRFIDAsync
+        [Fact]
+        public async Task GivenValidRequest_WhenGetVehicleByRFIDAsyncIsCalled_ThenReturnCorrectResult()
+        {
+            // Arrange
+            _repositoryMock.Setup(x => x.GetAllAsync(It.IsAny<Expression<Func<VehicleModel, bool>>>())).ReturnsAsync(new List<VehicleModel>() { vehicle });
+
+            // Act
+            var service = new VehicleService(_loggerMock.Object, _repositoryMock.Object, _mapper);
+            var result = await service.GetVehicleByRFIDAsync(It.IsAny<string>());
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Data.Should().NotBeNull();
+            result.Succeeded.Should().BeTrue();
+            _repositoryMock.Verify(x => x.GetAllAsync(It.IsAny<Expression<Func<VehicleModel, bool>>>()), Times.Once);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.GetVehicleByRFIDAsync)} method...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"Failed to run {nameof(service.GetVehicleByRFIDAsync)} method", Times.Never, _exception);
+        }
+
+        [Fact]
+        public async Task GivenValidRequestButNotFound_WhenGetVehicleByRFIDAsyncIsCalled_ThenReturnNotFound()
+        {
+            // Arrange
+            _repositoryMock.Setup(x => x.GetAllAsync(It.IsAny<Expression<Func<VehicleModel, bool>>>())).ReturnsAsync(new List<VehicleModel>());
+
+            // Act
+            var service = new VehicleService(_loggerMock.Object, _repositoryMock.Object, _mapper);
+            var result = await service.GetVehicleByRFIDAsync(It.IsAny<string>());
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Data.Should().BeNull();
+            result.Succeeded.Should().BeFalse();
+            _repositoryMock.Verify(x => x.GetAllAsync(It.IsAny<Expression<Func<VehicleModel, bool>>>()), Times.Once);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.GetVehicleByRFIDAsync)} method...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"Failed to run {nameof(service.GetVehicleByRFIDAsync)} method", Times.Never, _exception);
+        }
+
+        [Fact]
+        public async Task GivenValidRequestAndRepositoryIsDown_WhenGetVehicleByRFIDAsyncIsCalled_ThenThrowException()
+        {
+            // Arrange
+            _repositoryMock.Setup(x => x.GetAllAsync(It.IsAny<Expression<Func<VehicleModel, bool>>>())).ThrowsAsync(new Exception());
+
+            // Act
+            var service = new VehicleService(_loggerMock.Object, _repositoryMock.Object, _mapper);
+            Func<Task> func = () => service.GetVehicleByRFIDAsync(It.IsAny<string>());
+
+            // Assert
+            var ex = await Assert.ThrowsAsync<Exception>(func);
+            _repositoryMock.Verify(x => x.GetAllAsync(It.IsAny<Expression<Func<VehicleModel, bool>>>()), Times.Once);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.GetVehicleByRFIDAsync)} method...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"Failed to run {nameof(service.GetVehicleByRFIDAsync)} method", Times.Once, _exception);
+        }
+        #endregion
     }
 }

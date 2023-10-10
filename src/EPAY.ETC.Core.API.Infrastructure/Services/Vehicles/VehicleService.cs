@@ -2,6 +2,7 @@
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Vehicles;
 using EPAY.ETC.Core.API.Core.Models.Vehicle;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Vehicle;
+using EPAY.ETC.Core.Models;
 using EPAY.ETC.Core.Models.Validation;
 using Microsoft.Extensions.Logging;
 using System.Linq.Expressions;
@@ -25,6 +26,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Vehicles
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
         #endregion
+
         public async Task<ValidationResult<VehicleModel>> AddAsync(VehicleRequestModel input)
         {
             _logger.LogInformation($"Executing {nameof(AddAsync)} method...");
@@ -69,6 +71,32 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Vehicles
             catch (Exception ex)
             {
                 _logger.LogError($"Failed to run {nameof(GetByIdAsync)} method. Error: {ex.Message}");
+                throw;
+            }
+        }
+
+        public async Task<ValidationResult<VehicleInfoModel>> GetVehicleByRFIDAsync(string rfid)
+        {
+            _logger.LogInformation($"Executing {nameof(GetVehicleByRFIDAsync)} method...");
+            try
+            {
+                Expression<Func<VehicleModel, bool>> expression = s => !string.IsNullOrEmpty(s.RFID) && s.RFID.Equals(rfid.Trim());
+                var vehicles = await _repository.GetAllAsync(expression);
+
+                var vehicle = vehicles.FirstOrDefault();
+                if (vehicle == null)
+                {
+                    return ValidationResult.Failed<VehicleInfoModel>(null, new List<ValidationError>()
+                    {
+                        ValidationError.NotFound
+                    });
+                }
+
+                return ValidationResult.Success(_mapper.Map<VehicleInfoModel>(vehicle));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed to run {nameof(GetVehicleByRFIDAsync)} method. Error: {ex.Message}");
                 throw;
             }
         }

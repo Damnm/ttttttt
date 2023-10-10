@@ -3,6 +3,7 @@ using EPAY.ETC.Core.API.Core.Interfaces.Services.Vehicles;
 using EPAY.ETC.Core.API.Core.Models.Vehicle;
 using EPAY.ETC.Core.Models.Validation;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace EPAY.ETC.Core.API.Controllers.Vehicle
 {
@@ -101,6 +102,46 @@ namespace EPAY.ETC.Core.API.Controllers.Vehicle
             {
                 List<ValidationError> validationErrors = new();
                 string errorMessage = $"An error occurred when calling {nameof(GetByIdAsync)} method: {ex.Message}. InnerException : {ApiExceptionMessages.ExceptionMessages(ex)}. Stack trace: {ex.StackTrace}";
+                _logger.LogError(errorMessage);
+                validationErrors.Add(ValidationError.InternalServerError);
+                return StatusCode(StatusCodes.Status500InternalServerError, ValidationResult.Failed(errorMessage, validationErrors));
+            }
+        }
+        #endregion
+        #region GetVehicleByRFIDAsync
+        /// <summary>
+        /// Get Vehicle Detail by RFID
+        /// </summary>
+        /// <param name="rfid"></param>
+        /// <returns></returns>
+        [HttpGet("v1/vehicles/rfid/{rfid}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetVehicleByRFIDAsync(string rfid)
+        {
+            try
+            {
+                _logger.LogInformation($"Executing {nameof(GetVehicleByRFIDAsync)}...");
+
+                if (string.IsNullOrEmpty(rfid))
+                {
+                    return BadRequest(ValidationResult.Failed<VehicleModel>(null, new List<ValidationError>() { ValidationError.BadRequest }));
+                }
+
+                var result = await _vehicleService.GetVehicleByRFIDAsync(rfid);
+
+                if (result != null && !result.Succeeded)
+                {
+                    if (result.Errors.Count(x => x.Code == (int)HttpStatusCode.NotFound) > 0)
+                        return NotFound(result);
+                }
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                List<ValidationError> validationErrors = new();
+                string errorMessage = $"An error occurred when calling {nameof(GetVehicleByRFIDAsync)} method: {ex.Message}. InnerException : {ApiExceptionMessages.ExceptionMessages(ex)}. Stack trace: {ex.StackTrace}";
                 _logger.LogError(errorMessage);
                 validationErrors.Add(ValidationError.InternalServerError);
                 return StatusCode(StatusCodes.Status500InternalServerError, ValidationResult.Failed(errorMessage, validationErrors));
