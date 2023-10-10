@@ -1,8 +1,8 @@
 ﻿using EPAY.ETC.Core.API.Core.Interfaces.Services.Authentication;
-using EPAY.ETC.Core.API.Core.Models.Authentication;
 using EPAY.ETC.Core.API.Core.Models.Employees;
 using EPAY.ETC.Core.API.Infrastructure.Models.Configs;
 using EPAY.ETC.Core.Models.Enums;
+using EPAY.ETC.Core.Models.Request;
 using EPAY.ETC.Core.Models.UI;
 using EPAY.ETC.Core.Models.Validation;
 using Microsoft.Extensions.Logging;

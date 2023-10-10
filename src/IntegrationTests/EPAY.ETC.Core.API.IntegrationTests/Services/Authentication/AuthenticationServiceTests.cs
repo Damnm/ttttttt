@@ -1,9 +1,7 @@
-﻿using EPAY.ETC.Core.API.Core.Models.Authentication;
-using EPAY.ETC.Core.API.Infrastructure.Services.Authentication;
+﻿using EPAY.ETC.Core.API.Infrastructure.Services.Authentication;
 using EPAY.ETC.Core.API.IntegrationTests.Common;
-using EPAY.ETC.Core.Models.Enums;
+using EPAY.ETC.Core.Models.Request;
 using EPAY.ETC.Core.Models.UI;
-using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
 using XUnitPriorityOrderer;

@@ -4,6 +4,7 @@ using EPAY.ETC.Core.API.Infrastructure.Services.ManualBarrierControls;
 using EPAY.ETC.Core.API.Infrastructure.UnitTests.Common;
 using EPAY.ETC.Core.API.UnitTests.Helpers;
 using EPAY.ETC.Core.Models.Enums;
+using EPAY.ETC.Core.Models.Request;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;

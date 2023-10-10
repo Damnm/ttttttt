@@ -1,19 +1,13 @@
-﻿using EPAY.ETC.Core.API.Core.Models.Fusion;
-using EPAY.ETC.Core.API.Core.Models.ManualBarrierControl;
-using EPAY.ETC.Core.API.Core.Models.Vehicle;
+﻿using EPAY.ETC.Core.API.Core.Models.Vehicle;
 using EPAY.ETC.Core.API.IntegrationTests.Common;
 using EPAY.ETC.Core.Models.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using EPAY.ETC.Core.Models.Request;
+using FluentAssertions;
+using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Net;
-using System.Text;
 using System.Text.Json.Nodes;
-using System.Threading.Tasks;
 using XUnitPriorityOrderer;
-using FluentAssertions;
 
 namespace EPAY.ETC.Core.API.IntegrationTests.Controllers.ManualBarrierControls
 {

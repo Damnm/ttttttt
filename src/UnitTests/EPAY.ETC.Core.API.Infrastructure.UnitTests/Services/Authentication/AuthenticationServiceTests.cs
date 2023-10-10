@@ -1,10 +1,10 @@
 ﻿using EPAY.ETC.Core.API.Core.Interfaces.Services.Authentication;
-using EPAY.ETC.Core.API.Core.Models.Authentication;
 using EPAY.ETC.Core.API.Infrastructure.Models.Configs;
 using EPAY.ETC.Core.API.Infrastructure.Services.Authentication;
 using EPAY.ETC.Core.API.Infrastructure.UnitTests.Common;
 using EPAY.ETC.Core.API.Infrastructure.UnitTests.Helpers;
 using EPAY.ETC.Core.Models.Enums;
+using EPAY.ETC.Core.Models.Request;
 using EPAY.ETC.Core.Models.UI;
 using EPAY.ETC.Core.Models.Validation;
 using FluentAssertions;
@@ -45,7 +45,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Authentication
         };
         private EmployeeAutoLoginRequest autoLogin = new EmployeeAutoLoginRequest()
         {
-            EmployeeId ="123456",
+            EmployeeId = "123456",
             ActionCode = "Login",
         };
         #endregion

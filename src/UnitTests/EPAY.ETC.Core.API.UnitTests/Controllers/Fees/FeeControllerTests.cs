@@ -1,12 +1,16 @@
 ﻿using EPAY.ETC.Core.API.Controllers.Fees;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Fees;
+using EPAY.ETC.Core.API.Core.Interfaces.Services.UIActions;
 using EPAY.ETC.Core.API.Core.Models.Fees;
+using EPAY.ETC.Core.API.Models.Configs;
+using EPAY.ETC.Core.API.Services;
 using EPAY.ETC.Core.API.UnitTests.Helpers;
 using EPAY.ETC.Core.Models.Validation;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Moq;
 using System.Linq.Expressions;
 using CoreModel = EPAY.ETC.Core.Models.Fees;
@@ -19,6 +23,12 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Fees
         #region Init mock instance
         private readonly Mock<ILogger<FeeController>> _loggerMock = new();
         private readonly Mock<IFeeService> _feeServiceMock = new();
+        private readonly Mock<IUIActionService> _iuActionServiceMock = new();
+        private readonly Mock<IRabbitMQPublisherService> _rabbitMQPublisherServiceMock = new();
+        private IOptions<List<PublisherConfigurationOption>> _publisherOptions = Options.Create(new List<PublisherConfigurationOption>()
+        {
+            new PublisherConfigurationOption(){ PublisherTarget = ETC.Core.Models.Enums.PublisherTargetEnum.Fee}
+        });
         #endregion
 
         #region Init test data
@@ -76,7 +86,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Fees
             _feeServiceMock.Setup(x => x.AddAsync(It.IsAny<CoreModel.FeeModel>())).ReturnsAsync(response);
 
             // Act
-            var controller = new FeeController(_loggerMock.Object, _feeServiceMock.Object);
+            var controller = new FeeController(_loggerMock.Object, _feeServiceMock.Object, _iuActionServiceMock.Object, _rabbitMQPublisherServiceMock.Object, _publisherOptions);
             var actualResult = await controller.AddAsync(request);
             var data = ((CreatedResult)actualResult).Value as ValidationResult<FeeModel>;
 
@@ -108,7 +118,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Fees
             _feeServiceMock.Setup(x => x.AddAsync(It.IsAny<CoreModel.FeeModel>())).ReturnsAsync(response);
 
             // Act
-            var controller = new FeeController(_loggerMock.Object, _feeServiceMock.Object);
+            var controller = new FeeController(_loggerMock.Object, _feeServiceMock.Object, _iuActionServiceMock.Object, _rabbitMQPublisherServiceMock.Object, _publisherOptions);
             var actualResult = await controller.AddAsync(request);
             var data = ((ConflictObjectResult)actualResult).Value as ValidationResult<FeeModel>;
 
@@ -146,7 +156,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Fees
             _feeServiceMock.Setup(x => x.AddAsync(It.IsAny<CoreModel.FeeModel>())).ThrowsAsync(new Exception("Some ex"));
 
             // Act
-            var controller = new FeeController(_loggerMock.Object, _feeServiceMock.Object);
+            var controller = new FeeController(_loggerMock.Object, _feeServiceMock.Object, _iuActionServiceMock.Object, _rabbitMQPublisherServiceMock.Object, _publisherOptions);
             var actualResult = await controller.AddAsync(request);
             var data = ((ObjectResult)actualResult).Value as ValidationResult<FeeModel>;
 
@@ -185,7 +195,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Fees
             _feeServiceMock.Setup(x => x.UpdateAsync(It.IsAny<Guid>(), It.IsAny<CoreModel.FeeModel>())).ReturnsAsync(response);
 
             // Act
-            var controller = new FeeController(_loggerMock.Object, _feeServiceMock.Object);
+            var controller = new FeeController(_loggerMock.Object, _feeServiceMock.Object, _iuActionServiceMock.Object, _rabbitMQPublisherServiceMock.Object, _publisherOptions);
             var actualResult = await controller.UpdateAsync(feeId, request);
             var data = ((OkObjectResult)actualResult).Value as ValidationResult<FeeModel>;
 
@@ -217,7 +227,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Fees
             _feeServiceMock.Setup(x => x.UpdateAsync(It.IsAny<Guid>(), It.IsAny<CoreModel.FeeModel>())).ReturnsAsync(response);
 
             // Act
-            var controller = new FeeController(_loggerMock.Object, _feeServiceMock.Object);
+            var controller = new FeeController(_loggerMock.Object, _feeServiceMock.Object, _iuActionServiceMock.Object, _rabbitMQPublisherServiceMock.Object, _publisherOptions);
             var actualResult = await controller.UpdateAsync(feeId, request);
             var data = ((ConflictObjectResult)actualResult).Value as ValidationResult<FeeModel>;
 
@@ -232,7 +242,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Fees
             data?.Succeeded.Should().BeFalse();
             data?.Data.Should().BeNull();
         }
-        
+
         [Fact]
         public async Task GivenRequestIsValidAndFeeIsNotExists_WhenApiUpdateAsyncIsCalled_ThenReturnNotFound()
         {
@@ -241,7 +251,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Fees
             _feeServiceMock.Setup(x => x.UpdateAsync(It.IsAny<Guid>(), It.IsAny<CoreModel.FeeModel>())).ReturnsAsync(response);
 
             // Act
-            var controller = new FeeController(_loggerMock.Object, _feeServiceMock.Object);
+            var controller = new FeeController(_loggerMock.Object, _feeServiceMock.Object, _iuActionServiceMock.Object, _rabbitMQPublisherServiceMock.Object, _publisherOptions);
             var actualResult = await controller.UpdateAsync(feeId, request);
             var data = ((NotFoundObjectResult)actualResult).Value as ValidationResult<FeeModel>;
 
@@ -279,7 +289,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Fees
             _feeServiceMock.Setup(x => x.UpdateAsync(It.IsAny<Guid>(), It.IsAny<CoreModel.FeeModel>())).ThrowsAsync(new Exception("Some ex"));
 
             // Act
-            var controller = new FeeController(_loggerMock.Object, _feeServiceMock.Object);
+            var controller = new FeeController(_loggerMock.Object, _feeServiceMock.Object, _iuActionServiceMock.Object, _rabbitMQPublisherServiceMock.Object, _publisherOptions);
             var actualResult = await controller.UpdateAsync(feeId, request);
             var data = ((ObjectResult)actualResult).Value as ValidationResult<FeeModel>;
 
@@ -306,7 +316,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Fees
             _feeServiceMock.Setup(x => x.RemoveAsync(It.IsAny<Guid>())).ReturnsAsync(response);
 
             // Act
-            var controller = new FeeController(_loggerMock.Object, _feeServiceMock.Object);
+            var controller = new FeeController(_loggerMock.Object, _feeServiceMock.Object, _iuActionServiceMock.Object, _rabbitMQPublisherServiceMock.Object, _publisherOptions);
             var actualResult = await controller.RemoveAsync(feeId);
             var data = ((OkObjectResult)actualResult).Value as ValidationResult<FeeModel>;
 
@@ -330,7 +340,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Fees
             _feeServiceMock.Setup(x => x.RemoveAsync(It.IsAny<Guid>())).ReturnsAsync(response);
 
             // Act
-            var controller = new FeeController(_loggerMock.Object, _feeServiceMock.Object);
+            var controller = new FeeController(_loggerMock.Object, _feeServiceMock.Object, _iuActionServiceMock.Object, _rabbitMQPublisherServiceMock.Object, _publisherOptions);
             var actualResult = await controller.RemoveAsync(Guid.NewGuid());
             var data = ((NotFoundObjectResult)actualResult).Value as ValidationResult<FeeModel>;
 
@@ -354,7 +364,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Fees
             _feeServiceMock.Setup(x => x.RemoveAsync(It.IsAny<Guid>())).ThrowsAsync(new Exception("Some ex"));
 
             // Act
-            var controller = new FeeController(_loggerMock.Object, _feeServiceMock.Object);
+            var controller = new FeeController(_loggerMock.Object, _feeServiceMock.Object, _iuActionServiceMock.Object, _rabbitMQPublisherServiceMock.Object, _publisherOptions);
             var actualResult = await controller.RemoveAsync(feeId);
             var data = ((ObjectResult)actualResult).Value as ValidationResult<FeeModel>;
 
@@ -381,7 +391,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Fees
             _feeServiceMock.Setup(x => x.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(response);
 
             // Act
-            var controller = new FeeController(_loggerMock.Object, _feeServiceMock.Object);
+            var controller = new FeeController(_loggerMock.Object, _feeServiceMock.Object, _iuActionServiceMock.Object, _rabbitMQPublisherServiceMock.Object, _publisherOptions);
             var actualResult = await controller.GetByIdAsync(feeId);
             var data = ((OkObjectResult)actualResult).Value as ValidationResult<FeeModel>;
 
@@ -413,7 +423,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Fees
             _feeServiceMock.Setup(x => x.GetByIdAsync(It.IsAny<Guid>())).ThrowsAsync(new Exception("Some ex"));
 
             // Act
-            var controller = new FeeController(_loggerMock.Object, _feeServiceMock.Object);
+            var controller = new FeeController(_loggerMock.Object, _feeServiceMock.Object, _iuActionServiceMock.Object, _rabbitMQPublisherServiceMock.Object, _publisherOptions);
             var actualResult = await controller.GetByIdAsync(feeId);
             var data = ((ObjectResult)actualResult).Value as ValidationResult<FeeModel>;
 
@@ -440,7 +450,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Fees
             _feeServiceMock.Setup(x => x.GetAllAsync(It.IsAny<Expression<Func<FeeModel, bool>>>())).ReturnsAsync(response);
 
             // Act
-            var controller = new FeeController(_loggerMock.Object, _feeServiceMock.Object);
+            var controller = new FeeController(_loggerMock.Object, _feeServiceMock.Object, _iuActionServiceMock.Object, _rabbitMQPublisherServiceMock.Object, _publisherOptions);
             var actualResult = await controller.GetAllAsync();
             var data = ((OkObjectResult)actualResult).Value as ValidationResult<IEnumerable<FeeModel>>;
 
@@ -464,7 +474,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Fees
             _feeServiceMock.Setup(x => x.GetAllAsync(It.IsAny<Expression<Func<FeeModel, bool>>>())).ThrowsAsync(new Exception("Some ex"));
 
             // Act
-            var controller = new FeeController(_loggerMock.Object, _feeServiceMock.Object);
+            var controller = new FeeController(_loggerMock.Object, _feeServiceMock.Object, _iuActionServiceMock.Object, _rabbitMQPublisherServiceMock.Object, _publisherOptions);
             var actualResult = await controller.GetAllAsync();
             var data = ((ObjectResult)actualResult).Value as ValidationResult<FeeModel>;
 

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using EPAY.ETC.Core.API.Core.Exceptions;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Authentication;
-using EPAY.ETC.Core.API.Core.Models.Authentication;
+using EPAY.ETC.Core.Models.Request;
 using EPAY.ETC.Core.Models.Validation;
 using Microsoft.AspNetCore.Mvc;
 
@@ -44,8 +44,10 @@ namespace EPAY.ETC.Core.API.Controllers.Authentication
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        [HttpPost("/api/Authentication/v1/employees/authenticate")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [HttpPost("v1/employees/authenticate")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Authenticate([FromBody] EmployeeLoginRequest request)
         {
@@ -57,16 +59,18 @@ namespace EPAY.ETC.Core.API.Controllers.Authentication
                 }
                 var validationResult = await _authenticationService.AuthenticateAsync(request);
 
-                if (validationResult.Succeeded)
+                if (validationResult == null)
+                    return NotFound(validationResult);
+
+                if (validationResult != null && !validationResult.Succeeded)
                 {
-                    return Ok(validationResult.Data);
+                    if (validationResult.Errors.Count(x => x.Code == StatusCodes.Status401Unauthorized) > 0)
+                        return Unauthorized(validationResult);
                 }
-                else
-                {
-                    return BadRequest(validationResult.Errors);
-                }
+
+                return Ok(validationResult!.Data);
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 List<ValidationError> validationErrors = new();
                 string errorMessage = $"An error occurred when calling {nameof(Authenticate)} method: {ex.Message}. InnerException : {ApiExceptionMessages.ExceptionMessages(ex)}. Stack trace: {ex.StackTrace}";
@@ -81,8 +85,10 @@ namespace EPAY.ETC.Core.API.Controllers.Authentication
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        [HttpPost("/api/Authentication/v1/employees/auto-authenticate")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [HttpPost("v1/employees/auto-authenticate")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> AutoAuthenticate([FromBody] EmployeeAutoLoginRequest request)
         {
@@ -95,14 +101,16 @@ namespace EPAY.ETC.Core.API.Controllers.Authentication
 
                 var validationResult = await _authenticationService.AutoAuthenticateAsync(request);
 
-                if (validationResult.Succeeded)
+                if (validationResult == null)
+                    return NotFound(validationResult);
+
+                if (validationResult != null && !validationResult.Succeeded)
                 {
-                    return Ok(validationResult.Data);
+                    if (validationResult.Errors.Count(x => x.Code == StatusCodes.Status401Unauthorized) > 0)
+                        return Unauthorized(validationResult);
                 }
-                else
-                {
-                    return BadRequest(validationResult.Errors);
-                }
+
+                return Ok(validationResult!.Data);
             }
             catch (Exception ex)
             {

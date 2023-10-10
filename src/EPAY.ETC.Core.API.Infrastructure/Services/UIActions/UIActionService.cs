@@ -154,16 +154,16 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                 BarrierOpenStatus result = new BarrierOpenStatus()
                 {
                     Status = request.Action!,
-                    Limit = request.Limit
+                    Limit = request.Limit ?? 0
                 };
 
-                await _redisDB.HashSetAsync(Constant.HASH_BARRIER_OPEN_STATUS, result.ToHashEntries());
+                await _redisDB.HashSetAsync(CoreConstant.HASH_BARRIER_OPEN_STATUS, result.ToHashEntries());
                 await _manualBarrierControlRepository.AddAsync(new Core.Models.ManualBarrierControl.ManualBarrierControlModel()
                 {
                     Action = request.Action,
                     CreatedDate = DateTime.Now,
                     EmployeeId = request.EmployeeId,
-                    LaneOutId = request.LaneId,
+                    LaneOutId = request.LaneId ?? string.Empty,
                     Id = Guid.NewGuid()
                 });
 

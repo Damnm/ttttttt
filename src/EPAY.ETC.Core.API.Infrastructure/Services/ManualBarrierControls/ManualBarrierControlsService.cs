@@ -2,17 +2,10 @@
 using EPAY.ETC.Core.API.Core.Interfaces.Services.ManualBarrierControls;
 using EPAY.ETC.Core.API.Core.Models.ManualBarrierControl;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.ManualBarrierControls;
-using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Payment;
-using EPAY.ETC.Core.API.Infrastructure.Services.Payment;
 using EPAY.ETC.Core.Models.Request;
 using EPAY.ETC.Core.Models.Validation;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EPAY.ETC.Core.API.Infrastructure.Services.ManualBarrierControls
 {

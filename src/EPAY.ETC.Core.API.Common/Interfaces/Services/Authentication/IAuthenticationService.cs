@@ -1,4 +1,4 @@
-﻿using EPAY.ETC.Core.API.Core.Models.Authentication;
+﻿using EPAY.ETC.Core.Models.Request;
 using EPAY.ETC.Core.Models.UI;
 using EPAY.ETC.Core.Models.Validation;
 

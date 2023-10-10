@@ -17,7 +17,7 @@ namespace EPAY.ETC.Core.API.Controllers.UIAction
     /// </summary>
     [ApiController]
     [Route("~/api/[controller]")]
-    public class UIActionController: ControllerBase
+    public class UIActionController : ControllerBase
     {
         #region Variables
         private readonly ILogger<UIActionController> _logger;
@@ -60,51 +60,12 @@ namespace EPAY.ETC.Core.API.Controllers.UIAction
         }
         #endregion
 
-        #region ReconcileVehicleInfoAsync
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="reconcileVehicleInfo"></param>
-        /// <returns></returns>
-        [HttpPost("v1/actions/reconcilevehicleinfo")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> ReconcileVehicleInfoAsync([FromBody] ReconcileVehicleInfoModel reconcileVehicleInfo)
-        {
-            List<ValidationError> validationErrors = new();
-
-            try
-            {
-                _logger.LogInformation($"Executing {nameof(ReconcileVehicleInfoAsync)}...");
-
-                var reconcileVehicleInfoResult = await _uiActionService.ReconcileVehicleInfoAsync(reconcileVehicleInfo);
-                if (reconcileVehicleInfoResult.Succeeded && reconcileVehicleInfoResult.Data != null)
-                {
-                    _rabbitMQPublisherService.SendMessage(JsonSerializer.Serialize(reconcileVehicleInfoResult.Data), ETC.Core.Models.Enums.PublisherTargetEnum.Fee);
-                    return Ok();
-                }
-                else
-                {
-                    validationErrors.Add(ValidationError.InternalServerError);
-                    return StatusCode(StatusCodes.Status500InternalServerError, ValidationResult.Failed("", validationErrors));
-                }
-            }
-            catch (Exception ex)
-            {
-                string errorMessage = $"An error occurred when calling {nameof(ReconcileVehicleInfoAsync)} method: {ex.Message}. InnerException : {ApiExceptionMessages.ExceptionMessages(ex)}. Stack trace: {ex.StackTrace}";
-                _logger.LogError(errorMessage);
-                validationErrors.Add(ValidationError.InternalServerError);
-                return StatusCode(StatusCodes.Status500InternalServerError, ValidationResult.Failed(errorMessage, validationErrors));
-            }
-        }
-        #endregion
-
         #region LoadCurrentUIAsync
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        [HttpGet("ui")]
+        [HttpGet("v1/ui")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> LoadCurrentUIAsync()
@@ -128,7 +89,7 @@ namespace EPAY.ETC.Core.API.Controllers.UIAction
             }
             catch (Exception ex)
             {
-                string errorMessage = $"An error occurred when calling {nameof(ReconcileVehicleInfoAsync)} method: {ex.Message}. InnerException : {ApiExceptionMessages.ExceptionMessages(ex)}. Stack trace: {ex.StackTrace}";
+                string errorMessage = $"An error occurred when calling {nameof(LoadCurrentUIAsync)} method: {ex.Message}. InnerException : {ApiExceptionMessages.ExceptionMessages(ex)}. Stack trace: {ex.StackTrace}";
                 _logger.LogError(errorMessage);
                 validationErrors.Add(ValidationError.InternalServerError);
                 return StatusCode(StatusCodes.Status500InternalServerError, ValidationResult.Failed(errorMessage, validationErrors));

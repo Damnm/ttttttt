@@ -1,8 +1,14 @@
 ﻿using EPAY.ETC.Core.API.Core.Exceptions;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Fees;
+using EPAY.ETC.Core.API.Core.Interfaces.Services.UIActions;
+using EPAY.ETC.Core.API.Core.Models.Vehicle.ReconcileVehicle;
+using EPAY.ETC.Core.API.Models.Configs;
+using EPAY.ETC.Core.API.Services;
 using EPAY.ETC.Core.Models.Fees;
 using EPAY.ETC.Core.Models.Validation;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using System.Text.Json;
 
 namespace EPAY.ETC.Core.API.Controllers.Fees
 {
@@ -15,17 +21,35 @@ namespace EPAY.ETC.Core.API.Controllers.Fees
     {
         private readonly ILogger<FeeController> _logger;
         private readonly IFeeService _service;
+        private readonly IUIActionService _uiActionService;
+        private readonly IRabbitMQPublisherService _rabbitMQPublisherService;
+        private readonly List<PublisherConfigurationOption> _publisherOptions;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="logger"></param>
         /// <param name="service"></param>
+        /// <param name="uiActionService"></param>
+        /// <param name="rabbitMQPublisherService"></param>
+        /// <param name="publisherOptions"></param>
         /// <exception cref="ArgumentNullException"></exception>
-        public FeeController(ILogger<FeeController> logger, IFeeService service)
+        public FeeController(ILogger<FeeController> logger,
+                             IFeeService service,
+                             IUIActionService uiActionService,
+                             IRabbitMQPublisherService rabbitMQPublisherService,
+                             IOptions<List<PublisherConfigurationOption>> publisherOptions)
         {
+            if (publisherOptions is null)
+            {
+                throw new ArgumentNullException(nameof(publisherOptions));
+            }
+
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _service = service ?? throw new ArgumentNullException(nameof(service));
+            _uiActionService = uiActionService ?? throw new ArgumentNullException(nameof(uiActionService));
+            _rabbitMQPublisherService = rabbitMQPublisherService ?? throw new ArgumentNullException(nameof(rabbitMQPublisherService));
+            _publisherOptions = publisherOptions.Value;
         }
 
         #region AddAsync
@@ -288,6 +312,45 @@ namespace EPAY.ETC.Core.API.Controllers.Fees
                 {
                     StatusCode = StatusCodes.Status500InternalServerError
                 };
+            }
+        }
+        #endregion
+
+        #region ReconcileVehicleInfoAsync
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="reconcileVehicleInfo"></param>
+        /// <returns></returns>
+        [HttpPost("v1/vehicles")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> ReconcileVehicleInfoAsync([FromBody] ReconcileVehicleInfoModel reconcileVehicleInfo)
+        {
+            List<ValidationError> validationErrors = new();
+
+            try
+            {
+                _logger.LogInformation($"Executing {nameof(ReconcileVehicleInfoAsync)}...");
+
+                var reconcileVehicleInfoResult = await _uiActionService.ReconcileVehicleInfoAsync(reconcileVehicleInfo);
+                if (reconcileVehicleInfoResult.Succeeded && reconcileVehicleInfoResult.Data != null)
+                {
+                    _rabbitMQPublisherService.SendMessage(JsonSerializer.Serialize(reconcileVehicleInfoResult.Data), ETC.Core.Models.Enums.PublisherTargetEnum.Fee);
+                    return Ok(ValidationResult.Success<string?>(null));
+                }
+                else
+                {
+                    validationErrors.Add(ValidationError.InternalServerError);
+                    return StatusCode(StatusCodes.Status500InternalServerError, ValidationResult.Failed<string?>(validationErrors));
+                }
+            }
+            catch (Exception ex)
+            {
+                string errorMessage = $"An error occurred when calling {nameof(ReconcileVehicleInfoAsync)} method: {ex.Message}. InnerException : {ApiExceptionMessages.ExceptionMessages(ex)}. Stack trace: {ex.StackTrace}";
+                _logger.LogError(errorMessage);
+                validationErrors.Add(ValidationError.InternalServerError);
+                return StatusCode(StatusCodes.Status500InternalServerError, ValidationResult.Failed(errorMessage, validationErrors));
             }
         }
         #endregion

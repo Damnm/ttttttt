@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using EPAY.ETC.Core.API.Core.Models.Authentication;
 using EPAY.ETC.Core.API.Core.Models.Barcode;
 using EPAY.ETC.Core.API.Core.Models.ETCCheckOuts;
 using EPAY.ETC.Core.API.Core.Models.Fusion;
