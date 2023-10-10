@@ -53,7 +53,7 @@ namespace EPAY.ETC.Core.API.Services
             {
                 _logger.LogInformation($"Executing {nameof(SendMessage)}...");
 
-                var publisherOption = _publisherOptions.FirstOrDefault(x => x.PublisherTarget == ETC.Core.Models.Enums.PublisherTargetEnum.PaymentStatus);
+                var publisherOption = _publisherOptions.FirstOrDefault(x => x.PublisherTarget == target);
                 RabbitMessageOutbound resultMessage = new RabbitMessageOutbound()
                 {
                     Message = message
