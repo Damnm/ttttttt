@@ -1,4 +1,5 @@
 ﻿using EPAY.ETC.Core.API.Core.Models.Vehicle;
+using EPAY.ETC.Core.Models;
 using EPAY.ETC.Core.Models.Validation;
 
 namespace EPAY.ETC.Core.API.Core.Interfaces.Services.Vehicles
@@ -9,5 +10,6 @@ namespace EPAY.ETC.Core.API.Core.Interfaces.Services.Vehicles
         Task<ValidationResult<VehicleModel>> GetByIdAsync(Guid id);
         Task<ValidationResult<VehicleModel>> UpdateAsync(Guid id ,VehicleRequestModel input);
         Task<ValidationResult<VehicleModel>> RemoveAsync(Guid id);
+        Task<ValidationResult<VehicleInfoModel>> GetVehicleByRFIDAsync(string rfid);
     }
 }

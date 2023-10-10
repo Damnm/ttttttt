@@ -9,6 +9,26 @@ services:
     build: ./docker/sdk
     image: net_sdk
 
+  redis-server:
+    image: redis/redis-stack-server:latest
+    container_name: redis_server
+    ports:
+      - "6379:6379"
+    networks:
+      - postgres
+
+  rabbitmq-server:
+    image: rabbitmq:3.9.29-management-alpine
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=rabbitmq
+      - RABBITMQ_DEFAULT_PASS=Epay2023
+    networks:
+      - postgres
+
   postgreSQL:
     image: postgres:15.3-alpine
     container_name: "postgres"

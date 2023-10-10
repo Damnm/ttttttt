@@ -537,7 +537,6 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                     });
             #endregion
 
-
             #region Fee configuration
             modelBuilder.Entity<FeeModel>().HasKey(x => x.Id);
             modelBuilder.Entity<FeeModel>()
@@ -635,6 +634,30 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
             modelBuilder.Entity<BarcodeModel>()
                .Property(x => x.EmployeeId)
                .HasMaxLength(50);
+            modelBuilder.Entity<BarcodeModel>()
+               .Property(x => x.BarcodeAction)
+               .HasMaxLength(50)
+               .HasConversion(new EnumToStringConverter<BarcodeActionEnum>());
+
+            modelBuilder.Entity<BarcodeModel>().HasData(
+                new BarcodeModel()
+                {
+                    Id = new Guid("224874BF-0B78-41F5-A827-7DF9F3AE2412"),
+                    CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
+                    ActionCode = "W6FDEZ",
+                    ActionDesc = "Barcode đăng nhập cho nhân viên",
+                    BarcodeAction = BarcodeActionEnum.ControlUIAccess,
+                    EmployeeId = "030001"
+                },
+                new BarcodeModel()
+                {
+                    Id = new Guid("6458F220-28E0-4D6B-9367-BE6F5B6F2F2F"),
+                    CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
+                    ActionCode = "K6GRG7",
+                    ActionDesc = "Barcode điều khiển barrier",
+                    BarcodeAction = BarcodeActionEnum.ControlBarrier,
+                    EmployeeId = "030001"
+                });
             #endregion
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

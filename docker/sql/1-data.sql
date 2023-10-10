@@ -67,10 +67,10 @@ INSERT INTO public."Vehicles" ("Id", "RFID", "PlateNumber", "PlateColor", "Make"
 
 INSERT INTO public."AppConfig" ("Id", "IsApply", "AppName", "HeaderHeading", "HeaderSubHeading", "HeaderLine1", "HeaderLine2", "FooterLine1", "FooterLine2", "CreatedDate", "StationCode") VALUES ('2c0f4a72-0c59-4a76-a379-4be0bc5ebd08', true, 'Default app config', 'Cảng hàng không quốc tế Tân Sơn Nhất', 'CN tổng Công ty hàng không việt - CTCP', 'ĐC: 58 Trường Sơn, Phường 2, Quận Tân Bình, TP. HCM', 'ĐT: 123456789 MST: 0312451145112', 'TP HCM, ', 'Người nộp', '2023-09-27 13:55:24.173983', '03');
 
-INSERT INTO public."ManualBarrierControl" ("Id", "EmployeeId", "Action", "LaneOutId", "CreatedDate") VALUES ('137048a2-0571-4f79-a0e2-1fcd10e515cf', '3fa85f64-5717-4562-b3fc-2c963f66afa6', 0, 'string', NULL);
-INSERT INTO public."ManualBarrierControl" ("Id", "EmployeeId", "Action", "LaneOutId", "CreatedDate") VALUES ('2d4858da-133f-4f1c-922d-e8b5b730118e', 'string', 0, 'string', '2023-09-29 10:49:01.711561');
-INSERT INTO public."ManualBarrierControl" ("Id", "EmployeeId", "Action", "LaneOutId", "CreatedDate") VALUES ('42e1ae2b-aee2-4c95-a3eb-29ad1e6fb1f0', 'striang', 1, 'string', '2023-09-29 11:13:13.527187');
-INSERT INTO public."ManualBarrierControl" ("Id", "EmployeeId", "Action", "LaneOutId", "CreatedDate") VALUES ('39708dbe-994c-405c-8165-3a335576592a', 'ádasda', 0, '6666', '2023-09-29 13:55:31.294961');
-INSERT INTO public."ManualBarrierControl" ("Id", "EmployeeId", "Action", "LaneOutId", "CreatedDate") VALUES ('330ec4da-c636-4e8a-9dd1-40d0d0d2b9ab', 'a654a78d-36c8-477a-9a9c-dabfeb2dca03', 0, 'aaa', '2023-09-29 13:56:50.144423');
-INSERT INTO public."ManualBarrierControl" ("Id", "EmployeeId", "Action", "LaneOutId", "CreatedDate") VALUES ('7c3b11ee-8096-49fe-868a-a974ea9da23e', 'dc3b5cbf-339e-437f-85b6-a4abd62c28db', 0, '11', '2023-10-04 08:26:32.097625');
-INSERT INTO public."ManualBarrierControl" ("Id", "EmployeeId", "Action", "LaneOutId", "CreatedDate") VALUES ('3e77a6eb-b445-472a-ae09-dd45eea2c335', '40d2ae7b-e3c6-471f-9a36-4e0831f3e709', 1, '22', '2023-10-04 08:26:58.551336');
+INSERT INTO public."ManualBarrierControl" ("Id", "EmployeeId", "Action", "LaneOutId", "CreatedDate") VALUES ('137048a2-0571-4f79-a0e2-1fcd10e515cf', '030001', 0, 'string', NULL);
+INSERT INTO public."ManualBarrierControl" ("Id", "EmployeeId", "Action", "LaneOutId", "CreatedDate") VALUES ('2d4858da-133f-4f1c-922d-e8b5b730118e', '030001', 0, 'string', '2023-09-29 10:49:01.711561');
+INSERT INTO public."ManualBarrierControl" ("Id", "EmployeeId", "Action", "LaneOutId", "CreatedDate") VALUES ('42e1ae2b-aee2-4c95-a3eb-29ad1e6fb1f0', '030001', 1, 'string', '2023-09-29 11:13:13.527187');
+INSERT INTO public."ManualBarrierControl" ("Id", "EmployeeId", "Action", "LaneOutId", "CreatedDate") VALUES ('39708dbe-994c-405c-8165-3a335576592a', '030001', 0, '6666', '2023-09-29 13:55:31.294961');
+INSERT INTO public."ManualBarrierControl" ("Id", "EmployeeId", "Action", "LaneOutId", "CreatedDate") VALUES ('330ec4da-c636-4e8a-9dd1-40d0d0d2b9ab', '030001', 0, 'aaa', '2023-09-29 13:56:50.144423');
+INSERT INTO public."ManualBarrierControl" ("Id", "EmployeeId", "Action", "LaneOutId", "CreatedDate") VALUES ('7c3b11ee-8096-49fe-868a-a974ea9da23e', '030001', 0, '11', '2023-10-04 08:26:32.097625');
+INSERT INTO public."ManualBarrierControl" ("Id", "EmployeeId", "Action", "LaneOutId", "CreatedDate") VALUES ('3e77a6eb-b445-472a-ae09-dd45eea2c335', '030001', 1, '22', '2023-10-04 08:26:58.551336');

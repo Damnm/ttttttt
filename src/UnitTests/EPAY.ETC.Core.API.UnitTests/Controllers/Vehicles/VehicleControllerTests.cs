@@ -328,5 +328,60 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Vehicles
             Assert.True(actualResultRespone.Errors.Count() > 0);
         }
         #endregion
+        #region GetVehicleByRFIDAsync
+        [Fact]
+        public async Task GivenValidRequest_WhenApiGetVehicleByRFIDAsyncIsCalled_ThenReturnCorrectResult()
+        {
+            // Arrange
+            ETC.Core.Models.VehicleInfoModel responseMock = new ETC.Core.Models.VehicleInfoModel(){
+                PlateNumber = "Some Plate number",
+                PlateColour = "Some Plate colour",
+                Make = "Some make",
+                Seat = 10,
+                VehicleType = "Loại 2",
+                Weight = 7000,
+            };
+            _vehicleServiceMock.Setup(x => x.GetVehicleByRFIDAsync(It.IsAny<string>())).ReturnsAsync(ValidationResult.Success(responseMock));
+
+            // Act
+            var vehicleController = new VehicleController(_loggerMock.Object, _vehicleServiceMock.Object);
+            var actualResult = await vehicleController.GetVehicleByRFIDAsync(new Guid().ToString());
+            var data = ((OkObjectResult)actualResult).Value as ValidationResult<ETC.Core.Models.VehicleInfoModel>;
+
+            // Assert
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleController.GetVehicleByRFIDAsync)}...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleController.GetVehicleByRFIDAsync)} method", Times.Never, _exception);
+            actualResult.Should().BeOfType<OkObjectResult>();
+            ((ObjectResult)actualResult).StatusCode.Should().Be(StatusCodes.Status200OK);
+            data?.Succeeded.Should().BeTrue();
+            data?.Data?.Should().NotBeNull();
+            data?.Data?.PlateNumber.Should().Be(responseMock?.PlateNumber);
+            data?.Data?.PlateColour.Should().Be(responseMock?.PlateColour);
+            data?.Data?.Make.Should().Be(responseMock?.Make);
+            data?.Data?.Seat.Should().Be(responseMock?.Seat);
+            data?.Data?.VehicleType.Should().Be(responseMock?.VehicleType);
+            data?.Data?.Weight.Should().Be(responseMock?.Weight);
+        }
+        // Unhappy case 400
+        [Fact]
+        public async Task GivenValidRequestAndPriorityVehicleServiceIsDown_WhenApiGetVehicleByRFIDAsyncIsCalled_ThenReturnInternalServerError()
+        {
+            // Arrange
+            var someEx = new Exception("An error occurred when calling GetVehicleByRFIDAsync method");
+            _vehicleServiceMock.Setup(x => x.GetVehicleByRFIDAsync(It.IsAny<string>())).ThrowsAsync(someEx);
+
+            // Act
+            var vehicleController = new VehicleController(_loggerMock.Object, _vehicleServiceMock.Object);
+            var actualResult = await vehicleController.GetVehicleByRFIDAsync(new Guid().ToString());
+            var actualResultRespone = ((ObjectResult)actualResult).Value as ValidationResult<string>;
+
+            // Assert
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(vehicleController.GetVehicleByRFIDAsync)}...", Times.Once, _exception);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(vehicleController.GetVehicleByRFIDAsync)} method", Times.Once, _exception);
+            ((ObjectResult)actualResult).StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+            actualResultRespone!.Succeeded.Should().BeFalse();
+            Assert.True(actualResultRespone.Errors.Count() > 0);
+        }
+        #endregion
     }
 }
