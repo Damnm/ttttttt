@@ -1,15 +1,9 @@
-﻿using AutoMapper;
-using EPAY.ETC.Core.API.Core.Exceptions;
+﻿using EPAY.ETC.Core.API.Core.Exceptions;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.UIActions;
-using EPAY.ETC.Core.API.Models.Configs;
 using EPAY.ETC.Core.API.Services;
 using EPAY.ETC.Core.Models.Request;
 using EPAY.ETC.Core.Models.Validation;
-using EPAY.ETC.Core.Publisher.Common.Options;
-using EPAY.ETC.Core.Publisher.Interface;
-using EPAY.ETC.Core.RabbitMQ.Common.Events;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using System.Text.Json;
 
 namespace EPAY.ETC.Core.API.Controllers.Devices
@@ -21,7 +15,7 @@ namespace EPAY.ETC.Core.API.Controllers.Devices
     [Route("~/api/[controller]")]
     public class DeviceController : ControllerBase
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<DeviceController> _logger;
         private readonly IUIActionService _uiActionService;
         private readonly IRabbitMQPublisherService _rabbitMQPublisherService;
 
@@ -31,7 +25,7 @@ namespace EPAY.ETC.Core.API.Controllers.Devices
         /// <param name="logger"></param>
         /// <param name="uiActionService"></param>
         /// <param name="rabbitMQPublisherService"></param>
-        public DeviceController(ILogger logger,
+        public DeviceController(ILogger<DeviceController> logger,
                                 IUIActionService uiActionService,
                                 IRabbitMQPublisherService rabbitMQPublisherService)
         {
