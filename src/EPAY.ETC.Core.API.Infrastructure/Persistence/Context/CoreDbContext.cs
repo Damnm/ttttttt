@@ -106,38 +106,38 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                 {
                     Id = new Guid("70884a61-39f3-4e8e-b936-d5b18652d3ac"),
                     CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
-                    Name = "Xe nhượng quyền"
+                    VehicleCategoryName = "Xe nhượng quyền"
                 },
                 new VehicleCategoryModel()
                 {
                     Id = new Guid("82f143d3-b2ed-40d6-a59e-4fc980a24450"),
                     CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
-                    Name = "Xe nhượng quyền TCP"
+                    VehicleCategoryName = "Xe nhượng quyền TCP"
                 },
                 new VehicleCategoryModel()
                 {
                     Id = new Guid("2b0557d0-cc6b-4fc2-a0b3-08788c9fd8c7"),
                     CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
-                    Name = "Xe ưu tiên theo tháng"
+                    VehicleCategoryName = "Xe ưu tiên theo tháng"
                 },
                 new VehicleCategoryModel()
                 {
                     Id = new Guid("bd4e670d-8cae-46fa-8bac-d77ac139a044"),
                     CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
-                    Name = "Xe ưu tiên theo quý"
+                    VehicleCategoryName = "Xe ưu tiên theo quý"
                 },
                 new VehicleCategoryModel()
                 {
                     Id = new Guid("ac9b71a5-0541-4d2e-a358-6afac6d6c525"),
                     CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
-                    Name = "Xe ưu tiên theo năm"
+                    VehicleCategoryName = "Xe ưu tiên theo năm"
                 });
             #endregion
 
             #region Fee type configuration
             modelBuilder.Entity<FeeTypeModel>().HasKey(x => x.Id);
             modelBuilder.Entity<FeeTypeModel>()
-                .Property(x => x.Name)
+                .Property(x => x.FeeName)
                 .HasMaxLength(50)
                 .HasConversion(new EnumToStringConverter<FeeTypeEnum>());
 
@@ -146,7 +146,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                 {
                     Id = new Guid("30ee8597-aa3e-43e7-a1f1-559ee2d4b85e"),
                     CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
-                    Name = FeeTypeEnum.Free,
+                    FeeName = FeeTypeEnum.Free,
                     Desc = FeeTypeEnum.Free.ToEnumMemberAttrValue(),
                     Amount = 0
                 },
@@ -154,7 +154,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                 {
                     Id = new Guid("46b26ea4-abfd-4b9f-bdf4-ec0e434d9ffc"),
                     CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
-                    Name = FeeTypeEnum.Fixed,
+                    FeeName = FeeTypeEnum.Fixed,
                     Desc = FeeTypeEnum.Fixed.ToEnumMemberAttrValue(),
                     Amount = 15000
                 },
@@ -162,14 +162,14 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                 {
                     Id = new Guid("1143d8c3-22e2-4bd5-a690-89ca0c47b3c9"),
                     CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
-                    Name = FeeTypeEnum.TimeBlock,
+                    FeeName = FeeTypeEnum.TimeBlock,
                     Desc = FeeTypeEnum.TimeBlock.ToEnumMemberAttrValue()
                 },
                 new FeeTypeModel()
                 {
                     Id = new Guid("04595036-c8a8-4800-9513-c4015b98da3b"),
                     CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
-                    Name = FeeTypeEnum.DayBlock,
+                    FeeName = FeeTypeEnum.DayBlock,
                     Desc = FeeTypeEnum.DayBlock.ToEnumMemberAttrValue()
                 });
             #endregion
@@ -183,19 +183,19 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                     {
                         Id = new Guid("efbe78bc-290b-4a01-a596-bbc62f60f5f3"),
                         CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
-                        Name = "Taxi Mai Linh"
+                        GroupName = "Taxi Mai Linh"
                     },
                     new VehicleGroupModel()
                     {
                         Id = new Guid("1fc5fc58-94e4-4169-a576-3cd9ecf8eb96"),
                         CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
-                        Name = "Taxi Xanh"
+                        GroupName = "Taxi Xanh"
                     },
                     new VehicleGroupModel()
                     {
                         Id = new Guid("ec2a686b-8adc-4053-9e2e-4942cab0168d"),
                         CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
-                        Name = "Công ty vận tải hành khách"
+                        GroupName = "Công ty vận tải hành khách"
                     });
 
             #endregion
@@ -655,6 +655,14 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                     BarcodeAction = BarcodeActionEnum.ControlBarrier,
                     EmployeeId = "030001"
                 });
+            #endregion
+
+            #region ManualBarrier configuration
+            modelBuilder.Entity<ManualBarrierControlModel>().HasKey(x => x.Id);
+            modelBuilder.Entity<ManualBarrierControlModel>()
+               .Property(x => x.Action)
+               .HasMaxLength(50)
+               .HasConversion(new EnumToStringConverter<BarrierActionEnum>());
             #endregion
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

@@ -65,9 +65,9 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Services.Fusions
             result.Data?.Epoch.Should().Be(expected!.Data!.Epoch);
             result.Data?.Loop1.Should().Be(expected!.Data!.Loop1);
             result.Data?.RFID.Should().Be(expected!.Data!.RFID);
-            result.Data?.Cam1.Should().Be(expected!.Data!.Cam1);
+            result.Data?.ANPRCam1.Should().Be(expected!.Data!.ANPRCam1);
             result.Data?.Loop2.Should().Be(expected!.Data!.Loop2);
-            result.Data?.Cam2.Should().Be(expected!.Data!.Cam2);
+            result.Data?.CCTVCam2.Should().Be(expected!.Data!.CCTVCam2);
             result.Data?.Loop3.Should().Be(expected!.Data!.Loop3);
             result.Data?.ReversedLoop1.Should().Be(expected!.Data!.ReversedLoop1);
             result.Data?.ReversedLoop1.Should().Be(expected!.Data!.ReversedLoop1);
@@ -174,9 +174,9 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Services.Fusions
             result.Data?.Epoch.Should().Be(expected!.Data!.Epoch);
             result.Data?.Loop1.Should().Be(expected!.Data!.Loop1);
             result.Data?.RFID.Should().Be(expected!.Data!.RFID);
-            result.Data?.Cam1.Should().Be(expected!.Data!.Cam1);
+            result.Data?.ANPRCam1.Should().Be(expected!.Data!.ANPRCam1);
             result.Data?.Loop2.Should().Be(expected!.Data!.Loop2);
-            result.Data?.Cam2.Should().Be(expected!.Data!.Cam2);
+            result.Data?.CCTVCam2.Should().Be(expected!.Data!.CCTVCam2);
             result.Data?.Loop3.Should().Be(expected!.Data!.Loop3);
             result.Data?.ReversedLoop1.Should().Be(expected!.Data!.ReversedLoop1);
             result.Data?.ReversedLoop1.Should().Be(expected!.Data!.ReversedLoop1);

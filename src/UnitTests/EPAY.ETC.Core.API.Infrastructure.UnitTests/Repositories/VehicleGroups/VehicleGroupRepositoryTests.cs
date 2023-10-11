@@ -25,7 +25,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.VehicleGroups
             new VehicleGroupModel()
             {
                 Id = Guid.NewGuid(),
-                Name = "Some name",
+                GroupName = "Some name",
                 CreatedDate = new DateTime(2023,9,11)
             }
         };

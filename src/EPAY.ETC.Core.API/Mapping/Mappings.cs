@@ -113,7 +113,7 @@ namespace EPAY.ETC.Core.API.Mapping
                 .ForPath(e => e.Payment.Make, act => act.MapFrom(src => src.Payment.Make))
                 .ForPath(e => e.Payment.Model, act => act.MapFrom(src => src.Payment.Model))
                 .ForPath(e => e.Payment.PlateNumber, act => act.MapFrom(src => src.Payment.PlateNumber))
-                .ForPath(e => e.Payment.VehicleTypeId, act => act.MapFrom(src => src.Payment.VehicleTypeId))
+                .ForPath(e => e.Payment.VehicleTypeId, act => act.MapFrom(src => src.Payment.VehicleType))
                 .ForPath(e => e.Payment.Amount, act => act.MapFrom(src => src.Payment.Amount))
                 .ForPath(e => e.Payment.Currency, act => act.MapFrom(src => src.Payment.PaymentStatuses.FirstOrDefault().Currency))
                 .ForPath(e => e.Payment.TicketTypeId, act => act.MapFrom(src => src.Payment.Fee.TicketTypeId))

@@ -9,14 +9,15 @@ namespace EPAY.ETC.Core.API.Core.Models.TransactionLog
     [Table("LaneInRFIDTransactionLog")]
     public class LaneInRFIDTransactionLog : BaseEntity<Guid>
     {
-        public Double Epoch { get; set; }
+        public long Epoch { get; set; }
         [MaxLength(50)]
         public string? RFID { get; set; }
         [MaxLength(50)]
         public string? RFIDReaderMacAddr { get; set; }
         [MaxLength(50)]
         public string? RFIDReaderIPAddr { get; set; }
-        public Guid LaneInId { get; set; }
+        [MaxLength(10)]
+        public string? LaneInId { get; set; }
         [MaxLength(150)]
         public string? Make { get; set; }
         [MaxLength(150)]
@@ -27,12 +28,12 @@ namespace EPAY.ETC.Core.API.Core.Models.TransactionLog
         public string? PlateColour { get; set; }
         [MaxLength(20)]
         public string? VehicleType { get; set; }
-        public int Seat { get; set; }
-        public int Weight { get; set; }
+        public int? Seat { get; set; }
+        public int? Weight { get; set; }
         [MaxLength(255)]
         public string? PlateNumberPhotoUrl { get; set; }
         [MaxLength(255)]
         public string? VehiclePhotoUrl { get; set; }
-        public Double ConfidenceScore { get; set; }
+        public double ConfidenceScore { get; set; }
     }
 }

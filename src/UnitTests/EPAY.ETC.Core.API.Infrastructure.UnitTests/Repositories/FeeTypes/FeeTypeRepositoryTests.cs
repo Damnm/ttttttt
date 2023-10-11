@@ -26,7 +26,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.FeeTypes
             new FeeTypeModel()
             {
                 Id = Guid.NewGuid(),
-                Name = FeeTypeEnum.TimeBlock,
+                FeeName = FeeTypeEnum.TimeBlock,
                 CreatedDate = new DateTime(2023,9,11)
             }
         };

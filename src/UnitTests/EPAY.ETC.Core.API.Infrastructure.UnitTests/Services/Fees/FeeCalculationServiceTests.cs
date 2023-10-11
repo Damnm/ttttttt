@@ -43,7 +43,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fees
                 FeeType = new Core.Models.FeeTypes.FeeTypeModel()
                 {
                     Id = Guid.NewGuid(),
-                    Name = FeeTypeEnum.TimeBlock,
+                    FeeName = FeeTypeEnum.TimeBlock,
                     Amount = 0,
                     CreatedDate = new DateTime(2023,9,11)
                 }
@@ -136,7 +136,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fees
         {
             // Arrange
             var feeVehicleCategory = feeVehicleCategories.FirstOrDefault()!;
-            feeVehicleCategory.FeeType!.Name = feeType;
+            feeVehicleCategory.FeeType!.FeeName = feeType;
             feeVehicleCategory.FeeType!.Amount = amount;
 
             _feeVehicleCategoryRepositoryMock.Setup(x => x.GetAllAsync(It.IsAny<Expression<Func<FeeVehicleCategoryModel, bool>>>())).ReturnsAsync(new List<FeeVehicleCategoryModel>() { feeVehicleCategory });

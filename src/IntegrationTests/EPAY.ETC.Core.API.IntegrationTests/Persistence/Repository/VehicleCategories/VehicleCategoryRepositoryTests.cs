@@ -38,7 +38,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Repository.VehicleCateg
             _repository = scope.ServiceProvider.GetRequiredService<IVehicleCategoryRepository>();
 
             // Arrange
-            Expression<Func<VehicleCategoryModel, bool>> expression = s => s.Name == "Xe nhượng quyền";
+            Expression<Func<VehicleCategoryModel, bool>> expression = s => s.VehicleCategoryName == "Xe nhượng quyền";
 
             // Act
             var result = await _repository.GetAllAsync(expression);

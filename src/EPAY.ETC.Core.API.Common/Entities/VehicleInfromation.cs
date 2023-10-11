@@ -13,17 +13,17 @@ namespace EPAY.ETC.Core.API.Core.Entities
         }
 
 
-        [StringLength(50)]
+        [MaxLength(50)]
         public string? RFID { get; set; }
-        [StringLength(20)]
+        [MaxLength(20)]
         public string? PlateNumber { get; set; }
-        [StringLength(20)]
+        [MaxLength(20)]
         public string? PlateColor { get; set; }
-        [StringLength(20)]
+        [MaxLength(20)]
         public string? Make { get; set; }
         public int? Seat { get; set; }
         public int? Weight { get; set; }
-        [StringLength(20)]
+        [MaxLength(20)]
         public string? VehicleType { get; set; }
 
     }

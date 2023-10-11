@@ -11,9 +11,9 @@ namespace EPAY.ETC.Core.API.Core.Models.FeeTypes
     [ExcludeFromCodeCoverage]
     public class FeeTypeModel : BaseEntity<Guid>
     {
-        public FeeTypeEnum Name { get; set; }
+        public FeeTypeEnum FeeName { get; set; }
         public double? Amount { get; set; }
-        [StringLength(255)]
+        [MaxLength(255)]
         public string? Desc { get; set; }
 
         public virtual ICollection<FeeVehicleCategoryModel>? FeeVehicleCategories { get; set; }

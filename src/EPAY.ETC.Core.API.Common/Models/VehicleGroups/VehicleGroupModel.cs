@@ -10,9 +10,9 @@ namespace EPAY.ETC.Core.API.Core.Models.VehicleGroups
     [ExcludeFromCodeCoverage]
     public class VehicleGroupModel : BaseEntity<Guid>
     {
-        [StringLength(100)]
-        public string? Name { get; set; }
-        [StringLength(255)]
+        [MaxLength(100)]
+        public string? GroupName { get; set; }
+        [MaxLength(255)]
         public string? Desc { get; set; }
 
         public virtual ICollection<FeeVehicleCategoryModel>? FeeVehicleCategories { get; set; }

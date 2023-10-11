@@ -25,7 +25,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.VehicleCategor
             new VehicleCategoryModel()
             {
                 Id = Guid.NewGuid(),
-                Name = "Some name",
+                VehicleCategoryName = "Some name",
                 CreatedDate = new DateTime(2023,9,11)
             }
         };

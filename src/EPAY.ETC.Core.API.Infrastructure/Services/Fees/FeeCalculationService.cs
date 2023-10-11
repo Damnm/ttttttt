@@ -83,13 +83,13 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
                         CustomVehicleTypeCode = feeVehicleCategory.CustomVehicleType?.Name.ToString(),
                         CustomVehicleTypeName = feeVehicleCategory.CustomVehicleType?.Name.ToEnumMemberAttrValue(),
                         VehicleCategoryId = feeVehicleCategory.VehicleCategoryId,
-                        VehicleCategoryName = feeVehicleCategory.VehicleCategory?.Name,
+                        VehicleCategoryName = feeVehicleCategory.VehicleCategory?.VehicleCategoryName,
                         VehicleGroupId = feeVehicleCategory.VehicleGroupId,
-                        VehicleGroupName = feeVehicleCategory.VehicleGroup?.Name
+                        VehicleGroupName = feeVehicleCategory.VehicleGroup?.GroupName
                     };
 
                     // Set fee type if exists
-                    feeType = feeVehicleCategory.FeeType?.Name ?? FeeTypeEnum.TimeBlock;
+                    feeType = feeVehicleCategory.FeeType?.FeeName ?? FeeTypeEnum.TimeBlock;
                 }
                 else if (!string.IsNullOrEmpty(rfid))
                 {

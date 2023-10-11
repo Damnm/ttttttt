@@ -25,9 +25,9 @@ namespace EPAY.ETC.Core.API.Core.Models.FeeVehicleCategories
         public Guid CustomVehicleTypeId { get; set; }
         [ForeignKey("CustomVehicleTypeId")]
         public virtual CustomVehicleTypeModel? CustomVehicleType { get; set; }
-        [StringLength(20)]
+        [MaxLength(20)]
         public string? PlateNumber { get; set; }
-        [StringLength(50)]
+        [MaxLength(50)]
         public string? RFID { get; set; }
         public bool IsTCPVehicle { get; set; } = false;
         public DateTime ValidFrom { get; set; }

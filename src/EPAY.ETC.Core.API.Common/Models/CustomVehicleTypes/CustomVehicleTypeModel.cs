@@ -15,7 +15,7 @@ namespace EPAY.ETC.Core.API.Core.Models.CustomVehicleTypes
     public class CustomVehicleTypeModel : BaseEntity<Guid>
     {
         public CustomVehicleTypeEnum Name { get; set; }
-        [StringLength(255)]
+        [MaxLength(255)]
         public string? Desc { get; set; }
 
         public virtual ICollection<FeeVehicleCategoryModel>? FeeVehicleCategories { get; set; }

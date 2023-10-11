@@ -27,9 +27,9 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Repository.Fusions
             Epoch = 10,
             Loop1 = true,
             RFID = true,
-            Cam1 = "12A123456",
+            ANPRCam1 = "12A123456",
             Loop2 = true,
-            Cam2 = "12A123456",
+            CCTVCam2 = "12A123456",
             Loop3 = true,
             ReversedLoop1 = true,
             ReversedLoop2 = true,
@@ -58,9 +58,9 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Repository.Fusions
             result!.Epoch.Should().Be(expected!.Epoch);
             result!.Loop1.Should().Be(expected!.Loop1);
             result!.RFID.Should().Be(expected!.RFID);
-            result!.Cam1.Should().Be(expected!.Cam1);
+            result!.ANPRCam1.Should().Be(expected!.ANPRCam1);
             result!.Loop2.Should().Be(expected!.Loop2);
-            result!.Cam2.Should().Be(expected!.Cam2);
+            result!.CCTVCam2.Should().Be(expected!.CCTVCam2);
             result!.Loop3.Should().Be(expected!.Loop3);
             result!.ReversedLoop1.Should().Be(expected!.ReversedLoop1);
             result!.ReversedLoop2.Should().Be(expected!.ReversedLoop2);     
@@ -83,9 +83,9 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Repository.Fusions
             result!.Epoch.Should().Be(fusion.Epoch);
             result!.Loop1.Should().Be(fusion.Loop1);
             result!.RFID.Should().Be(fusion.RFID);
-            result!.Cam1.Should().Be(fusion.Cam1);
+            result!.ANPRCam1.Should().Be(fusion.ANPRCam1);
             result!.Loop2.Should().Be(fusion.Loop2);
-            result!.Cam2.Should().Be(fusion.Cam2);
+            result!.CCTVCam2.Should().Be(fusion.CCTVCam2);
             result!.Loop3.Should().Be(fusion.Loop3);
             result!.ReversedLoop1.Should().Be(fusion.ReversedLoop1);
             result!.ReversedLoop2.Should().Be(fusion.ReversedLoop2);
@@ -118,9 +118,9 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Repository.Fusions
             fusion.Epoch = 20;
             fusion.Loop1 = false;
             fusion.RFID = true;
-            fusion.Cam1 = "12A123456";
+            fusion.ANPRCam1 = "12A123456";
             fusion.Loop2 = true;
-            fusion.Cam2 = "12A123456";
+            fusion.CCTVCam2 = "12A123456";
             fusion.Loop3 = true;
             fusion.ReversedLoop1 = true;
             fusion.ReversedLoop2 = true;
@@ -135,9 +135,9 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Repository.Fusions
             expected?.Epoch.Should().Be(expected!.Epoch);
             expected?.Loop1.Should().Be(expected!.Loop1);
             expected?.RFID.Should().Be(expected!.RFID);
-            expected?.Cam1.Should().Be(expected!.Cam1);
+            expected?.ANPRCam1.Should().Be(expected!.ANPRCam1);
             expected?.Loop2.Should().Be(expected!.Loop2);
-            expected?.Cam2.Should().Be(expected!.Cam2);
+            expected?.CCTVCam2.Should().Be(expected!.CCTVCam2);
             expected?.Loop3.Should().Be(expected!.Loop3);
             expected?.ReversedLoop1.Should().Be(expected!.ReversedLoop1);
             expected?.ReversedLoop2.Should().Be(expected!.ReversedLoop2);

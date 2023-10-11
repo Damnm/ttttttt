@@ -38,7 +38,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Repository.FeeTypes
             _repository = scope.ServiceProvider.GetRequiredService<IFeeTypeRepository>();
 
             // Arrange
-            Expression<Func<FeeTypeModel, bool>> expression = s => s.Name == Core.Models.Enum.FeeTypeEnum.Free;
+            Expression<Func<FeeTypeModel, bool>> expression = s => s.FeeName == Core.Models.Enum.FeeTypeEnum.Free;
 
             // Act
             var result = await _repository.GetAllAsync(expression);

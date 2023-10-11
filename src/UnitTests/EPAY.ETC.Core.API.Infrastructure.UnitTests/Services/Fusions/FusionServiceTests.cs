@@ -47,9 +47,9 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fusions
             Epoch = 100,
             Loop1 = true,
             RFID = false,
-            Cam1 = "12A12345",
+            ANPRCam1 = "12A12345",
             Loop2 = true,
-            Cam2 = "12A12345",
+            CCTVCam2 = "12A12345",
             Loop3 = true,
             ReversedLoop1 = true,
             ReversedLoop2 = true
