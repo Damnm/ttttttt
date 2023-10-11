@@ -1,3 +1,12 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 15.3
+-- Dumped by pg_dump version 15.3
+
+-- Started on 2023-10-11 16:35:10
+
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
@@ -14,7 +23,7 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- TOC entry 232 (class 1259 OID 18050)
+-- TOC entry 232 (class 1259 OID 25709)
 -- Name: AppConfig; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -36,7 +45,24 @@ CREATE TABLE public."AppConfig" (
 ALTER TABLE public."AppConfig" OWNER TO postgres;
 
 --
--- TOC entry 221 (class 1259 OID 17464)
+-- TOC entry 235 (class 1259 OID 25738)
+-- Name: Barcode; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."Barcode" (
+    "Id" uuid NOT NULL,
+    "EmployeeId" character varying(50),
+    "ActionCode" character varying(20),
+    "ActionDesc" character varying(100),
+    "CreatedDate" timestamp without time zone,
+    "BarcodeAction" character varying(50) DEFAULT ''::character varying NOT NULL
+);
+
+
+ALTER TABLE public."Barcode" OWNER TO postgres;
+
+--
+-- TOC entry 221 (class 1259 OID 25096)
 -- Name: CustomVehicleType; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -51,7 +77,7 @@ CREATE TABLE public."CustomVehicleType" (
 ALTER TABLE public."CustomVehicleType" OWNER TO postgres;
 
 --
--- TOC entry 231 (class 1259 OID 18026)
+-- TOC entry 231 (class 1259 OID 25679)
 -- Name: ETCCheckout; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -71,7 +97,7 @@ CREATE TABLE public."ETCCheckout" (
 ALTER TABLE public."ETCCheckout" OWNER TO postgres;
 
 --
--- TOC entry 228 (class 1259 OID 17570)
+-- TOC entry 228 (class 1259 OID 25203)
 -- Name: Fee; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -111,7 +137,7 @@ CREATE TABLE public."Fee" (
 ALTER TABLE public."Fee" OWNER TO postgres;
 
 --
--- TOC entry 222 (class 1259 OID 17469)
+-- TOC entry 222 (class 1259 OID 25101)
 -- Name: FeeType; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -127,7 +153,7 @@ CREATE TABLE public."FeeType" (
 ALTER TABLE public."FeeType" OWNER TO postgres;
 
 --
--- TOC entry 226 (class 1259 OID 17494)
+-- TOC entry 226 (class 1259 OID 25126)
 -- Name: FeeVehicleCategory; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -149,7 +175,7 @@ CREATE TABLE public."FeeVehicleCategory" (
 ALTER TABLE public."FeeVehicleCategory" OWNER TO postgres;
 
 --
--- TOC entry 220 (class 1259 OID 17459)
+-- TOC entry 220 (class 1259 OID 24638)
 -- Name: Fusions; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -170,7 +196,7 @@ CREATE TABLE public."Fusions" (
 ALTER TABLE public."Fusions" OWNER TO postgres;
 
 --
--- TOC entry 215 (class 1259 OID 17417)
+-- TOC entry 215 (class 1259 OID 24596)
 -- Name: LaneInCameraTransactionLogs; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -198,7 +224,7 @@ CREATE TABLE public."LaneInCameraTransactionLogs" (
 ALTER TABLE public."LaneInCameraTransactionLogs" OWNER TO postgres;
 
 --
--- TOC entry 216 (class 1259 OID 17424)
+-- TOC entry 216 (class 1259 OID 24603)
 -- Name: LaneInRFIDTransactionLogs; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -226,15 +252,15 @@ CREATE TABLE public."LaneInRFIDTransactionLogs" (
 ALTER TABLE public."LaneInRFIDTransactionLogs" OWNER TO postgres;
 
 --
--- TOC entry 233 (class 1259 OID 18059)
+-- TOC entry 234 (class 1259 OID 25725)
 -- Name: ManualBarrierControl; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public."ManualBarrierControl" (
     "Id" uuid NOT NULL,
-    "EmployeeId" character varying(10),
+    "EmployeeId" text,
     "Action" integer NOT NULL,
-    "LaneOutId" character varying(10),
+    "LaneOutId" text NOT NULL,
     "CreatedDate" timestamp without time zone
 );
 
@@ -242,7 +268,23 @@ CREATE TABLE public."ManualBarrierControl" (
 ALTER TABLE public."ManualBarrierControl" OWNER TO postgres;
 
 --
--- TOC entry 229 (class 1259 OID 17981)
+-- TOC entry 233 (class 1259 OID 25717)
+-- Name: ManualBarrierControls; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."ManualBarrierControls" (
+    "Id" uuid NOT NULL,
+    "EmployeeId" uuid,
+    "Action" integer NOT NULL,
+    "LaneOutId" text NOT NULL,
+    "CreatedDate" timestamp without time zone
+);
+
+
+ALTER TABLE public."ManualBarrierControls" OWNER TO postgres;
+
+--
+-- TOC entry 229 (class 1259 OID 25634)
 -- Name: Payment; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -266,7 +308,7 @@ CREATE TABLE public."Payment" (
 ALTER TABLE public."Payment" OWNER TO postgres;
 
 --
--- TOC entry 230 (class 1259 OID 17988)
+-- TOC entry 230 (class 1259 OID 25641)
 -- Name: PaymentStatus; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -278,15 +320,16 @@ CREATE TABLE public."PaymentStatus" (
     "PaymentMethod" character varying(50) NOT NULL,
     "PaymentDate" timestamp without time zone NOT NULL,
     "Status" character varying(50) NOT NULL,
-    "PaymentReferenceId" character varying(50),
-    "CreatedDate" timestamp without time zone
+    "TransactionId" character varying(50),
+    "CreatedDate" timestamp without time zone,
+    "Reason" character varying(255)
 );
 
 
 ALTER TABLE public."PaymentStatus" OWNER TO postgres;
 
 --
--- TOC entry 225 (class 1259 OID 17484)
+-- TOC entry 225 (class 1259 OID 25116)
 -- Name: TimeBlockFee; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -305,7 +348,7 @@ CREATE TABLE public."TimeBlockFee" (
 ALTER TABLE public."TimeBlockFee" OWNER TO postgres;
 
 --
--- TOC entry 227 (class 1259 OID 17559)
+-- TOC entry 227 (class 1259 OID 25192)
 -- Name: TimeBlockFeeFormulas; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -323,7 +366,7 @@ CREATE TABLE public."TimeBlockFeeFormulas" (
 ALTER TABLE public."TimeBlockFeeFormulas" OWNER TO postgres;
 
 --
--- TOC entry 223 (class 1259 OID 17474)
+-- TOC entry 223 (class 1259 OID 25106)
 -- Name: VehicleCategory; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -338,7 +381,7 @@ CREATE TABLE public."VehicleCategory" (
 ALTER TABLE public."VehicleCategory" OWNER TO postgres;
 
 --
--- TOC entry 224 (class 1259 OID 17479)
+-- TOC entry 224 (class 1259 OID 25111)
 -- Name: VehicleGroup; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -353,7 +396,7 @@ CREATE TABLE public."VehicleGroup" (
 ALTER TABLE public."VehicleGroup" OWNER TO postgres;
 
 --
--- TOC entry 217 (class 1259 OID 17431)
+-- TOC entry 217 (class 1259 OID 24610)
 -- Name: VehiclePaymentTransactions; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -369,7 +412,7 @@ CREATE TABLE public."VehiclePaymentTransactions" (
 ALTER TABLE public."VehiclePaymentTransactions" OWNER TO postgres;
 
 --
--- TOC entry 219 (class 1259 OID 17452)
+-- TOC entry 219 (class 1259 OID 24631)
 -- Name: VehicleTransactionModels; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -399,7 +442,7 @@ CREATE TABLE public."VehicleTransactionModels" (
 ALTER TABLE public."VehicleTransactionModels" OWNER TO postgres;
 
 --
--- TOC entry 218 (class 1259 OID 17445)
+-- TOC entry 218 (class 1259 OID 24624)
 -- Name: Vehicles; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -420,7 +463,7 @@ CREATE TABLE public."Vehicles" (
 ALTER TABLE public."Vehicles" OWNER TO postgres;
 
 --
--- TOC entry 214 (class 1259 OID 17412)
+-- TOC entry 214 (class 1259 OID 24591)
 -- Name: __EFMigrationsHistory; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -432,9 +475,8 @@ CREATE TABLE public."__EFMigrationsHistory" (
 
 ALTER TABLE public."__EFMigrationsHistory" OWNER TO postgres;
 
-
 --
--- TOC entry 3318 (class 2606 OID 18056)
+-- TOC entry 3327 (class 2606 OID 25715)
 -- Name: AppConfig PK_AppConfig; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -443,7 +485,16 @@ ALTER TABLE ONLY public."AppConfig"
 
 
 --
--- TOC entry 3265 (class 2606 OID 17468)
+-- TOC entry 3333 (class 2606 OID 25744)
+-- Name: Barcode PK_Barcode; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Barcode"
+    ADD CONSTRAINT "PK_Barcode" PRIMARY KEY ("Id");
+
+
+--
+-- TOC entry 3274 (class 2606 OID 25100)
 -- Name: CustomVehicleType PK_CustomVehicleType; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -452,7 +503,7 @@ ALTER TABLE ONLY public."CustomVehicleType"
 
 
 --
--- TOC entry 3315 (class 2606 OID 18030)
+-- TOC entry 3324 (class 2606 OID 25683)
 -- Name: ETCCheckout PK_ETCCheckout; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -461,7 +512,7 @@ ALTER TABLE ONLY public."ETCCheckout"
 
 
 --
--- TOC entry 3298 (class 2606 OID 17793)
+-- TOC entry 3307 (class 2606 OID 25445)
 -- Name: Fee PK_Fee; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -470,7 +521,7 @@ ALTER TABLE ONLY public."Fee"
 
 
 --
--- TOC entry 3267 (class 2606 OID 17473)
+-- TOC entry 3276 (class 2606 OID 25105)
 -- Name: FeeType PK_FeeType; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -479,7 +530,7 @@ ALTER TABLE ONLY public."FeeType"
 
 
 --
--- TOC entry 3283 (class 2606 OID 17498)
+-- TOC entry 3292 (class 2606 OID 25130)
 -- Name: FeeVehicleCategory PK_FeeVehicleCategory; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -488,7 +539,7 @@ ALTER TABLE ONLY public."FeeVehicleCategory"
 
 
 --
--- TOC entry 3263 (class 2606 OID 17463)
+-- TOC entry 3272 (class 2606 OID 24642)
 -- Name: Fusions PK_Fusions; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -497,7 +548,7 @@ ALTER TABLE ONLY public."Fusions"
 
 
 --
--- TOC entry 3253 (class 2606 OID 17423)
+-- TOC entry 3262 (class 2606 OID 24602)
 -- Name: LaneInCameraTransactionLogs PK_LaneInCameraTransactionLogs; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -506,7 +557,7 @@ ALTER TABLE ONLY public."LaneInCameraTransactionLogs"
 
 
 --
--- TOC entry 3255 (class 2606 OID 17430)
+-- TOC entry 3264 (class 2606 OID 24609)
 -- Name: LaneInRFIDTransactionLogs PK_LaneInRFIDTransactionLogs; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -515,7 +566,7 @@ ALTER TABLE ONLY public."LaneInRFIDTransactionLogs"
 
 
 --
--- TOC entry 3320 (class 2606 OID 18065)
+-- TOC entry 3331 (class 2606 OID 25731)
 -- Name: ManualBarrierControl PK_ManualBarrierControl; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -524,7 +575,16 @@ ALTER TABLE ONLY public."ManualBarrierControl"
 
 
 --
--- TOC entry 3306 (class 2606 OID 17987)
+-- TOC entry 3329 (class 2606 OID 25723)
+-- Name: ManualBarrierControls PK_ManualBarrierControls; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."ManualBarrierControls"
+    ADD CONSTRAINT "PK_ManualBarrierControls" PRIMARY KEY ("Id");
+
+
+--
+-- TOC entry 3315 (class 2606 OID 25640)
 -- Name: Payment PK_Payment; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -533,7 +593,7 @@ ALTER TABLE ONLY public."Payment"
 
 
 --
--- TOC entry 3310 (class 2606 OID 17994)
+-- TOC entry 3319 (class 2606 OID 25647)
 -- Name: PaymentStatus PK_PaymentStatus; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -542,7 +602,7 @@ ALTER TABLE ONLY public."PaymentStatus"
 
 
 --
--- TOC entry 3275 (class 2606 OID 17488)
+-- TOC entry 3284 (class 2606 OID 25120)
 -- Name: TimeBlockFee PK_TimeBlockFee; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -551,7 +611,7 @@ ALTER TABLE ONLY public."TimeBlockFee"
 
 
 --
--- TOC entry 3286 (class 2606 OID 17563)
+-- TOC entry 3295 (class 2606 OID 25196)
 -- Name: TimeBlockFeeFormulas PK_TimeBlockFeeFormulas; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -560,7 +620,7 @@ ALTER TABLE ONLY public."TimeBlockFeeFormulas"
 
 
 --
--- TOC entry 3269 (class 2606 OID 17478)
+-- TOC entry 3278 (class 2606 OID 25110)
 -- Name: VehicleCategory PK_VehicleCategory; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -569,7 +629,7 @@ ALTER TABLE ONLY public."VehicleCategory"
 
 
 --
--- TOC entry 3271 (class 2606 OID 17483)
+-- TOC entry 3280 (class 2606 OID 25115)
 -- Name: VehicleGroup PK_VehicleGroup; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -578,7 +638,7 @@ ALTER TABLE ONLY public."VehicleGroup"
 
 
 --
--- TOC entry 3257 (class 2606 OID 17437)
+-- TOC entry 3266 (class 2606 OID 24616)
 -- Name: VehiclePaymentTransactions PK_VehiclePaymentTransactions; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -587,7 +647,7 @@ ALTER TABLE ONLY public."VehiclePaymentTransactions"
 
 
 --
--- TOC entry 3261 (class 2606 OID 17458)
+-- TOC entry 3270 (class 2606 OID 24637)
 -- Name: VehicleTransactionModels PK_VehicleTransactionModels; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -596,7 +656,7 @@ ALTER TABLE ONLY public."VehicleTransactionModels"
 
 
 --
--- TOC entry 3259 (class 2606 OID 17451)
+-- TOC entry 3268 (class 2606 OID 24630)
 -- Name: Vehicles PK_Vehicles; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -605,7 +665,7 @@ ALTER TABLE ONLY public."Vehicles"
 
 
 --
--- TOC entry 3251 (class 2606 OID 17416)
+-- TOC entry 3260 (class 2606 OID 24595)
 -- Name: __EFMigrationsHistory PK___EFMigrationsHistory; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -614,7 +674,7 @@ ALTER TABLE ONLY public."__EFMigrationsHistory"
 
 
 --
--- TOC entry 3316 (class 1259 OID 18057)
+-- TOC entry 3325 (class 1259 OID 25716)
 -- Name: IX_AppConfig_IsApply; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -622,7 +682,7 @@ CREATE INDEX "IX_AppConfig_IsApply" ON public."AppConfig" USING btree ("IsApply"
 
 
 --
--- TOC entry 3311 (class 1259 OID 18036)
+-- TOC entry 3320 (class 1259 OID 25689)
 -- Name: IX_ETCCheckout_PaymentId; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -630,7 +690,7 @@ CREATE INDEX "IX_ETCCheckout_PaymentId" ON public."ETCCheckout" USING btree ("Pa
 
 
 --
--- TOC entry 3312 (class 1259 OID 18037)
+-- TOC entry 3321 (class 1259 OID 25690)
 -- Name: IX_ETCCheckout_TransactionId; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -638,7 +698,7 @@ CREATE INDEX "IX_ETCCheckout_TransactionId" ON public."ETCCheckout" USING btree 
 
 
 --
--- TOC entry 3313 (class 1259 OID 18038)
+-- TOC entry 3322 (class 1259 OID 25691)
 -- Name: IX_ETCCheckout_TransactionId_RFID_PlateNumber; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -646,7 +706,7 @@ CREATE INDEX "IX_ETCCheckout_TransactionId_RFID_PlateNumber" ON public."ETCCheck
 
 
 --
--- TOC entry 3276 (class 1259 OID 17519)
+-- TOC entry 3285 (class 1259 OID 25151)
 -- Name: IX_FeeVehicleCategory_CustomVehicleTypeId; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -654,7 +714,7 @@ CREATE INDEX "IX_FeeVehicleCategory_CustomVehicleTypeId" ON public."FeeVehicleCa
 
 
 --
--- TOC entry 3277 (class 1259 OID 17520)
+-- TOC entry 3286 (class 1259 OID 25152)
 -- Name: IX_FeeVehicleCategory_FeeTypeId; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -662,7 +722,7 @@ CREATE INDEX "IX_FeeVehicleCategory_FeeTypeId" ON public."FeeVehicleCategory" US
 
 
 --
--- TOC entry 3278 (class 1259 OID 17521)
+-- TOC entry 3287 (class 1259 OID 25153)
 -- Name: IX_FeeVehicleCategory_PlateNumber; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -670,7 +730,7 @@ CREATE INDEX "IX_FeeVehicleCategory_PlateNumber" ON public."FeeVehicleCategory" 
 
 
 --
--- TOC entry 3279 (class 1259 OID 17522)
+-- TOC entry 3288 (class 1259 OID 25154)
 -- Name: IX_FeeVehicleCategory_RFID; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -678,7 +738,7 @@ CREATE INDEX "IX_FeeVehicleCategory_RFID" ON public."FeeVehicleCategory" USING b
 
 
 --
--- TOC entry 3280 (class 1259 OID 17523)
+-- TOC entry 3289 (class 1259 OID 25155)
 -- Name: IX_FeeVehicleCategory_VehicleCategoryId; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -686,7 +746,7 @@ CREATE INDEX "IX_FeeVehicleCategory_VehicleCategoryId" ON public."FeeVehicleCate
 
 
 --
--- TOC entry 3281 (class 1259 OID 17524)
+-- TOC entry 3290 (class 1259 OID 25156)
 -- Name: IX_FeeVehicleCategory_VehicleGroupId; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -694,7 +754,7 @@ CREATE INDEX "IX_FeeVehicleCategory_VehicleGroupId" ON public."FeeVehicleCategor
 
 
 --
--- TOC entry 3287 (class 1259 OID 17582)
+-- TOC entry 3296 (class 1259 OID 25215)
 -- Name: IX_Fee_CustomVehicleTypeId; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -702,7 +762,7 @@ CREATE INDEX "IX_Fee_CustomVehicleTypeId" ON public."Fee" USING btree ("CustomVe
 
 
 --
--- TOC entry 3288 (class 1259 OID 17924)
+-- TOC entry 3297 (class 1259 OID 25576)
 -- Name: IX_Fee_LaneInDate; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -710,7 +770,7 @@ CREATE INDEX "IX_Fee_LaneInDate" ON public."Fee" USING btree ("LaneInDate");
 
 
 --
--- TOC entry 3289 (class 1259 OID 17584)
+-- TOC entry 3298 (class 1259 OID 25217)
 -- Name: IX_Fee_LaneInEpoch; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -718,7 +778,7 @@ CREATE INDEX "IX_Fee_LaneInEpoch" ON public."Fee" USING btree ("LaneInEpoch");
 
 
 --
--- TOC entry 3290 (class 1259 OID 17776)
+-- TOC entry 3299 (class 1259 OID 25443)
 -- Name: IX_Fee_LaneInId; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -726,7 +786,7 @@ CREATE INDEX "IX_Fee_LaneInId" ON public."Fee" USING btree ("LaneInId");
 
 
 --
--- TOC entry 3291 (class 1259 OID 17907)
+-- TOC entry 3300 (class 1259 OID 25559)
 -- Name: IX_Fee_LaneOutDate; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -734,7 +794,7 @@ CREATE INDEX "IX_Fee_LaneOutDate" ON public."Fee" USING btree ("LaneOutDate");
 
 
 --
--- TOC entry 3292 (class 1259 OID 17587)
+-- TOC entry 3301 (class 1259 OID 25220)
 -- Name: IX_Fee_LaneOutEpoch; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -742,7 +802,7 @@ CREATE INDEX "IX_Fee_LaneOutEpoch" ON public."Fee" USING btree ("LaneOutEpoch");
 
 
 --
--- TOC entry 3293 (class 1259 OID 17730)
+-- TOC entry 3302 (class 1259 OID 25442)
 -- Name: IX_Fee_LaneOutId; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -750,7 +810,7 @@ CREATE INDEX "IX_Fee_LaneOutId" ON public."Fee" USING btree ("LaneOutId");
 
 
 --
--- TOC entry 3294 (class 1259 OID 17639)
+-- TOC entry 3303 (class 1259 OID 25441)
 -- Name: IX_Fee_PlateNumber; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -758,7 +818,7 @@ CREATE INDEX "IX_Fee_PlateNumber" ON public."Fee" USING btree ("PlateNumber");
 
 
 --
--- TOC entry 3295 (class 1259 OID 17623)
+-- TOC entry 3304 (class 1259 OID 25440)
 -- Name: IX_Fee_RFID; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -766,7 +826,7 @@ CREATE INDEX "IX_Fee_RFID" ON public."Fee" USING btree ("RFID");
 
 
 --
--- TOC entry 3296 (class 1259 OID 17607)
+-- TOC entry 3305 (class 1259 OID 25439)
 -- Name: IX_Fee_TicketId; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -774,7 +834,7 @@ CREATE INDEX "IX_Fee_TicketId" ON public."Fee" USING btree ("TicketId");
 
 
 --
--- TOC entry 3307 (class 1259 OID 18005)
+-- TOC entry 3316 (class 1259 OID 25658)
 -- Name: IX_PaymentStatus_PaymentId; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -782,15 +842,15 @@ CREATE INDEX "IX_PaymentStatus_PaymentId" ON public."PaymentStatus" USING btree 
 
 
 --
--- TOC entry 3308 (class 1259 OID 18007)
--- Name: IX_PaymentStatus_PaymentReferenceId; Type: INDEX; Schema: public; Owner: postgres
+-- TOC entry 3317 (class 1259 OID 25660)
+-- Name: IX_PaymentStatus_TransactionId; Type: INDEX; Schema: public; Owner: postgres
 --
 
-CREATE INDEX "IX_PaymentStatus_PaymentReferenceId" ON public."PaymentStatus" USING btree ("PaymentReferenceId");
+CREATE INDEX "IX_PaymentStatus_TransactionId" ON public."PaymentStatus" USING btree ("TransactionId");
 
 
 --
--- TOC entry 3299 (class 1259 OID 18039)
+-- TOC entry 3308 (class 1259 OID 25698)
 -- Name: IX_Payment_CustomVehicleTypeId; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -798,7 +858,7 @@ CREATE INDEX "IX_Payment_CustomVehicleTypeId" ON public."Payment" USING btree ("
 
 
 --
--- TOC entry 3300 (class 1259 OID 18000)
+-- TOC entry 3309 (class 1259 OID 25653)
 -- Name: IX_Payment_FeeId; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -806,7 +866,7 @@ CREATE INDEX "IX_Payment_FeeId" ON public."Payment" USING btree ("FeeId");
 
 
 --
--- TOC entry 3301 (class 1259 OID 18001)
+-- TOC entry 3310 (class 1259 OID 25654)
 -- Name: IX_Payment_LaneInId; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -814,7 +874,7 @@ CREATE INDEX "IX_Payment_LaneInId" ON public."Payment" USING btree ("LaneInId");
 
 
 --
--- TOC entry 3302 (class 1259 OID 18002)
+-- TOC entry 3311 (class 1259 OID 25655)
 -- Name: IX_Payment_LaneOutId; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -822,7 +882,7 @@ CREATE INDEX "IX_Payment_LaneOutId" ON public."Payment" USING btree ("LaneOutId"
 
 
 --
--- TOC entry 3303 (class 1259 OID 18003)
+-- TOC entry 3312 (class 1259 OID 25656)
 -- Name: IX_Payment_PlateNumber; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -830,7 +890,7 @@ CREATE INDEX "IX_Payment_PlateNumber" ON public."Payment" USING btree ("PlateNum
 
 
 --
--- TOC entry 3304 (class 1259 OID 18004)
+-- TOC entry 3313 (class 1259 OID 25657)
 -- Name: IX_Payment_RFID; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -838,7 +898,7 @@ CREATE INDEX "IX_Payment_RFID" ON public."Payment" USING btree ("RFID");
 
 
 --
--- TOC entry 3284 (class 1259 OID 17569)
+-- TOC entry 3293 (class 1259 OID 25202)
 -- Name: IX_TimeBlockFeeFormulas_CustomVehicleTypeId; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -846,7 +906,7 @@ CREATE INDEX "IX_TimeBlockFeeFormulas_CustomVehicleTypeId" ON public."TimeBlockF
 
 
 --
--- TOC entry 3272 (class 1259 OID 17553)
+-- TOC entry 3281 (class 1259 OID 25185)
 -- Name: IX_TimeBlockFee_CustomVehicleTypeId; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -854,7 +914,7 @@ CREATE INDEX "IX_TimeBlockFee_CustomVehicleTypeId" ON public."TimeBlockFee" USIN
 
 
 --
--- TOC entry 3273 (class 1259 OID 17534)
+-- TOC entry 3282 (class 1259 OID 25166)
 -- Name: IX_TimeBlockFee_FromSecond_ToSecond; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -862,7 +922,7 @@ CREATE INDEX "IX_TimeBlockFee_FromSecond_ToSecond" ON public."TimeBlockFee" USIN
 
 
 --
--- TOC entry 3331 (class 2606 OID 18031)
+-- TOC entry 3344 (class 2606 OID 25684)
 -- Name: ETCCheckout FK_ETCCheckout_Payment_PaymentId; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -871,7 +931,7 @@ ALTER TABLE ONLY public."ETCCheckout"
 
 
 --
--- TOC entry 3322 (class 2606 OID 17499)
+-- TOC entry 3335 (class 2606 OID 25131)
 -- Name: FeeVehicleCategory FK_FeeVehicleCategory_CustomVehicleType_CustomVehicleTypeId; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -880,7 +940,7 @@ ALTER TABLE ONLY public."FeeVehicleCategory"
 
 
 --
--- TOC entry 3323 (class 2606 OID 17504)
+-- TOC entry 3336 (class 2606 OID 25136)
 -- Name: FeeVehicleCategory FK_FeeVehicleCategory_FeeType_FeeTypeId; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -889,7 +949,7 @@ ALTER TABLE ONLY public."FeeVehicleCategory"
 
 
 --
--- TOC entry 3324 (class 2606 OID 17509)
+-- TOC entry 3337 (class 2606 OID 25141)
 -- Name: FeeVehicleCategory FK_FeeVehicleCategory_VehicleCategory_VehicleCategoryId; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -898,7 +958,7 @@ ALTER TABLE ONLY public."FeeVehicleCategory"
 
 
 --
--- TOC entry 3325 (class 2606 OID 17514)
+-- TOC entry 3338 (class 2606 OID 25146)
 -- Name: FeeVehicleCategory FK_FeeVehicleCategory_VehicleGroup_VehicleGroupId; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -907,7 +967,7 @@ ALTER TABLE ONLY public."FeeVehicleCategory"
 
 
 --
--- TOC entry 3327 (class 2606 OID 17794)
+-- TOC entry 3340 (class 2606 OID 25446)
 -- Name: Fee FK_Fee_CustomVehicleType_CustomVehicleTypeId; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -916,7 +976,7 @@ ALTER TABLE ONLY public."Fee"
 
 
 --
--- TOC entry 3330 (class 2606 OID 17995)
+-- TOC entry 3343 (class 2606 OID 25648)
 -- Name: PaymentStatus FK_PaymentStatus_Payment_PaymentId; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -925,7 +985,7 @@ ALTER TABLE ONLY public."PaymentStatus"
 
 
 --
--- TOC entry 3328 (class 2606 OID 18040)
+-- TOC entry 3341 (class 2606 OID 25699)
 -- Name: Payment FK_Payment_CustomVehicleType_CustomVehicleTypeId; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -934,7 +994,7 @@ ALTER TABLE ONLY public."Payment"
 
 
 --
--- TOC entry 3329 (class 2606 OID 18045)
+-- TOC entry 3342 (class 2606 OID 25704)
 -- Name: Payment FK_Payment_Fee_FeeId; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -943,7 +1003,7 @@ ALTER TABLE ONLY public."Payment"
 
 
 --
--- TOC entry 3326 (class 2606 OID 17564)
+-- TOC entry 3339 (class 2606 OID 25197)
 -- Name: TimeBlockFeeFormulas FK_TimeBlockFeeFormulas_CustomVehicleType_CustomVehicleTypeId; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -952,7 +1012,7 @@ ALTER TABLE ONLY public."TimeBlockFeeFormulas"
 
 
 --
--- TOC entry 3321 (class 2606 OID 17554)
+-- TOC entry 3334 (class 2606 OID 25186)
 -- Name: TimeBlockFee FK_TimeBlockFee_CustomVehicleType_CustomVehicleTypeId; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -960,7 +1020,7 @@ ALTER TABLE ONLY public."TimeBlockFee"
     ADD CONSTRAINT "FK_TimeBlockFee_CustomVehicleType_CustomVehicleTypeId" FOREIGN KEY ("CustomVehicleTypeId") REFERENCES public."CustomVehicleType"("Id") ON DELETE CASCADE;
 
 
--- Completed on 2023-09-28 14:46:45
+-- Completed on 2023-10-11 16:35:10
 
 --
 -- PostgreSQL database dump complete
