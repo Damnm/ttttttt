@@ -336,7 +336,12 @@ namespace EPAY.ETC.Core.API.Controllers.Fees
                 var reconcileVehicleInfoResult = await _uiActionService.ReconcileVehicleInfoAsync(reconcileVehicleInfo);
                 if (reconcileVehicleInfoResult.Succeeded && reconcileVehicleInfoResult.Data != null)
                 {
-                    _rabbitMQPublisherService.SendMessage(JsonSerializer.Serialize(reconcileVehicleInfoResult.Data), ETC.Core.Models.Enums.PublisherTargetEnum.Fee);
+                    if (reconcileVehicleInfoResult.Data.Fee != null)
+                        _rabbitMQPublisherService.SendMessage(JsonSerializer.Serialize(reconcileVehicleInfoResult.Data.Fee), ETC.Core.Models.Enums.PublisherTargetEnum.Fee);
+                    
+                    if (reconcileVehicleInfoResult.Data.PaymentStatus != null)
+                        _rabbitMQPublisherService.SendMessage(JsonSerializer.Serialize(reconcileVehicleInfoResult.Data.PaymentStatus), ETC.Core.Models.Enums.PublisherTargetEnum.PaymentStatus);
+
                     return Ok(ValidationResult.Success<string?>(null));
                 }
                 else

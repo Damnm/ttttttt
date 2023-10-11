@@ -30,7 +30,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.PaymentStatus
                 Amount = 300,
                 Currency ="vnd",
                 PaymentMethod = PaymentMethodEnum.RFID,
-
+                PaymentDate = DateTimeOffset.FromUnixTimeSeconds(1696805977).DateTime,
+                Status = PaymentStatusEnum.Paid
             }
         };
 
@@ -212,13 +213,20 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.PaymentStatus
         public async void GivenValidRequest_WhenGetAllWithNavigationAsyncIsCalled_ThenReturnCorrectResult()
         {
             // Arrange
+            LaneSessionReportRequestModel request = new LaneSessionReportRequestModel()
+            {
+                FromDateTimeEpoch = 1696605977,
+                ToDateTimeEpoch = 1697005977,
+                ShiftId = "Ca 1"
+            };
+
             var data = paymentStatuses.FirstOrDefault()!;
             _dbPaymentStatusSetMock = EFTestHelper.GetMockDbSet(paymentStatuses);
             _dbContextMock.Setup(x => x.PaymentStatuses).Returns(_dbPaymentStatusSetMock.Object);
 
             // Act
             var paymentStatusRepository = new PaymentStatusRepository(_loggerMock.Object, _dbContextMock.Object);
-            var result = await paymentStatusRepository.GetAllWithNavigationAsync(It.IsAny<LaneSessionReportRequestModel>());
+            var result = await paymentStatusRepository.GetAllWithNavigationAsync(request);
 
             // Assert
             result.Should().NotBeNull();
@@ -232,12 +240,18 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.PaymentStatus
         public async Task GivenValidRequestButFailedToConnectDatabase_WhenGetAllWithNavigationAsyncIsCalled_ThenThrowExceptionAsync()
         {
             // Arrange
+            LaneSessionReportRequestModel request = new LaneSessionReportRequestModel()
+            {
+                FromDateTimeEpoch = 1696605977,
+                ToDateTimeEpoch = 1697005977
+            };
+
             var someEx = new ETCEPAYCoreAPIException(99, "Some exception");
             _dbContextMock.Setup(x => x.PaymentStatuses).Throws(someEx);
 
             // Act
             var paymentStatusRepository = new PaymentStatusRepository(_loggerMock.Object, _dbContextMock.Object);
-            Func<Task> func = async () => await paymentStatusRepository.GetAllWithNavigationAsync(It.IsAny<LaneSessionReportRequestModel>());
+            Func<Task> func = async () => await paymentStatusRepository.GetAllWithNavigationAsync(request);
 
             // Assert
             var ex = await Assert.ThrowsAsync<ETCEPAYCoreAPIException>(func);

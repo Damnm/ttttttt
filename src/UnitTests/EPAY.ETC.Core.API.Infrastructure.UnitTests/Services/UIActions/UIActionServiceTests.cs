@@ -311,13 +311,13 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
                     PlateNumber = "fffdsfdfd",
                     VehicleType = "01",
 
-                    LandIn = new LandModel()
+                    In = new Core.Models.Vehicle.ReconcileVehicle.LaneInModel()
                     {
-                        LandId = "01"
+                        LaneInId = "01"
                     },
-                    LandOut = new LandModel()
+                    Out = new Core.Models.Vehicle.ReconcileVehicle.LaneOutModel()
                     {
-                        LandId = "06"
+                        LaneOutId = "06"
                     }
                 }
             };
@@ -373,13 +373,13 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
                     PlateNumber = "fffdsfdfd",
                     VehicleType = "01",
 
-                    LandIn = new LandModel()
+                    In = new Core.Models.Vehicle.ReconcileVehicle.LaneInModel()
                     {
-                        LandId = "01"
+                        LaneInId = "01"
                     },
-                    LandOut = new LandModel()
+                    Out = new Core.Models.Vehicle.ReconcileVehicle.LaneOutModel()
                     {
-                        LandId = "06"
+                        LaneOutId = "06"
                     }
                 }
             };
@@ -415,13 +415,13 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
                     PlateNumber = "fffdsfdfd",
                     VehicleType = "01",
 
-                    LandIn = new LandModel()
+                    In = new Core.Models.Vehicle.ReconcileVehicle.LaneInModel()
                     {
-                        LandId = "01"
+                        LaneInId = "01"
                     },
-                    LandOut = new LandModel()
+                    Out = new Core.Models.Vehicle.ReconcileVehicle.LaneOutModel()
                     {
-                        LandId = "06"
+                        LaneOutId = "06"
                     }
                 }
             };
@@ -435,7 +435,9 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
 
             // Assert
             result.Should().NotBeNull();
-            result.Data.Should().BeNull();
+            result.Data.Should().NotBeNull();
+            result.Data?.Fee.Should().BeNull();
+            result.Data?.PaymentStatus.Should().BeNull();
             result.Succeeded.Should().BeTrue();
 
             _redisDatabaseMock.Verify(x => x.StringGetAsync(It.IsAny<RedisKey>(), It.IsAny<CommandFlags>()), Times.Once);

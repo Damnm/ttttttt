@@ -68,8 +68,8 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Devices
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(controller.ManipulateBarrier)}...", Times.Once, _nullException);
             _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(controller.ManipulateBarrier)} method", Times.Never, _nullException);
 
-            actualResult.Should().BeOfType<OkResult>();
-            ((OkResult)actualResult).StatusCode.Should().Be(StatusCodes.Status200OK);
+            actualResult.Should().BeOfType<OkObjectResult>();
+            ((OkObjectResult)actualResult).StatusCode.Should().Be(StatusCodes.Status200OK);
         }
 
         // Unhappy case 400
