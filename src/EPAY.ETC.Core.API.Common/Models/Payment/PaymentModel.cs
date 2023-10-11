@@ -28,6 +28,7 @@ namespace EPAY.ETC.Core.API.Core.Models.Payment
         public string? Model { get; set; }
         [MaxLength(20)]
         public string? PlateNumber { get; set; }
+        [MaxLength(20)]
         public string? VehicleTypeId { get; set; }
         public Guid? CustomVehicleTypeId { get; set; }
         [ForeignKey(nameof(CustomVehicleTypeId))]

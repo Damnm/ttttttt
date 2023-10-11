@@ -10,10 +10,10 @@ namespace EPAY.ETC.Core.API.Core.Models.Fusion
         public long Epoch { get; set; }
         public bool Loop1 { get; set; }
         public bool RFID { get; set; }
-        [StringLength(15)]
+        [MaxLength(15)]
         public string? Cam1 { get; set; }
         public bool Loop2 { get; set; }
-        [StringLength(15)]
+        [MaxLength(15)]
         public string? Cam2 { get; set; }
         public bool Loop3 { get; set; }
         public bool ReversedLoop1 { get; set; }

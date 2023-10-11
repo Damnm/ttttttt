@@ -1,24 +1,37 @@
 ﻿using EPAY.ETC.Core.API.Core.Entities;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
 
 namespace EPAY.ETC.Core.API.Core.Models.TransactionLog
 {
     [ExcludeFromCodeCoverage]
+    [Table("LaneInRFIDTransactionLog")]
     public class LaneInRFIDTransactionLog : BaseEntity<Guid>
     {
         public Double Epoch { get; set; }
+        [MaxLength(50)]
         public string? RFID { get; set; }
+        [MaxLength(50)]
         public string? RFIDReaderMacAddr { get; set; }
+        [MaxLength(50)]
         public string? RFIDReaderIPAddr { get; set; }
         public Guid LaneInId { get; set; }
+        [MaxLength(150)]
         public string? Make { get; set; }
+        [MaxLength(150)]
         public string? Model { get; set; }
+        [MaxLength(20)]
         public string? PlateNumber { get; set; }
+        [MaxLength(50)]
         public string? PlateColour { get; set; }
+        [MaxLength(20)]
         public string? VehicleType { get; set; }
         public int Seat { get; set; }
         public int Weight { get; set; }
+        [MaxLength(255)]
         public string? PlateNumberPhotoUrl { get; set; }
+        [MaxLength(255)]
         public string? VehiclePhotoUrl { get; set; }
         public Double ConfidenceScore { get; set; }
     }
