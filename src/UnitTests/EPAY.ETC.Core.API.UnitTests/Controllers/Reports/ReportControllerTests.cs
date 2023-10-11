@@ -26,7 +26,8 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Reports
             FromDateTimeEpoch = 1696909646,
             ToDateTimeEpoch = 1696909646,
             EmployeeId = "Some employee",
-            LaneOutId = "Some lane"
+            LaneOutId = "Some lane",
+            ShiftId = "Some"
         };
         private LaneSessionReportModel sessionReportResponse = new LaneSessionReportModel()
         {

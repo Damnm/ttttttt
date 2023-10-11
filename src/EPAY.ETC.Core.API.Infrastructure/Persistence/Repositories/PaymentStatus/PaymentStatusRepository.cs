@@ -1,4 +1,6 @@
 ﻿using EPAY.ETC.Core.API.Core.Exceptions;
+using EPAY.ETC.Core.API.Core.Models.Shifts;
+using EPAY.ETC.Core.API.Infrastructure.Common.Constants;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Context;
 using EPAY.ETC.Core.Models.Enums;
 using EPAY.ETC.Core.Models.Receipt.SessionReports;
@@ -85,6 +87,13 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PaymentStatu
                 DateTime fromDate = DateTimeOffset.FromUnixTimeSeconds(request.FromDateTimeEpoch).DateTime;
                 DateTime toDate = DateTimeOffset.FromUnixTimeSeconds(request.ToDateTimeEpoch).DateTime;
 
+                MockShiftModel? shift = null;
+
+                if (!string.IsNullOrEmpty(request.ShiftId) && AppConstant.ShiftValuePairs.ContainsKey(request.ShiftId))
+                {
+                    shift = AppConstant.ShiftValuePairs[request.ShiftId];
+                }
+
 #pragma warning disable CS8602 // Disable warning nullable field
                 var result = _dbContext.PaymentStatuses
                     .Include(x => x.Payment)
@@ -95,7 +104,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PaymentStatu
                         ? (
                             (!string.IsNullOrEmpty(request.LaneOutId) ? x.Payment.Fee.LaneOutId == request.LaneOutId : true)
                             && (!string.IsNullOrEmpty(request.EmployeeId) ? x.Payment.Fee.EmployeeId == request.EmployeeId : true)
-                            && (!string.IsNullOrEmpty(request.ShiftId) ? x.Payment.Fee.ShiftId.ToString() == request.ShiftId : true)
+                            && (!string.IsNullOrEmpty(request.ShiftId) ? shift != null : true)
                             && x.PaymentDate >= fromDate && x.PaymentDate <= toDate
                             && x.Status == PaymentStatusEnum.Paid
                         )

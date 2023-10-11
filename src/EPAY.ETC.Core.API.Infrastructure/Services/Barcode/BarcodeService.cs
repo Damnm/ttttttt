@@ -76,6 +76,29 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Barcode
                 throw;
             }
         }
+
+        public async Task<ValidationResult<List<BarcodeModel>>> GetListAsync(Expression<Func<BarcodeModel, bool>>? expression)
+        {
+            _logger.LogInformation($"Executing {nameof(GetListAsync)} method...");
+            try
+            {
+                var result = await _barcodeRepository.GetAllAsync(expression);
+                if (result == null)
+                {
+                    return ValidationResult.Failed<List<BarcodeModel>>(null, new List<ValidationError>()
+                    {
+                        ValidationError.NotFound
+                    });
+                }
+
+                return ValidationResult.Success(result.ToList());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed to run {nameof(GetListAsync)} method. Error: {ex.Message}");
+                throw;
+            }
+        }
         #endregion
 
         #region RemoveAsync

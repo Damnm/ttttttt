@@ -55,7 +55,7 @@ namespace EPAY.ETC.Core.API.Controllers.Devices
                     _rabbitMQPublisherService.SendMessage(JsonSerializer.Serialize(result.Data), ETC.Core.Models.Enums.PublisherTargetEnum.Barrier);
                 }
 
-                return Ok(ValidationResult.Success<string?>(null));
+                return Ok(result);
             }
             catch (Exception ex)
             {

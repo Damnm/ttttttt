@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using EPAY.ETC.Core.API.Core.Exceptions;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Barcode;
+using EPAY.ETC.Core.API.Core.Models.Barcode;
 using EPAY.ETC.Core.Models.Request;
 using EPAY.ETC.Core.Models.Validation;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq.Expressions;
 
 namespace EPAY.ETC.Core.API.Controllers.Barcode
 {
@@ -40,7 +42,6 @@ namespace EPAY.ETC.Core.API.Controllers.Barcode
         #endregion
 
         #region AddAsync
-        
         /// <summary>
         /// 
         /// </summary>
@@ -163,6 +164,40 @@ namespace EPAY.ETC.Core.API.Controllers.Barcode
             {
                 List<ValidationError> validationErrors = new();
                 string errorMessage = $"An error occurred when calling {nameof(UpdateAsync)} method: {ex.Message}. InnerException : {ApiExceptionMessages.ExceptionMessages(ex)}. Stack trace: {ex.StackTrace}";
+                _logger.LogError(errorMessage);
+                validationErrors.Add(ValidationError.InternalServerError);
+                return StatusCode(StatusCodes.Status500InternalServerError, ValidationResult.Failed(errorMessage, validationErrors));
+            }
+        }
+        #endregion
+        #region UpdateAsync
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPost("v1/barcodes/filter")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetListAsync([FromBody] BarcodeFilterRequestModel request)
+        {
+            try
+            {
+                _logger.LogInformation($"Executing {nameof(GetListAsync)}...");
+
+                Expression<Func<BarcodeModel, bool>> expression = s =>
+                (!string.IsNullOrEmpty(request.EmployeeId) ? !string.IsNullOrEmpty(s.EmployeeId) && s.EmployeeId.Equals(request.EmployeeId) : true)
+                && (!string.IsNullOrEmpty(request.ActionCode) ? !string.IsNullOrEmpty(s.ActionCode) && s.ActionCode.Equals(request.ActionCode) : true)
+                && (request.BarcodeAction != null ? s.BarcodeAction == request.BarcodeAction : true);
+
+                var barcodeResult = await _barcodeService.GetListAsync(expression);
+
+                return Ok(barcodeResult);
+            }
+            catch (Exception ex)
+            {
+                List<ValidationError> validationErrors = new();
+                string errorMessage = $"An error occurred when calling {nameof(GetListAsync)} method: {ex.Message}. InnerException : {ApiExceptionMessages.ExceptionMessages(ex)}. Stack trace: {ex.StackTrace}";
                 _logger.LogError(errorMessage);
                 validationErrors.Add(ValidationError.InternalServerError);
                 return StatusCode(StatusCodes.Status500InternalServerError, ValidationResult.Failed(errorMessage, validationErrors));

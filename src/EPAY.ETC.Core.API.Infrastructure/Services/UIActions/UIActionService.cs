@@ -14,6 +14,7 @@ using EPAY.ETC.Core.Models.Enums;
 using EPAY.ETC.Core.Models.Fees;
 using EPAY.ETC.Core.Models.Receipt.SessionReports;
 using EPAY.ETC.Core.Models.Request;
+using EPAY.ETC.Core.Models.UI;
 using EPAY.ETC.Core.Models.Validation;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -51,91 +52,119 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
             _uiOptions = uiOptions ?? throw new ArgumentNullException(nameof(uiOptions));
         }
 
-        public async Task<ValidationResult<FeeModel?>> ReconcileVehicleInfoAsync(ReconcileVehicleInfoModel reconcileVehicleInfo)
+        public async Task<ValidationResult<ReconcileResultModel>> ReconcileVehicleInfoAsync(ReconcileVehicleInfoModel reconcileVehicleInfo)
         {
             _logger.LogInformation($"Executing {nameof(ReconcileVehicleInfoAsync)} method...");
 
             try
             {
-                // Get FeeModel object from Redis.
-                FeeModel? feeModel = null;
-                var feeObject = await _redisDB.StringGetAsync(RedisConstant.StringType_FeeModules(reconcileVehicleInfo?.ObjectId.ToString() ?? string.Empty));
-                if (!string.IsNullOrEmpty(feeObject.ToString()))
+                ReconcileResultModel result = new ReconcileResultModel();
+                if (reconcileVehicleInfo?.Payment != null)
                 {
-                    feeModel = JsonSerializer.Deserialize<FeeModel>(feeObject.ToString());
-                    if (feeModel != null)
+                    var uiModelStr = (string?)await _redisDB.StringGetAsync(RedisConstant.UI_MODEL_KEY);
+                    UIModel? uiModel = null;
+                    if (!string.IsNullOrEmpty(uiModelStr))
+                        uiModel = JsonSerializer.Deserialize<UIModel>(uiModelStr);
+
+                    result.PaymentStatus = new PaymenStatusResponseModel()
                     {
-                        // EmployeeId
-                        feeModel.EmployeeId = !string.IsNullOrEmpty(reconcileVehicleInfo?.EmployeeId) ? reconcileVehicleInfo?.EmployeeId : feeModel.EmployeeId;
+                        ObjectId = reconcileVehicleInfo.ObjectId ?? Guid.NewGuid(),
+                        PaymentStatus = new ETC.Core.Models.Fees.PaymentStatusModel()
+                        {
+                            PaymentId = reconcileVehicleInfo.Payment.PaymentId,
+                            Status = reconcileVehicleInfo.Payment?.PaymentStatus ?? PaymentStatusEnum.Unpaid,
+                            PaymentMethod = reconcileVehicleInfo.Payment?.PaymentType ?? PaymentMethodEnum.Cash,
+                            Amount = uiModel?.Body?.Out?.Amount,
+                            Currency = uiModel?.Body?.Out?.Currency
+                        }
+                    };
+                    return ValidationResult.Success(result);
+                }
+                else
+                {
+                    // Get FeeModel object from Redis.
+                    FeeModel? feeModel = null;
+                    var feeObject = await _redisDB.StringGetAsync(RedisConstant.StringType_FeeModules(reconcileVehicleInfo?.ObjectId.ToString() ?? string.Empty));
 
-                        if (feeModel.LaneInVehicle == null)
-                            feeModel.LaneInVehicle = new LaneInVehicleModel();
-                        if (feeModel.LaneInVehicle.VehicleInfo == null)
-                            feeModel.LaneInVehicle.VehicleInfo = new ETC.Core.Models.VehicleInfoModel();
-                        if (feeModel.LaneOutVehicle == null)
-                            feeModel.LaneOutVehicle = new LaneOutVehicleModel();
-                        if (feeModel.LaneOutVehicle.VehicleInfo == null)
-                            feeModel.LaneOutVehicle.VehicleInfo = new ETC.Core.Models.VehicleInfoModel();
+                    if (!string.IsNullOrEmpty(feeObject.ToString()))
+                    {
+                        feeModel = JsonSerializer.Deserialize<FeeModel>(feeObject.ToString());
+                        if (feeModel != null)
+                        {
+                            // EmployeeId
+                            feeModel.EmployeeId = !string.IsNullOrEmpty(reconcileVehicleInfo?.EmployeeId) ? reconcileVehicleInfo?.EmployeeId : feeModel.EmployeeId;
 
-                        // Platenumber
-                        feeModel.LaneInVehicle.VehicleInfo.PlateNumber = !string.IsNullOrEmpty(reconcileVehicleInfo?.Vehicle?.PlateNumber)
-                            ? reconcileVehicleInfo?.Vehicle?.PlateNumber
-                            : feeModel.LaneInVehicle.VehicleInfo.PlateNumber;
-                        feeModel.LaneOutVehicle.VehicleInfo.PlateNumber = !string.IsNullOrEmpty(reconcileVehicleInfo?.Vehicle?.PlateNumber)
-                            ? reconcileVehicleInfo?.Vehicle?.PlateNumber
-                            : feeModel.LaneOutVehicle.VehicleInfo.PlateNumber;
+                            if (feeModel.LaneInVehicle == null)
+                                feeModel.LaneInVehicle = new LaneInVehicleModel();
+                            if (feeModel.LaneInVehicle.VehicleInfo == null)
+                                feeModel.LaneInVehicle.VehicleInfo = new ETC.Core.Models.VehicleInfoModel();
+                            if (feeModel.LaneOutVehicle == null)
+                                feeModel.LaneOutVehicle = new LaneOutVehicleModel();
+                            if (feeModel.LaneOutVehicle.VehicleInfo == null)
+                                feeModel.LaneOutVehicle.VehicleInfo = new ETC.Core.Models.VehicleInfoModel();
 
-                        // RFID
-                        feeModel.LaneInVehicle.RFID = !string.IsNullOrEmpty(reconcileVehicleInfo?.Vehicle?.RFID)
-                            ? reconcileVehicleInfo?.Vehicle?.PlateNumber
-                            : feeModel.LaneInVehicle.RFID;
-                        feeModel.LaneOutVehicle.RFID = !string.IsNullOrEmpty(reconcileVehicleInfo?.Vehicle?.RFID)
-                            ? reconcileVehicleInfo?.Vehicle?.PlateNumber
-                            : feeModel.LaneOutVehicle.RFID;
+                            // Platenumber
+                            feeModel.LaneInVehicle.VehicleInfo.PlateNumber = !string.IsNullOrEmpty(reconcileVehicleInfo?.Vehicle?.PlateNumber)
+                                ? reconcileVehicleInfo?.Vehicle?.PlateNumber
+                                : feeModel.LaneInVehicle.VehicleInfo.PlateNumber;
+                            feeModel.LaneOutVehicle.VehicleInfo.PlateNumber = !string.IsNullOrEmpty(reconcileVehicleInfo?.Vehicle?.PlateNumber)
+                                ? reconcileVehicleInfo?.Vehicle?.PlateNumber
+                                : feeModel.LaneOutVehicle.VehicleInfo.PlateNumber;
 
-                        // VehicleType
-                        feeModel.LaneInVehicle.VehicleInfo.VehicleType = !string.IsNullOrEmpty(reconcileVehicleInfo?.Vehicle?.VehicleType)
-                            ? reconcileVehicleInfo?.Vehicle?.VehicleType
-                            : feeModel.LaneInVehicle.VehicleInfo.VehicleType;
+                            // RFID
+                            feeModel.LaneInVehicle.RFID = !string.IsNullOrEmpty(reconcileVehicleInfo?.Vehicle?.RFID)
+                                ? reconcileVehicleInfo?.Vehicle?.PlateNumber
+                                : feeModel.LaneInVehicle.RFID;
+                            feeModel.LaneOutVehicle.RFID = !string.IsNullOrEmpty(reconcileVehicleInfo?.Vehicle?.RFID)
+                                ? reconcileVehicleInfo?.Vehicle?.PlateNumber
+                                : feeModel.LaneOutVehicle.RFID;
 
-                        feeModel.LaneOutVehicle.VehicleInfo.VehicleType = !string.IsNullOrEmpty(reconcileVehicleInfo?.Vehicle?.VehicleType)
-                           ? reconcileVehicleInfo?.Vehicle?.VehicleType
-                           : feeModel.LaneOutVehicle.VehicleInfo.VehicleType;
+                            // VehicleType
+                            feeModel.LaneInVehicle.VehicleInfo.VehicleType = !string.IsNullOrEmpty(reconcileVehicleInfo?.Vehicle?.VehicleType)
+                                ? reconcileVehicleInfo?.Vehicle?.VehicleType
+                                : feeModel.LaneInVehicle.VehicleInfo.VehicleType;
 
-                        // LandIn
-                        feeModel.LaneInVehicle.LaneInId = !string.IsNullOrEmpty(reconcileVehicleInfo?.Vehicle?.LandIn?.LandId)
-                           ? reconcileVehicleInfo?.Vehicle?.LandIn?.LandId
-                           : feeModel.LaneInVehicle.LaneInId;
-                        feeModel.LaneInVehicle.Epoch = (reconcileVehicleInfo?.Vehicle?.LandIn?.LaneDateTimeEpoch > 0)
-                           ? reconcileVehicleInfo.Vehicle.LandIn.LaneDateTimeEpoch
-                           : feeModel.LaneInVehicle.Epoch;
-                        feeModel.LaneInVehicle.VehicleInfo.VehiclePhotoUrl = !string.IsNullOrEmpty(reconcileVehicleInfo?.Vehicle?.LandIn?.LanePhotoUrl)
-                            ? reconcileVehicleInfo?.Vehicle?.LandIn?.LanePhotoUrl
-                            : feeModel.LaneInVehicle.VehicleInfo.VehiclePhotoUrl;
+                            feeModel.LaneOutVehicle.VehicleInfo.VehicleType = !string.IsNullOrEmpty(reconcileVehicleInfo?.Vehicle?.VehicleType)
+                               ? reconcileVehicleInfo?.Vehicle?.VehicleType
+                               : feeModel.LaneOutVehicle.VehicleInfo.VehicleType;
 
-                        // LandOut
-                        feeModel.LaneOutVehicle.LaneOutId = !string.IsNullOrEmpty(reconcileVehicleInfo?.Vehicle?.LandOut.LandId)
-                           ? reconcileVehicleInfo?.Vehicle?.LandOut?.LandId
-                           : feeModel.LaneOutVehicle.LaneOutId;
-                        feeModel.LaneOutVehicle.Epoch = (reconcileVehicleInfo?.Vehicle?.LandOut?.LaneDateTimeEpoch > 0)
-                           ? reconcileVehicleInfo.Vehicle.LandOut.LaneDateTimeEpoch
-                           : feeModel.LaneOutVehicle.Epoch;
-                        feeModel.LaneOutVehicle.VehicleInfo.VehiclePhotoUrl = !string.IsNullOrEmpty(reconcileVehicleInfo?.Vehicle?.LandOut?.LanePhotoUrl)
-                            ? reconcileVehicleInfo?.Vehicle?.LandOut?.LanePhotoUrl
-                            : feeModel.LaneOutVehicle.VehicleInfo.VehiclePhotoUrl;
+                            // LandIn
+                            feeModel.LaneInVehicle.LaneInId = !string.IsNullOrEmpty(reconcileVehicleInfo?.Vehicle?.In?.LaneInId)
+                               ? reconcileVehicleInfo?.Vehicle?.In?.LaneInId
+                               : feeModel.LaneInVehicle.LaneInId;
+                            feeModel.LaneInVehicle.Epoch = (reconcileVehicleInfo?.Vehicle?.In?.LaneInDateTimeEpoch > 0)
+                               ? reconcileVehicleInfo?.Vehicle?.In?.LaneInDateTimeEpoch ?? 0
+                               : feeModel.LaneInVehicle.Epoch;
+                            feeModel.LaneInVehicle.VehicleInfo.VehiclePhotoUrl = !string.IsNullOrEmpty(reconcileVehicleInfo?.Vehicle?.In?.LaneInPhotoUrl)
+                                ? reconcileVehicleInfo?.Vehicle?.In?.LaneInPhotoUrl
+                                : feeModel.LaneInVehicle.VehicleInfo.VehiclePhotoUrl;
 
-                        return ValidationResult.Success<FeeModel?>(feeModel);
+                            // LandOut
+                            feeModel.LaneOutVehicle.LaneOutId = !string.IsNullOrEmpty(reconcileVehicleInfo?.Vehicle?.Out?.LaneOutId)
+                               ? reconcileVehicleInfo?.Vehicle?.Out?.LaneOutId
+                               : feeModel.LaneOutVehicle.LaneOutId;
+                            feeModel.LaneOutVehicle.Epoch = (reconcileVehicleInfo?.Vehicle?.Out?.LaneOutDateTimeEpoch > 0)
+                               ? reconcileVehicleInfo.Vehicle.Out.LaneOutDateTimeEpoch ?? 0
+                               : feeModel.LaneOutVehicle.Epoch;
+                            feeModel.LaneOutVehicle.VehicleInfo.VehiclePhotoUrl = !string.IsNullOrEmpty(reconcileVehicleInfo?.Vehicle?.Out?.LaneOutPhotoUrl)
+                                ? reconcileVehicleInfo?.Vehicle?.Out?.LaneOutPhotoUrl
+                                : feeModel.LaneOutVehicle.VehicleInfo.VehiclePhotoUrl;
+
+                            result.Fee = feeModel;
+
+                            return ValidationResult.Success(result);
+                        }
+                        else
+                        {
+                            _logger.LogError($"Fee object from Redis is null {nameof(ReconcileVehicleInfoAsync)} method.");
+                            return ValidationResult.Success(result);
+                        }
                     }
                     else
                     {
                         _logger.LogError($"Fee object from Redis is null {nameof(ReconcileVehicleInfoAsync)} method.");
-                        return ValidationResult.Success(feeModel);
+                        return ValidationResult.Success(result);
                     }
-                }
-                else
-                {
-                    _logger.LogError($"Fee object from Redis is null {nameof(ReconcileVehicleInfoAsync)} method.");
-                    return ValidationResult.Success(feeModel);
                 }
             }
             catch (Exception ex)
@@ -300,7 +329,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                 PaymenStatusResponseModel result = new PaymenStatusResponseModel()
                 {
                     ObjectId = request.ObjectId ?? Guid.Empty,
-                    PaymentStatus = new PaymentStatusModel()
+                    PaymentStatus = new ETC.Core.Models.Fees.PaymentStatusModel()
                     {
                         PaymentId = request.PaymentId,
                         Amount = request.Amount,
