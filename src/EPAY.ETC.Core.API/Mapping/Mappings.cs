@@ -6,6 +6,7 @@ using EPAY.ETC.Core.API.Core.Models.ManualBarrierControl;
 using EPAY.ETC.Core.API.Core.Models.Vehicle;
 using EPAY.ETC.Core.API.Core.Utils;
 using EPAY.ETC.Core.API.Models.Configs;
+using EPAY.ETC.Core.Models.Devices;
 using EPAY.ETC.Core.Models.Fees;
 using EPAY.ETC.Core.Models.Fees.PaymentStatusHistory;
 using EPAY.ETC.Core.Models.Request;
@@ -153,19 +154,24 @@ namespace EPAY.ETC.Core.API.Mapping
                 .ForPath(e => e.VehicleInfo.Weight, act => act.MapFrom(src => src.VehicleInfo.Weight))
                 .ForPath(e => e.VehicleInfo.PlateNumberPhotoUrl, act => act.MapFrom(src => src.VehicleInfo.PlateNumberPhotoUrl));
 
-            CreateMap<Core.Models.Devices.Camera.CameraModel, LaneInVehicleModel>()
-                .ForPath(e => e.Epoch, act => act.MapFrom(src => src.Epoch))
-                .ForPath(e => e.RFID, act => act.MapFrom(src => src.TagId))
-                .ForPath(e => e.Device.MacAddr, act => act.MapFrom(src => src.CameraDeviceInfo.MacAddr))
-                .ForPath(e => e.Device.IpAddr, act => act.MapFrom(src => src.CameraDeviceInfo.IPAddr))
+            CreateMap<ANPRCameraModel, LaneInVehicleModel>()
+                .ForPath(e => e.LaneInId, act => act.MapFrom(src => src.LaneInId))
+                .ForPath(e => e.Epoch, act => act.MapFrom(src => src.CheckpointTimeEpoch))
+                .ForPath(e => e.Device.MacAddr, act => act.MapFrom(src => src.MacAddr))
+                .ForPath(e => e.Device.IpAddr, act => act.MapFrom(src => src.IpAddr))
                 .ForPath(e => e.VehicleInfo.Make, act => act.MapFrom(src => src.VehicleInfo.Make))
                 .ForPath(e => e.VehicleInfo.Model, act => act.MapFrom(src => src.VehicleInfo.Model))
                 .ForPath(e => e.VehicleInfo.PlateNumber, act => act.MapFrom(src => src.VehicleInfo.PlateNumber))
-                .ForPath(e => e.VehicleInfo.VehiclePhotoUrl, act => act.MapFrom(src => src.VehicleInfo.VehiclePhotoUrl))
+                .ForPath(e => e.VehicleInfo.PlateColour, act => act.MapFrom(src => src.VehicleInfo.PlateColour))
+                .ForPath(e => e.VehicleInfo.VehicleColour, act => act.MapFrom(src => src.VehicleInfo.VehicleColour))
                 .ForPath(e => e.VehicleInfo.VehicleType, act => act.MapFrom(src => src.VehicleInfo.VehicleType))
                 .ForPath(e => e.VehicleInfo.Seat, act => act.MapFrom(src => src.VehicleInfo.Seat))
                 .ForPath(e => e.VehicleInfo.Weight, act => act.MapFrom(src => src.VehicleInfo.Weight))
-                .ForPath(e => e.VehicleInfo.PlateNumberPhotoUrl, act => act.MapFrom(src => src.VehicleInfo.PlateNumberPhotoUrl));
+                .ForPath(e => e.VehicleInfo.VehiclePhotoUrl, act => act.MapFrom(src => src.VehicleInfo.VehiclePhotoUrl))
+                .ForPath(e => e.VehicleInfo.PlateNumberPhotoUrl, act => act.MapFrom(src => src.VehicleInfo.PlateNumberPhotoUrl))
+                .ForPath(e => e.VehicleInfo.ConfidenceScore, act => act.MapFrom(src => src.VehicleInfo.ConfidenceScore))
+                .ForPath(e => e.VehicleInfo.Timestamp, act => act.MapFrom(src => src.VehicleInfo.Timestamp));
+
 
         }
     }

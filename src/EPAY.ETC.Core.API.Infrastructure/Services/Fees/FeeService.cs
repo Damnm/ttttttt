@@ -2,6 +2,7 @@
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Fees;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Fees;
 using EPAY.ETC.Core.Models.Constants;
+using EPAY.ETC.Core.Models.Devices;
 using EPAY.ETC.Core.Models.Fees;
 using EPAY.ETC.Core.Models.Validation;
 using Microsoft.Extensions.Logging;
@@ -227,11 +228,11 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
                     if (keyCAMVehicles != null)
                     {
                         var laneInCAMVehicle = await _redisDB.StringGetAsync((RedisKey[]?)keyCAMVehicles);
-                        List<Core.Models.Devices.Camera.CameraModel?> resultData = laneInCAMVehicle.ToList()
-                            .Select(s => JsonSerializer.Deserialize<Core.Models.Devices.Camera.CameraModel>(s.ToString())).ToList();
+                        List<ANPRCameraModel?> resultData = laneInCAMVehicle.ToList()
+                            .Select(s => JsonSerializer.Deserialize<ANPRCameraModel>(s.ToString())).ToList();
                         if (resultData != null && resultData.Count > 0)
                         {
-                            result = _mapper.Map<List<Core.Models.Devices.Camera.CameraModel>, List<LaneInVehicleModel>>(resultData);
+                            result = _mapper.Map<List<ANPRCameraModel>, List<LaneInVehicleModel>>(resultData);
                             return ValidationResult.Success(result);
                         }
                     }
