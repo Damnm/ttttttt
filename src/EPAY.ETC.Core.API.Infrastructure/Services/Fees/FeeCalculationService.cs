@@ -2,6 +2,7 @@
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Fees;
 using EPAY.ETC.Core.API.Core.Utils;
 using EPAY.ETC.Core.API.Infrastructure.Common.Utils;
+using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.CustomVehicleTypes;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.FeeVehicleCategories;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.TimeBlockFees;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Vehicle;
@@ -20,19 +21,21 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
         private readonly ITimeBlockFeeRepository _timeBlockFeeRepository;
         private readonly ITimeBlockFeeFormulaRepository _feeFormulaRepository;
         private readonly IVehicleRepository _vehicleRepository;
+        private readonly ICustomVehicleTypeRepository _customVehicleTypeRepository;
 
-        public FeeCalculationService(
-            ILogger<FeeCalculationService> logger,
-            IFeeVehicleCategoryRepository feeVehicleCategoryRepository,
-            ITimeBlockFeeRepository timeBlockFeeRepository,
-            ITimeBlockFeeFormulaRepository feeFormulaRepository,
-            IVehicleRepository vehicleRepository)
+        public FeeCalculationService(ILogger<FeeCalculationService> logger,
+                                     IFeeVehicleCategoryRepository feeVehicleCategoryRepository,
+                                     ITimeBlockFeeRepository timeBlockFeeRepository,
+                                     ITimeBlockFeeFormulaRepository feeFormulaRepository,
+                                     IVehicleRepository vehicleRepository,
+                                     ICustomVehicleTypeRepository customVehicleTypeRepository)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _feeVehicleCategoryRepository = feeVehicleCategoryRepository ?? throw new ArgumentNullException(nameof(feeVehicleCategoryRepository));
             _timeBlockFeeRepository = timeBlockFeeRepository ?? throw new ArgumentNullException(nameof(timeBlockFeeRepository));
             _feeFormulaRepository = feeFormulaRepository ?? throw new ArgumentNullException(nameof(feeFormulaRepository));
             _vehicleRepository = vehicleRepository ?? throw new ArgumentNullException(nameof(vehicleRepository));
+            _customVehicleTypeRepository = customVehicleTypeRepository ?? throw new ArgumentNullException(nameof(customVehicleTypeRepository));
         }
 
         // TODO: Do check vehicle in BOO?
@@ -100,6 +103,19 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
                         var vehicle = vehicles.FirstOrDefault()!;
 
                         customVehicleType = VehicleTypeConverter.ConvertVehicleType(vehicle.Seat ?? 0, vehicle.Weight);
+
+                        var customVehicleTypes = await _customVehicleTypeRepository.GetAllAsync(x => x.Name == customVehicleType);
+
+                        result.Vehicle = new VehicleModel()
+                        {
+                            PlateNumber = vehicle.PlateNumber,
+                            RFID = vehicle.RFID,
+                            CustomVehicleTypeId = customVehicleTypes?.Select(x => x.Id).FirstOrDefault(),
+                            CustomVehicleTypeCode = customVehicleType.ToString(),
+                            CustomVehicleTypeName = customVehicleType.ToEnumMemberAttrValue(),
+                            Make = vehicle.Make,
+                            Model = vehicle.Model
+                        };
                     }
                 }
 
