@@ -1,5 +1,6 @@
 ﻿using EPAY.ETC.Core.API.Controllers.Reports;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.UIActions;
+using EPAY.ETC.Core.API.Services;
 using EPAY.ETC.Core.API.UnitTests.Common;
 using EPAY.ETC.Core.API.UnitTests.Helpers;
 using EPAY.ETC.Core.Models.Enums;
@@ -18,6 +19,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Reports
     {
         #region Init mock instance
         private Mock<IUIActionService> _uiActionServiceMock = new();
+        private Mock<IRabbitMQPublisherService> _rabbitMQPublisherServiceMock = new();
         #endregion
 
         #region Init mock data
@@ -87,7 +89,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Reports
             _uiActionServiceMock.Setup(x => x.PrintLaneSessionReport(It.IsAny<LaneSessionReportRequestModel>())).ReturnsAsync(ValidationResult.Success(sessionReportResponse));
 
             // Act
-            var controller = new ReportController(_loggerMock.Object, _uiActionServiceMock.Object);
+            var controller = new ReportController(_loggerMock.Object, _uiActionServiceMock.Object, _rabbitMQPublisherServiceMock.Object);
             var actualResult = await controller.PrintLaneSessionReport(sessionReportRequest);
             var data = ((OkObjectResult)actualResult).Value as ValidationResult<LaneSessionReportModel>;
 
@@ -126,7 +128,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Reports
             _uiActionServiceMock.Setup(x => x.PrintLaneSessionReport(It.IsAny<LaneSessionReportRequestModel>())).ThrowsAsync(someEx);
 
             // Act
-            var controller = new ReportController(_loggerMock.Object, _uiActionServiceMock.Object);
+            var controller = new ReportController(_loggerMock.Object, _uiActionServiceMock.Object, _rabbitMQPublisherServiceMock.Object);
             var actualResult = await controller.PrintLaneSessionReport(sessionReportRequest);
             var actualResultRespone = ((ObjectResult)actualResult).Value as ValidationResult<string>;
 
