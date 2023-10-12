@@ -34,14 +34,6 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.PaymentStatus
             _logger.LogInformation($"Executing {nameof(AddAsync)} method...");
             try
             {
-                var existingRecords = await GetExistingRecordAsync(input);
-                if (existingRecords)
-                {
-                    return ValidationResult.Failed<PaymentStatusModel>(new List<ValidationError>()
-                    {
-                        new ValidationError("Gía trị đã có trên hệ thống", ValidationError.Conflict.Code)
-                    });
-                }
                 var entity = _mapper.Map<PaymentStatusModel>(input);
                 entity.Id = Guid.NewGuid();
                 entity.CreatedDate = DateTime.Now;
@@ -126,13 +118,6 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.PaymentStatus
                         ValidationError.NotFound
                     });
                 }
-                if (oldRecord.Id != id)
-                {
-                    return ValidationResult.Failed<PaymentStatusModel>(new List<ValidationError>()
-                    {
-                        new ValidationError("Giá trị đã có trên hệ thống", ValidationError.Conflict.Code)
-                    });
-                }
                 _mapper.Map(request, oldRecord);
 
                 await _repository.UpdateAsync(oldRecord);
@@ -145,18 +130,6 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.PaymentStatus
             }
         }
 
-        #endregion
-
-        #region Private method
-        private async Task<bool> GetExistingRecordAsync(PaymentStatusAddRequestModel input)
-        {
-            Expression<Func<PaymentStatusModel, bool>> expression = s =>
-                s.TransactionId == input.TransactionId;
-
-            var result = await _repository.GetAllAsync(expression);
-
-            return result.Any();
-        }
         #endregion
 
         #region GetPaymentStatusHistoryAsync
