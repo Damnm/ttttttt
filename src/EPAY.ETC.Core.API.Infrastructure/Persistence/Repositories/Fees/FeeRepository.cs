@@ -6,6 +6,7 @@ using EPAY.ETC.Core.Models.Validation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Linq.Expressions;
+using System.Text.Json;
 using FeeModel = EPAY.ETC.Core.API.Core.Models.Fees.FeeModel;
 
 namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Fees
@@ -25,6 +26,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Fees
         {
             try
             {
+                _logger.LogInformation($"Adding FeeModel {JsonSerializer.Serialize(entity)}");
                 _logger.LogInformation($"Executing {nameof(AddAsync)} method...");
 
                 await _dbContext.Fees.AddAsync(entity);
@@ -32,7 +34,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Fees
 
                 return entity;
             }
-            catch(ETCEPAYCoreAPIException ex) {
+            catch (ETCEPAYCoreAPIException ex)
+            {
                 _logger.LogError($"An error occurred when calling {nameof(AddAsync)} method. Details: {ex.Message}. Stack trace: {ex.StackTrace}");
                 throw;
             }
@@ -81,7 +84,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Fees
             {
                 _logger.LogInformation($"Executing {nameof(GetByObjectIdAsync)} method...");
 
-                return  await _dbContext.Fees.AsNoTracking().Where(x => x.ObjectId == objectId).FirstOrDefaultAsync();
+                return await _dbContext.Fees.AsNoTracking().Where(x => x.ObjectId == objectId).FirstOrDefaultAsync();
             }
             catch (ETCEPAYCoreAPIException ex)
             {
