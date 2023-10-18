@@ -33,7 +33,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
         private readonly ICustomVehicleTypeRepository _customVehicleTypeRepository;
         private readonly IManualBarrierControlRepository _manualBarrierControlRepository;
         private readonly IDatabase _redisDB;
-        private readonly IOptions<ETC.Core.Models.UI.UIModel> _uiOptions;
+        private readonly IOptions<UIModel> _uiOptions;
 
         public UIActionService(ILogger<UIActionService> logger,
                                IPaymentStatusRepository paymentStatusRepository,
@@ -41,7 +41,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                                ICustomVehicleTypeRepository customVehicleTypeRepository,
                                IManualBarrierControlRepository manualBarrierControlRepository,
                                IDatabase redisDB,
-                               IOptions<ETC.Core.Models.UI.UIModel> uiOptions)
+                               IOptions<UIModel> uiOptions)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _paymentStatusRepository = paymentStatusRepository ?? throw new ArgumentNullException(nameof(paymentStatusRepository));
@@ -349,18 +349,18 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
             }
         }
 
-        public async Task<ValidationResult<ETC.Core.Models.UI.UIModel>> LoadCurrentUIAsync()
+        public async Task<ValidationResult<UIModel>> LoadCurrentUIAsync(AuthenticatedEmployeeResponseModel? authenticatedEmployee = null)
         {
             try
             {
                 _logger.LogInformation($"Executing {nameof(LoadCurrentUIAsync)} method...");
                 var uiModelStr = await _redisDB.StringGetAsync(RedisConstant.UI_MODEL_KEY);
 
-                ETC.Core.Models.UI.UIModel? result = null;
+                UIModel? result = null;
 
                 if (!string.IsNullOrEmpty(uiModelStr.ToString()))
                 {
-                    result = JsonSerializer.Deserialize<ETC.Core.Models.UI.UIModel>(uiModelStr.ToString());
+                    result = JsonSerializer.Deserialize<UIModel>(uiModelStr.ToString());
                 }
 
                 if (result == null)
@@ -369,12 +369,21 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
 
                     if (!string.IsNullOrEmpty(uiModelStr.ToString()))
                     {
-                        result = JsonSerializer.Deserialize<ETC.Core.Models.UI.UIModel>(uiModelStr.ToString());
+                        result = JsonSerializer.Deserialize<UIModel>(uiModelStr.ToString());
                     }
                 }
 
                 if (result == null)
                     result = _uiOptions.Value;
+
+                if (authenticatedEmployee != null)
+                {
+                    result.Authentication = authenticatedEmployee;
+                    
+                    if (result.Header == null)
+                        result.Header = new HeaderModel();
+                    result.Header.EmployeeName = $"{authenticatedEmployee.FirstName} {authenticatedEmployee.LastName}";
+                }
 
                 await _redisDB.StringSetAsync(RedisConstant.UI_MODEL_KEY, JsonSerializer.Serialize(result));
 

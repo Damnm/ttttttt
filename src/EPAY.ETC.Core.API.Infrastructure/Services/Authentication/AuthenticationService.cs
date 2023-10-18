@@ -1,4 +1,5 @@
 ﻿using EPAY.ETC.Core.API.Core.Interfaces.Services.Authentication;
+using EPAY.ETC.Core.API.Core.Interfaces.Services.UIActions;
 using EPAY.ETC.Core.API.Core.Models.Employees;
 using EPAY.ETC.Core.API.Infrastructure.Models.Configs;
 using EPAY.ETC.Core.Models.Enums;
@@ -21,14 +22,16 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Authentication
         #region Variables   -
         private readonly ILogger<AuthenticationService> _logger;
         private readonly IPasswordService _passwordService;
+        private readonly IUIActionService _uIActionService;
         private readonly IOptions<JWTSettingsConfig> _jwtSettingsOption;
         #endregion
 
         #region Constructor
-        public AuthenticationService(ILogger<AuthenticationService> logger, IPasswordService passwordService, IOptions<JWTSettingsConfig> jwtSettingsOption)
+        public AuthenticationService(ILogger<AuthenticationService> logger, IPasswordService passwordService, IUIActionService uIActionService, IOptions<JWTSettingsConfig> jwtSettingsOption)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _passwordService = passwordService ?? throw new ArgumentNullException(nameof(passwordService));
+            _uIActionService = uIActionService ?? throw new ArgumentNullException(nameof(uIActionService));
             _jwtSettingsOption = jwtSettingsOption ?? throw new ArgumentNullException(nameof(jwtSettingsOption));
         }
 
@@ -80,6 +83,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Authentication
                     Username = employee.UserName,
                     JwtToken = tokenHandler.WriteToken(token)
                 };
+
+                await _uIActionService.LoadCurrentUIAsync(authenticatedEmployee);
 
                 return ValidationResult.Success(authenticatedEmployee);
             }
