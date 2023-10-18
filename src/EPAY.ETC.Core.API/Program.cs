@@ -119,17 +119,7 @@ builder.Services
         };
     });
 
-builder.Services.AddCors(options => 
-{
-    options.AddDefaultPolicy(policy =>
-    {
-        policy
-        .SetIsOriginAllowedToAllowWildcardSubdomains()
-        .AllowAnyHeader()
-        .AllowAnyMethod()
-        .AllowCredentials();
-    });
-});
+builder.Services.AddCors();
 
 var app = builder.Build();
 
@@ -166,7 +156,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseCors();
+app.UseCors(policy => policy.AllowAnyMethod().AllowAnyHeader().SetIsOriginAllowed(origin => true).AllowCredentials());
 
 app.UseAuthentication();
 app.UseAuthorization();
