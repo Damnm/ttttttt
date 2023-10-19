@@ -81,7 +81,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Authentication
                     FirstName = employee.FirstName,
                     LastName = employee.LastName,
                     Username = employee.UserName,
-                    JwtToken = tokenHandler.WriteToken(token)
+                    JwtToken = tokenHandler.WriteToken(token),
+                    AuthStatus = AuthStatusEnum.Loggedin
                 };
 
                 await _uIActionService.LoadCurrentUIAsync(authenticatedEmployee);
@@ -141,7 +142,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Authentication
                     FirstName = employee.FirstName,
                     LastName = employee.LastName,
                     Username = employee.UserName,
-                    JwtToken = tokenHandler.WriteToken(token)
+                    JwtToken = tokenHandler.WriteToken(token),
+                    AuthStatus = AuthStatusEnum.Loggedin
                 };
 
                 return ValidationResult.Success(authenticatedEmployee);
@@ -174,7 +176,10 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Authentication
                             uiModel.Command.Logon = new ETC.Core.Models.UI.Command.LogonModel();
                         uiModel.Command.Logon.Action = LogonStatusEnum.Logout;
 
-                        uiModel.Authentication = null;
+                        uiModel.Authentication = new AuthenticatedEmployeeResponseModel()
+                        {
+                            AuthStatus = AuthStatusEnum.Loggedout
+                        };
 
                         if (uiModel.Header == null)
                             uiModel.Header = new HeaderModel();
