@@ -8,5 +8,6 @@ namespace EPAY.ETC.Core.API.Core.Interfaces.Services.Authentication
     {
         Task<ValidationResult<AuthenticatedEmployeeResponseModel>> AuthenticateAsync(EmployeeLoginRequest input);
         Task<ValidationResult<AuthenticatedEmployeeResponseModel>> AutoAuthenticateAsync(EmployeeAutoLoginRequest request);
+        Task<ValidationResult<UIModel?>> LogoutAsync();
     }
 }

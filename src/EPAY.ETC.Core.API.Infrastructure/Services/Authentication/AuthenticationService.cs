@@ -152,6 +152,40 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Authentication
                 throw;
             }
         }
+
+        public async Task<ValidationResult<UIModel?>> LogoutAsync()
+        {
+            try
+            {
+                _logger.LogInformation($"Executing {nameof(LogoutAsync)} method...");
+
+                var uiResult = await _uIActionService.LoadCurrentUIAsync();
+                UIModel? uiModel = null;
+
+                if (uiResult.Succeeded)
+                {
+                    uiModel = uiResult.Data;
+
+                    if (uiModel != null)
+                    {
+                        uiModel.Authentication = null;
+
+                        if (uiModel.Header == null)
+                            uiModel.Header = new HeaderModel();
+                        uiModel.Header.EmployeeName = string.Empty;
+
+                        await _uIActionService.AddOrUpdateCurrentUIAsync(uiModel);
+                    }
+                }
+
+                return ValidationResult.Success(uiModel);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"An error occurred when calling {nameof(LogoutAsync)} method. Details: {ex.Message}. Stack trace: {ex.StackTrace}");
+                throw;
+            }
+        }
         #endregion
 
         #region Private method

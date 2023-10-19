@@ -395,5 +395,19 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                 throw;
             }
         }
+
+        public async Task AddOrUpdateCurrentUIAsync(UIModel input)
+        {
+            try
+            {
+                _logger.LogInformation($"Executing {nameof(AddOrUpdateCurrentUIAsync)} method...");
+                await _redisDB.StringSetAsync(RedisConstant.UI_MODEL_KEY, JsonSerializer.Serialize(input));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"An error occurred when calling {nameof(AddOrUpdateCurrentUIAsync)} method. Details: {ex.Message}. Stack trace: {ex.StackTrace}");
+                throw;
+            }
+        }
     }
 }

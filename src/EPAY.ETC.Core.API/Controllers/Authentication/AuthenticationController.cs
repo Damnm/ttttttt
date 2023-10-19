@@ -53,6 +53,8 @@ namespace EPAY.ETC.Core.API.Controllers.Authentication
         {
             try
             {
+                _logger.LogInformation($"Executing {nameof(Authenticate)} method...");
+
                 if (request == null)
                 {
                     return BadRequest("Invalid request body.");
@@ -94,6 +96,8 @@ namespace EPAY.ETC.Core.API.Controllers.Authentication
         {
             try
             {
+                _logger.LogInformation($"Executing {nameof(AutoAuthenticate)} method...");
+
                 if (request == null)
                 {
                     return BadRequest("Invalid request body.");
@@ -120,7 +124,34 @@ namespace EPAY.ETC.Core.API.Controllers.Authentication
                 validationErrors.Add(ValidationError.InternalServerError);
                 return StatusCode(StatusCodes.Status500InternalServerError, ValidationResult.Failed(errorMessage, validationErrors));
             }
-            #endregion
+        }
+        #endregion
+
+        /// <summary>
+        /// Logout method
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost("v1/employees/sign-out")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> LogoutAsync()
+        {
+            try
+            {
+                _logger.LogInformation($"Executing {nameof(LogoutAsync)} method...");
+
+                var validationResult = await _authenticationService.LogoutAsync();
+
+                return Ok(validationResult!.Data);
+            }
+            catch (Exception ex)
+            {
+                List<ValidationError> validationErrors = new();
+                string errorMessage = $"An error occurred when calling {nameof(LogoutAsync)} method: {ex.Message}. InnerException : {ApiExceptionMessages.ExceptionMessages(ex)}. Stack trace: {ex.StackTrace}";
+                _logger.LogError(errorMessage);
+                validationErrors.Add(ValidationError.InternalServerError);
+                return StatusCode(StatusCodes.Status500InternalServerError, ValidationResult.Failed(errorMessage, validationErrors));
+            }
         }
     }
 }
