@@ -168,6 +168,12 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Authentication
 
                     if (uiModel != null)
                     {
+                        if (uiModel.Command == null)
+                            uiModel.Command = new ETC.Core.Models.UI.Command.CommandModel();
+                        if (uiModel.Command.Logon == null)
+                            uiModel.Command.Logon = new ETC.Core.Models.UI.Command.LogonModel();
+                        uiModel.Command.Logon.Action = LogonStatusEnum.Logout;
+
                         uiModel.Authentication = null;
 
                         if (uiModel.Header == null)

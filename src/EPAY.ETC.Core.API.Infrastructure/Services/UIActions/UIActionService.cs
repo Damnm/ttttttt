@@ -379,7 +379,13 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                 if (authenticatedEmployee != null)
                 {
                     result.Authentication = authenticatedEmployee;
-                    
+
+                    if (result.Command == null)
+                        result.Command = new ETC.Core.Models.UI.Command.CommandModel();
+                    if (result.Command.Logon == null)
+                        result.Command.Logon = new ETC.Core.Models.UI.Command.LogonModel();
+                    result.Command.Logon.Action = LogonStatusEnum.Login;
+
                     if (result.Header == null)
                         result.Header = new HeaderModel();
                     result.Header.EmployeeName = $"{authenticatedEmployee.FirstName} {authenticatedEmployee.LastName}";
