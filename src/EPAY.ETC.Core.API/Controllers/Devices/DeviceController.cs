@@ -1,5 +1,6 @@
 ﻿using EPAY.ETC.Core.API.Core.Exceptions;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.UIActions;
+using EPAY.ETC.Core.API.Core.Utils;
 using EPAY.ETC.Core.API.Services;
 using EPAY.ETC.Core.Models.Request;
 using EPAY.ETC.Core.Models.Validation;
@@ -52,7 +53,8 @@ namespace EPAY.ETC.Core.API.Controllers.Devices
 
                 if (result.Succeeded)
                 {
-                    _rabbitMQPublisherService.SendMessage(JsonSerializer.Serialize(result.Data), ETC.Core.Models.Enums.PublisherTargetEnum.Barrier);
+                    string message = JsonSerializer.Serialize(new { result.Data?.Limit, Status = result.Data?.Status.ToDescriptionString() });
+                    _rabbitMQPublisherService.SendMessage(message, ETC.Core.Models.Enums.PublisherTargetEnum.Barrier);
                 }
 
                 return Ok(result);
