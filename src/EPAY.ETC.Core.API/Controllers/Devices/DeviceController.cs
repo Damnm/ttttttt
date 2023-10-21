@@ -53,7 +53,7 @@ namespace EPAY.ETC.Core.API.Controllers.Devices
 
                 if (result.Succeeded)
                 {
-                    string message = JsonSerializer.Serialize(new { result.Data?.Limit, Status = result.Data?.Status.ToDescriptionString() });
+                    string message = JsonSerializer.Serialize(new { result.Data?.Limit, Status = result.Data?.Status.ToString() });
                     _rabbitMQPublisherService.SendMessage(message, ETC.Core.Models.Enums.PublisherTargetEnum.Barrier);
                 }
 
