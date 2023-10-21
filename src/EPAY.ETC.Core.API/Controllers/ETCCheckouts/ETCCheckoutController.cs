@@ -42,7 +42,7 @@ namespace EPAY.ETC.Core.API.Controllers.ETCCheckouts
         {
             try
             {
-                _logger.LogInformation($"Executing {nameof(AddAsync)}...");
+                _logger.LogInformation($"Executing {nameof(AddAsync)}...ETCCheckoutAddUpdateRequestModel: {System.Text.Json.JsonSerializer.Serialize(input)}");
 
                 var result = await _service.AddAsync(input);
 

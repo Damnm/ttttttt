@@ -8,6 +8,7 @@ using EPAY.ETC.Core.Models.Validation;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Text.Json;
 
 namespace EPAY.ETC.Core.API.Infrastructure.Services.ETCCheckouts
 {
@@ -55,6 +56,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.ETCCheckouts
                 }
 
                 var entity = _mapper.Map<ETCCheckoutDataModel>(input);
+
+                _logger.LogInformation($"Mapped ETCCheckout model: {JsonSerializer.Serialize(entity)}");
 
                 var result = await _repository.AddAsync(entity);
 

@@ -14,6 +14,7 @@ namespace EPAY.ETC.Core.API.Core.Interfaces.Services.UIActions
         Task<ValidationResult<LaneSessionReportModel>> PrintLaneSessionReport(LaneSessionReportRequestModel request);
         Task<ValidationResult<PaymenStatusResponseModel>> UpdatePaymentMethod(PaymentStatusUIRequestModel request);
         Task<ValidationResult<BarrierOpenStatus>> ManipulateBarrier(BarrierRequestModel request);
-        Task<ValidationResult<UIModel>> LoadCurrentUIAsync();
+        Task<ValidationResult<UIModel>> LoadCurrentUIAsync(AuthenticatedEmployeeResponseModel? authenticatedEmployee = null);
+        Task AddOrUpdateCurrentUIAsync(UIModel input);
     }
 }

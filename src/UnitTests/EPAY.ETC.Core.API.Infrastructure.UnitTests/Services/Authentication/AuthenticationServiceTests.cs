@@ -1,4 +1,5 @@
 ﻿using EPAY.ETC.Core.API.Core.Interfaces.Services.Authentication;
+using EPAY.ETC.Core.API.Core.Interfaces.Services.UIActions;
 using EPAY.ETC.Core.API.Infrastructure.Models.Configs;
 using EPAY.ETC.Core.API.Infrastructure.Services.Authentication;
 using EPAY.ETC.Core.API.Infrastructure.UnitTests.Common;
@@ -20,6 +21,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Authentication
         private readonly Exception _exception = null!;
         private readonly Mock<ILogger<AuthenticationService>> _loggerMock = new();
         private readonly Mock<IPasswordService> _passwordServiceMock = new();
+        private readonly Mock<IUIActionService> _uiServiceMock = new();
         private readonly IOptions<JWTSettingsConfig> jwtSettingsOption = Options.Create(new JWTSettingsConfig()
         {
             Audience = "Some",
@@ -58,7 +60,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Authentication
             _passwordServiceMock.Setup(x => x.IsMatched(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(ValidationResult.Success(true));
 
             // Act
-            var service = new AuthenticationService(_loggerMock.Object, _passwordServiceMock.Object, jwtSettingsOption);
+            var service = new AuthenticationService(_loggerMock.Object, _passwordServiceMock.Object, _uiServiceMock.Object, jwtSettingsOption);
             var result = await service.AuthenticateAsync(login);
 
             // Assert
@@ -84,7 +86,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Authentication
             _passwordServiceMock.Setup(x => x.IsMatched(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(ValidationResult.Success(false));
 
             // Act
-            var service = new AuthenticationService(_loggerMock.Object, _passwordServiceMock.Object, jwtSettingsOption);
+            var service = new AuthenticationService(_loggerMock.Object, _passwordServiceMock.Object, _uiServiceMock.Object, jwtSettingsOption);
             var result = await service.AuthenticateAsync(login);
 
             // Assert
@@ -106,7 +108,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Authentication
             _passwordServiceMock.Setup(x => x.IsMatched(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Throws(someEx);
 
             // Act
-            var service = new AuthenticationService(_loggerMock.Object, _passwordServiceMock.Object, jwtSettingsOption);
+            var service = new AuthenticationService(_loggerMock.Object, _passwordServiceMock.Object, _uiServiceMock.Object, jwtSettingsOption);
             Func<Task> func = async () => await service.AuthenticateAsync(login);
 
             // Assert
@@ -133,7 +135,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Authentication
             };
 
             // Act
-            var service = new AuthenticationService(_loggerMock.Object, _passwordServiceMock.Object, jwtSettingsOption);
+            var service = new AuthenticationService(_loggerMock.Object, _passwordServiceMock.Object, _uiServiceMock.Object, jwtSettingsOption);
             var result = await service.AutoAuthenticateAsync(login);
 
             // Assert
@@ -161,7 +163,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Authentication
             };
 
             // Act
-            var service = new AuthenticationService(_loggerMock.Object, _passwordServiceMock.Object, jwtSettingsOption);
+            var service = new AuthenticationService(_loggerMock.Object, _passwordServiceMock.Object, _uiServiceMock.Object, jwtSettingsOption);
             var result = await service.AutoAuthenticateAsync(login);
 
             // Assert

@@ -1,4 +1,5 @@
 ﻿using EPAY.ETC.Core.API.Core.Interfaces.Services.Authentication;
+using EPAY.ETC.Core.API.Core.Interfaces.Services.UIActions;
 using EPAY.ETC.Core.API.Core.Models.Employees;
 using EPAY.ETC.Core.API.Infrastructure.Models.Configs;
 using EPAY.ETC.Core.Models.Enums;
@@ -21,14 +22,16 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Authentication
         #region Variables   -
         private readonly ILogger<AuthenticationService> _logger;
         private readonly IPasswordService _passwordService;
+        private readonly IUIActionService _uIActionService;
         private readonly IOptions<JWTSettingsConfig> _jwtSettingsOption;
         #endregion
 
         #region Constructor
-        public AuthenticationService(ILogger<AuthenticationService> logger, IPasswordService passwordService, IOptions<JWTSettingsConfig> jwtSettingsOption)
+        public AuthenticationService(ILogger<AuthenticationService> logger, IPasswordService passwordService, IUIActionService uIActionService, IOptions<JWTSettingsConfig> jwtSettingsOption)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _passwordService = passwordService ?? throw new ArgumentNullException(nameof(passwordService));
+            _uIActionService = uIActionService ?? throw new ArgumentNullException(nameof(uIActionService));
             _jwtSettingsOption = jwtSettingsOption ?? throw new ArgumentNullException(nameof(jwtSettingsOption));
         }
 
@@ -78,8 +81,11 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Authentication
                     FirstName = employee.FirstName,
                     LastName = employee.LastName,
                     Username = employee.UserName,
-                    JwtToken = tokenHandler.WriteToken(token)
+                    JwtToken = tokenHandler.WriteToken(token),
+                    AuthStatus = AuthStatusEnum.Loggedin
                 };
+
+                await _uIActionService.LoadCurrentUIAsync(authenticatedEmployee);
 
                 return ValidationResult.Success(authenticatedEmployee);
             }
@@ -136,7 +142,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Authentication
                     FirstName = employee.FirstName,
                     LastName = employee.LastName,
                     Username = employee.UserName,
-                    JwtToken = tokenHandler.WriteToken(token)
+                    JwtToken = tokenHandler.WriteToken(token),
+                    AuthStatus = AuthStatusEnum.Loggedin
                 };
 
                 return ValidationResult.Success(authenticatedEmployee);
@@ -144,6 +151,49 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Authentication
             catch (Exception ex)
             {
                 _logger.LogError($"An error occurred when calling {nameof(AutoAuthenticateAsync)} method. Details: {ex.Message}. Stack trace: {ex.StackTrace}");
+                throw;
+            }
+        }
+
+        public async Task<ValidationResult<UIModel?>> LogoutAsync()
+        {
+            try
+            {
+                _logger.LogInformation($"Executing {nameof(LogoutAsync)} method...");
+
+                var uiResult = await _uIActionService.LoadCurrentUIAsync();
+                UIModel? uiModel = null;
+
+                if (uiResult.Succeeded)
+                {
+                    uiModel = uiResult.Data;
+
+                    if (uiModel != null)
+                    {
+                        if (uiModel.Command == null)
+                            uiModel.Command = new ETC.Core.Models.UI.Command.CommandModel();
+                        if (uiModel.Command.Logon == null)
+                            uiModel.Command.Logon = new ETC.Core.Models.UI.Command.LogonModel();
+                        uiModel.Command.Logon.Action = LogonStatusEnum.Logout;
+
+                        uiModel.Authentication = new AuthenticatedEmployeeResponseModel()
+                        {
+                            AuthStatus = AuthStatusEnum.Loggedout
+                        };
+
+                        if (uiModel.Header == null)
+                            uiModel.Header = new HeaderModel();
+                        uiModel.Header.EmployeeName = string.Empty;
+
+                        await _uIActionService.AddOrUpdateCurrentUIAsync(uiModel);
+                    }
+                }
+
+                return ValidationResult.Success(uiModel);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"An error occurred when calling {nameof(LogoutAsync)} method. Details: {ex.Message}. Stack trace: {ex.StackTrace}");
                 throw;
             }
         }

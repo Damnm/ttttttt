@@ -73,17 +73,17 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence
             services.AddScoped<IBarcodeRepository, BarcodeRepository>();
 
             ////Add Services
-            services.AddScoped<IVehicleService, VehicleService>();
-            services.AddScoped<IFusionService, FusionService>();
-            services.AddScoped<IFeeCalculationService, FeeCalculationService>();
-            services.AddScoped<IFeeService, FeeService>();
-            services.AddScoped<IPaymentStatusService, PaymentStatusService>();
-            services.AddScoped<IPaymentService, PaymentService>();
-            services.AddScoped<IUIActionService, UIActionService>();
-            services.AddScoped<IManualBarrierControlsService, ManualBarrierControlsService>();
-            services.AddScoped<IBarcodeService, BarcodeService>();
-            services.AddScoped<IAuthenticationService, AuthenticationService>();
-            services.AddScoped<IPasswordService, PasswordService>();
+            services.AddTransient<IVehicleService, VehicleService>();
+            services.AddTransient<IFusionService, FusionService>();
+            services.AddTransient<IFeeCalculationService, FeeCalculationService>();
+            services.AddTransient<IFeeService, FeeService>();
+            services.AddTransient<IPaymentStatusService, PaymentStatusService>();
+            services.AddTransient<IPaymentService, PaymentService>();
+            services.AddTransient<IUIActionService, UIActionService>();
+            services.AddTransient<IManualBarrierControlsService, ManualBarrierControlsService>();
+            services.AddTransient<IBarcodeService, BarcodeService>();
+            services.AddTransient<IAuthenticationService, AuthenticationService>();
+            services.AddTransient<IPasswordService, PasswordService>();
 
             return services;
         }

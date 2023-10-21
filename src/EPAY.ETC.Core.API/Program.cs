@@ -86,15 +86,6 @@ builder.Services.AddSwaggerGen(c =>
 });
 builder.Services.AddAutoMapper(typeof(Program));
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy(name: "EPAYPolicy",
-        policy =>
-        {
-            policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
-        });
-});
-
 // NLog: Setup NLog for Dependency injection
 builder.Logging.ClearProviders();
 builder.Logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
@@ -128,17 +119,7 @@ builder.Services
         };
     });
 
-builder.Services.AddCors(options => 
-{
-    options.AddDefaultPolicy(policy =>
-    {
-        policy
-        .WithOrigins("http://localhost:4200")
-        .AllowAnyHeader()
-        .AllowAnyMethod()
-        .AllowCredentials();
-    });
-});
+builder.Services.AddCors();
 
 var app = builder.Build();
 
@@ -175,7 +156,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseCors();
+app.UseCors(policy => policy.AllowAnyMethod().AllowAnyHeader().SetIsOriginAllowed(origin => true).AllowCredentials());
 
 app.UseAuthentication();
 app.UseAuthorization();
