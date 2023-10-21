@@ -47,7 +47,10 @@ namespace EPAY.ETC.Core.API.Mapping
                 .ReverseMap();
             CreateMap<FusionAddRequestModel, FusionModel>().ReverseMap();
             CreateMap<PaymentStatusAddRequestModel, Core.Models.PaymentStatus.PaymentStatusModel>().ReverseMap();
-            CreateMap<PaymentAddOrUpdateRequestModel, Core.Models.Payment.PaymentModel>().ReverseMap();
+            CreateMap<PaymentAddOrUpdateRequestModel, Core.Models.Payment.PaymentModel>()
+                 .ForMember(e => e.Id, act => act.MapFrom(src => src.PaymentId.HasValue ? src.PaymentId : Guid.NewGuid()))
+                 .ReverseMap();
+
             CreateMap<FusionUpdateRequestModel, FusionModel>().ReverseMap();
             CreateMap<PaymentStatusUpdateRequestModel, Core.Models.PaymentStatus.PaymentStatusModel>().ReverseMap();
             CreateMap<CoreModel.FeeModel, FeeModel>()
