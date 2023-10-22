@@ -2,6 +2,7 @@
 using EPAY.ETC.Core.API.Core.Interfaces.Services.UIActions;
 using EPAY.ETC.Core.API.Core.Utils;
 using EPAY.ETC.Core.API.Services;
+using EPAY.ETC.Core.Models.Devices;
 using EPAY.ETC.Core.Models.Request;
 using EPAY.ETC.Core.Models.Validation;
 using Microsoft.AspNetCore.Mvc;
@@ -53,7 +54,12 @@ namespace EPAY.ETC.Core.API.Controllers.Devices
 
                 if (result.Succeeded)
                 {
-                    string message = JsonSerializer.Serialize(new { result.Data?.Limit, Status = result.Data?.Status.ToString() });
+                    var barrierRequest = new BarrierModel()
+                    {
+                        Action = result.Data?.Status ?? ETC.Core.Models.Enums.BarrierActionEnum.Close
+                    };
+
+                    string message = JsonSerializer.Serialize(barrierRequest);
                     _rabbitMQPublisherService.SendMessage(message, ETC.Core.Models.Enums.PublisherTargetEnum.Barrier);
                 }
 
