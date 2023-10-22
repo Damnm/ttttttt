@@ -46,6 +46,11 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
                 }
 
                 var entity = _mapper.Map<FeeModel>(input);
+                
+                if (string.IsNullOrEmpty(entity.LaneOutId))
+                {
+                    entity.LaneOutId = Environment.GetEnvironmentVariable("LANEOUTID_ENVIRONMENT") ?? "1";
+                }
 
                 var result = await _repository.AddAsync(entity);
 
@@ -162,6 +167,11 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
 
                 var entity = _mapper.Map<FeeModel>(request);
                 entity.Id = id;
+
+                if (string.IsNullOrEmpty(entity.LaneOutId))
+                {
+                    entity.LaneOutId = Environment.GetEnvironmentVariable("LANEOUTID_ENVIRONMENT") ?? "1";
+                }
 
                 await _repository.UpdateAsync(entity);
 

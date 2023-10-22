@@ -1,4 +1,5 @@
 ﻿using EPAY.ETC.Core.API.Core.Extensions;
+using EPAY.ETC.Core.API.Core.Interfaces.Repositories;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.UIActions;
 using EPAY.ETC.Core.API.Core.Models.Configs;
 using EPAY.ETC.Core.API.Core.Models.Vehicle.ReconcileVehicle;
@@ -7,6 +8,7 @@ using EPAY.ETC.Core.API.Infrastructure.Common.Extensions;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.CustomVehicleTypes;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.ETCCheckouts;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.ManualBarrierControls;
+using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Payment;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PaymentStatus;
 using EPAY.ETC.Core.Models.BarrierOpenStatus;
 using EPAY.ETC.Core.Models.Constants;
@@ -28,6 +30,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
     public class UIActionService : IUIActionService
     {
         private readonly ILogger<UIActionService> _logger;
+        private readonly IPaymentRepository _paymentRepository;
         private readonly IPaymentStatusRepository _paymentStatusRepository;
         private readonly IAppConfigRepository _appConfigRepository;
         private readonly ICustomVehicleTypeRepository _customVehicleTypeRepository;
@@ -36,6 +39,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
         private readonly IOptions<UIModel> _uiOptions;
 
         public UIActionService(ILogger<UIActionService> logger,
+                               IPaymentRepository paymentRepository,
                                IPaymentStatusRepository paymentStatusRepository,
                                IAppConfigRepository appConfigRepository,
                                ICustomVehicleTypeRepository customVehicleTypeRepository,
@@ -44,6 +48,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                                IOptions<UIModel> uiOptions)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _paymentRepository = paymentRepository ?? throw new ArgumentNullException(nameof(paymentRepository));
             _paymentStatusRepository = paymentStatusRepository ?? throw new ArgumentNullException(nameof(paymentStatusRepository));
             _appConfigRepository = appConfigRepository ?? throw new ArgumentNullException(nameof(appConfigRepository));
             _customVehicleTypeRepository = customVehicleTypeRepository ?? throw new ArgumentNullException(nameof(customVehicleTypeRepository));
@@ -58,20 +63,20 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
 
             try
             {
+                var uiModelStr = (string?)await _redisDB.StringGetAsync(RedisConstant.UI_MODEL_KEY);
+                UIModel? uiModel = null;
+                if (!string.IsNullOrEmpty(uiModelStr))
+                    uiModel = JsonSerializer.Deserialize<UIModel>(uiModelStr);
+
                 ReconcileResultModel result = new ReconcileResultModel();
                 if (reconcileVehicleInfo?.Payment != null)
                 {
-                    var uiModelStr = (string?)await _redisDB.StringGetAsync(RedisConstant.UI_MODEL_KEY);
-                    UIModel? uiModel = null;
-                    if (!string.IsNullOrEmpty(uiModelStr))
-                        uiModel = JsonSerializer.Deserialize<UIModel>(uiModelStr);
-
                     result.PaymentStatus = new PaymenStatusResponseModel()
                     {
-                        ObjectId = reconcileVehicleInfo.ObjectId ?? Guid.NewGuid(),
+                        ObjectId = reconcileVehicleInfo.ObjectId ?? uiModel?.ObjectId ?? Guid.NewGuid(),
                         PaymentStatus = new ETC.Core.Models.Fees.PaymentStatusModel()
                         {
-                            PaymentId = reconcileVehicleInfo.Payment.PaymentId,
+                            PaymentId = reconcileVehicleInfo.Payment.PaymentId ?? uiModel?.Body?.Payment?.PaymentId,
                             Status = reconcileVehicleInfo.Payment?.PaymentStatus ?? PaymentStatusEnum.Unpaid,
                             PaymentMethod = reconcileVehicleInfo.Payment?.PaymentType ?? PaymentMethodEnum.Cash,
                             Amount = uiModel?.Body?.Out?.Amount,
@@ -84,7 +89,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                 {
                     // Get FeeModel object from Redis.
                     FeeModel? feeModel = null;
-                    var feeObject = await _redisDB.StringGetAsync(RedisConstant.StringType_FeeModules(reconcileVehicleInfo?.ObjectId.ToString() ?? string.Empty));
+                    var feeObject = await _redisDB.StringGetAsync(RedisConstant.StringType_FeeModules(reconcileVehicleInfo?.ObjectId.ToString() ?? uiModel?.ObjectId.ToString() ?? string.Empty));
 
                     if (!string.IsNullOrEmpty(feeObject.ToString()))
                     {
@@ -357,6 +362,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                 var uiModelStr = await _redisDB.StringGetAsync(RedisConstant.UI_MODEL_KEY);
 
                 UIModel? result = null;
+                string laneId = Environment.GetEnvironmentVariable("LANEOUTID_ENVIRONMENT") ?? "1";
 
                 if (!string.IsNullOrEmpty(uiModelStr.ToString()))
                 {
@@ -384,12 +390,19 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                         result.Command = new ETC.Core.Models.UI.Command.CommandModel();
                     if (result.Command.Logon == null)
                         result.Command.Logon = new ETC.Core.Models.UI.Command.LogonModel();
+
                     result.Command.Logon.Action = LogonStatusEnum.Login;
+                    result.Command.LandId = laneId;
 
                     if (result.Header == null)
                         result.Header = new HeaderModel();
                     result.Header.EmployeeName = $"{authenticatedEmployee.FirstName} {authenticatedEmployee.LastName}";
                 }
+
+                if (result.Body == null)
+                    result.Body = new BodyModel();
+
+                result.Body.PaidVehicleHistory = await _paymentRepository.GetPaidVehicleHistoryAsync(laneId);
 
                 await _redisDB.StringSetAsync(RedisConstant.UI_MODEL_KEY, JsonSerializer.Serialize(result));
 

@@ -10,7 +10,7 @@ namespace EPAY.ETC.Core.API.Core.Interfaces.Services.Payment
         public Task<ValidationResult<Models.Payment.PaymentModel>> GetByIdAsync(Guid id);
         public Task<ValidationResult<Models.Payment.PaymentModel>> UpdateAsync(Guid id, PaymentAddOrUpdateRequestModel request);
         public Task<ValidationResult<Models.Payment.PaymentModel>> RemoveAsync(Guid id);
-        public Task<ValidationResult<List<PaidVehicleHistoryModel>>> GetPaidVehicleHistoryAsync();
+        public Task<ValidationResult<List<PaidVehicleHistoryModel>>> GetPaidVehicleHistoryAsync(string? laneId = null);
     }
 }
  

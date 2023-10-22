@@ -348,7 +348,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Payment
         public async Task GivenValidRequest_WhenGetPaidVehicleHistoryAsyncIsCalled_ThenReturnCorrectResult()
         {
             // Arrange
-            _paymentServiceMock.Setup(x => x.GetPaidVehicleHistoryAsync()).ReturnsAsync(paidVehicleHistory);
+            _paymentServiceMock.Setup(x => x.GetPaidVehicleHistoryAsync(It.IsAny<string>())).ReturnsAsync(paidVehicleHistory);
 
             // Act
             var paymentController = new PaymentController(_loggerMock.Object, _paymentServiceMock.Object);
@@ -371,7 +371,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Payment
         {
             // Arrange
             var someEx = new Exception("An error occurred when calling GetByIdAsync method");
-            _paymentServiceMock.Setup(x => x.GetPaidVehicleHistoryAsync()).ThrowsAsync(someEx);
+            _paymentServiceMock.Setup(x => x.GetPaidVehicleHistoryAsync(It.IsAny<string>())).ThrowsAsync(someEx);
 
             // Act
             var paymentController = new PaymentController(_loggerMock.Object, _paymentServiceMock.Object);

@@ -6,6 +6,6 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Payment
 {
     public interface IPaymentRepository: IRepository<Core.Models.Payment.PaymentModel, Guid>
     {
-        Task<List<PaidVehicleHistoryModel>?> GetPaidVehicleHistoryAsync();
+        Task<List<PaidVehicleHistoryModel>?> GetPaidVehicleHistoryAsync(string? laneId = "1");
     }
 }
