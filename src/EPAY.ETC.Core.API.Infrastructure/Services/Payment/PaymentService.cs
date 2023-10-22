@@ -165,12 +165,12 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Payment
         #endregion
 
         #region GetPaidVehicleHistoryAsync
-        public async Task<ValidationResult<List<PaidVehicleHistoryModel>>> GetPaidVehicleHistoryAsync()
+        public async Task<ValidationResult<List<PaidVehicleHistoryModel>>> GetPaidVehicleHistoryAsync(string? laneId = null)
         {
             _logger.LogInformation($"Executing {nameof(GetPaidVehicleHistoryAsync)} method...");
             try
             {
-                var result = await _repository.GetPaidVehicleHistoryAsync();
+                var result = await _repository.GetPaidVehicleHistoryAsync(laneId);
                 if (result == null)
                 {
                     return ValidationResult.Failed<List<PaidVehicleHistoryModel>>(null, new List<ValidationError>()
