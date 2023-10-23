@@ -112,25 +112,20 @@ namespace EPAY.ETC.Core.API.Controllers.UIAction
             {
                 _logger.LogInformation($"Executing {nameof(RemoveCurrentTransaction)}...");
 
-                var result = await _uiActionService.LoadCurrentUIAsync();
-                
-                if (result.Succeeded && result.Data != null)
+                var result = await _uiActionService.GetFeeProcessing();
+
+                if (!string.IsNullOrEmpty(result))
                 {
                     FusionStatusModel fusionStatus = new FusionStatusModel()
                     {
                         ActionEnum = ETC.Core.Models.Enums.ActionEnum.Delete,
-                        ObjectId = result.Data.ObjectId ?? Guid.Empty
+                        ObjectId = Guid.TryParse(result, out Guid guidValue) ? guidValue : Guid.Empty
                     };
 
                     _rabbitMQPublisherService.SendMessage(JsonSerializer.Serialize(fusionStatus), ETC.Core.Models.Enums.PublisherTargetEnum.FusionStatus);
+                }
 
-                    return Ok(result);
-                }
-                else
-                {
-                    validationErrors.Add(ValidationError.InternalServerError);
-                    return StatusCode(StatusCodes.Status500InternalServerError, ValidationResult.Failed(string.Join(" | ", result.Errors.Select(x => x.Message)), validationErrors));
-                }
+                return Ok(result);
             }
             catch (Exception ex)
             {

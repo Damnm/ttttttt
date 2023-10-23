@@ -16,5 +16,6 @@ namespace EPAY.ETC.Core.API.Core.Interfaces.Services.UIActions
         Task<ValidationResult<BarrierOpenStatus>> ManipulateBarrier(BarrierRequestModel request);
         Task<ValidationResult<UIModel>> LoadCurrentUIAsync(AuthenticatedEmployeeResponseModel? authenticatedEmployee = null);
         Task AddOrUpdateCurrentUIAsync(UIModel input);
+        Task<string> GetFeeProcessing();
     }
 }
