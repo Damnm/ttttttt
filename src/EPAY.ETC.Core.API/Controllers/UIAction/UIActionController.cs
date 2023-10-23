@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using EPAY.ETC.Core.API.Core.Exceptions;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.UIActions;
-using EPAY.ETC.Core.API.Core.Models.Vehicle.ReconcileVehicle;
 using EPAY.ETC.Core.API.Models.Configs;
 using EPAY.ETC.Core.API.Services;
+using EPAY.ETC.Core.Models.Devices;
 using EPAY.ETC.Core.Models.Validation;
 using EPAY.ETC.Core.Publisher.Interface;
 using Microsoft.AspNetCore.Mvc;
@@ -66,7 +66,7 @@ namespace EPAY.ETC.Core.API.Controllers.UIAction
         /// </summary>
         /// <returns></returns>
         [HttpGet("v1/ui")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> LoadCurrentUIAsync()
         {
@@ -90,6 +90,51 @@ namespace EPAY.ETC.Core.API.Controllers.UIAction
             catch (Exception ex)
             {
                 string errorMessage = $"An error occurred when calling {nameof(LoadCurrentUIAsync)} method: {ex.Message}. InnerException : {ApiExceptionMessages.ExceptionMessages(ex)}. Stack trace: {ex.StackTrace}";
+                _logger.LogError(errorMessage);
+                validationErrors.Add(ValidationError.InternalServerError);
+                return StatusCode(StatusCodes.Status500InternalServerError, ValidationResult.Failed(errorMessage, validationErrors));
+            }
+        }
+        #endregion
+        #region RemoveCurrentTransaction
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("v1/remove-transaction")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> RemoveCurrentTransaction()
+        {
+            List<ValidationError> validationErrors = new();
+
+            try
+            {
+                _logger.LogInformation($"Executing {nameof(RemoveCurrentTransaction)}...");
+
+                var result = await _uiActionService.LoadCurrentUIAsync();
+                
+                if (result.Succeeded && result.Data != null)
+                {
+                    FusionStatusModel fusionStatus = new FusionStatusModel()
+                    {
+                        ActionEnum = ETC.Core.Models.Enums.ActionEnum.Delete,
+                        ObjectId = result.Data.ObjectId ?? Guid.Empty
+                    };
+
+                    _rabbitMQPublisherService.SendMessage(JsonSerializer.Serialize(fusionStatus), ETC.Core.Models.Enums.PublisherTargetEnum.FusionStatus);
+
+                    return Ok(result);
+                }
+                else
+                {
+                    validationErrors.Add(ValidationError.InternalServerError);
+                    return StatusCode(StatusCodes.Status500InternalServerError, ValidationResult.Failed(string.Join(" | ", result.Errors.Select(x => x.Message)), validationErrors));
+                }
+            }
+            catch (Exception ex)
+            {
+                string errorMessage = $"An error occurred when calling {nameof(RemoveCurrentTransaction)} method: {ex.Message}. InnerException : {ApiExceptionMessages.ExceptionMessages(ex)}. Stack trace: {ex.StackTrace}";
                 _logger.LogError(errorMessage);
                 validationErrors.Add(ValidationError.InternalServerError);
                 return StatusCode(StatusCodes.Status500InternalServerError, ValidationResult.Failed(errorMessage, validationErrors));
