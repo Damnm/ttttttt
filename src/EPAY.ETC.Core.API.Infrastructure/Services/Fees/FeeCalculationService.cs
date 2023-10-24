@@ -104,15 +104,10 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
 
                         customVehicleType = VehicleTypeConverter.ConvertVehicleType(vehicle.Seat ?? 0, vehicle.Weight);
 
-                        var customVehicleTypes = await _customVehicleTypeRepository.GetAllAsync(x => x.Name == customVehicleType);
-
                         result.Vehicle = new VehicleModel()
                         {
                             PlateNumber = vehicle.PlateNumber,
                             RFID = vehicle.RFID,
-                            CustomVehicleTypeId = customVehicleTypes?.Select(x => x.Id).FirstOrDefault(),
-                            CustomVehicleTypeCode = customVehicleType.ToString(),
-                            CustomVehicleTypeName = customVehicleType.ToEnumMemberAttrValue(),
                             Make = vehicle.Make,
                             Model = vehicle.Model
                         };
@@ -139,6 +134,15 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
                         result.Fee.Amount = FeeCalculationUtil.FeeCalculation(timeBlockFees?.ToList(), timeBlockFeeFormulas.FirstOrDefault(), duration);
                         break;
                 }
+
+                // Set CustomVehicleType info
+                var customVehicleTypes = await _customVehicleTypeRepository.GetAllAsync(x => x.Name == customVehicleType);
+
+                if (result.Vehicle == null)
+                    result.Vehicle = new VehicleModel();
+                result.Vehicle.CustomVehicleTypeId = customVehicleTypes?.Select(x => x.Id).FirstOrDefault();
+                result.Vehicle.CustomVehicleTypeCode = customVehicleType.ToString();
+                result.Vehicle.CustomVehicleTypeName = customVehicleType.ToEnumMemberAttrValue();
 
                 return ValidationResult.Success(result);
             }
@@ -170,8 +174,16 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
                 // Calculate using TimeBlockFee
                 var timeBlockFeeFormulas = await _feeFormulaRepository.GetAllAsync(x => x.CustomVehicleType != null && x.CustomVehicleType.Name == customVehicleType);
                 var timeBlockFees = await _timeBlockFeeRepository.GetAllAsync(x => x.CustomVehicleType != null && x.CustomVehicleType.Name == customVehicleType);
-                result.Fee.Amount = FeeCalculationUtil.FeeCalculation(timeBlockFees?.ToList(), timeBlockFeeFormulas.FirstOrDefault(), duration);
+                var customVehicleTypes = await _customVehicleTypeRepository.GetAllAsync(x => x.Name == customVehicleType);
 
+                result.Fee.Amount = FeeCalculationUtil.FeeCalculation(timeBlockFees?.ToList(), timeBlockFeeFormulas.FirstOrDefault(), duration);
+                result.Vehicle = new VehicleModel()
+                {
+                    PlateNumber = plateNumber,
+                    CustomVehicleTypeId = customVehicleTypes?.Select(x => x.Id).FirstOrDefault(),
+                    CustomVehicleTypeCode = customVehicleType?.ToString(),
+                    CustomVehicleTypeName = customVehicleType?.ToEnumMemberAttrValue(),
+                };
                 return ValidationResult.Success(result);
             }
             catch (Exception ex)
