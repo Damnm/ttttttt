@@ -4,6 +4,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.Common.Constants
 {
     public static class AppConstant
     {
+        public static string REDIS_KEY_FUSION_PROCESSING = "Fusion::Processing";
+
         public static IDictionary<string, MockShiftModel> ShiftValuePairs = new Dictionary<string, MockShiftModel>()
         {
             {

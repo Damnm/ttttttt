@@ -4,6 +4,7 @@ using EPAY.ETC.Core.API.Core.Interfaces.Services.UIActions;
 using EPAY.ETC.Core.API.Core.Models.Configs;
 using EPAY.ETC.Core.API.Core.Models.Vehicle.ReconcileVehicle;
 using EPAY.ETC.Core.API.Core.Utils;
+using EPAY.ETC.Core.API.Infrastructure.Common.Constants;
 using EPAY.ETC.Core.API.Infrastructure.Common.Extensions;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.CustomVehicleTypes;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.ETCCheckouts;
@@ -430,6 +431,22 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
             catch (Exception ex)
             {
                 _logger.LogError($"An error occurred when calling {nameof(AddOrUpdateCurrentUIAsync)} method. Details: {ex.Message}. Stack trace: {ex.StackTrace}");
+                throw;
+            }
+        }
+
+        public async Task<string> GetFeeProcessing()
+        {
+            try
+            {
+                _logger.LogInformation($"Executing {nameof(GetFeeProcessing)} method...");
+               var result = await _redisDB.StringGetAsync(AppConstant.REDIS_KEY_FUSION_PROCESSING);
+
+                return result.ToString();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"An error occurred when calling {nameof(GetFeeProcessing)} method. Details: {ex.Message}. Stack trace: {ex.StackTrace}");
                 throw;
             }
         }
