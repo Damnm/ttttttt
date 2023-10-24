@@ -172,8 +172,7 @@ namespace EPAY.ETC.Core.API.Mapping
                 .ForPath(e => e.VehicleInfo.Weight, act => act.MapFrom(src => src.VehicleInfo.Weight))
                 .ForPath(e => e.VehicleInfo.VehiclePhotoUrl, act => act.MapFrom(src => src.VehicleInfo.VehiclePhotoUrl))
                 .ForPath(e => e.VehicleInfo.PlateNumberPhotoUrl, act => act.MapFrom(src => src.VehicleInfo.PlateNumberPhotoUrl))
-                .ForPath(e => e.VehicleInfo.ConfidenceScore, act => act.MapFrom(src => src.VehicleInfo.ConfidenceScore))
-                .ForPath(e => e.VehicleInfo.Timestamp, act => act.MapFrom(src => src.VehicleInfo.Timestamp));
+                .ForPath(e => e.VehicleInfo.ConfidenceScore, act => act.MapFrom(src => src.VehicleInfo.ConfidenceScore));
 
 
         }
