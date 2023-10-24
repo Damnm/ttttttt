@@ -117,12 +117,12 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Payment
             try
             {
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
-                var result = _dbContext.PaymentStatuses
+                var result = _dbContext.PaymentStatuses.OrderByDescending(k => k.PaymentDate)
                    .Include(x => x.Payment)
                    .Include(x => x.Payment.Fee)
                    .Include(x => x.Payment.CustomVehicleType)
                    .AsNoTracking()
-                   .Where(x => x.Status == PaymentStatusEnum.Paid && x.Payment.Fee.LaneOutId.Equals(laneId)).OrderByDescending(x => x.PaymentDate).Take(3)
+                   .Where(x => x.Status == PaymentStatusEnum.Paid && x.Payment.Fee.LaneOutId.Equals(laneId)).Take(3)
                    .Select(x => new PaidVehicleHistoryModel()
                    {
                        PlateNumber = x.Payment.PlateNumber,

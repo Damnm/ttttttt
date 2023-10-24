@@ -170,6 +170,11 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Payment
             _logger.LogInformation($"Executing {nameof(GetPaidVehicleHistoryAsync)} method...");
             try
             {
+                if (string.IsNullOrEmpty(laneId))
+                {
+                    laneId = Environment.GetEnvironmentVariable("LANEOUTID_ENVIRONMENT") ?? "1";
+                }
+
                 var result = await _repository.GetPaidVehicleHistoryAsync(laneId);
                 if (result == null)
                 {
