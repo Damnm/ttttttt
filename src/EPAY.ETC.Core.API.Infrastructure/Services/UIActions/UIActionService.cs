@@ -13,6 +13,7 @@ using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Payment;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PaymentStatus;
 using EPAY.ETC.Core.Models.BarrierOpenStatus;
 using EPAY.ETC.Core.Models.Constants;
+using EPAY.ETC.Core.Models.Devices;
 using EPAY.ETC.Core.Models.Enums;
 using EPAY.ETC.Core.Models.Fees;
 using EPAY.ETC.Core.Models.Receipt.SessionReports;
@@ -146,9 +147,6 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                             feeModel.LaneInVehicle.Epoch = (reconcileVehicleInfo?.Vehicle?.In?.LaneInDateTimeEpoch > 0)
                                ? reconcileVehicleInfo?.Vehicle?.In?.LaneInDateTimeEpoch ?? 0
                                : feeModel.LaneInVehicle.Epoch;
-                            feeModel.LaneInVehicle.VehicleInfo.VehiclePhotoUrl = !string.IsNullOrEmpty(reconcileVehicleInfo?.Vehicle?.In?.LaneInPhotoUrl)
-                                ? reconcileVehicleInfo?.Vehicle?.In?.LaneInPhotoUrl
-                                : feeModel.LaneInVehicle.VehicleInfo.VehiclePhotoUrl;
 
                             // LandOut
                             feeModel.LaneOutVehicle.LaneOutId = !string.IsNullOrEmpty(reconcileVehicleInfo?.Vehicle?.Out?.LaneOutId)
@@ -157,9 +155,30 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                             feeModel.LaneOutVehicle.Epoch = (reconcileVehicleInfo?.Vehicle?.Out?.LaneOutDateTimeEpoch > 0)
                                ? reconcileVehicleInfo.Vehicle.Out.LaneOutDateTimeEpoch ?? 0
                                : feeModel.LaneOutVehicle.Epoch;
-                            feeModel.LaneOutVehicle.VehicleInfo.VehiclePhotoUrl = !string.IsNullOrEmpty(reconcileVehicleInfo?.Vehicle?.Out?.LaneOutPhotoUrl)
-                                ? reconcileVehicleInfo?.Vehicle?.Out?.LaneOutPhotoUrl
-                                : feeModel.LaneOutVehicle.VehicleInfo.VehiclePhotoUrl;
+
+                            // Load reconciliation image
+                            var camInStr = _redisDB.StringGet(RedisConstant.StringType_CameraInKey(feeModel.LaneOutVehicle.VehicleInfo.PlateNumber ?? string.Empty)).ToString();
+                            var camOutStr = _redisDB.StringGet(RedisConstant.StringType_CameraOutKey(feeModel.LaneOutVehicle.VehicleInfo.PlateNumber ?? string.Empty)).ToString();
+
+                            if (!string.IsNullOrEmpty(camInStr))
+                            {
+                                var camData = JsonSerializer.Deserialize<ANPRCameraModel>(camInStr);
+                                if (camData != null)
+                                {
+                                    feeModel.LaneInVehicle.VehicleInfo.VehiclePhotoUrl = camData.VehicleInfo?.VehiclePhotoUrl ?? camData.VehicleInfo?.VehicleRearPhotoUrl ?? string.Empty;
+                                    feeModel.LaneInVehicle.VehicleInfo.PlateNumberPhotoUrl = camData.VehicleInfo?.PlateNumberPhotoUrl ?? camData.VehicleInfo?.PlateNumberRearPhotoUrl ?? string.Empty;
+                                }
+                            }
+
+                            if (!string.IsNullOrEmpty(camOutStr))
+                            {
+                                var camData = JsonSerializer.Deserialize<ANPRCameraModel>(camInStr);
+                                if (camData != null)
+                                {
+                                    feeModel.LaneOutVehicle.VehicleInfo.VehiclePhotoUrl = camData.VehicleInfo?.VehiclePhotoUrl ?? camData.VehicleInfo?.VehicleRearPhotoUrl ?? string.Empty;
+                                    feeModel.LaneOutVehicle.VehicleInfo.PlateNumberPhotoUrl = camData.VehicleInfo?.PlateNumberPhotoUrl ?? camData.VehicleInfo?.PlateNumberRearPhotoUrl ?? string.Empty;
+                                }
+                            }
 
                             result.Fee = feeModel;
 
@@ -440,7 +459,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
             try
             {
                 _logger.LogInformation($"Executing {nameof(GetFeeProcessing)} method...");
-               var result = await _redisDB.StringGetAsync(AppConstant.REDIS_KEY_FUSION_PROCESSING);
+                var result = await _redisDB.StringGetAsync(AppConstant.REDIS_KEY_FUSION_PROCESSING);
 
                 return result.ToString();
             }

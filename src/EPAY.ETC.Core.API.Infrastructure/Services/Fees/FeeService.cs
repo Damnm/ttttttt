@@ -153,15 +153,6 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
                     });
                 }
 
-                bool existRecord = await CheckExistsRecordByObjectId(id, request.ObjectId);
-                if (existRecord)
-                {
-                    return ValidationResult.Failed<FeeModel>(new List<ValidationError>()
-                    {
-                        ValidationError.Conflict
-                    });
-                }
-
                 var entity = _mapper.Map<FeeModel>(request);
                 entity.Id = id;
 
