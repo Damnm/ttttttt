@@ -38,8 +38,10 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
 
                 var existFees = await GetByIdAsync(input.FeeId ?? Guid.NewGuid());
                 if (existFees != null)
-                {
-                   return  await UpdateAsync(existFees.Data!.Id, input);
+                { 
+                    _logger.LogWarning($"Executing {nameof(AddAsync)} method, existed object {JsonSerializer.Serialize(input)} in database.");
+
+                    return await UpdateAsync(existFees.Data!.Id, input);
                 }
 
                 var entity = _mapper.Map<FeeModel>(input);
@@ -48,7 +50,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
                 {
                     entity.LaneOutId = Environment.GetEnvironmentVariable("LANEOUTID_ENVIRONMENT") ?? "1";
                 }
-
+                _logger.LogWarning($"Executing {nameof(AddAsync)} method, add new object {JsonSerializer.Serialize(input)} to database.");
                 var result = await _repository.AddAsync(entity);
 
                 return ValidationResult.Success(result);
@@ -147,18 +149,10 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
                 var oldRecord = await _repository.GetByIdAsync(id);
                 if (oldRecord == null)
                 {
+                    _logger.LogWarning($"Executing {nameof(UpdateAsync)} method, not found object {JsonSerializer.Serialize(request)} in database.");
                     return ValidationResult.Failed<FeeModel>(new List<ValidationError>()
                     {
                         ValidationError.NotFound
-                    });
-                }
-
-                bool existRecord = await CheckExistsRecordByObjectId(id, request.ObjectId);
-                if (existRecord)
-                {
-                    return ValidationResult.Failed<FeeModel>(new List<ValidationError>()
-                    {
-                        ValidationError.Conflict
                     });
                 }
 
@@ -169,7 +163,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
                 {
                     entity.LaneOutId = Environment.GetEnvironmentVariable("LANEOUTID_ENVIRONMENT") ?? "1";
                 }
-
+                _logger.LogWarning($"Executing {nameof(UpdateAsync)} method, found object {JsonSerializer.Serialize(request)} in database and updates its.");
                 await _repository.UpdateAsync(entity);
 
                 return ValidationResult.Success(entity);
@@ -180,27 +174,6 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
                 throw;
             }
         }
-
-        #region Private method
-        private async Task<bool> CheckExistsRecordByObjectId(Guid? id)
-        {
-            try
-            {
-                _logger.LogInformation($"Executing {nameof(CheckExistsRecordByObjectId)} method...");
-
-                Expression<Func<FeeModel, bool>> expression = s => (id.HasValue ? s.Id != id : true);
-
-                var result = await _repository.GetAllAsync(expression);
-
-                return result.Any();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"An error occurred when calling {nameof(CheckExistsRecordByObjectId)} method. Details: {ex.Message}. Stack trace: {ex.StackTrace}");
-                throw;
-            }
-        }
-        #endregion
 
         public async Task<ValidationResult<List<LaneInVehicleModel>>> FindVehicleAsync(string inputVehicle)
         {
