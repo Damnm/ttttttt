@@ -8,6 +8,7 @@ using EPAY.ETC.Core.API.Core.Models.Vehicle;
 using EPAY.ETC.Core.API.Core.Utils;
 using EPAY.ETC.Core.API.Models.Configs;
 using EPAY.ETC.Core.Models.Devices;
+using EPAY.ETC.Core.Models.Enums;
 using EPAY.ETC.Core.Models.Fees;
 using EPAY.ETC.Core.Models.Fees.PaymentStatusHistory;
 using EPAY.ETC.Core.Models.Request;
@@ -103,7 +104,8 @@ namespace EPAY.ETC.Core.API.Mapping
                 .ForPath(e => e.LaneInVehicle.VehicleInfo.PlateNumber, act => act.MapFrom(src => src.PlateNumber))
                 .ForPath(e => e.LaneOutVehicle.VehicleInfo.VehiclePhotoUrl, act => act.MapFrom(src => src.LaneOutVehiclePhotoUrl))
                 .ForPath(e => e.LaneOutVehicle.VehicleInfo.PlateNumberPhotoUrl, act => act.MapFrom(src => src.LaneOutPlateNumberPhotoUrl))
-                .ForPath(e => e.LaneOutVehicle.VehicleInfo.PlateNumber, act => act.MapFrom(src => src.PlateNumber));
+                .ForPath(e => e.LaneOutVehicle.VehicleInfo.PlateNumber, act => act.MapFrom(src => src.PlateNumber))
+                .ForPath(e => e.CustomVehicleType, act => act.MapFrom(src => src.CustomVehicleType != null ? src.CustomVehicleType.Name : CustomVehicleTypeEnum.Type1));
 
             CreateMap<ETCCheckoutAddUpdateRequestModel, ETCCheckoutDataModel>().ReverseMap();
             CreateMap<ETCCheckoutResponseModel, ETCCheckoutDataModel>();
