@@ -36,13 +36,10 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
             {
                 _logger.LogInformation($"Executing {nameof(AddAsync)} method...");
 
-                bool existRecord = await CheckExistsRecordByObjectId(input.FeeId, input.ObjectId);
-                if (existRecord)
+                var existFees = await GetByIdAsync(input.FeeId ?? Guid.NewGuid());
+                if (existFees != null)
                 {
-                    return ValidationResult.Failed<FeeModel>(new List<ValidationError>()
-                    {
-                        ValidationError.Conflict
-                    });
+                   return  await UpdateAsync(existFees.Data!.Id, input);
                 }
 
                 var entity = _mapper.Map<FeeModel>(input);
@@ -185,13 +182,13 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
         }
 
         #region Private method
-        private async Task<bool> CheckExistsRecordByObjectId(Guid? id, Guid objectId)
+        private async Task<bool> CheckExistsRecordByObjectId(Guid? id)
         {
             try
             {
                 _logger.LogInformation($"Executing {nameof(CheckExistsRecordByObjectId)} method...");
 
-                Expression<Func<FeeModel, bool>> expression = s => (id.HasValue ? s.Id != id : true) && s.ObjectId == objectId;
+                Expression<Func<FeeModel, bool>> expression = s => (id.HasValue ? s.Id != id : true);
 
                 var result = await _repository.GetAllAsync(expression);
 
