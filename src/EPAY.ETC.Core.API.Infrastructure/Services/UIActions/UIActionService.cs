@@ -1,5 +1,4 @@
 ﻿using EPAY.ETC.Core.API.Core.Extensions;
-using EPAY.ETC.Core.API.Core.Interfaces.Repositories;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.UIActions;
 using EPAY.ETC.Core.API.Core.Models.Configs;
 using EPAY.ETC.Core.API.Core.Models.Vehicle.ReconcileVehicle;
@@ -23,7 +22,6 @@ using EPAY.ETC.Core.Models.Validation;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using StackExchange.Redis;
-using System;
 using System.Linq.Expressions;
 using System.Text.Json;
 using ValidationResult = EPAY.ETC.Core.Models.Validation.ValidationResult;
