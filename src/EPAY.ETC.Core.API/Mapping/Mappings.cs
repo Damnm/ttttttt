@@ -13,6 +13,7 @@ using EPAY.ETC.Core.Models.Fees;
 using EPAY.ETC.Core.Models.Fees.PaymentStatusHistory;
 using EPAY.ETC.Core.Models.Request;
 using EPAY.ETC.Core.Models.UI;
+using EPAY.ETC.Core.Models.Utils;
 using EPAY.ETC.Core.Publisher.Common.Options;
 using System.Diagnostics.CodeAnalysis;
 using CoreModel = EPAY.ETC.Core.Models.Fees;
