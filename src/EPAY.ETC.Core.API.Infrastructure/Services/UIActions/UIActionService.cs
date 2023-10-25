@@ -22,6 +22,7 @@ using EPAY.ETC.Core.Models.Validation;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using StackExchange.Redis;
+using System;
 using System.Linq.Expressions;
 using System.Text.Json;
 using ValidationResult = EPAY.ETC.Core.Models.Validation.ValidationResult;
@@ -99,6 +100,10 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                         {
                             // EmployeeId
                             feeModel.EmployeeId = !string.IsNullOrEmpty(reconcileVehicleInfo?.EmployeeId) ? reconcileVehicleInfo?.EmployeeId : feeModel.EmployeeId;
+
+                            if (!int.TryParse(reconcileVehicleInfo?.Vehicle?.VehicleType, out int vehicleType))
+                                vehicleType = 1;
+                            feeModel.CustomVehicleType = (CustomVehicleTypeEnum)vehicleType;
 
                             if (feeModel.LaneInVehicle == null)
                                 feeModel.LaneInVehicle = new LaneInVehicleModel();
