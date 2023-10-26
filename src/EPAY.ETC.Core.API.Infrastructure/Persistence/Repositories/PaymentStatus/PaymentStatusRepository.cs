@@ -4,6 +4,7 @@ using EPAY.ETC.Core.API.Infrastructure.Common.Constants;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Context;
 using EPAY.ETC.Core.Models.Enums;
 using EPAY.ETC.Core.Models.Receipt.SessionReports;
+using EPAY.ETC.Core.Models.Utils;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Linq.Expressions;
@@ -84,8 +85,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PaymentStatu
             _logger.LogInformation($"Executing {nameof(GetAllWithNavigationAsync)} method...");
             try
             {
-                DateTime fromDate = DateTimeOffset.FromUnixTimeSeconds(request.FromDateTimeEpoch).DateTime;
-                DateTime toDate = DateTimeOffset.FromUnixTimeSeconds(request.ToDateTimeEpoch).DateTime;
+                DateTime fromDate = request.FromDateTimeEpoch.ToSpecificDateTime();
+                DateTime toDate = request.ToDateTimeEpoch.ToSpecificDateTime();
 
                 MockShiftModel? shift = null;
 

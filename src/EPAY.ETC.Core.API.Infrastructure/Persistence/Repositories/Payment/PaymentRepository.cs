@@ -3,6 +3,7 @@ using EPAY.ETC.Core.API.Core.Utils;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Context;
 using EPAY.ETC.Core.Models.Enums;
 using EPAY.ETC.Core.Models.Fees.PaidVehicleHistory;
+using EPAY.ETC.Core.Models.Utils;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Linq.Expressions;
