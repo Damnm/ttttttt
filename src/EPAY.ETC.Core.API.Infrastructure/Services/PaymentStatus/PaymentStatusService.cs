@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.PaymentStatus;
-using EPAY.ETC.Core.API.Core.Models.ETCCheckOuts;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PaymentStatus;
 using EPAY.ETC.Core.Models.Enums;
 using EPAY.ETC.Core.Models.Fees.PaymentStatusHistory;

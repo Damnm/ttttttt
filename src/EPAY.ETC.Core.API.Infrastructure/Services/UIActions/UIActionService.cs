@@ -194,7 +194,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                 BarrierOpenStatus result = new BarrierOpenStatus()
                 {
                     Status = request.Action!,
-                    Limit = request.Limit ?? 0
+                    Limit = request.Limit ?? 1
                 };
 
                 await _redisDB.HashSetAsync(CoreConstant.HASH_BARRIER_OPEN_STATUS, result.ToHashEntries());
