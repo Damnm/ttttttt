@@ -170,7 +170,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
 
                             if (!string.IsNullOrEmpty(camOutStr))
                             {
-                                var camData = JsonSerializer.Deserialize<ANPRCameraModel>(camInStr);
+                                var camData = JsonSerializer.Deserialize<ANPRCameraModel>(camOutStr);
                                 if (camData != null)
                                 {
                                     feeModel.LaneOutVehicle.VehicleInfo.VehiclePhotoUrl = camData.VehicleInfo?.VehiclePhotoUrl ?? camData.VehicleInfo?.VehicleRearPhotoUrl ?? string.Empty;
