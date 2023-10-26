@@ -82,7 +82,7 @@ namespace EPAY.ETC.Core.API.Mapping
                 .ForMember(e => e.ConfidenceScore, act => act.MapFrom(src => src.LaneOutVehicle != null && src.LaneOutVehicle.VehicleInfo != null ? (float?)src.LaneOutVehicle.VehicleInfo.ConfidenceScore : (src.LaneInVehicle != null && src.LaneInVehicle.VehicleInfo != null ? (float?)src.LaneInVehicle.VehicleInfo.ConfidenceScore : null)))
                 .ForMember(e => e.Seat, act => act.MapFrom(src => src.LaneOutVehicle != null && src.LaneOutVehicle.VehicleInfo != null ? src.LaneOutVehicle.VehicleInfo.Seat : (src.LaneInVehicle != null && src.LaneInVehicle.VehicleInfo != null ? src.LaneInVehicle.VehicleInfo.Seat : null)))
                 .ForMember(e => e.Weight, act => act.MapFrom(src => src.LaneOutVehicle != null && src.LaneOutVehicle.VehicleInfo != null ? src.LaneOutVehicle.VehicleInfo.Weight : (src.LaneInVehicle != null && src.LaneInVehicle.VehicleInfo != null ? src.LaneInVehicle.VehicleInfo.Weight : null)))
-                .ForMember(e => e.CustomVehicleType, act => act.MapFrom(src => new CustomVehicleTypeModel() { Name = src.CustomVehicleType ?? ETC.Core.Models.Enums.CustomVehicleTypeEnum.Type1}));
+                .ForMember(e => e.CustomVehicleType, act => act.Ignore());
             CreateMap<FeeModel, CoreModel.FeeModel>()
                 .ForMember(e => e.FeeId, act => act.MapFrom(src => src.Id))
                 .ForPath(e => e.LaneInVehicle.LaneInId, act => act.MapFrom(src => src.LaneInId))
