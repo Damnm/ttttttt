@@ -37,7 +37,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
                 _logger.LogInformation($"Executing {nameof(AddAsync)} method...");
 
                 var existFees = await GetByIdAsync(input.FeeId ?? Guid.NewGuid());
-                if (existFees != null)
+                if (existFees?.Data != null)
                 { 
                     _logger.LogWarning($"Executing {nameof(AddAsync)} method, existed object {JsonSerializer.Serialize(input)} in database.");
 
