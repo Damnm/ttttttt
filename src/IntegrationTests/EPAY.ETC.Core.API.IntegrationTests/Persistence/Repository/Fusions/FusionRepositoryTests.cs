@@ -26,7 +26,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Repository.Fusions
             Id = objectId,
             Epoch = 10,
             Loop1 = true,
-            RFID = true,
+            RFID = "Some RFID",
             ANPRCam1 = "12A123456",
             Loop2 = true,
             CCTVCam2 = "12A123456",
@@ -117,7 +117,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Repository.Fusions
             //vehicle.CreatedDate = vehicle.CreatedDate;
             fusion.Epoch = 20;
             fusion.Loop1 = false;
-            fusion.RFID = true;
+            fusion.RFID = "Some RFID";
             fusion.ANPRCam1 = "12A123456";
             fusion.Loop2 = true;
             fusion.CCTVCam2 = "12A123456";

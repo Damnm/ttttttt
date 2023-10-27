@@ -19,7 +19,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Controllers.Fusions
         {
             Epoch = 01524,
             Loop1 = true,
-            RFID = false,
+            RFID = "Some RFID",
             Cam1 = "12A12356",
             Loop2 = true,
             Cam2 = "12A12356",
@@ -91,7 +91,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Controllers.Fusions
             successful?.GetValue<bool>().Should().BeTrue();
             data?["Epoch"]?.GetValue<float>().Should().Be(request.Epoch);
             data?["Loop1"]?.GetValue<bool>().Should().Be(request.Loop1);
-            data?["RFID"]?.GetValue<bool>().Should().Be(request.RFID);
+            data?["RFID"]?.GetValue<string>().Should().Be(request.RFID);
             data?["Cam1"]?.GetValue<string>().Should().Be(request.Cam1);
             data?["Loop2"]?.GetValue<bool>().Should().Be(request.Loop2);
             data?["Cam2"]?.GetValue<string>().Should().Be(request.Cam2);
@@ -131,7 +131,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Controllers.Fusions
             HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", JWTToken);
             request.Epoch = 666;
             request.Loop1 = false;
-            request.RFID = false;
+            request.RFID = "Some RFID";
             request.Cam1 = "12A9999";
             request.Loop2 = false;
             request.Cam2 = "12A9999";
@@ -154,7 +154,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Controllers.Fusions
             data.Should().NotBeNull();
             data?["Epoch"]?.GetValue<float>().Should().Be(request.Epoch);
             data?["Loop1"]?.GetValue<bool>().Should().Be(request.Loop1);
-            data?["RFID"]?.GetValue<bool>().Should().Be(request.RFID);
+            data?["RFID"]?.GetValue<string>().Should().Be(request.RFID);
             data?["Cam1"]?.GetValue<string>().Should().Be(request.Cam1);
             data?["Loop2"]?.GetValue<bool>().Should().Be(request.Loop2);
             data?["Cam2"]?.GetValue<string>().Should().Be(request.Cam2);

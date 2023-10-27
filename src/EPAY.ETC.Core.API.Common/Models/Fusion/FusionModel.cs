@@ -11,7 +11,8 @@ namespace EPAY.ETC.Core.API.Core.Models.Fusion
     {
         public long Epoch { get; set; }
         public bool Loop1 { get; set; }
-        public bool RFID { get; set; }
+        [MaxLength(50)]
+        public string? RFID { get; set; }
         [MaxLength(15)]
         public string? ANPRCam1 { get; set; }
         public bool Loop2 { get; set; }

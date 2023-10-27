@@ -1,6 +1,7 @@
 ﻿using EPAY.ETC.Core.API.Core.Extensions;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.UIActions;
 using EPAY.ETC.Core.API.Core.Models.Configs;
+using EPAY.ETC.Core.API.Core.Models.Fusion;
 using EPAY.ETC.Core.API.Core.Models.Vehicle.ReconcileVehicle;
 using EPAY.ETC.Core.API.Core.Utils;
 using EPAY.ETC.Core.API.Infrastructure.Common.Constants;
@@ -382,10 +383,14 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
             try
             {
                 _logger.LogInformation($"Executing {nameof(LoadCurrentUIAsync)} method...");
-                var uiModelStr = await _redisDB.StringGetAsync(RedisConstant.UI_MODEL_KEY);
 
                 UIModel? result = null;
                 string laneId = Environment.GetEnvironmentVariable("LANEOUTID_ENVIRONMENT") ?? "1";
+
+                var paidHistories = await _paymentRepository.GetPaidVehicleHistoryAsync(laneId);
+                var waitingVehicles = await GetWaitingVehicles();
+
+                var uiModelStr = await _redisDB.StringGetAsync(RedisConstant.UI_MODEL_KEY);
 
                 if (!string.IsNullOrEmpty(uiModelStr.ToString()))
                 {
@@ -425,7 +430,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                 if (result.Body == null)
                     result.Body = new BodyModel();
 
-                result.Body.PaidVehicleHistory = await _paymentRepository.GetPaidVehicleHistoryAsync(laneId);
+                result.Body.PaidVehicleHistory = paidHistories;
+                result.Body.WaitingVehicles = waitingVehicles;
 
                 await _redisDB.StringSetAsync(RedisConstant.UI_MODEL_KEY, JsonSerializer.Serialize(result));
 
@@ -467,5 +473,74 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                 throw;
             }
         }
+
+        #region Private method
+        private async Task<List<WaitingVehicleModel>> GetWaitingVehicles()
+        {
+            List<WaitingVehicleModel> result = new List<WaitingVehicleModel>();
+
+            var fusionObjects = await HashGetListAsync<FusionModel>(null, RedisConstant.SORTED_SET_FUSION_OUT);
+            List<WaitingVehicleModel> waitingVehicles = new List<WaitingVehicleModel>();
+            if (fusionObjects != null && fusionObjects.Any())
+            {
+                foreach (var fusion in fusionObjects)
+                {
+                    string? plateNumber = fusion.ANPRCam1;
+
+                    if (!string.IsNullOrEmpty(fusion.RFID))
+                    {
+                        var rfidIn = _redisDB.StringGet(RedisConstant.StringType_RFIDInKey(fusion.RFID)).ToString();
+                        if (!string.IsNullOrEmpty(rfidIn))
+                        {
+                            var rfidInValue = JsonSerializer.Deserialize<RFIDDataModel>(rfidIn);
+                            plateNumber = rfidInValue?.VehicleInfo?.PlateNumber ?? plateNumber;
+                        }
+                    }
+
+                    // Create list vehicle is waiting
+                    waitingVehicles.Add(new WaitingVehicleModel()
+                    {
+                        RFID = fusion.RFID,
+                        PlateNumber = plateNumber,
+                        LaneinDateTimeEpoch = fusion.Epoch
+                    });
+                }
+            }
+
+            return result;
+        }
+        private async Task<List<T>?> HashGetListAsync<T>(Func<T, bool>? action, string sortedKey, Order order = Order.Ascending)
+        {
+            _logger.LogInformation($"Executing {nameof(HashGetListAsync)} method...");
+            List<T>? result = new List<T>();
+
+            try
+            {
+                var members = await _redisDB.SortedSetRangeByScoreWithScoresAsync(sortedKey, order: order);
+
+                foreach (var member in members)
+                {
+                    var hashEntries = await _redisDB.HashGetAllAsync(member.Element.ToString());
+
+                    if (hashEntries != null && hashEntries.Any())
+                    {
+                        var item = RedisExtention.ConvertFromRedis<T>(hashEntries);
+
+                        if (item != null && (action == null || action.Invoke(item)))
+                        {
+                            result.Add(item);
+                        }
+                    }
+                }
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.StackTrace);
+                throw;
+            }
+        }
+        #endregion
     }
 }
