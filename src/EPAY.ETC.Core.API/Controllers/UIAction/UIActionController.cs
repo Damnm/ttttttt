@@ -103,7 +103,7 @@ namespace EPAY.ETC.Core.API.Controllers.UIAction
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        [HttpPost("v1/remove-transaction/{action}")]
+        [HttpPost("v1/add-remove-transaction")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> AddOrRemoveCurrentTransaction(ActionEnum? action)
