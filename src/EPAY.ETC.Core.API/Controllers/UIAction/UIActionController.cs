@@ -4,6 +4,7 @@ using EPAY.ETC.Core.API.Core.Interfaces.Services.UIActions;
 using EPAY.ETC.Core.API.Models.Configs;
 using EPAY.ETC.Core.API.Services;
 using EPAY.ETC.Core.Models.Devices;
+using EPAY.ETC.Core.Models.Enums;
 using EPAY.ETC.Core.Models.Validation;
 using EPAY.ETC.Core.Publisher.Interface;
 using Microsoft.AspNetCore.Mvc;
@@ -100,36 +101,55 @@ namespace EPAY.ETC.Core.API.Controllers.UIAction
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="action"></param>
         /// <returns></returns>
-        [HttpGet("v1/remove-transaction")]
+        [HttpPost("v1/remove-transaction/{action}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> RemoveCurrentTransaction()
+        public async Task<IActionResult> AddOrRemoveCurrentTransaction(ActionEnum? action)
         {
             List<ValidationError> validationErrors = new();
 
             try
             {
-                _logger.LogInformation($"Executing {nameof(RemoveCurrentTransaction)}...");
+                _logger.LogInformation($"Executing {nameof(AddOrRemoveCurrentTransaction)}...");
 
-                var result = await _uiActionService.GetFeeProcessing();
+                if (action == null)
+                    return BadRequest("Action is required");
 
-                if (!string.IsNullOrEmpty(result))
+                FusionStatusModel fusionStatus;
+
+                switch (action)
                 {
-                    FusionStatusModel fusionStatus = new FusionStatusModel()
-                    {
-                        ActionEnum = ETC.Core.Models.Enums.ActionEnum.Delete,
-                        ObjectId = Guid.TryParse(result, out Guid guidValue) ? guidValue : Guid.Empty
-                    };
+                    case ActionEnum.Insert:
+                        fusionStatus = new FusionStatusModel()
+                        {
+                            ActionEnum = action.Value,
+                            ObjectId = Guid.NewGuid()
+                        };
+                        _rabbitMQPublisherService.SendMessage(JsonSerializer.Serialize(fusionStatus), PublisherTargetEnum.FusionStatus);
+                        break;
 
-                    _rabbitMQPublisherService.SendMessage(JsonSerializer.Serialize(fusionStatus), ETC.Core.Models.Enums.PublisherTargetEnum.FusionStatus);
+                    case ActionEnum.Delete:
+                        var result = await _uiActionService.GetFeeProcessing();
+
+                        if (!string.IsNullOrEmpty(result))
+                        {
+                            fusionStatus = new FusionStatusModel()
+                            {
+                                ActionEnum = action.Value,
+                                ObjectId = Guid.TryParse(result, out Guid guidValue) ? guidValue : Guid.NewGuid()
+                            };
+                            _rabbitMQPublisherService.SendMessage(JsonSerializer.Serialize(fusionStatus), PublisherTargetEnum.FusionStatus);
+                        }
+                        break;
                 }
 
-                return Ok(result);
+                return Ok();
             }
             catch (Exception ex)
             {
-                string errorMessage = $"An error occurred when calling {nameof(RemoveCurrentTransaction)} method: {ex.Message}. InnerException : {ApiExceptionMessages.ExceptionMessages(ex)}. Stack trace: {ex.StackTrace}";
+                string errorMessage = $"An error occurred when calling {nameof(AddOrRemoveCurrentTransaction)} method: {ex.Message}. InnerException : {ApiExceptionMessages.ExceptionMessages(ex)}. Stack trace: {ex.StackTrace}";
                 _logger.LogError(errorMessage);
                 validationErrors.Add(ValidationError.InternalServerError);
                 return StatusCode(StatusCodes.Status500InternalServerError, ValidationResult.Failed(errorMessage, validationErrors));
