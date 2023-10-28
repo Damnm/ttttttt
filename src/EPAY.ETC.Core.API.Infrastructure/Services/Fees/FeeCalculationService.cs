@@ -161,6 +161,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
 
                 // Init variable using
                 long duration = checkOutDateEpoch - checkInDateEpoch;
+                FeeTypeEnum feeType = FeeTypeEnum.TimeBlock;
 
                 // Init result return
                 var result = new VehicleFeeModel()
@@ -171,19 +172,75 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
                     }
                 };
 
-                // Calculate using TimeBlockFee
-                var timeBlockFeeFormulas = await _feeFormulaRepository.GetAllAsync(x => x.CustomVehicleType != null && x.CustomVehicleType.Name == customVehicleType);
-                var timeBlockFees = await _timeBlockFeeRepository.GetAllAsync(x => x.CustomVehicleType != null && x.CustomVehicleType.Name == customVehicleType);
-                var customVehicleTypes = await _customVehicleTypeRepository.GetAllAsync(x => x.Name == customVehicleType);
+                // Get vehicle already defined
+                var feeVehicleCategories = await _feeVehicleCategoryRepository.GetAllAsync(x =>
+                    x.PlateNumber != null
+                    && !string.IsNullOrEmpty(plateNumber)
+                    && x.PlateNumber.Equals(plateNumber)
+                );
+                var feeVehicleCategory = feeVehicleCategories.OrderBy(x => x.PlateNumber).FirstOrDefault();
 
-                result.Fee.Amount = FeeCalculationUtil.FeeCalculation(timeBlockFees?.ToList(), timeBlockFeeFormulas.FirstOrDefault(), duration);
-                result.Vehicle = new VehicleModel()
+                // If exists
+                if (feeVehicleCategory != null)
                 {
-                    PlateNumber = plateNumber,
-                    CustomVehicleTypeId = customVehicleTypes?.Select(x => x.Id).FirstOrDefault(),
-                    CustomVehicleTypeCode = customVehicleType?.ToString(),
-                    CustomVehicleTypeName = customVehicleType?.ToEnumMemberAttrValue(),
-                };
+                    // Update result vehicle
+                    result.Vehicle = new VehicleModel()
+                    {
+                        PlateNumber = feeVehicleCategory.PlateNumber,
+                        RFID = feeVehicleCategory.RFID,
+                        CustomVehicleTypeId = feeVehicleCategory.CustomVehicleTypeId,
+                        CustomVehicleTypeCode = feeVehicleCategory.CustomVehicleType?.Name.ToString(),
+                        CustomVehicleTypeName = feeVehicleCategory.CustomVehicleType?.Name.ToEnumMemberAttrValue(),
+                        VehicleCategoryId = feeVehicleCategory.VehicleCategoryId,
+                        VehicleCategoryName = feeVehicleCategory.VehicleCategory?.VehicleCategoryName,
+                        VehicleGroupId = feeVehicleCategory.VehicleGroupId,
+                        VehicleGroupName = feeVehicleCategory.VehicleGroup?.GroupName
+                    };
+
+                    // Set fee type if exists
+                    feeType = feeVehicleCategory.FeeType?.FeeName ?? FeeTypeEnum.TimeBlock;
+                }
+
+                // Calculate fee
+                switch (feeType)
+                {
+                    case FeeTypeEnum.Free:
+                        result.Fee.Amount = 0;
+                        break;
+
+                    case FeeTypeEnum.Fixed:
+                        result.Fee.Amount = feeVehicleCategory?.FeeType?.Amount ?? 0;
+                        break;
+
+                    // Calculate using TimeBlockFee
+                    default:
+                        Guid? customVehilceTypeId = null;
+
+                        if (feeVehicleCategory?.CustomVehicleType != null)
+                        {
+                            customVehicleType = feeVehicleCategory.CustomVehicleType.Name;
+                            customVehilceTypeId = feeVehicleCategory.CustomVehicleType.Id;
+                        }
+
+                        var timeBlockFeeFormulas = await _feeFormulaRepository.GetAllAsync(x => x.CustomVehicleType != null && x.CustomVehicleType.Name == customVehicleType);
+                        var timeBlockFees = await _timeBlockFeeRepository.GetAllAsync(x => x.CustomVehicleType != null && x.CustomVehicleType.Name == customVehicleType);
+                        if (customVehilceTypeId == null)
+                        {
+                            var customVehicleTypes = await _customVehicleTypeRepository.GetAllAsync(x => x.Name == customVehicleType);
+                            customVehilceTypeId = customVehicleTypes?.Select(x => x.Id).FirstOrDefault();
+                        }
+
+                        result.Fee.Amount = FeeCalculationUtil.FeeCalculation(timeBlockFees?.ToList(), timeBlockFeeFormulas.FirstOrDefault(), duration);
+                        result.Vehicle = new VehicleModel()
+                        {
+                            PlateNumber = plateNumber,
+                            CustomVehicleTypeId = customVehilceTypeId,
+                            CustomVehicleTypeCode = customVehicleType?.ToString(),
+                            CustomVehicleTypeName = customVehicleType?.ToEnumMemberAttrValue(),
+                        };
+                        break;
+                }
+
                 return ValidationResult.Success(result);
             }
             catch (Exception ex)
