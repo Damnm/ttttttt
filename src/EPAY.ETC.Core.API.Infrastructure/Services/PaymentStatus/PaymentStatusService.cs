@@ -33,8 +33,10 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.PaymentStatus
             _logger.LogInformation($"Executing {nameof(AddAsync)} method...");
             try
             {
-                var entity = _mapper.Map<PaymentStatusModel>(input);
-                entity.Id = Guid.NewGuid();
+                var entity = _mapper.Map<PaymentStatusModel>(input) ?? new PaymentStatusModel();
+                if(entity.Id == Guid.Empty)
+                    entity.Id = Guid.NewGuid();
+
                 entity.CreatedDate = DateTime.Now;
 
                 var result = await _repository.AddAsync(entity);
