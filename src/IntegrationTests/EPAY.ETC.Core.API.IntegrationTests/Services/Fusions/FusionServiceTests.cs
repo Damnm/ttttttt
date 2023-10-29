@@ -18,7 +18,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Services.Fusions
         {
             Epoch = 10,
             Loop1 = true,
-            RFID = true,
+            RFID = "Some RFID",
             Cam1 = "12A123456",
             Loop2 = true,
             Cam2 = "12A123456",
@@ -31,7 +31,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Services.Fusions
         {
             Epoch = 20,
             Loop1 = true,
-            RFID = true,
+            RFID = "Some RFID",
             Cam1 = "12A123456",
             Loop2 = true,
             Cam2 = "12A123456",

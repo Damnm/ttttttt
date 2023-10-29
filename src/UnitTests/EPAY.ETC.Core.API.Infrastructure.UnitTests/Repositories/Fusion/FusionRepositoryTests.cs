@@ -32,7 +32,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Repositories.Fusion
             {
                 Id = Guid.NewGuid(),
                 Loop1 = true,
-                RFID = true,
+                RFID = "Some RFID",
                 ANPRCam1 = "12A12345",
                 Loop2 = true,
                 CCTVCam2 = "12A12345",

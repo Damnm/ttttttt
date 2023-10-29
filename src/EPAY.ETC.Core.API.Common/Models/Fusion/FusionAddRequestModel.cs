@@ -10,7 +10,9 @@ namespace EPAY.ETC.Core.API.Core.Models.Fusion
         //public Guid ObjectId { get; set; }
         public long Epoch { get; set; }
         public bool Loop1 { get; set; }
-        public bool RFID { get; set; }
+        [MaxLength(50)]
+        [Required(ErrorMessage = "PlateNumber required!")]
+        public string? RFID { get; set; }
         [MaxLength(15)]
         [Required(ErrorMessage = "PlateNumber required!")]
         public string? Cam1 { get; set; }

@@ -20,7 +20,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fusions
         {
             Epoch = 100,
             Loop1 = true,
-            RFID = false,
+            RFID = "Some RFID",
             Cam1 = "12A12345",
             Loop2 = true,
             Cam2 = "12A12345",
@@ -32,7 +32,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fusions
         {
             Epoch = 100,
             Loop1 = true,
-            RFID = false,
+            RFID = "Some RFID",
             Cam1 = "12A12345",
             Loop2 = true,
             Cam2 = "12A12345",
@@ -46,7 +46,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fusions
             CreatedDate = DateTime.Now,
             Epoch = 100,
             Loop1 = true,
-            RFID = false,
+            RFID = "Some RFID",
             ANPRCam1 = "12A12345",
             Loop2 = true,
             CCTVCam2 = "12A12345",
