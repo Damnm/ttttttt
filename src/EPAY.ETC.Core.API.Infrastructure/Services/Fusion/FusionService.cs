@@ -30,8 +30,17 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fusion
             {
                 var entity = _mapper.Map<FusionModel>(input);
 
-                var result = await _repository.AddAsync(entity);
-                return ValidationResult.Success(result);
+                var oldEntry = await _repository.GetByIdAsync(entity.Id);
+
+                if (oldEntry != null)
+                {
+                    entity = _mapper.Map(entity, oldEntry);
+                    await _repository.UpdateAsync(entity);
+
+                    return ValidationResult.Success(entity);
+                }
+
+                return ValidationResult.Success(await _repository.AddAsync(entity));
             }
             catch (Exception ex)
             {

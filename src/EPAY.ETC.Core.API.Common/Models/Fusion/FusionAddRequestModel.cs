@@ -6,7 +6,7 @@ namespace EPAY.ETC.Core.API.Core.Models.Fusion
     [ExcludeFromCodeCoverage]
     public class FusionAddRequestModel
     {
-        //public Guid ObjectId { get; set; }
+        public Guid? Id { get; set; }
         public long Epoch { get; set; }
         public bool Loop1 { get; set; }
         [MaxLength(50)]

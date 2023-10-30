@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using EPAY.ETC.Core.API.Core.Models.Barcode;
-using EPAY.ETC.Core.API.Core.Models.CustomVehicleTypes;
 using EPAY.ETC.Core.API.Core.Models.ETCCheckOuts;
 using EPAY.ETC.Core.API.Core.Models.Fusion;
 using EPAY.ETC.Core.API.Core.Models.ManualBarrierControl;
@@ -48,7 +47,11 @@ namespace EPAY.ETC.Core.API.Mapping
             CreateMap<ManualBarrierControlAddOrUpdateRequestModel, ManualBarrierControlModel>()
                 .ForMember(e => e.CreatedDate, act => act.MapFrom(src => DateTime.Now))
                 .ReverseMap();
-            CreateMap<FusionAddRequestModel, FusionModel>().ReverseMap();
+            CreateMap<FusionAddRequestModel, FusionModel>()
+                .ForMember(e => e.Id, act => act.MapFrom(src => src.Id ?? Guid.NewGuid()))
+                .ForMember(e => e.ANPRCam1, act => act.MapFrom(src => src.Cam1))
+                .ForMember(e => e.CCTVCam2, act => act.MapFrom(src => src.Cam2))
+                .ReverseMap();
             CreateMap<PaymentStatusAddRequestModel, Core.Models.PaymentStatus.PaymentStatusModel>().ReverseMap();
             CreateMap<PaymentAddOrUpdateRequestModel, Core.Models.Payment.PaymentModel>()
                  .ForMember(e => e.Id, act => act.MapFrom(src => src.PaymentId.HasValue ? src.PaymentId : Guid.NewGuid()))
