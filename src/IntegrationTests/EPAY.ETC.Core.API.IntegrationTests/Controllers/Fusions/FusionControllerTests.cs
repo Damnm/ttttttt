@@ -20,9 +20,9 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Controllers.Fusions
             Epoch = 01524,
             Loop1 = true,
             RFID = "Some RFID",
-            Cam1 = "12A12356",
+            ANPRCam1 = "12A12356",
             Loop2 = true,
-            Cam2 = "12A12356",
+            CCTVCam2 = "12A12356",
             Loop3 = true,
             ReversedLoop1 = true,
             ReversedLoop2 = true,
@@ -92,9 +92,9 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Controllers.Fusions
             data?["Epoch"]?.GetValue<float>().Should().Be(request.Epoch);
             data?["Loop1"]?.GetValue<bool>().Should().Be(request.Loop1);
             data?["RFID"]?.GetValue<string>().Should().Be(request.RFID);
-            data?["Cam1"]?.GetValue<string>().Should().Be(request.Cam1);
+            data?["Cam1"]?.GetValue<string>().Should().Be(request.ANPRCam1);
             data?["Loop2"]?.GetValue<bool>().Should().Be(request.Loop2);
-            data?["Cam2"]?.GetValue<string>().Should().Be(request.Cam2);
+            data?["Cam2"]?.GetValue<string>().Should().Be(request.CCTVCam2);
             data?["Loop3"]?.GetValue<bool>().Should().Be(request.Loop3);
             data?["ReversedLoop1"]?.GetValue<bool>().Should().Be(request.ReversedLoop1);
             data?["ReversedLoop2"]?.GetValue<bool>().Should().Be(request.ReversedLoop2);
@@ -132,9 +132,9 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Controllers.Fusions
             request.Epoch = 666;
             request.Loop1 = false;
             request.RFID = "Some RFID";
-            request.Cam1 = "12A9999";
+            request.ANPRCam1 = "12A9999";
             request.Loop2 = false;
-            request.Cam2 = "12A9999";
+            request.CCTVCam2 = "12A9999";
             request.Loop3 = false;
             request.ReversedLoop1 = false;
             request.ReversedLoop2 = false;
@@ -155,9 +155,9 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Controllers.Fusions
             data?["Epoch"]?.GetValue<float>().Should().Be(request.Epoch);
             data?["Loop1"]?.GetValue<bool>().Should().Be(request.Loop1);
             data?["RFID"]?.GetValue<string>().Should().Be(request.RFID);
-            data?["Cam1"]?.GetValue<string>().Should().Be(request.Cam1);
+            data?["Cam1"]?.GetValue<string>().Should().Be(request.ANPRCam1);
             data?["Loop2"]?.GetValue<bool>().Should().Be(request.Loop2);
-            data?["Cam2"]?.GetValue<string>().Should().Be(request.Cam2);
+            data?["Cam2"]?.GetValue<string>().Should().Be(request.CCTVCam2);
             data?["Loop3"]?.GetValue<bool>().Should().Be(request.Loop3);
             data?["ReversedLoop1"]?.GetValue<bool>().Should().Be(request.ReversedLoop1);
             data?["ReversedLoop2"]?.GetValue<bool>().Should().Be(request.ReversedLoop2);
