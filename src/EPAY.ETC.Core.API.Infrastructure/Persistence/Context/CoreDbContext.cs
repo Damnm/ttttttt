@@ -15,6 +15,7 @@ using EPAY.ETC.Core.API.Core.Models.Vehicle;
 using EPAY.ETC.Core.API.Core.Models.VehicleCategories;
 using EPAY.ETC.Core.API.Core.Models.VehicleGroups;
 using EPAY.ETC.Core.Models.Enums;
+using EPAY.ETC.Core.Models.Utils;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System.Diagnostics.CodeAnalysis;

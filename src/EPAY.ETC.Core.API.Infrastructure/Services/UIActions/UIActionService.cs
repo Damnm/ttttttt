@@ -3,7 +3,6 @@ using EPAY.ETC.Core.API.Core.Interfaces.Services.UIActions;
 using EPAY.ETC.Core.API.Core.Models.Configs;
 using EPAY.ETC.Core.API.Core.Models.Fusion;
 using EPAY.ETC.Core.API.Core.Models.Vehicle.ReconcileVehicle;
-using EPAY.ETC.Core.API.Core.Utils;
 using EPAY.ETC.Core.API.Infrastructure.Common.Constants;
 using EPAY.ETC.Core.API.Infrastructure.Common.Extensions;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.CustomVehicleTypes;
@@ -19,6 +18,7 @@ using EPAY.ETC.Core.Models.Fees;
 using EPAY.ETC.Core.Models.Receipt.SessionReports;
 using EPAY.ETC.Core.Models.Request;
 using EPAY.ETC.Core.Models.UI;
+using EPAY.ETC.Core.Models.Utils;
 using EPAY.ETC.Core.Models.Validation;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -296,7 +296,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                 {
                     Qty = paymentStatuses.Count(),
                     GrandTotal = grandTotal,
-                    BottomLine = ConvertUtil.DocTienBangChuV2(grandTotal)
+                    BottomLine = grandTotal.ToMoneyString()
                 };
 
                 var paymentMethodCashs = paymentStatuses

@@ -1,5 +1,4 @@
-﻿using EPAY.ETC.Core.API.Core.Extensions;
-using EPAY.ETC.Core.API.Core.Interfaces.Services.Fees;
+﻿using EPAY.ETC.Core.API.Core.Interfaces.Services.Fees;
 using EPAY.ETC.Core.API.Core.Utils;
 using EPAY.ETC.Core.API.Infrastructure.Common.Utils;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.CustomVehicleTypes;
@@ -7,6 +6,7 @@ using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.FeeVehicleCatego
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.TimeBlockFees;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Vehicle;
 using EPAY.ETC.Core.Models.Enums;
+using EPAY.ETC.Core.Models.Utils;
 using EPAY.ETC.Core.Models.Validation;
 using EPAY.ETC.Core.Models.VehicleFee;
 using Microsoft.Extensions.Logging;

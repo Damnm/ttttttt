@@ -1,9 +1,8 @@
 ﻿using EPAY.ETC.Core.API.Controllers.Fees;
-using EPAY.ETC.Core.API.Core.Extensions;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Fees;
-using EPAY.ETC.Core.API.Core.Models.Enum;
 using EPAY.ETC.Core.API.UnitTests.Helpers;
 using EPAY.ETC.Core.Models.Enums;
+using EPAY.ETC.Core.Models.Utils;
 using EPAY.ETC.Core.Models.Validation;
 using EPAY.ETC.Core.Models.VehicleFee;
 using FluentAssertions;
