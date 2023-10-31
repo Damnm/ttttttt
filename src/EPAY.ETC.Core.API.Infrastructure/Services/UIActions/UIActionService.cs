@@ -228,6 +228,20 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                     Id = Guid.NewGuid()
                 });
 
+                if (result.Status == BarrierActionEnum.Open && request.ManualBarrierType != ManualBarrierTypeEnum.TicketVehicle)
+                {
+                    var processingObjectId = _redisDB.StringGet(RedisConstant.FUSION_PROCESSING);
+                    if (!string.IsNullOrEmpty(processingObjectId) && Guid.TryParse(processingObjectId, out Guid objectId))
+                    {
+                        PaymentModel paymentModel = new PaymentModel()
+                        {
+                            Amount = 0,
+                            PaymentMethod = PaymentMethodEnum.PriorityVehicle,
+                            ObjectId = objectId
+                        };
+                    }
+                }
+
                 return ValidationResult.Success(result);
             }
             catch (Exception ex)
@@ -391,6 +405,9 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                 string laneId = Environment.GetEnvironmentVariable("LANEOUTID_ENVIRONMENT") ?? "1";
 
                 var paidHistories = await _paymentRepository.GetPaidVehicleHistoryAsync(laneId);
+
+                _redisDB.StringSet(RedisConstant.PAID_VEHICLE_HISTORY_KEY, JsonSerializer.Serialize(paidHistories));
+
                 var waitingVehicles = await GetWaitingVehicles();
 
                 var uiModelStr = await _redisDB.StringGetAsync(RedisConstant.UI_MODEL_KEY);
@@ -478,10 +495,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
         }
 
         #region Private method
-        private async Task<List<WaitingVehicleModel>> GetWaitingVehicles()
+        public async Task<List<WaitingVehicleModel>> GetWaitingVehicles()
         {
-            List<WaitingVehicleModel> result = new List<WaitingVehicleModel>();
-
             var fusionObjects = await HashGetListAsync<FusionModel>(null, RedisConstant.SORTED_SET_FUSION_OUT);
             List<WaitingVehicleModel> waitingVehicles = new List<WaitingVehicleModel>();
             if (fusionObjects != null && fusionObjects.Any())
@@ -489,6 +504,17 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                 foreach (var fusion in fusionObjects)
                 {
                     string? plateNumber = fusion.ANPRCam1;
+                    long? inEpoch = null;
+
+                    if (!string.IsNullOrEmpty(fusion.ANPRCam1))
+                    {
+                        var camData = _redisDB.StringGet(RedisConstant.StringType_CameraInKey(fusion.ANPRCam1)).ToString();
+                        if (!string.IsNullOrEmpty(camData))
+                        {
+                            var anprCamValue = JsonSerializer.Deserialize<ANPRCameraModel>(camData);
+                            inEpoch = anprCamValue?.CheckpointTimeEpoch;
+                        }
+                    }
 
                     if (!string.IsNullOrEmpty(fusion.RFID))
                     {
@@ -497,6 +523,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                         {
                             var rfidInValue = JsonSerializer.Deserialize<RFIDDataModel>(rfidIn);
                             plateNumber = rfidInValue?.VehicleInfo?.PlateNumber ?? plateNumber;
+                            inEpoch = rfidInValue?.Epoch;
                         }
                     }
 
@@ -505,12 +532,12 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                     {
                         RFID = fusion.RFID,
                         PlateNumber = plateNumber,
-                        LaneinDateTimeEpoch = fusion.Epoch
+                        LaneinDateTimeEpoch = inEpoch ?? fusion.Epoch
                     });
                 }
             }
 
-            return result;
+            return waitingVehicles;
         }
         private async Task<List<T>?> HashGetListAsync<T>(Func<T, bool>? action, string sortedKey, Order order = Order.Ascending)
         {
