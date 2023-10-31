@@ -56,11 +56,23 @@ namespace EPAY.ETC.Core.API.Controllers.Devices
                 {
                     var barrierRequest = new BarrierModel()
                     {
-                        Action = result.Data?.Status ?? ETC.Core.Models.Enums.BarrierActionEnum.Close
+                        Action = result.Data?.BarrierOpenStatus?.Status ?? ETC.Core.Models.Enums.BarrierActionEnum.Close
                     };
 
                     string message = JsonSerializer.Serialize(barrierRequest);
                     _rabbitMQPublisherService.SendMessage(message, ETC.Core.Models.Enums.PublisherTargetEnum.Barrier);
+
+                    if (result.Data?.Payment != null)
+                    {
+                        message = JsonSerializer.Serialize(result.Data?.Payment);
+                        _rabbitMQPublisherService.SendMessage(message, ETC.Core.Models.Enums.PublisherTargetEnum.Payment);
+                    }
+
+                    if (result.Data?.Fee != null)
+                    {
+                        message = JsonSerializer.Serialize(result.Data?.Fee);
+                        _rabbitMQPublisherService.SendMessage(message, ETC.Core.Models.Enums.PublisherTargetEnum.Fee);
+                    }
                 }
 
                 return Ok(result);

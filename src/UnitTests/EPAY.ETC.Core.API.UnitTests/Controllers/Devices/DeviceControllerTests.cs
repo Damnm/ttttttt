@@ -1,5 +1,6 @@
 ﻿using EPAY.ETC.Core.API.Controllers.Devices;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.UIActions;
+using EPAY.ETC.Core.API.Core.Models.UI;
 using EPAY.ETC.Core.API.Services;
 using EPAY.ETC.Core.API.UnitTests.Common;
 using EPAY.ETC.Core.API.UnitTests.Helpers;
@@ -29,10 +30,13 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Devices
             Action = BarrierActionEnum.Open,
             Limit = 0
         };
-        private BarrierOpenStatus barrierOpenStatusResponse = new BarrierOpenStatus()
+        private ManipulateBarrierResponseModel barrierOpenStatusResponse = new ManipulateBarrierResponseModel()
         {
-            Limit = 0,
-            Status = BarrierActionEnum.Open
+            BarrierOpenStatus = new BarrierOpenStatus()
+            {
+                Limit = 0,
+                Status = BarrierActionEnum.Open
+            }
         };
         #endregion
 

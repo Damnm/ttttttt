@@ -2,6 +2,7 @@
 using EPAY.ETC.Core.API.Core.Interfaces.Services.UIActions;
 using EPAY.ETC.Core.API.Core.Models.Configs;
 using EPAY.ETC.Core.API.Core.Models.Fusion;
+using EPAY.ETC.Core.API.Core.Models.UI;
 using EPAY.ETC.Core.API.Core.Models.Vehicle.ReconcileVehicle;
 using EPAY.ETC.Core.API.Infrastructure.Common.Constants;
 using EPAY.ETC.Core.API.Infrastructure.Common.Extensions;
@@ -206,13 +207,15 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
             }
         }
 
-        public async Task<ValidationResult<BarrierOpenStatus>> ManipulateBarrier(BarrierRequestModel request)
+        public async Task<ValidationResult<ManipulateBarrierResponseModel>> ManipulateBarrier(BarrierRequestModel request)
         {
             try
             {
                 _logger.LogInformation($"Executing {nameof(ManipulateBarrier)} method...");
 
-                BarrierOpenStatus result = new BarrierOpenStatus()
+                ManipulateBarrierResponseModel result = new ManipulateBarrierResponseModel();
+
+                result.BarrierOpenStatus = new BarrierOpenStatus()
                 {
                     Status = request.Action!,
                     Limit = request.Limit ?? 1
@@ -228,17 +231,35 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                     Id = Guid.NewGuid()
                 });
 
-                if (result.Status == BarrierActionEnum.Open && request.ManualBarrierType != ManualBarrierTypeEnum.TicketVehicle)
+                if (result.BarrierOpenStatus.Status == BarrierActionEnum.Open && request.ManualBarrierType != ManualBarrierTypeEnum.TicketVehicle)
                 {
-                    var processingObjectId = _redisDB.StringGet(RedisConstant.FUSION_PROCESSING);
+                    var processingObjectId = _redisDB.StringGet(RedisConstant.FUSION_PROCESSING).ToString();
                     if (!string.IsNullOrEmpty(processingObjectId) && Guid.TryParse(processingObjectId, out Guid objectId))
                     {
-                        PaymentModel paymentModel = new PaymentModel()
+                        var uiModel = await LoadCurrentUIAsync();
+
+                        result.Payment = new PaymentModel()
                         {
+                            ObjectId = objectId,
                             Amount = 0,
                             PaymentMethod = PaymentMethodEnum.PriorityVehicle,
-                            ObjectId = objectId
+                            CheckOutTime = uiModel?.Data?.Body?.Out?.LaneOutDateEpoch ?? DateTimeOffset.Now.ToUnixTimeSeconds(),
+                            PaymentId = uiModel?.Data?.Body?.Payment?.PaymentId ?? Guid.Empty
                         };
+
+                        var lastLoopStatus = _redisDB.StringGet(RedisConstant.LAST_LOOP_UNPAID);
+                        if (bool.TryParse(lastLoopStatus, out bool lastLoopStatusValue) && lastLoopStatusValue)
+                        {
+                            var feeModelStr = _redisDB.StringGet(RedisConstant.StringType_FeeModules(processingObjectId)).ToString();
+                            if (!string.IsNullOrEmpty(feeModelStr))
+                            {
+                                result.Fee = JsonSerializer.Deserialize<FeeModel>(feeModelStr);
+                                if (result.Fee != null)
+                                {
+                                    result.Fee.FeeType = FeeTypeEnum.FeeCommitment;
+                                }
+                            }
+                        }
                     }
                 }
 
