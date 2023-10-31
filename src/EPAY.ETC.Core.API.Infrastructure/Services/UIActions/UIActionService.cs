@@ -222,10 +222,17 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                         {
                             ObjectId = objectId,
                             Amount = 0,
-                            PaymentMethod = PaymentMethodEnum.PriorityVehicle,
+                            PaymentMethod = PaymentMethodEnum.Priority,
                             CheckOutTime = uiModel?.Data?.Body?.Out?.LaneOutDateEpoch ?? DateTimeOffset.Now.ToUnixTimeSeconds(),
                             PaymentId = uiModel?.Data?.Body?.Payment?.PaymentId ?? Guid.Empty
                         };
+
+                        switch (request.ManualBarrierType)
+                        {
+                            case ManualBarrierTypeEnum.FreeEntry:
+                                result.Payment.PaymentMethod = PaymentMethodEnum.FreeEntry;
+                                break;
+                        }
 
                         var lastLoopStatus = _redisDB.StringGet(RedisConstant.LAST_LOOP_UNPAID);
                         if (bool.TryParse(lastLoopStatus, out bool lastLoopStatusValue) && lastLoopStatusValue)
