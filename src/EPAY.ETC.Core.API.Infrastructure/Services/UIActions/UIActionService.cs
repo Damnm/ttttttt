@@ -221,6 +221,9 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                     Id = Guid.NewGuid()
                 });
 
+                var processingObjectId = _redisDB.StringGet(RedisConstant.FUSION_PROCESSING).ToString();
+                Guid objectId;
+
                 switch (request.Action)
                 {
                     case BarrierActionEnum.Open:
@@ -239,8 +242,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                         {
                             _logger.LogInformation($"Processing logic for {request.ManualBarrierType}({request.ManualBarrierType.ToDescriptionString()})");
 
-                            var processingObjectId = _redisDB.StringGet(RedisConstant.FUSION_PROCESSING).ToString();
-                            if (!string.IsNullOrEmpty(processingObjectId) && Guid.TryParse(processingObjectId, out Guid objectId))
+                            if (!string.IsNullOrEmpty(processingObjectId) && Guid.TryParse(processingObjectId, out objectId))
                             {
                                 var uiModel = await LoadCurrentUIAsync();
 
@@ -277,6 +279,21 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                         _logger.LogInformation($"Remove key from Redis: Key={RedisConstant.HASH_BARRIER_OPEN_STATUS}, {RedisConstant.BARCODE_PAYMENT_METHOD}");
                         await _redisDB.KeyDeleteAsync(RedisConstant.HASH_BARRIER_OPEN_STATUS);
                         await _redisDB.KeyDeleteAsync(RedisConstant.BARCODE_PAYMENT_METHOD);
+
+                        _logger.LogInformation($"Processing re-send fee calculate if exists trans in queue...");
+                        if (!string.IsNullOrEmpty(processingObjectId) && Guid.TryParse(processingObjectId, out objectId))
+                        {
+                            var feeModelStr = _redisDB.StringGet(RedisConstant.StringType_FeeModules(processingObjectId)).ToString();
+                            if (!string.IsNullOrEmpty(feeModelStr))
+                            {
+                                result.Fee = JsonSerializer.Deserialize<FeeModel>(feeModelStr);
+                                if (result.Fee != null)
+                                {
+                                    result.Fee.FeeType = FeeTypeEnum.FeeCalculation;
+                                }
+                                _logger.LogInformation($"Send message to Fees core with message={JsonSerializer.Serialize(result.Fee)}");
+                            }
+                        }
                         break;
                 }
 
