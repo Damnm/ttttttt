@@ -224,13 +224,21 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                 switch (request.Action)
                 {
                     case BarrierActionEnum.Open:
+                        _logger.LogInformation($"Save to Redis with Key={CoreConstant.HASH_BARRIER_OPEN_STATUS}, Value={JsonSerializer.Serialize(result.BarrierOpenStatus)}");
+
                         await _redisDB.HashSetAsync(CoreConstant.HASH_BARRIER_OPEN_STATUS, result.BarrierOpenStatus.ToHashEntries());
 
                         if (paymentMethod != null)
+                        {
+                            _logger.LogInformation($"Save to Redis with Key={RedisConstant.BARCODE_PAYMENT_METHOD}, Value={paymentMethod}");
+
                             await _redisDB.StringSetAsync(RedisConstant.BARCODE_PAYMENT_METHOD, paymentMethod.ToString());
+                        }
 
                         if (request.ManualBarrierType != ManualBarrierTypeEnum.OneTimePass)
                         {
+                            _logger.LogInformation($"Processing logic for {request.ManualBarrierType}({request.ManualBarrierType.ToDescriptionString()})");
+
                             var processingObjectId = _redisDB.StringGet(RedisConstant.FUSION_PROCESSING).ToString();
                             if (!string.IsNullOrEmpty(processingObjectId) && Guid.TryParse(processingObjectId, out Guid objectId))
                             {
@@ -245,6 +253,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                                     PaymentId = uiModel?.Data?.Body?.Payment?.PaymentId ?? Guid.Empty
                                 };
 
+                                _logger.LogInformation($"Send message to Payment core with message={JsonSerializer.Serialize(result.Payment)}");
+
                                 var lastLoopStatus = _redisDB.StringGet(RedisConstant.LAST_LOOP_UNPAID);
                                 if (bool.TryParse(lastLoopStatus, out bool lastLoopStatusValue) && lastLoopStatusValue)
                                 {
@@ -256,6 +266,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                                         {
                                             result.Fee.FeeType = FeeTypeEnum.FeeCommitment;
                                         }
+                                        _logger.LogInformation($"Send message to Fees core with message={JsonSerializer.Serialize(result.Fee)}");
                                     }
                                 }
                             }
@@ -263,6 +274,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                         break;
 
                     case BarrierActionEnum.Close:
+                        _logger.LogInformation($"Remove key from Redis: Key={CoreConstant.HASH_BARRIER_OPEN_STATUS}, {RedisConstant.BARCODE_PAYMENT_METHOD}");
                         await _redisDB.KeyDeleteAsync(CoreConstant.HASH_BARRIER_OPEN_STATUS);
                         await _redisDB.KeyDeleteAsync(RedisConstant.BARCODE_PAYMENT_METHOD);
                         break;
