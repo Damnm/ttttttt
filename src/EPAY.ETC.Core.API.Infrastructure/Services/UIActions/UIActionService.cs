@@ -201,8 +201,6 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                     Limit = request.Limit ?? 1
                 };
 
-                await _redisDB.HashSetAsync(CoreConstant.HASH_BARRIER_OPEN_STATUS, result.ToHashEntries());
-
                 PaymentMethodEnum? paymentMethod = null;
                 switch (request.ManualBarrierType)
                 {
@@ -223,46 +221,51 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                     Id = Guid.NewGuid()
                 });
 
-                if (request.Action == BarrierActionEnum.Open)
+                switch (request.Action)
                 {
-                    if (paymentMethod != null)
-                        await _redisDB.StringSetAsync(RedisConstant.BARCODE_PAYMENT_METHOD, paymentMethod.ToString());
+                    case BarrierActionEnum.Open:
+                        await _redisDB.HashSetAsync(CoreConstant.HASH_BARRIER_OPEN_STATUS, result.BarrierOpenStatus.ToHashEntries());
 
-                    if (request.ManualBarrierType != ManualBarrierTypeEnum.OneTimePass)
-                    {
-                        var processingObjectId = _redisDB.StringGet(RedisConstant.FUSION_PROCESSING).ToString();
-                        if (!string.IsNullOrEmpty(processingObjectId) && Guid.TryParse(processingObjectId, out Guid objectId))
+                        if (paymentMethod != null)
+                            await _redisDB.StringSetAsync(RedisConstant.BARCODE_PAYMENT_METHOD, paymentMethod.ToString());
+
+                        if (request.ManualBarrierType != ManualBarrierTypeEnum.OneTimePass)
                         {
-                            var uiModel = await LoadCurrentUIAsync();
-
-                            result.Payment = new PaymentModel()
+                            var processingObjectId = _redisDB.StringGet(RedisConstant.FUSION_PROCESSING).ToString();
+                            if (!string.IsNullOrEmpty(processingObjectId) && Guid.TryParse(processingObjectId, out Guid objectId))
                             {
-                                ObjectId = objectId,
-                                Amount = 0,
-                                PaymentMethod = paymentMethod,
-                                CheckOutTime = uiModel?.Data?.Body?.Out?.LaneOutDateEpoch ?? DateTimeOffset.Now.ToUnixTimeSeconds(),
-                                PaymentId = uiModel?.Data?.Body?.Payment?.PaymentId ?? Guid.Empty
-                            };
+                                var uiModel = await LoadCurrentUIAsync();
 
-                            var lastLoopStatus = _redisDB.StringGet(RedisConstant.LAST_LOOP_UNPAID);
-                            if (bool.TryParse(lastLoopStatus, out bool lastLoopStatusValue) && lastLoopStatusValue)
-                            {
-                                var feeModelStr = _redisDB.StringGet(RedisConstant.StringType_FeeModules(processingObjectId)).ToString();
-                                if (!string.IsNullOrEmpty(feeModelStr))
+                                result.Payment = new PaymentModel()
                                 {
-                                    result.Fee = JsonSerializer.Deserialize<FeeModel>(feeModelStr);
-                                    if (result.Fee != null)
+                                    ObjectId = objectId,
+                                    Amount = 0,
+                                    PaymentMethod = paymentMethod,
+                                    CheckOutTime = uiModel?.Data?.Body?.Out?.LaneOutDateEpoch ?? DateTimeOffset.Now.ToUnixTimeSeconds(),
+                                    PaymentId = uiModel?.Data?.Body?.Payment?.PaymentId ?? Guid.Empty
+                                };
+
+                                var lastLoopStatus = _redisDB.StringGet(RedisConstant.LAST_LOOP_UNPAID);
+                                if (bool.TryParse(lastLoopStatus, out bool lastLoopStatusValue) && lastLoopStatusValue)
+                                {
+                                    var feeModelStr = _redisDB.StringGet(RedisConstant.StringType_FeeModules(processingObjectId)).ToString();
+                                    if (!string.IsNullOrEmpty(feeModelStr))
                                     {
-                                        result.Fee.FeeType = FeeTypeEnum.FeeCommitment;
+                                        result.Fee = JsonSerializer.Deserialize<FeeModel>(feeModelStr);
+                                        if (result.Fee != null)
+                                        {
+                                            result.Fee.FeeType = FeeTypeEnum.FeeCommitment;
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
-                }
-                else if (request.Action == BarrierActionEnum.Close)
-                {
-                    await _redisDB.KeyDeleteAsync(RedisConstant.BARCODE_PAYMENT_METHOD);
+                        break;
+
+                    case BarrierActionEnum.Close:
+                        await _redisDB.KeyDeleteAsync(CoreConstant.HASH_BARRIER_OPEN_STATUS);
+                        await _redisDB.KeyDeleteAsync(RedisConstant.BARCODE_PAYMENT_METHOD);
+                        break;
                 }
 
                 return ValidationResult.Success(result);
