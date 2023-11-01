@@ -75,7 +75,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.ManualBarrierControls
         }
         #endregion
         #region RemoveAsync
-        public async Task<ValidationResult<ManualBarrierControlModel>> RemoveAsync(Guid id)
+        public async Task<ValidationResult<ManualBarrierControlModel?>> RemoveAsync(Guid id)
         {
             _logger.LogInformation($"Executing {nameof(RemoveAsync)} method...");
             try
@@ -83,7 +83,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.ManualBarrierControls
                 var result = await _repository.GetByIdAsync(id);
                 if (result == null)
                 {
-                    return ValidationResult.Failed<ManualBarrierControlModel>(null, new List<ValidationError>()
+                    return ValidationResult.Failed<ManualBarrierControlModel?>(new List<ValidationError>()
                     {
                         ValidationError.NotFound
                     });

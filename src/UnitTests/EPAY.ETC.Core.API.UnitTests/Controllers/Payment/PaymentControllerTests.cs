@@ -230,7 +230,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Payment
         public async Task GivenValidRequest_WhenRemoveAsyncIsCalled_ThenReturnCorrectResult()
         {
             // Arrange
-            var responseMock = new ValidationResult<PaymentModel>(new List<ValidationError>());
+            var responseMock = new ValidationResult<PaymentModel?>(new List<ValidationError>());
             _paymentServiceMock.Setup(x => x.RemoveAsync(It.IsNotNull<Guid>())).ReturnsAsync(responseMock);
 
             // Act
@@ -251,7 +251,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Payment
         public async Task GivenValidRequestAndNonExistingSettingsGuid_WhenRemoveAsyncIsCalled_ThenReturnNotFound()
         {
             // Arrange
-            var responseMock = new ValidationResult<PaymentModel>(new List<ValidationError>()
+            var responseMock = new ValidationResult<PaymentModel?>(new List<ValidationError>()
             {
                 ValidationError.NotFound
             });

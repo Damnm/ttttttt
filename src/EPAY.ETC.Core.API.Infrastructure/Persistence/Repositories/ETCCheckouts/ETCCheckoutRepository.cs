@@ -72,7 +72,13 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.ETCCheckouts
 
                 ETCCheckoutFilterResultDto result = new ETCCheckoutFilterResultDto();
 
-                var entities = _dbContext.ETCCheckOuts.AsNoTracking().Include(x => x.Payment).Include(x => x.Payment.Fee).AsQueryable();
+                var entities = _dbContext.ETCCheckOuts
+                    .AsNoTracking()
+                    .Include(x => x.Payment)
+#nullable disable
+                    .ThenInclude(x => x.Fee)
+#nullable restore
+                    .AsQueryable();
 
                 if (filter != null)
                 {

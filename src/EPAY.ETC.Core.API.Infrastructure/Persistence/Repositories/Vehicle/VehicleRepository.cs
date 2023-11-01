@@ -38,17 +38,17 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Vehicle
         }
         #endregion
         #region GetAsync
-        public async Task<IEnumerable<VehicleModel>> GetAllAsync(Expression<Func<VehicleModel, bool>>? expression = null)
+        public Task<IEnumerable<VehicleModel>> GetAllAsync(Expression<Func<VehicleModel, bool>>? expression = null)
         {
             _logger.LogInformation($"Executing {nameof(GetAllAsync)} method...");
             try
             {
                 if (expression == null)
                 {
-                    return _dbContext.Vehicles.AsNoTracking();
+                    return Task.FromResult(_dbContext.Vehicles.AsNoTracking().AsEnumerable());
                 }
 
-                return _dbContext.Vehicles.AsNoTracking().Where(expression);
+                return Task.FromResult(_dbContext.Vehicles.AsNoTracking().Where(expression).AsEnumerable());
             }
             catch (Exception ex)
             {
@@ -58,14 +58,14 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Vehicle
         }
         #endregion
         #region GetByIdAsync
-        public async Task<VehicleModel?> GetByIdAsync(Guid id)
+        public Task<VehicleModel?> GetByIdAsync(Guid id)
         {
             _logger.LogInformation($"Executing {nameof(GetByIdAsync)} method...");
 
             try
             {
                 var vehicle = _dbContext.Vehicles.AsNoTracking().FirstOrDefault(x => x.Id == id);
-                return vehicle;
+                return Task.FromResult(vehicle);
             }
             catch (Exception ex)
             {

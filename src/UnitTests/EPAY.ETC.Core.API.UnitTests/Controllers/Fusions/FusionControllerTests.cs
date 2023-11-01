@@ -209,7 +209,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Fusions
         public async Task GivenValidRequest_WhenRemoveAsyncIsCalled_ThenReturnCorrectResult()
         {
             // Arrange
-            var responseMock = new ValidationResult<FusionModel>(new List<ValidationError>());
+            var responseMock = new ValidationResult<FusionModel?>(new List<ValidationError>());
             _fusionServiceMock.Setup(x => x.RemoveAsync(It.IsNotNull<Guid>())).ReturnsAsync(responseMock);
 
             // Act
@@ -230,7 +230,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Fusions
         public async Task GivenValidRequestAndNonExistingSettingsGuid_WhenRemoveAsyncIsCalled_ThenReturnNotFound()
         {
             // Arrange
-            var responseMock = new ValidationResult<FusionModel>(new List<ValidationError>()
+            var responseMock = new ValidationResult<FusionModel?>(new List<ValidationError>()
             {
                 ValidationError.NotFound
             });

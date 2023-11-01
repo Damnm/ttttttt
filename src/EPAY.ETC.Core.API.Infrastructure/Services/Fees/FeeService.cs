@@ -48,7 +48,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
                 
                 if (string.IsNullOrEmpty(entity.LaneOutId))
                 {
-                    entity.LaneOutId = Environment.GetEnvironmentVariable("LANEOUTID_ENVIRONMENT") ?? "1";
+                    entity.LaneOutId = Environment.GetEnvironmentVariable(CoreConstant.ENVIRONMENT_LANE_OUT) ?? "1";
                 }
                 _logger.LogWarning($"Executing {nameof(AddAsync)} method, add new object {JsonSerializer.Serialize(input)} to database.");
                 var result = await _repository.AddAsync(entity);
@@ -161,7 +161,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
 
                 if (string.IsNullOrEmpty(entity.LaneOutId))
                 {
-                    entity.LaneOutId = Environment.GetEnvironmentVariable("LANEOUTID_ENVIRONMENT") ?? "1";
+                    entity.LaneOutId = Environment.GetEnvironmentVariable(CoreConstant.ENVIRONMENT_LANE_OUT) ?? "1";
                 }
                 _logger.LogWarning($"Executing {nameof(UpdateAsync)} method, found object {JsonSerializer.Serialize(request)} in database and updates its.");
                 await _repository.UpdateAsync(entity);
@@ -190,11 +190,12 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
                 if (inputVehicle.Length>=15)
                 {
                     var keyRFIDVehicles = await _redisDB.ExecuteAsync("keys", RedisConstant.StringType_RFIDInKey($"*{inputVehicle}*"));
-                    if (keyRFIDVehicles != null)
+                    var redisKeys = (RedisKey[]?)keyRFIDVehicles;
+                    if (redisKeys != null)
                     {
-                        var laneInRFIDVehicle = await _redisDB.StringGetAsync((RedisKey[]?)keyRFIDVehicles);
-                        List<Core.Models.Devices.RFID.RFIDModel?> resultData = laneInRFIDVehicle.ToList()
-                            .Select(s => JsonSerializer.Deserialize<Core.Models.Devices.RFID.RFIDModel>(s.ToString())).ToList();
+                        var laneInRFIDVehicle = await _redisDB.StringGetAsync(redisKeys);
+                        List<Core.Models.Devices.RFID.RFIDModel> resultData = laneInRFIDVehicle.ToList()
+                            .Select(s => JsonSerializer.Deserialize<Core.Models.Devices.RFID.RFIDModel>(s.ToString()) ?? new Core.Models.Devices.RFID.RFIDModel()).ToList();
                         if (resultData != null && resultData.Count > 0)
                         {
                             result = _mapper.Map<List<Core.Models.Devices.RFID.RFIDModel>, List<LaneInVehicleModel>>(resultData);
@@ -205,11 +206,12 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
                 else if (inputVehicle.Length < 15)
                 {
                     var keyCAMVehicles = await _redisDB.ExecuteAsync("keys", RedisConstant.StringType_CameraInKey($"*{inputVehicle}*"));
-                    if (keyCAMVehicles != null)
+                    var redisKeys = (RedisKey[]?)keyCAMVehicles;
+                    if (redisKeys != null)
                     {
-                        var laneInCAMVehicle = await _redisDB.StringGetAsync((RedisKey[]?)keyCAMVehicles);
-                        List<ANPRCameraModel?> resultData = laneInCAMVehicle.ToList()
-                            .Select(s => JsonSerializer.Deserialize<ANPRCameraModel>(s.ToString())).ToList();
+                        var laneInCAMVehicle = await _redisDB.StringGetAsync(redisKeys);
+                        List<ANPRCameraModel> resultData = laneInCAMVehicle.ToList()
+                            .Select(s => JsonSerializer.Deserialize<ANPRCameraModel>(s.ToString()) ?? new ANPRCameraModel()).ToList();
                         if (resultData != null && resultData.Count > 0)
                         {
                             result = _mapper.Map<List<ANPRCameraModel>, List<LaneInVehicleModel>>(resultData);

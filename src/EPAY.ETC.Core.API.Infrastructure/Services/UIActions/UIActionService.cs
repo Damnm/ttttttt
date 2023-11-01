@@ -224,9 +224,9 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                 switch (request.Action)
                 {
                     case BarrierActionEnum.Open:
-                        _logger.LogInformation($"Save to Redis with Key={CoreConstant.HASH_BARRIER_OPEN_STATUS}, Value={JsonSerializer.Serialize(result.BarrierOpenStatus)}");
+                        _logger.LogInformation($"Save to Redis with Key={RedisConstant.HASH_BARRIER_OPEN_STATUS}, Value={JsonSerializer.Serialize(result.BarrierOpenStatus)}");
 
-                        await _redisDB.HashSetAsync(CoreConstant.HASH_BARRIER_OPEN_STATUS, result.BarrierOpenStatus.ToHashEntries());
+                        await _redisDB.HashSetAsync(RedisConstant.HASH_BARRIER_OPEN_STATUS, result.BarrierOpenStatus.ToHashEntries());
 
                         if (paymentMethod != null)
                         {
@@ -274,8 +274,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                         break;
 
                     case BarrierActionEnum.Close:
-                        _logger.LogInformation($"Remove key from Redis: Key={CoreConstant.HASH_BARRIER_OPEN_STATUS}, {RedisConstant.BARCODE_PAYMENT_METHOD}");
-                        await _redisDB.KeyDeleteAsync(CoreConstant.HASH_BARRIER_OPEN_STATUS);
+                        _logger.LogInformation($"Remove key from Redis: Key={RedisConstant.HASH_BARRIER_OPEN_STATUS}, {RedisConstant.BARCODE_PAYMENT_METHOD}");
+                        await _redisDB.KeyDeleteAsync(RedisConstant.HASH_BARRIER_OPEN_STATUS);
                         await _redisDB.KeyDeleteAsync(RedisConstant.BARCODE_PAYMENT_METHOD);
                         break;
                 }
@@ -440,7 +440,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                 _logger.LogInformation($"Executing {nameof(LoadCurrentUIAsync)} method...");
 
                 UIModel? result = null;
-                string laneId = Environment.GetEnvironmentVariable("LANEOUTID_ENVIRONMENT") ?? "1";
+                string laneId = Environment.GetEnvironmentVariable(CoreConstant.ENVIRONMENT_LANE_OUT) ?? "1";
 
                 var paidHistories = await _paymentRepository.GetPaidVehicleHistoryAsync(laneId);
 

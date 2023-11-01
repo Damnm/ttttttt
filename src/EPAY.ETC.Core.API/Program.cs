@@ -3,6 +3,7 @@ using EPAY.ETC.Core.API.Infrastructure.Models.Configs;
 using EPAY.ETC.Core.API.Infrastructure.Persistence;
 using EPAY.ETC.Core.API.Models.Configs;
 using EPAY.ETC.Core.API.Services;
+using EPAY.ETC.Core.Models.Constants;
 using EPAY.ETC.Core.Publisher.DependencyInjectionExtensions;
 using EPAY.ETC.Core.RabbitMQ.DependencyInjectionExtensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -19,7 +20,7 @@ using System.Text.Json.Serialization;
 var builder = WebApplication.CreateBuilder(args);
 ConfigurationManager config = builder.Configuration;
 
-var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+var environmentName = Environment.GetEnvironmentVariable(CoreConstant.ENVIRONMENT_BASE);
 builder.Configuration.AddJsonFile($"appsettings.{environmentName}.json", optional: true);
 
 // Config IOptions

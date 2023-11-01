@@ -298,7 +298,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Payment
         public async Task GivenValidRequestButNotFound_WhenGetPaidVehicleHistoryAsyncIsCalled_ThenReturnCorrectResult()
         {
             // Arrange
-            List<PaidVehicleHistoryModel> paidVehicleHis = null;
+            List<PaidVehicleHistoryModel>? paidVehicleHis = null;
             _paymentRepositoryMock.Setup(x => x.GetPaidVehicleHistoryAsync(It.IsAny<string>())).ReturnsAsync(paidVehicleHis);
 
             // Act

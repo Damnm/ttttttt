@@ -1,5 +1,4 @@
-﻿using EPAY.ETC.Core.API.Core.Extensions;
-using EPAY.ETC.Core.API.Core.Models.Barcode;
+﻿using EPAY.ETC.Core.API.Core.Models.Barcode;
 using EPAY.ETC.Core.API.Core.Models.Configs;
 using EPAY.ETC.Core.API.Core.Models.CustomVehicleTypes;
 using EPAY.ETC.Core.API.Core.Models.ETCCheckOuts;
@@ -14,6 +13,7 @@ using EPAY.ETC.Core.API.Core.Models.TransactionLog;
 using EPAY.ETC.Core.API.Core.Models.Vehicle;
 using EPAY.ETC.Core.API.Core.Models.VehicleCategories;
 using EPAY.ETC.Core.API.Core.Models.VehicleGroups;
+using EPAY.ETC.Core.Models.Constants;
 using EPAY.ETC.Core.Models.Enums;
 using EPAY.ETC.Core.Models.Utils;
 using Microsoft.EntityFrameworkCore;
@@ -66,7 +66,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                 .HasMaxLength(50)
                 .HasConversion(new EnumToStringConverter<CustomVehicleTypeEnum>());
 
-            bool isDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
+            bool isDevelopment = Environment.GetEnvironmentVariable(CoreConstant.ENVIRONMENT_BASE) == "Development";
 
             modelBuilder.Entity<CustomVehicleTypeModel>().HasData(
                 new CustomVehicleTypeModel()

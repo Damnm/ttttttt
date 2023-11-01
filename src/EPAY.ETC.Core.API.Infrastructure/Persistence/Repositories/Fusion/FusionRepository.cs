@@ -59,14 +59,14 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Fusion
         }
         #endregion
         #region GetByIdAsync
-        public async Task<FusionModel?> GetByIdAsync(Guid id)
+        public Task<FusionModel?> GetByIdAsync(Guid id)
         {
             _logger.LogInformation($"Executing {nameof(GetByIdAsync)} method...");
 
             try
             {
                 var fusion = _dbContext.Fusions.AsNoTracking().FirstOrDefault(x => x.Id == id);
-                return fusion;
+                return Task.FromResult(fusion);
             }
             catch (Exception ex)
             {

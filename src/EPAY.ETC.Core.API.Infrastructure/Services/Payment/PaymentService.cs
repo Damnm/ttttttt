@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Payment;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Payment;
+using EPAY.ETC.Core.Models.Constants;
 using EPAY.ETC.Core.Models.Fees.PaidVehicleHistory;
 using EPAY.ETC.Core.Models.Request;
 using EPAY.ETC.Core.Models.Validation;
@@ -81,7 +82,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Payment
         #endregion
 
         #region RemoveAsync
-        public async Task<ValidationResult<PaymentModel>> RemoveAsync(Guid id)
+        public async Task<ValidationResult<PaymentModel?>> RemoveAsync(Guid id)
         {
             _logger.LogInformation($"Executing {nameof(RemoveAsync)} method...");
             try
@@ -89,7 +90,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Payment
                 var result = await _repository.GetByIdAsync(id);
                 if (result == null)
                 {
-                    return ValidationResult.Failed<PaymentModel>(null, new List<ValidationError>()
+                    return ValidationResult.Failed<PaymentModel?>(new List<ValidationError>()
                     {
                         ValidationError.NotFound
                     });
@@ -172,7 +173,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Payment
             {
                 if (string.IsNullOrEmpty(laneId))
                 {
-                    laneId = Environment.GetEnvironmentVariable("LANEOUTID_ENVIRONMENT") ?? "1";
+                    laneId = Environment.GetEnvironmentVariable(CoreConstant.ENVIRONMENT_LANE_OUT) ?? "1";
                 }
 
                 var result = await _repository.GetPaidVehicleHistoryAsync(laneId);

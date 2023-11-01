@@ -58,14 +58,14 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.ManualBarrie
         }
         #endregion
         #region GetByIdAsync
-        public async Task<ManualBarrierControlModel?> GetByIdAsync(Guid id)
+        public Task<ManualBarrierControlModel?> GetByIdAsync(Guid id)
         {
             _logger.LogInformation($"Executing {nameof(GetByIdAsync)} method...");
 
             try
             {
                 var manualbarriercontrol = _dbContext.ManualBarrierControls.AsNoTracking().FirstOrDefault(x => x.Id == id);
-                return manualbarriercontrol;
+                return Task.FromResult(manualbarriercontrol);
             }
             catch (Exception ex)
             {

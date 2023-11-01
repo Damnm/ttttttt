@@ -218,7 +218,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.ManualBarrierControls
         public async Task GivenValidRequest_WhenRemoveAsyncIsCalled_ThenReturnCorrectResult()
         {
             // Arrange
-            var responseMock = new ValidationResult<ManualBarrierControlModel>(new List<ValidationError>());
+            var responseMock = new ValidationResult<ManualBarrierControlModel?>(new List<ValidationError>());
             _manualBarrierControlsServiceMock.Setup(x => x.RemoveAsync(It.IsNotNull<Guid>())).ReturnsAsync(responseMock);
 
             // Act
@@ -239,7 +239,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.ManualBarrierControls
         public async Task GivenValidRequestAndNonExistingSettingsGuid_WhenRemoveAsyncIsCalled_ThenReturnNotFound()
         {
             // Arrange
-            var responseMock = new ValidationResult<ManualBarrierControlModel>(new List<ValidationError>()
+            var responseMock = new ValidationResult<ManualBarrierControlModel?>(new List<ValidationError>()
             {
                 ValidationError.NotFound
             });
@@ -287,7 +287,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.ManualBarrierControls
         public async Task GivenValidRequest_WhenGetByIdAsyncIsCalled_ThenReturnCorrectResult()
         {
             // Arrange
-            responseMock.Data.Action = BarrierActionEnum.Open;
+            responseMock.Data!.Action = BarrierActionEnum.Open;
             _manualBarrierControlsServiceMock.Setup(x => x.GetByIdAsync(It.IsNotNull<Guid>())).ReturnsAsync(responseMock);
 
             // Act

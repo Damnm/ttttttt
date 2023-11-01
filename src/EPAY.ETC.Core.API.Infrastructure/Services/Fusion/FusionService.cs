@@ -74,7 +74,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fusion
         }
         #endregion
         #region RemoveAsync
-        public async Task<ValidationResult<FusionModel>> RemoveAsync(Guid id)
+        public async Task<ValidationResult<FusionModel?>> RemoveAsync(Guid id)
         {
             _logger.LogInformation($"Executing {nameof(RemoveAsync)} method...");
             try
@@ -82,7 +82,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fusion
                 var result = await _repository.GetByIdAsync(id);
                 if (result == null)
                 {
-                    return ValidationResult.Failed<FusionModel>(null, new List<ValidationError>()
+                    return ValidationResult.Failed<FusionModel?>(new List<ValidationError>()
                     {
                         ValidationError.NotFound
                     });

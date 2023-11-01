@@ -264,7 +264,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.PaymentStatus
         public async Task GivenValidRequest_WhenRemoveAsyncIsCalled_ThenReturnCorrectResult()
         {
             // Arrange
-            var responseMock = new ValidationResult<PaymentStatusModel>(new List<ValidationError>());
+            var responseMock = new ValidationResult<PaymentStatusModel?>(new List<ValidationError>());
             _paymentStatusServiceMock.Setup(x => x.RemoveAsync(It.IsNotNull<Guid>())).ReturnsAsync(responseMock);
 
             // Act
@@ -285,7 +285,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.PaymentStatus
         public async Task GivenValidRequestAndNonExistingSettingsGuid_WhenRemoveAsyncIsCalled_ThenReturnNotFound()
         {
             // Arrange
-            var responseMock = new ValidationResult<PaymentStatusModel>(new List<ValidationError>()
+            var responseMock = new ValidationResult<PaymentStatusModel?>(new List<ValidationError>()
             {
                 ValidationError.NotFound
             });
@@ -486,7 +486,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.PaymentStatus
             ((ObjectResult)actualResult).StatusCode.Should().Be(StatusCodes.Status200OK);
             data?.Succeeded.Should().BeTrue();
             data?.Data.Should().NotBeNull();
-            data?.Data.Count.Should().Be(3);
+            data?.Data?.Count.Should().Be(3);
 
         }
 

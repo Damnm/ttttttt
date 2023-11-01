@@ -1,4 +1,5 @@
 ﻿using EPAY.ETC.Core.API.IntegrationTests.Helpers;
+using EPAY.ETC.Core.Models.Constants;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -20,7 +21,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Common
             WebApplicationFactory = new WebApplicationFactory<Program>()
                 .WithWebHostBuilder(builder =>
                 {
-                    var enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+                    var enviroment = Environment.GetEnvironmentVariable(CoreConstant.ENVIRONMENT_BASE);
 
                     if (enviroment == null)
                         builder.UseEnvironment("IntegrationTests");

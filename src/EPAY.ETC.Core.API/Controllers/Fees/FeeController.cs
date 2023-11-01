@@ -287,7 +287,11 @@ namespace EPAY.ETC.Core.API.Controllers.Fees
         #endregion
 
         #region FindVehicleAsync
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="rfidOrNumberPlate"></param>
+        /// <returns></returns>
         [HttpGet("v1/vehicles/{rfidOrNumberPlate}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

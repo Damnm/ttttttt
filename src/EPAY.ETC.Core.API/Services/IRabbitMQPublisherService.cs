@@ -5,7 +5,6 @@ namespace EPAY.ETC.Core.API.Services
     /// <summary>
     /// 
     /// </summary>
-    /// <typeparam name="T"></typeparam>
     public interface IRabbitMQPublisherService
     {
         /// <summary>

@@ -8,6 +8,6 @@ namespace EPAY.ETC.Core.API.Core.Interfaces.Services.Fusion
         public Task<ValidationResult<FusionModel>> AddAsync(FusionAddRequestModel input);
         public Task<ValidationResult<FusionModel>> GetByIdAsync(Guid id);
         public Task<ValidationResult<FusionModel>> UpdateAsync(Guid id, FusionUpdateRequestModel request);
-        public Task<ValidationResult<FusionModel>> RemoveAsync(Guid id);
+        public Task<ValidationResult<FusionModel?>> RemoveAsync(Guid id);
     }
 }

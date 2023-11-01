@@ -169,7 +169,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Barcode
         public async Task GivenValidRequest_WhenRemoveAsyncIsCalled_ThenReturnCorrectResult()
         {
             // Arrange
-            var responseMock = new ValidationResult<BarcodeModel>(new List<ValidationError>());
+            var responseMock = new ValidationResult<BarcodeModel?>(new List<ValidationError>());
             _barcodeServiceMock.Setup(x => x.RemoveAsync(It.IsNotNull<Guid>())).ReturnsAsync(responseMock);
 
             // Act
@@ -190,7 +190,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Barcode
         public async Task GivenValidRequestAndNonExistingSettingsGuid_WhenRemoveAsyncIsCalled_ThenReturnNotFound()
         {
             // Arrange
-            var responseMock = new ValidationResult<BarcodeModel>(new List<ValidationError>()
+            var responseMock = new ValidationResult<BarcodeModel?>(new List<ValidationError>()
             {
                 ValidationError.NotFound
             });

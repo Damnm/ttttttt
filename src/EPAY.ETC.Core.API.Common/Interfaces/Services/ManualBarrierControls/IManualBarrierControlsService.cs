@@ -15,6 +15,6 @@ namespace EPAY.ETC.Core.API.Core.Interfaces.Services.ManualBarrierControls
         public Task<ValidationResult<ManualBarrierControlModel>> AddAsync(ManualBarrierControlAddOrUpdateRequestModel input);
         public Task<ValidationResult<ManualBarrierControlModel>> GetByIdAsync(Guid id);
         public Task<ValidationResult<ManualBarrierControlModel>> UpdateAsync(Guid id, ManualBarrierControlAddOrUpdateRequestModel request);
-        public Task<ValidationResult<ManualBarrierControlModel>> RemoveAsync(Guid id);
+        public Task<ValidationResult<ManualBarrierControlModel?>> RemoveAsync(Guid id);
     }
 }

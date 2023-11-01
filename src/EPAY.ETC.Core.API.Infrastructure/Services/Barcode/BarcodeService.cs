@@ -102,7 +102,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Barcode
         #endregion
 
         #region RemoveAsync
-        public async Task<ValidationResult<BarcodeModel>> RemoveAsync(Guid id)
+        public async Task<ValidationResult<BarcodeModel?>> RemoveAsync(Guid id)
         {
             _logger.LogInformation($"Executing {nameof(RemoveAsync)} method...");
             try
@@ -110,7 +110,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Barcode
                 var result = await _barcodeRepository.GetByIdAsync(id);
                 if (result == null)
                 {
-                    return ValidationResult.Failed<BarcodeModel>(null, new List<ValidationError>()
+                    return ValidationResult.Failed<BarcodeModel?>(new List<ValidationError>()
                     {
                         ValidationError.NotFound
                     });

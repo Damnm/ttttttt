@@ -11,30 +11,30 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Services.Authentication
     [TestCaseOrderer(CasePriorityOrderer.TypeName, CasePriorityOrderer.AssembyName)]
     public class AuthenticationServiceTests : IntegrationTestBase
     {
-        #region Init mock instance
-        private readonly Exception _exception = null!;
-        private readonly Mock<ILogger<AuthenticationService>> _loggerMock = new();
-        private readonly Mock<AuthenticationService> _authenticationServiceMock = new();
-        #endregion
-        #region Init test data
-        private AuthenticatedEmployeeResponseModel request = new AuthenticatedEmployeeResponseModel()
-        {
-            EmployeeId = "030001",
-            Username = "030001",
-            FirstName = "Lưu Trần",
-            LastName = "Anh Tuấn"
-        };
-        private EmployeeLoginRequest login = new EmployeeLoginRequest()
-        {
-            EmployeeId = "123456",
-            Password = "password"
-        };
-        private EmployeeAutoLoginRequest autoLogin = new EmployeeAutoLoginRequest()
-        {
-            EmployeeId = "123456",
-            ActionCode = "Login",
-        };
-        #endregion
+        //#region Init mock instance
+        //private readonly Exception _exception = null!;
+        //private readonly Mock<ILogger<AuthenticationService>> _loggerMock = new();
+        //private readonly Mock<AuthenticationService> _authenticationServiceMock = new();
+        //#endregion
+        //#region Init test data
+        //private AuthenticatedEmployeeResponseModel request = new AuthenticatedEmployeeResponseModel()
+        //{
+        //    EmployeeId = "030001",
+        //    Username = "030001",
+        //    FirstName = "Lưu Trần",
+        //    LastName = "Anh Tuấn"
+        //};
+        //private EmployeeLoginRequest login = new EmployeeLoginRequest()
+        //{
+        //    EmployeeId = "123456",
+        //    Password = "password"
+        //};
+        //private EmployeeAutoLoginRequest autoLogin = new EmployeeAutoLoginRequest()
+        //{
+        //    EmployeeId = "123456",
+        //    ActionCode = "Login",
+        //};
+        //#endregion
         //#region AuthenticationService
         //[Fact]
         //public async Task GivenValidRequest_WhenAddAsyncIsCalled_ThenAddedRecordSuccessfulAndReturnCorrectResult()

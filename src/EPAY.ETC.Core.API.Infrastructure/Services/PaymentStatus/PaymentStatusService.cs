@@ -78,7 +78,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.PaymentStatus
         #endregion
 
         #region RemoveAsync
-        public async Task<ValidationResult<Core.Models.PaymentStatus.PaymentStatusModel>> RemoveAsync(Guid id)
+        public async Task<ValidationResult<PaymentStatusModel?>> RemoveAsync(Guid id)
         {
             _logger.LogInformation($"Executing {nameof(RemoveAsync)} method...");
             try
@@ -86,7 +86,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.PaymentStatus
                 var result = await _repository.GetByIdAsync(id);
                 if (result == null)
                 {
-                    return ValidationResult.Failed<Core.Models.PaymentStatus.PaymentStatusModel>(null, new List<ValidationError>()
+                    return ValidationResult.Failed<PaymentStatusModel?>(new List<ValidationError>()
                     {
                         ValidationError.NotFound
                     });

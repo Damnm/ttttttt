@@ -305,7 +305,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.PaymentStatus
             result.Should().NotBeNull();
             result.Data.Should().NotBeNull();
             result.Succeeded.Should().BeTrue();
-            result.Data.Count.Should().Be(3);
+            result.Data?.Count.Should().Be(3);
             _paymentStatusRepositoryMock.Verify(x => x.GetPaymentStatusHistoryAsync(It.IsNotNull<Expression<Func<PaymentStatusModel, bool>>>()), Times.Once);
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.GetPaymentStatusHistoryAsync)} method...", Times.Once, _exception);
             _loggerMock.VerifyLog(LogLevel.Error, $"Failed to run {nameof(service.GetPaymentStatusHistoryAsync)} method", Times.Never, _exception);
@@ -314,7 +314,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.PaymentStatus
         [Fact]
         public async Task GivenValidRequestButNotFound_WhenGetPaymentStatusHistoryAsyncIsCalled_ThenReturnCorrectResult()
         {
-            IQueryable<PaymentStatusModel> paymentStat = null;
+            IQueryable<PaymentStatusModel> paymentStat = Enumerable.Empty<PaymentStatusModel>().AsQueryable();
+
             // Arrange
             _paymentStatusRepositoryMock.Setup(x => x.GetPaymentStatusHistoryAsync(It.IsNotNull<Expression<Func<PaymentStatusModel, bool>>>())).ReturnsAsync(paymentStat);
 
