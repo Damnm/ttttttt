@@ -74,12 +74,20 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                 ReconcileResultModel result = new ReconcileResultModel();
                 if (reconcilVehicleInfo?.Payment != null)
                 {
+                    Guid objectId = uiModel?.ObjectId ?? Guid.NewGuid();
+                    Guid? paymentId = uiModel?.Body?.Payment?.PaymentId;
+
+                    if (reconcilVehicleInfo.ObjectId != null && reconcilVehicleInfo.ObjectId != Guid.Empty)
+                        objectId = (Guid)reconcilVehicleInfo.ObjectId;
+                    if (reconcilVehicleInfo.Payment.PaymentId != null && reconcilVehicleInfo.Payment.PaymentId != Guid.Empty)
+                        paymentId = reconcilVehicleInfo.Payment.PaymentId;
+
                     result.PaymentStatus = new PaymenStatusResponseModel()
                     {
-                        ObjectId = reconcilVehicleInfo.ObjectId ?? uiModel?.ObjectId ?? Guid.NewGuid(),
+                        ObjectId = objectId,
                         PaymentStatus = new ETC.Core.Models.Fees.PaymentStatusModel()
                         {
-                            PaymentId = reconcilVehicleInfo.Payment.PaymentId ?? uiModel?.Body?.Payment?.PaymentId,
+                            PaymentId = paymentId,
                             Status = reconcilVehicleInfo.Payment?.PaymentStatus ?? PaymentStatusEnum.Unpaid,
                             PaymentMethod = reconcilVehicleInfo.Payment?.PaymentType ?? PaymentMethodEnum.Cash,
                             Amount = uiModel?.Body?.Out?.Amount,
