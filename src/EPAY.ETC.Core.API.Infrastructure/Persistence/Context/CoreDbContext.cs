@@ -1,6 +1,7 @@
 ﻿using EPAY.ETC.Core.API.Core.Models.Barcode;
 using EPAY.ETC.Core.API.Core.Models.Configs;
 using EPAY.ETC.Core.API.Core.Models.CustomVehicleTypes;
+using EPAY.ETC.Core.API.Core.Models.ErrorResponse;
 using EPAY.ETC.Core.API.Core.Models.ETCCheckOuts;
 using EPAY.ETC.Core.API.Core.Models.Fees;
 using EPAY.ETC.Core.API.Core.Models.FeeTypes;
@@ -51,6 +52,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
         public virtual DbSet<AppConfigModel> AppConfigs { get; set; }
         public virtual DbSet<ManualBarrierControlModel> ManualBarrierControls { get; set; }
         public virtual DbSet<BarcodeModel> Barcodes { get; set; }
+        public virtual DbSet<ErrorResponseModel> ErrorResponses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -664,6 +666,174 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                .Property(x => x.Action)
                .HasMaxLength(50)
                .HasConversion(new EnumToStringConverter<BarrierActionEnum>());
+            #endregion
+
+            #region ErrorResponse
+            modelBuilder.Entity<ErrorResponseModel>().HasKey(x => x.Id);
+
+            modelBuilder.Entity<ErrorResponseModel>().HasData(
+            #region VETC
+                 // Checkin
+                 new ErrorResponseModel()
+                 {
+                     Id = new Guid("1105a445-09cd-48f2-97f9-1cc6b9be7672"),
+                     Source = "VETC",
+                     Function = "Checkin",
+                     Code = 400,
+                     Status = "BAD_REQUEST",
+                     ErrorCode = string.Empty,
+                     EpayCode = 301,
+                     EpayMessage = "Thiếu tham số đầu vào",
+                     CreatedDate = DateTime.Now
+                 },
+                new ErrorResponseModel()
+                {
+                    Id = new Guid("1432aea7-f727-4282-9707-23dfbe417d53"),
+                    Source = "VETC",
+                    Function = "Checkin",
+                    Code = 500,
+                    Status = "INTERNAL_SERVER_ERROR",
+                    ErrorCode = "ETAG_NOTFOUND",
+                    EpayCode = 302,
+                    EpayMessage = "Không tồn tại mã RFID",
+                     CreatedDate = DateTime.Now
+                },
+
+                // checkout
+                 new ErrorResponseModel()
+                 {
+                     Id = new Guid("25cf2789-c3f8-48c1-9392-920b3ea5a0a4"),
+                     Source = "VETC",
+                     Function = "Checkout",
+                     Code = 400,
+                     Status = "BAD_REQUEST",
+                     ErrorCode = string.Empty,
+                     EpayCode = 301,
+                     EpayMessage = "Thiếu tham số đầu vào",
+                     CreatedDate = DateTime.Now
+                 },
+                new ErrorResponseModel()
+                {
+                    Id = new Guid("25ee8f5e-c899-4b55-a894-805dc3333022"),
+                    Source = "VETC",
+                    Function = "Checkout",
+                    Code = 500,
+                    Status = "INTERNAL_SERVER_ERROR",
+                    ErrorCode = "NOT_ENOUGH_MONEY",
+                    EpayCode = 305,
+                    EpayMessage = "Tài khoản không đủ tiền",
+                    CreatedDate = DateTime.Now
+                },
+
+                // Commit
+                 new ErrorResponseModel()
+                 {
+                     Id = new Guid("2c1ad42f-9c67-4ed3-a2f1-f8b912acc396"),
+                     Source = "VETC",
+                     Function = "Commit",
+                     Code = 400,
+                     Status = "BAD_REQUEST",
+                     ErrorCode = string.Empty,
+                     EpayCode = 301,
+                     EpayMessage = "Thiếu tham số đầu vào",
+                     CreatedDate = DateTime.Now
+                 },
+                new ErrorResponseModel()
+                {
+                    Id = new Guid("378a72d0-999e-49e9-bab3-9f68bb591de9"),
+                    Source = "VETC",
+                    Function = "Commit",
+                    Code = 500,
+                    Status = "INTERNAL_SERVER_ERROR",
+                    ErrorCode = "TRANSACTION_NOTFOUND",
+                    EpayCode = 306,
+                    EpayMessage = "Không tìm thấy giao dịch",
+                    CreatedDate = DateTime.Now
+                },
+                 // Rollback
+                 new ErrorResponseModel()
+                 {
+                     Id = new Guid("7fe27592-d680-41a0-a8a6-0ea9441495a0"),
+                     Source = "VETC",
+                     Function = "Rollback",
+                     Code = 400,
+                     Status = "BAD_REQUEST",
+                     ErrorCode = string.Empty,
+                     EpayCode = 301,
+                     EpayMessage = "Thiếu tham số đầu vào",
+                     CreatedDate = DateTime.Now
+                 },
+                new ErrorResponseModel()
+                {
+                    Id = new Guid("9ee064f5-3053-4367-822f-ecf7e2d230b0"),
+                    Source = "VETC",
+                    Function = "Rollback",
+                    Code = 500,
+                    Status = "INTERNAL_SERVER_ERROR",
+                    ErrorCode = "PAYMENT_ERROR",
+                    EpayCode = 308,
+                    EpayMessage = "Roll back không thành công",
+                    CreatedDate = DateTime.Now
+                },
+                #endregion
+
+                #region VDTC
+                 new ErrorResponseModel()
+                 {
+                     Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d64"),
+                     Source = "VDTC",
+                     Function = string.Empty,
+                     Code = 2,
+                     Status = string.Empty,
+                     ErrorCode = string.Empty,
+                     EpayCode = 201,
+                     EpayMessage = "Lỗi hệ thống",
+                     CreatedDate = DateTime.Now
+                 },
+                 new ErrorResponseModel()
+                 {
+                     Id = new Guid("e09d4996-85ba-49db-b773-f0ea32590abd"),
+                     Source = "VDTC",
+                     Function = string.Empty,
+                     Code = 27,
+                     Status = string.Empty,
+                     ErrorCode = string.Empty,
+                     EpayCode = 226,
+                     EpayMessage = "Lỗi hệ thống",
+                     CreatedDate = DateTime.Now
+                 },
+                 #endregion
+
+                 #region POS
+                  new ErrorResponseModel()
+                  {
+                      Id = new Guid("f8de22ef-2f65-43fc-afd5-defb85f9a62f"),
+                      Source = "POS",
+                      Function = string.Empty,
+                      Code = 1,
+                      Status = string.Empty,
+                      ErrorCode = string.Empty,
+                      EpayCode = 501,
+                      EpayMessage = "Khách hàng hủy thanh toán",
+                      CreatedDate = DateTime.Now
+                  },
+                 new ErrorResponseModel()
+                 {
+                     Id = new Guid("fdf50f73-ede5-4db2-82e1-5e0aa08b6c0e"),
+                     Source = "VDTC",
+                     Function = string.Empty,
+                     Code = 13,
+                     Status = string.Empty,
+                     ErrorCode = string.Empty,
+                     EpayCode = 513,
+                     EpayMessage = "Đầy bộ nhớ",
+                     CreatedDate = DateTime.Now
+                 }
+                 #endregion
+
+
+                );
+
             #endregion
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
