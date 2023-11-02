@@ -47,6 +47,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
 
                 // Init variable using
                 long duration = checkOutDateEpoch - checkInDateEpoch;
+                DateTime checkOutDateTime = checkOutDateEpoch.ToSpecificDateTime();
                 FeeTypeEnum feeType = FeeTypeEnum.TimeBlock;
                 CustomVehicleTypeEnum customVehicleType = CustomVehicleTypeEnum.Type1;
 
@@ -62,15 +63,18 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
                 // Get vehicle already defined
                 var feeVehicleCategories = await _feeVehicleCategoryRepository.GetAllAsync(x =>
                     (
-                        x.RFID != null
-                        && !string.IsNullOrEmpty(rfid)
-                        && x.RFID.Equals(rfid)
+                        (
+                            x.RFID != null
+                            && !string.IsNullOrEmpty(rfid)
+                            && x.RFID.Equals(rfid)
+                        )
+                        || (
+                            x.PlateNumber != null
+                            && !string.IsNullOrEmpty(plateNumber)
+                            && x.PlateNumber.Equals(plateNumber)
+                        )
                     )
-                    || (
-                        x.PlateNumber != null
-                        && !string.IsNullOrEmpty(plateNumber)
-                        && x.PlateNumber.Equals(plateNumber)
-                    )
+                    && x.ValidFrom >= checkOutDateTime && (x.ValidTo == null || x.ValidTo >= checkOutDateTime)
                 );
                 var feeVehicleCategory = feeVehicleCategories.OrderBy(x => x.RFID).ThenBy(x => x.PlateNumber).FirstOrDefault();
 
@@ -161,6 +165,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
 
                 // Init variable using
                 long duration = checkOutDateEpoch - checkInDateEpoch;
+                DateTime checkOutDateTime = checkOutDateEpoch.ToSpecificDateTime();
                 FeeTypeEnum feeType = FeeTypeEnum.TimeBlock;
 
                 // Init result return
@@ -177,6 +182,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
                     x.PlateNumber != null
                     && !string.IsNullOrEmpty(plateNumber)
                     && x.PlateNumber.Equals(plateNumber)
+                    && x.ValidFrom >= checkOutDateTime && (x.ValidTo == null || x.ValidTo >= checkOutDateTime)
                 );
                 var feeVehicleCategory = feeVehicleCategories.OrderBy(x => x.PlateNumber).FirstOrDefault();
 
