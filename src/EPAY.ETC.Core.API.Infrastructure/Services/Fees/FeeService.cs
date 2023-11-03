@@ -38,14 +38,14 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
 
                 var existFees = await GetByIdAsync(input.FeeId ?? Guid.NewGuid());
                 if (existFees?.Data != null)
-                { 
+                {
                     _logger.LogWarning($"Executing {nameof(AddAsync)} method, existed object {JsonSerializer.Serialize(input)} in database.");
 
                     return await UpdateAsync(existFees.Data!.Id, input);
                 }
 
                 var entity = _mapper.Map<FeeModel>(input);
-                
+
                 if (string.IsNullOrEmpty(entity.LaneOutId))
                 {
                     entity.LaneOutId = Environment.GetEnvironmentVariable(CoreConstant.ENVIRONMENT_LANE_OUT) ?? "1";
@@ -175,9 +175,9 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
             }
         }
 
-        public async Task<ValidationResult<List<LaneInVehicleModel>>> FindVehicleAsync(string inputVehicle)
+        public ValidationResult<List<LaneInVehicleModel>> FindVehicle(string inputVehicle)
         {
-            _logger.LogInformation($"Executing {nameof(FindVehicleAsync)} method...");
+            _logger.LogInformation($"Executing {nameof(FindVehicle)} method...");
 
             try
             {
@@ -187,13 +187,13 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
                     });
 
                 List<LaneInVehicleModel> result = new List<LaneInVehicleModel>();
-                if (inputVehicle.Length>=15)
+                if (inputVehicle.Length >= 15)
                 {
-                    var keyRFIDVehicles = await _redisDB.ExecuteAsync("keys", RedisConstant.StringType_RFIDInKey($"*{inputVehicle}*"));
+                    var keyRFIDVehicles = _redisDB.Execute("keys", RedisConstant.StringType_RFIDInKey($"*{inputVehicle}*"));
                     var redisKeys = (RedisKey[]?)keyRFIDVehicles;
                     if (redisKeys != null)
                     {
-                        var laneInRFIDVehicle = await _redisDB.StringGetAsync(redisKeys);
+                        var laneInRFIDVehicle = _redisDB.StringGet(redisKeys);
                         List<Core.Models.Devices.RFID.RFIDModel> resultData = laneInRFIDVehicle.ToList()
                             .Select(s => JsonSerializer.Deserialize<Core.Models.Devices.RFID.RFIDModel>(s.ToString()) ?? new Core.Models.Devices.RFID.RFIDModel()).ToList();
                         if (resultData != null && resultData.Count > 0)
@@ -205,11 +205,11 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
                 }
                 else if (inputVehicle.Length < 15)
                 {
-                    var keyCAMVehicles = await _redisDB.ExecuteAsync("keys", RedisConstant.StringType_CameraInKey($"*{inputVehicle}*"));
+                    var keyCAMVehicles = _redisDB.Execute("keys", RedisConstant.StringType_CameraInKey($"*{inputVehicle}*"));
                     var redisKeys = (RedisKey[]?)keyCAMVehicles;
                     if (redisKeys != null)
                     {
-                        var laneInCAMVehicle = await _redisDB.StringGetAsync(redisKeys);
+                        var laneInCAMVehicle = _redisDB.StringGet(redisKeys);
                         List<ANPRCameraModel> resultData = laneInCAMVehicle.ToList()
                             .Select(s => JsonSerializer.Deserialize<ANPRCameraModel>(s.ToString()) ?? new ANPRCameraModel()).ToList();
                         if (resultData != null && resultData.Count > 0)
@@ -220,14 +220,11 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
                     }
                 }
 
-                return ValidationResult.Failed<List<LaneInVehicleModel>>(new List<ValidationError>()
-                    {
-                        ValidationError.NotFound
-                    });
+                return ValidationResult.Failed<List<LaneInVehicleModel>>(new List<ValidationError>() { ValidationError.NotFound });
             }
             catch (Exception ex)
             {
-                _logger.LogError($"An error occurred when calling {nameof(FindVehicleAsync)} method. Details: {ex.Message}. Stack trace: {ex.StackTrace}");
+                _logger.LogError($"An error occurred when calling {nameof(FindVehicle)} method. Details: {ex.Message}. Stack trace: {ex.StackTrace}");
                 throw;
             }
         }

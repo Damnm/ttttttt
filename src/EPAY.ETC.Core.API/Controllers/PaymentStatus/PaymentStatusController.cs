@@ -197,13 +197,13 @@ namespace EPAY.ETC.Core.API.Controllers.PaymentStatus
         [HttpPost("v1/paymentstatuses/paymentMethod")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> UpdatePaymentMethod([FromBody] PaymentStatusUIRequestModel request)
+        public IActionResult UpdatePaymentMethod([FromBody] PaymentStatusUIRequestModel request)
         {
             try
             {
                 _logger.LogInformation($"Executing {nameof(UpdatePaymentMethod)}...");
 
-                var result = await _uiActionService.UpdatePaymentMethod(request);
+                var result = _uiActionService.UpdatePaymentMethod(request);
 
                 if (result.Succeeded)
                 {

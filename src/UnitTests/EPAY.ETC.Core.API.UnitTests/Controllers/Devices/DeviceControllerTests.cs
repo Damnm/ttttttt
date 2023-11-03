@@ -58,7 +58,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Devices
         public async Task GivenRequestIsValidAndCustomVehicleTypeIsNull_WhenManipulateBarrierIsCalled_ThenReturnCorrectResult()
         {
             // Arrange
-            _uiActionServiceMock.Setup(x => x.ManipulateBarrier(It.IsAny<BarrierRequestModel>())).ReturnsAsync(ValidationResult.Success(barrierOpenStatusResponse));
+            _uiActionServiceMock.Setup(x => x.ManipulateBarrierAsync(It.IsAny<BarrierRequestModel>())).ReturnsAsync(ValidationResult.Success(barrierOpenStatusResponse));
             _rabbitMQPublisherServiceMock.Setup(x => x.SendMessage(It.IsAny<string>(), It.IsAny<PublisherTargetEnum>()));
 
             // Act
@@ -66,7 +66,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Devices
             var actualResult = await controller.ManipulateBarrier(barrierRequest);
 
             // Assert
-            _uiActionServiceMock.Verify(x => x.ManipulateBarrier(It.IsAny<BarrierRequestModel>()), Times.Once);
+            _uiActionServiceMock.Verify(x => x.ManipulateBarrierAsync(It.IsAny<BarrierRequestModel>()), Times.Once);
             _rabbitMQPublisherServiceMock.Verify(x => x.SendMessage(It.IsAny<string>(), It.IsAny<PublisherTargetEnum>()), Times.Once);
 
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(controller.ManipulateBarrier)}...", Times.Once, _nullException);
@@ -82,7 +82,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Devices
         {
             // Arrange
             var someEx = new Exception("An error occurred when calling ManipulateBarrier method");
-            _uiActionServiceMock.Setup(x => x.ManipulateBarrier(It.IsAny<BarrierRequestModel>())).ThrowsAsync(someEx);
+            _uiActionServiceMock.Setup(x => x.ManipulateBarrierAsync(It.IsAny<BarrierRequestModel>())).ThrowsAsync(someEx);
 
             // Act
             var controller = new DeviceController(_loggerMock.Object, _uiActionServiceMock.Object, _rabbitMQPublisherServiceMock.Object);
@@ -101,7 +101,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Devices
         {
             // Arrange
             var someEx = new Exception("An error occurred when calling ManipulateBarrier method");
-            _uiActionServiceMock.Setup(x => x.ManipulateBarrier(It.IsAny<BarrierRequestModel>())).ReturnsAsync(ValidationResult.Success(barrierOpenStatusResponse));
+            _uiActionServiceMock.Setup(x => x.ManipulateBarrierAsync(It.IsAny<BarrierRequestModel>())).ReturnsAsync(ValidationResult.Success(barrierOpenStatusResponse));
             _rabbitMQPublisherServiceMock.Setup(x => x.SendMessage(It.IsAny<string>(), It.IsAny<PublisherTargetEnum>())).Throws(someEx);
 
             // Act

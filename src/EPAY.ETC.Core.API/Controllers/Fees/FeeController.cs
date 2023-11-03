@@ -295,12 +295,12 @@ namespace EPAY.ETC.Core.API.Controllers.Fees
         [HttpGet("v1/vehicles/{rfidOrNumberPlate}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> FindVehicleAsync(string rfidOrNumberPlate)
+        public IActionResult FindVehicleAsync(string rfidOrNumberPlate)
         {
             try
             {
                 _logger.LogInformation($"Executing {nameof(FindVehicleAsync)}...");
-                var result = await _service.FindVehicleAsync(rfidOrNumberPlate);
+                var result = _service.FindVehicle(rfidOrNumberPlate);
 
                 return Ok(result);
             }
@@ -329,7 +329,7 @@ namespace EPAY.ETC.Core.API.Controllers.Fees
         [HttpPost("v1/vehicles")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> ReconcileVehicleInfoAsync([FromBody] ReconcileVehicleInfoModel reconcileVehicleInfo)
+        public IActionResult ReconcileVehicleInfoAsync([FromBody] ReconcileVehicleInfoModel reconcileVehicleInfo)
         {
             List<ValidationError> validationErrors = new();
 
@@ -337,7 +337,7 @@ namespace EPAY.ETC.Core.API.Controllers.Fees
             {
                 _logger.LogInformation($"Executing {nameof(ReconcileVehicleInfoAsync)}...");
 
-                var reconcileVehicleInfoResult = await _uiActionService.ReconcileVehicleInfoAsync(reconcileVehicleInfo);
+                var reconcileVehicleInfoResult = _uiActionService.ReconcileVehicleInfo(reconcileVehicleInfo);
                 if (reconcileVehicleInfoResult.Succeeded && reconcileVehicleInfoResult.Data != null)
                 {
                     if (reconcileVehicleInfoResult.Data.Fee != null)

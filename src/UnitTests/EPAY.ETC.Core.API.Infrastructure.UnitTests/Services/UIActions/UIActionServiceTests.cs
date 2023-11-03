@@ -15,6 +15,7 @@ using EPAY.ETC.Core.Models.Enums;
 using EPAY.ETC.Core.Models.Receipt.SessionReports;
 using EPAY.ETC.Core.Models.Request;
 using EPAY.ETC.Core.Models.UI;
+using EPAY.ETC.Core.Models.Validation;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -135,7 +136,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
 
             // Act
             var service = new UIActionService(_loggerMock.Object, _paymentRepository.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _manualBarrierControlRepository.Object, _redisDatabaseMock.Object, _uiOptions);
-            var result = await service.PrintLaneSessionReport(sessionReportRequest);
+            var result = await service.PrintLaneSessionReportAsync(sessionReportRequest);
 
             // Assert
             result.Should().NotBeNull();
@@ -146,8 +147,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
             _customVehicleTypeRepositoryMock.Verify(x => x.GetAllAsync(It.IsAny<Expression<Func<CustomVehicleTypeModel, bool>>>()), Times.Once);
             _paymentStatusRepositoryMock.Verify(x => x.GetAllWithNavigationAsync(It.IsAny<LaneSessionReportRequestModel>()), Times.Once);
 
-            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.PrintLaneSessionReport)} method...", Times.Once, _nullException);
-            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(service.PrintLaneSessionReport)} method", Times.Never, _nullException);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.PrintLaneSessionReportAsync)} method...", Times.Once, _nullException);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(service.PrintLaneSessionReportAsync)} method", Times.Never, _nullException);
         }
 
         [Fact]
@@ -159,7 +160,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
 
             // Act
             var service = new UIActionService(_loggerMock.Object, _paymentRepository.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _manualBarrierControlRepository.Object, _redisDatabaseMock.Object, _uiOptions);
-            Func<Task> func = () => service.PrintLaneSessionReport(sessionReportRequest);
+            Func<Task> func = () => service.PrintLaneSessionReportAsync(sessionReportRequest);
 
             // Assert
             var ex = await Assert.ThrowsAsync<Exception>(func);
@@ -170,8 +171,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
             _customVehicleTypeRepositoryMock.Verify(x => x.GetAllAsync(It.IsAny<Expression<Func<CustomVehicleTypeModel, bool>>>()), Times.Never);
             _paymentStatusRepositoryMock.Verify(x => x.GetAllWithNavigationAsync(It.IsAny<LaneSessionReportRequestModel>()), Times.Never);
 
-            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.PrintLaneSessionReport)} method...", Times.Once, _nullException);
-            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(service.PrintLaneSessionReport)} method", Times.Once, _nullException);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.PrintLaneSessionReportAsync)} method...", Times.Once, _nullException);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(service.PrintLaneSessionReportAsync)} method", Times.Once, _nullException);
         }
 
         [Fact]
@@ -184,7 +185,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
 
             // Act
             var service = new UIActionService(_loggerMock.Object, _paymentRepository.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _manualBarrierControlRepository.Object, _redisDatabaseMock.Object, _uiOptions);
-            Func<Task> func = () => service.PrintLaneSessionReport(sessionReportRequest);
+            Func<Task> func = () => service.PrintLaneSessionReportAsync(sessionReportRequest);
 
             // Assert
             var ex = await Assert.ThrowsAsync<Exception>(func);
@@ -195,8 +196,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
             _customVehicleTypeRepositoryMock.Verify(x => x.GetAllAsync(It.IsAny<Expression<Func<CustomVehicleTypeModel, bool>>>()), Times.Once);
             _paymentStatusRepositoryMock.Verify(x => x.GetAllWithNavigationAsync(It.IsAny<LaneSessionReportRequestModel>()), Times.Never);
 
-            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.PrintLaneSessionReport)} method...", Times.Once, _nullException);
-            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(service.PrintLaneSessionReport)} method", Times.Once, _nullException);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.PrintLaneSessionReportAsync)} method...", Times.Once, _nullException);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(service.PrintLaneSessionReportAsync)} method", Times.Once, _nullException);
         }
 
         [Fact]
@@ -210,7 +211,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
 
             // Act
             var service = new UIActionService(_loggerMock.Object, _paymentRepository.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _manualBarrierControlRepository.Object, _redisDatabaseMock.Object, _uiOptions);
-            Func<Task> func = () => service.PrintLaneSessionReport(sessionReportRequest);
+            Func<Task> func = () => service.PrintLaneSessionReportAsync(sessionReportRequest);
 
             // Assert
             var ex = await Assert.ThrowsAsync<Exception>(func);
@@ -221,8 +222,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
             _customVehicleTypeRepositoryMock.Verify(x => x.GetAllAsync(It.IsAny<Expression<Func<CustomVehicleTypeModel, bool>>>()), Times.Once);
             _paymentStatusRepositoryMock.Verify(x => x.GetAllWithNavigationAsync(It.IsAny<LaneSessionReportRequestModel>()), Times.Once);
 
-            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.PrintLaneSessionReport)} method...", Times.Once, _nullException);
-            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(service.PrintLaneSessionReport)} method", Times.Once, _nullException);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.PrintLaneSessionReportAsync)} method...", Times.Once, _nullException);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(service.PrintLaneSessionReportAsync)} method", Times.Once, _nullException);
         }
         #endregion
 
@@ -236,7 +237,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
 
             // Act
             var service = new UIActionService(_loggerMock.Object, _paymentRepository.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _manualBarrierControlRepository.Object, _redisDatabaseMock.Object, _uiOptions);
-            var result = await service.ManipulateBarrier(barrierRequest);
+            var result = await service.ManipulateBarrierAsync(barrierRequest);
 
             // Assert
             result.Should().NotBeNull();
@@ -246,8 +247,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
             _redisDatabaseMock.Verify(x => x.HashSetAsync(It.IsAny<RedisKey>(), It.IsAny<HashEntry[]>(), It.IsAny<CommandFlags>()), Times.Once);
             _manualBarrierControlRepository.Verify(x => x.AddAsync(It.IsAny<ManualBarrierControlModel>()), Times.Once);
 
-            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.ManipulateBarrier)} method...", Times.Once, _nullException);
-            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(service.ManipulateBarrier)} method", Times.Never, _nullException);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.ManipulateBarrierAsync)} method...", Times.Once, _nullException);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(service.ManipulateBarrierAsync)} method", Times.Never, _nullException);
         }
 
         [Fact]
@@ -259,7 +260,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
 
             // Act
             var service = new UIActionService(_loggerMock.Object, _paymentRepository.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _manualBarrierControlRepository.Object, _redisDatabaseMock.Object, _uiOptions);
-            Func<Task> func = () => service.ManipulateBarrier(barrierRequest);
+            Func<Task> func = () => service.ManipulateBarrierAsync(barrierRequest);
 
             // Assert
             var ex = await Assert.ThrowsAsync<Exception>(func);
@@ -269,8 +270,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
             _redisDatabaseMock.Verify(x => x.HashSetAsync(It.IsAny<RedisKey>(), It.IsAny<HashEntry[]>(), It.IsAny<CommandFlags>()), Times.Once);
             _manualBarrierControlRepository.Verify(x => x.AddAsync(It.IsAny<ManualBarrierControlModel>()), Times.Never);
 
-            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.ManipulateBarrier)} method...", Times.Once, _nullException);
-            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(service.ManipulateBarrier)} method", Times.Once, _nullException);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.ManipulateBarrierAsync)} method...", Times.Once, _nullException);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(service.ManipulateBarrierAsync)} method", Times.Once, _nullException);
         }
 
         [Fact]
@@ -283,7 +284,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
 
             // Act
             var service = new UIActionService(_loggerMock.Object, _paymentRepository.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _manualBarrierControlRepository.Object, _redisDatabaseMock.Object, _uiOptions);
-            Func<Task> func = () => service.ManipulateBarrier(barrierRequest);
+            Func<Task> func = () => service.ManipulateBarrierAsync(barrierRequest);
 
             // Assert
             var ex = await Assert.ThrowsAsync<Exception>(func);
@@ -293,14 +294,14 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
             _redisDatabaseMock.Verify(x => x.HashSetAsync(It.IsAny<RedisKey>(), It.IsAny<HashEntry[]>(), It.IsAny<CommandFlags>()), Times.Once);
             _manualBarrierControlRepository.Verify(x => x.AddAsync(It.IsAny<ManualBarrierControlModel>()), Times.Once);
 
-            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.ManipulateBarrier)} method...", Times.Once, _nullException);
-            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(service.ManipulateBarrier)} method", Times.Once, _nullException);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.ManipulateBarrierAsync)} method...", Times.Once, _nullException);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(service.ManipulateBarrierAsync)} method", Times.Once, _nullException);
         }
         #endregion
 
         #region ReconcileVehicleInfoAsync
         [Fact]
-        public async Task GivenValidRequest_WhenReconcileVehicleInfoAsyncIsCalled_ThenReturnCorrectResult()
+        public void GivenValidRequest_WhenReconcileVehicleInfoAsyncIsCalled_ThenReturnCorrectResult()
         {
             // Arrange
 
@@ -329,7 +330,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
 
             // Act
             var service = new UIActionService(_loggerMock.Object, _paymentRepository.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _manualBarrierControlRepository.Object, _redisDatabaseMock.Object, _uiOptions);
-            var result = await service.ReconcileVehicleInfoAsync(reconcileVehicleInfo);
+            var result = service.ReconcileVehicleInfo(reconcileVehicleInfo);
 
             // Assert
             result.Should().NotBeNull();
@@ -338,12 +339,12 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
 
             _redisDatabaseMock.Verify(x => x.StringGetAsync(It.IsAny<RedisKey>(), It.IsAny<CommandFlags>()), Times.Once);
 
-            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.ReconcileVehicleInfoAsync)} method...", Times.Once, _nullException);
-            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(service.ReconcileVehicleInfoAsync)} method", Times.Never, _nullException);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.ReconcileVehicleInfo)} method...", Times.Once, _nullException);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(service.ReconcileVehicleInfo)} method", Times.Never, _nullException);
         }
 
         [Fact]
-        public async Task GivenValidRequestAndRedisDatabaseIsDown_WhenReconcileVehicleInfoAsyncIsCalled_ThenThrowException()
+        public void GivenValidRequestAndRedisDatabaseIsDown_WhenReconcileVehicleInfoAsyncIsCalled_ThenThrowException()
         {
             // Arrange
             var exception = new Exception("Some ex");
@@ -351,19 +352,19 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
 
             // Act
             var service = new UIActionService(_loggerMock.Object, _paymentRepository.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _manualBarrierControlRepository.Object, _redisDatabaseMock.Object, _uiOptions);
-            Func<Task> func = () => service.ReconcileVehicleInfoAsync(null!);
+            Func<ValidationResult<ReconcileResultModel>> func = () => service.ReconcileVehicleInfo(null!);
 
             // Assert
-            var ex = await Assert.ThrowsAsync<Exception>(func);
+            var ex = Assert.Throws<Exception>(func);
             ex.Should().NotBeNull();
             ex.Message.Should().Be(exception.Message);
 
-            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.ReconcileVehicleInfoAsync)} method...", Times.Once, _nullException);
-            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(service.ReconcileVehicleInfoAsync)} method", Times.Once, _nullException);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.ReconcileVehicleInfo)} method...", Times.Once, _nullException);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(service.ReconcileVehicleInfo)} method", Times.Once, _nullException);
         }
 
         [Fact]
-        public async Task GivenValidRequestAndInputIsNull_WhenReconcileVehicleInfoAsyncIsCalled_ThenReturnCorrectResult()
+        public void GivenValidRequestAndInputIsNull_WhenReconcileVehicleInfoAsyncIsCalled_ThenReturnCorrectResult()
         {
             // Arrange
             ReconcileVehicleInfoModel reconcileVehicleInfo = new ReconcileVehicleInfoModel()
@@ -391,7 +392,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
 
             // Act
             var service = new UIActionService(_loggerMock.Object, _paymentRepository.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _manualBarrierControlRepository.Object, _redisDatabaseMock.Object, _uiOptions);
-            var result = await service.ReconcileVehicleInfoAsync(null!);
+            var result = service.ReconcileVehicleInfo(null!);
 
             // Assert
             result.Should().NotBeNull();
@@ -400,12 +401,12 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
 
             _redisDatabaseMock.Verify(x => x.StringGetAsync(It.IsAny<RedisKey>(), It.IsAny<CommandFlags>()), Times.Once);
 
-            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.ReconcileVehicleInfoAsync)} method...", Times.Once, _nullException);
-            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(service.ReconcileVehicleInfoAsync)} method", Times.Never, _nullException);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.ReconcileVehicleInfo)} method...", Times.Once, _nullException);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(service.ReconcileVehicleInfo)} method", Times.Never, _nullException);
         }
 
         [Fact]
-        public async Task GivenValidRequestWithFeeObjectIsNull_WhenReconcileVehicleInfoAsyncIsCalled_ThenReturnCorrectResult()
+        public void GivenValidRequestWithFeeObjectIsNull_WhenReconcileVehicleInfoAsyncIsCalled_ThenReturnCorrectResult()
         {
             // Arrange
             ReconcileVehicleInfoModel reconcileVehicleInfo = new ReconcileVehicleInfoModel()
@@ -433,7 +434,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
 
             // Act
             var service = new UIActionService(_loggerMock.Object, _paymentRepository.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _manualBarrierControlRepository.Object, _redisDatabaseMock.Object, _uiOptions);
-            var result = await service.ReconcileVehicleInfoAsync(reconcileVehicleInfo);
+            var result = service.ReconcileVehicleInfo(reconcileVehicleInfo);
 
             // Assert
             result.Should().NotBeNull();
@@ -444,8 +445,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
 
             _redisDatabaseMock.Verify(x => x.StringGetAsync(It.IsAny<RedisKey>(), It.IsAny<CommandFlags>()), Times.Once);
 
-            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.ReconcileVehicleInfoAsync)} method...", Times.Once, _nullException);
-            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(service.ReconcileVehicleInfoAsync)} method", Times.Never, _nullException);
+            _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(service.ReconcileVehicleInfo)} method...", Times.Once, _nullException);
+            _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(service.ReconcileVehicleInfo)} method", Times.Never, _nullException);
         }
         #endregion
 

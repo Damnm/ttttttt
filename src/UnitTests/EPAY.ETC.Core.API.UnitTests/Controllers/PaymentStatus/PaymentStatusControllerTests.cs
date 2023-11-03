@@ -390,15 +390,15 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.PaymentStatus
             Assert.True(actualResult.Count() == 0);
         }
         [Fact]
-        public async Task GivenRequestIsValidAndCustomVehicleTypeIsNull_WhenUpdatePaymentMethodIsCalled_ThenReturnCorrectResult()
+        public void GivenRequestIsValidAndCustomVehicleTypeIsNull_WhenUpdatePaymentMethodIsCalled_ThenReturnCorrectResult()
         {
             // Arrange
-            _uiActionServiceMock.Setup(x => x.UpdatePaymentMethod(It.IsAny<PaymentStatusUIRequestModel>())).ReturnsAsync(ValidationResult.Success(paymentStatusResponse));
+            _uiActionServiceMock.Setup(x => x.UpdatePaymentMethod(It.IsAny<PaymentStatusUIRequestModel>())).Returns(ValidationResult.Success(paymentStatusResponse));
             _publisherServiceMock.Setup(x => x.SendMessage(It.IsAny<RabbitMessageOutbound>(), It.IsAny<PublisherOptions>()));
 
             // Act
             var controller = new PaymentStatusController(_loggerMock.Object, _paymentStatusServiceMock.Object, _uiActionServiceMock.Object, _publisherServiceMock.Object, _publisherOptions, _mapper);
-            var actualResult = await controller.UpdatePaymentMethod(updatePaymentStatusRequest);
+            var actualResult = controller.UpdatePaymentMethod(updatePaymentStatusRequest);
 
             // Assert
             _uiActionServiceMock.Verify(x => x.UpdatePaymentMethod(It.IsAny<PaymentStatusUIRequestModel>()), Times.Once);
@@ -426,15 +426,15 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.PaymentStatus
             Assert.True(actualResult.Count() > 0);
         }
         [Fact]
-        public async Task GivenRequestIsValidAndFeesCalculationServiceIsDown_WhenUpdatePaymentMethodIsCalled_ThenReturnInternalServerError()
+        public void GivenRequestIsValidAndFeesCalculationServiceIsDown_WhenUpdatePaymentMethodIsCalled_ThenReturnInternalServerError()
         {
             // Arrange
             var someEx = new Exception("An error occurred when calling UpdatePaymentMethod method");
-            _uiActionServiceMock.Setup(x => x.UpdatePaymentMethod(It.IsAny<PaymentStatusUIRequestModel>())).ThrowsAsync(someEx);
+            _uiActionServiceMock.Setup(x => x.UpdatePaymentMethod(It.IsAny<PaymentStatusUIRequestModel>())).Throws(someEx);
 
             // Act
             var controller = new PaymentStatusController(_loggerMock.Object, _paymentStatusServiceMock.Object, _uiActionServiceMock.Object, _publisherServiceMock.Object, _publisherOptions, _mapper);
-            var actualResult = await controller.UpdatePaymentMethod(updatePaymentStatusRequest);
+            var actualResult = controller.UpdatePaymentMethod(updatePaymentStatusRequest);
             var actualResultRespone = ((ObjectResult)actualResult).Value as ValidationResult<string>;
 
             // Assert
@@ -445,16 +445,16 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.PaymentStatus
             Assert.True(actualResultRespone?.Errors.Count > 0);
         }
         [Fact]
-        public async Task GivenRequestIsValidAndPublisherServiceIsDown_WhenUpdatePaymentMethodIsCalled_ThenReturnInternalServerError()
+        public void GivenRequestIsValidAndPublisherServiceIsDown_WhenUpdatePaymentMethodIsCalled_ThenReturnInternalServerError()
         {
             // Arrange
             var someEx = new Exception("An error occurred when calling UpdatePaymentMethod method");
-            _uiActionServiceMock.Setup(x => x.UpdatePaymentMethod(It.IsAny<PaymentStatusUIRequestModel>())).ReturnsAsync(ValidationResult.Success(paymentStatusResponse));
+            _uiActionServiceMock.Setup(x => x.UpdatePaymentMethod(It.IsAny<PaymentStatusUIRequestModel>())).Returns(ValidationResult.Success(paymentStatusResponse));
             _publisherServiceMock.Setup(x => x.SendMessage(It.IsAny<RabbitMessageOutbound>(), It.IsAny<PublisherOptions>())).Throws(someEx);
 
             // Act
             var controller = new PaymentStatusController(_loggerMock.Object, _paymentStatusServiceMock.Object, _uiActionServiceMock.Object, _publisherServiceMock.Object, _publisherOptions, _mapper);
-            var actualResult = await controller.UpdatePaymentMethod(updatePaymentStatusRequest);
+            var actualResult = controller.UpdatePaymentMethod(updatePaymentStatusRequest);
             var actualResultRespone = ((ObjectResult)actualResult).Value as ValidationResult<string>;
 
             // Assert

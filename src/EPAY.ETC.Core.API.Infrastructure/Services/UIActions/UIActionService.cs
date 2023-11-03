@@ -60,13 +60,13 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
             _uiOptions = uiOptions ?? throw new ArgumentNullException(nameof(uiOptions));
         }
 
-        public async Task<ValidationResult<ReconcileResultModel>> ReconcileVehicleInfoAsync(ReconcileVehicleInfoModel reconcilVehicleInfo)
+        public ValidationResult<ReconcileResultModel> ReconcileVehicleInfo(ReconcileVehicleInfoModel reconcilVehicleInfo)
         {
-            _logger.LogInformation($"Executing {nameof(ReconcileVehicleInfoAsync)} method...");
+            _logger.LogInformation($"Executing {nameof(ReconcileVehicleInfo)} method...");
 
             try
             {
-                var uiModelStr = (string?)await _redisDB.StringGetAsync(RedisConstant.UI_MODEL_KEY);
+                var uiModelStr = (string?)_redisDB.StringGet(RedisConstant.UI_MODEL_KEY);
                 UIModel? uiModel = null;
                 if (!string.IsNullOrEmpty(uiModelStr))
                     uiModel = JsonSerializer.Deserialize<UIModel>(uiModelStr);
@@ -100,7 +100,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                 {
                     // Get FeeModel object from Redis.
                     FeeModel? feeModel = null;
-                    var feeObject = await _redisDB.StringGetAsync(RedisConstant.StringType_FeeModules(reconcilVehicleInfo?.ObjectId.ToString() ?? uiModel?.ObjectId.ToString() ?? string.Empty));
+                    var feeObject = _redisDB.StringGet(RedisConstant.StringType_FeeModules(reconcilVehicleInfo?.ObjectId.ToString() ?? uiModel?.ObjectId.ToString() ?? string.Empty));
 
                     if (!string.IsNullOrEmpty(feeObject.ToString()))
                     {
@@ -121,7 +121,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                                 feeModel.LaneOutVehicle.VehicleInfo = new ETC.Core.Models.VehicleInfoModel();
 
                             // Update PlateNumber for FusionObject
-                            await _redisDB.HashSetAsync(reconcilVehicleInfo?.ObjectId.ToString() ?? uiModel?.ObjectId.ToString() ?? string.Empty, nameof(FusionModel.ANPRCam1), reconcilVehicleInfo?.Vehicle?.PlateNumber);
+                            _redisDB.HashSet(reconcilVehicleInfo?.ObjectId.ToString() ?? uiModel?.ObjectId.ToString() ?? string.Empty, nameof(FusionModel.ANPRCam1), reconcilVehicleInfo?.Vehicle?.PlateNumber);
 
                             feeModel.LaneOutVehicle.VehicleInfo.PlateNumber = !string.IsNullOrEmpty(reconcilVehicleInfo?.Vehicle?.PlateNumber) ? reconcilVehicleInfo?.Vehicle?.PlateNumber : feeModel.LaneOutVehicle.VehicleInfo.PlateNumber;
                             feeModel.LaneOutVehicle.RFID = !string.IsNullOrEmpty(reconcilVehicleInfo?.Vehicle?.RFID) ? reconcilVehicleInfo?.Vehicle?.PlateNumber : feeModel.LaneOutVehicle.RFID;
@@ -177,29 +177,29 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                         }
                         else
                         {
-                            _logger.LogError($"Fee object from Redis is null {nameof(ReconcileVehicleInfoAsync)} method.");
+                            _logger.LogError($"Fee object from Redis is null {nameof(ReconcileVehicleInfo)} method.");
                             return ValidationResult.Success(result);
                         }
                     }
                     else
                     {
-                        _logger.LogError($"Fee object from Redis is null {nameof(ReconcileVehicleInfoAsync)} method.");
+                        _logger.LogError($"Fee object from Redis is null {nameof(ReconcileVehicleInfo)} method.");
                         return ValidationResult.Success(result);
                     }
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError($"An error occurred when calling {nameof(ReconcileVehicleInfoAsync)} method. Details: {ex.Message}. Stack trace: {ex.StackTrace}");
+                _logger.LogError($"An error occurred when calling {nameof(ReconcileVehicleInfo)} method. Details: {ex.Message}. Stack trace: {ex.StackTrace}");
                 throw;
             }
         }
 
-        public async Task<ValidationResult<ManipulateBarrierResponseModel>> ManipulateBarrier(BarrierRequestModel request)
+        public async Task<ValidationResult<ManipulateBarrierResponseModel>> ManipulateBarrierAsync(BarrierRequestModel request)
         {
             try
             {
-                _logger.LogInformation($"Executing {nameof(ManipulateBarrier)} method...");
+                _logger.LogInformation($"Executing {nameof(ManipulateBarrierAsync)} method...");
 
                 ManipulateBarrierResponseModel result = new ManipulateBarrierResponseModel();
 
@@ -237,13 +237,13 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                     case BarrierActionEnum.Open:
                         _logger.LogInformation($"Save to Redis with Key={RedisConstant.HASH_BARRIER_OPEN_STATUS}, Value={JsonSerializer.Serialize(result.BarrierOpenStatus)}");
 
-                        await _redisDB.HashSetAsync(RedisConstant.HASH_BARRIER_OPEN_STATUS, result.BarrierOpenStatus.ToHashEntries());
+                        _redisDB.HashSet(RedisConstant.HASH_BARRIER_OPEN_STATUS, result.BarrierOpenStatus.ToHashEntries());
 
                         if (paymentMethod != null)
                         {
                             _logger.LogInformation($"Save to Redis with Key={RedisConstant.BARCODE_PAYMENT_METHOD}, Value={paymentMethod}");
 
-                            await _redisDB.StringSetAsync(RedisConstant.BARCODE_PAYMENT_METHOD, paymentMethod.ToString());
+                            _redisDB.StringSet(RedisConstant.BARCODE_PAYMENT_METHOD, paymentMethod.ToString());
                         }
 
                         if (request.ManualBarrierType != ManualBarrierTypeEnum.OneTimePass)
@@ -285,8 +285,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
 
                     case BarrierActionEnum.Close:
                         _logger.LogInformation($"Remove key from Redis: Key={RedisConstant.HASH_BARRIER_OPEN_STATUS}, {RedisConstant.BARCODE_PAYMENT_METHOD}");
-                        await _redisDB.KeyDeleteAsync(RedisConstant.HASH_BARRIER_OPEN_STATUS);
-                        await _redisDB.KeyDeleteAsync(RedisConstant.BARCODE_PAYMENT_METHOD);
+                        _redisDB.KeyDelete(RedisConstant.HASH_BARRIER_OPEN_STATUS);
+                        _redisDB.KeyDelete(RedisConstant.BARCODE_PAYMENT_METHOD);
 
                         _logger.LogInformation($"Processing re-send fee calculate if exists trans in queue...");
                         if (!string.IsNullOrEmpty(processingObjectId) && Guid.TryParse(processingObjectId, out objectId))
@@ -309,16 +309,16 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
             }
             catch (Exception ex)
             {
-                _logger.LogError($"An error occurred when calling {nameof(ManipulateBarrier)} method. Details: {ex.Message}. Stack trace: {ex.StackTrace}");
+                _logger.LogError($"An error occurred when calling {nameof(ManipulateBarrierAsync)} method. Details: {ex.Message}. Stack trace: {ex.StackTrace}");
                 throw;
             }
         }
 
-        public async Task<ValidationResult<LaneSessionReportModel>> PrintLaneSessionReport(LaneSessionReportRequestModel request)
+        public async Task<ValidationResult<LaneSessionReportModel>> PrintLaneSessionReportAsync(LaneSessionReportRequestModel request)
         {
             try
             {
-                _logger.LogInformation($"Executing {nameof(PrintLaneSessionReport)} method...");
+                _logger.LogInformation($"Executing {nameof(PrintLaneSessionReportAsync)} method...");
 
                 Expression<Func<AppConfigModel, bool>> expression = s => s.IsApply == true;
 
@@ -424,12 +424,12 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
             }
             catch (Exception ex)
             {
-                _logger.LogError($"An error occurred when calling {nameof(PrintLaneSessionReport)} method. Details: {ex.Message}. Stack trace: {ex.StackTrace}");
+                _logger.LogError($"An error occurred when calling {nameof(PrintLaneSessionReportAsync)} method. Details: {ex.Message}. Stack trace: {ex.StackTrace}");
                 throw;
             }
         }
 
-        public Task<ValidationResult<PaymenStatusResponseModel>> UpdatePaymentMethod(PaymentStatusUIRequestModel request)
+        public ValidationResult<PaymenStatusResponseModel> UpdatePaymentMethod(PaymentStatusUIRequestModel request)
         {
             try
             {
@@ -449,7 +449,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                     }
                 };
 
-                return Task.FromResult(ValidationResult.Success(result));
+                return ValidationResult.Success(result);
             }
             catch (Exception ex)
             {
@@ -471,9 +471,9 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
 
                 _redisDB.StringSet(RedisConstant.PAID_VEHICLE_HISTORY_KEY, JsonSerializer.Serialize(paidHistories));
 
-                var waitingVehicles = await GetWaitingVehicles();
+                var waitingVehicles = GetWaitingVehicles();
 
-                var uiModelStr = await _redisDB.StringGetAsync(RedisConstant.UI_MODEL_KEY);
+                var uiModelStr = _redisDB.StringGet(RedisConstant.UI_MODEL_KEY);
 
                 if (!string.IsNullOrEmpty(uiModelStr.ToString()))
                 {
@@ -482,7 +482,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
 
                 if (result == null)
                 {
-                    uiModelStr = await _redisDB.StringGetAsync(RedisConstant.UI_MODEL_TEMPLATE_KEY);
+                    uiModelStr = _redisDB.StringGet(RedisConstant.UI_MODEL_TEMPLATE_KEY);
 
                     if (!string.IsNullOrEmpty(uiModelStr.ToString()))
                     {
@@ -516,7 +516,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                 result.Body.PaidVehicleHistory = paidHistories;
                 result.Body.WaitingVehicles = waitingVehicles;
 
-                await _redisDB.StringSetAsync(RedisConstant.UI_MODEL_KEY, JsonSerializer.Serialize(result));
+                _redisDB.StringSet(RedisConstant.UI_MODEL_KEY, JsonSerializer.Serialize(result));
 
                 return ValidationResult.Success(result);
             }
@@ -527,26 +527,26 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
             }
         }
 
-        public async Task AddOrUpdateCurrentUIAsync(UIModel input)
+        public void AddOrUpdateCurrentUI(UIModel input)
         {
             try
             {
-                _logger.LogInformation($"Executing {nameof(AddOrUpdateCurrentUIAsync)} method...");
-                await _redisDB.StringSetAsync(RedisConstant.UI_MODEL_KEY, JsonSerializer.Serialize(input));
+                _logger.LogInformation($"Executing {nameof(AddOrUpdateCurrentUI)} method...");
+                _redisDB.StringSet(RedisConstant.UI_MODEL_KEY, JsonSerializer.Serialize(input));
             }
             catch (Exception ex)
             {
-                _logger.LogError($"An error occurred when calling {nameof(AddOrUpdateCurrentUIAsync)} method. Details: {ex.Message}. Stack trace: {ex.StackTrace}");
+                _logger.LogError($"An error occurred when calling {nameof(AddOrUpdateCurrentUI)} method. Details: {ex.Message}. Stack trace: {ex.StackTrace}");
                 throw;
             }
         }
 
-        public async Task<string> GetFeeProcessing()
+        public string GetFeeProcessing()
         {
             try
             {
                 _logger.LogInformation($"Executing {nameof(GetFeeProcessing)} method...");
-                var result = await _redisDB.StringGetAsync(AppConstant.REDIS_KEY_FUSION_PROCESSING);
+                var result = _redisDB.StringGet(AppConstant.REDIS_KEY_FUSION_PROCESSING);
 
                 return result.ToString();
             }
@@ -558,9 +558,9 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
         }
 
         #region Private method
-        public async Task<List<WaitingVehicleModel>> GetWaitingVehicles()
+        public List<WaitingVehicleModel> GetWaitingVehicles()
         {
-            var fusionObjects = await HashGetListAsync<FusionModel>(null, RedisConstant.SORTED_SET_FUSION_OUT);
+            var fusionObjects = HashGetList<FusionModel>(null, RedisConstant.SORTED_SET_FUSION_OUT);
             List<WaitingVehicleModel> waitingVehicles = new List<WaitingVehicleModel>();
             if (fusionObjects != null && fusionObjects.Any())
             {
@@ -602,18 +602,18 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
 
             return waitingVehicles;
         }
-        private async Task<List<T>?> HashGetListAsync<T>(Func<T, bool>? action, string sortedKey, Order order = Order.Ascending)
+        private List<T>? HashGetList<T>(Func<T, bool>? action, string sortedKey, Order order = Order.Ascending)
         {
-            _logger.LogInformation($"Executing {nameof(HashGetListAsync)} method...");
+            _logger.LogInformation($"Executing {nameof(HashGetList)} method...");
             List<T>? result = new List<T>();
 
             try
             {
-                var members = await _redisDB.SortedSetRangeByScoreWithScoresAsync(sortedKey, order: order);
+                var members = _redisDB.SortedSetRangeByScoreWithScores(sortedKey, order: order);
 
                 foreach (var member in members)
                 {
-                    var hashEntries = await _redisDB.HashGetAllAsync(member.Element.ToString());
+                    var hashEntries = _redisDB.HashGetAll(member.Element.ToString());
 
                     if (hashEntries != null && hashEntries.Any())
                     {

@@ -1,11 +1,6 @@
 ﻿using EPAY.ETC.Core.API.Core.Exceptions;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.ErrorResponse;
-using EPAY.ETC.Core.API.Core.Interfaces.Services.ETCCheckouts;
-using EPAY.ETC.Core.API.Core.Models.Barcode;
 using EPAY.ETC.Core.API.Core.Models.ErrorResponse;
-using EPAY.ETC.Core.API.Core.Models.ETCCheckOuts;
-using EPAY.ETC.Core.API.Infrastructure.Services.ErrorResponse;
-using EPAY.ETC.Core.Models.Request;
 using EPAY.ETC.Core.Models.Validation;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq.Expressions;
@@ -26,7 +21,7 @@ namespace EPAY.ETC.Core.API.Controllers.ETCCheckouts
         /// Initial constructor
         /// </summary>
         /// <param name="logger"></param>
-        /// <param name="etcCheckOutService"></param>
+        /// <param name="errorResponseService"></param>
         public ErrorResponseController(ILogger<ErrorResponseController> logger, IErrorResponseService errorResponseService)
         {
             _logger = logger;

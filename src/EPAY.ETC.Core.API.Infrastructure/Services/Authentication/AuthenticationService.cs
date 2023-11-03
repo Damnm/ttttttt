@@ -185,7 +185,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Authentication
                             uiModel.Header = new HeaderModel();
                         uiModel.Header.EmployeeName = string.Empty;
 
-                        await _uIActionService.AddOrUpdateCurrentUIAsync(uiModel);
+                        _uIActionService.AddOrUpdateCurrentUI(uiModel);
                     }
                 }
 

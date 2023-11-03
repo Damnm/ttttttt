@@ -86,7 +86,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Reports
         public async Task GivenRequestIsValidAndCustomVehicleTypeIsNull_WhenPrintLaneSessionReportIsCalled_ThenReturnCorrectResult()
         {
             // Arrange
-            _uiActionServiceMock.Setup(x => x.PrintLaneSessionReport(It.IsAny<LaneSessionReportRequestModel>())).ReturnsAsync(ValidationResult.Success(sessionReportResponse));
+            _uiActionServiceMock.Setup(x => x.PrintLaneSessionReportAsync(It.IsAny<LaneSessionReportRequestModel>())).ReturnsAsync(ValidationResult.Success(sessionReportResponse));
 
             // Act
             var controller = new ReportController(_loggerMock.Object, _uiActionServiceMock.Object, _rabbitMQPublisherServiceMock.Object);
@@ -94,7 +94,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Reports
             var data = ((OkObjectResult)actualResult).Value as ValidationResult<LaneSessionReportModel>;
 
             // Assert
-            _uiActionServiceMock.Verify(x => x.PrintLaneSessionReport(It.IsAny<LaneSessionReportRequestModel>()), Times.Once);
+            _uiActionServiceMock.Verify(x => x.PrintLaneSessionReportAsync(It.IsAny<LaneSessionReportRequestModel>()), Times.Once);
 
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(controller.PrintLaneSessionReport)}...", Times.Once, _nullException);
             _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(controller.PrintLaneSessionReport)} method", Times.Never, _nullException);
@@ -125,7 +125,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Reports
         {
             // Arrange
             var someEx = new Exception("An error occurred when calling PrintLaneSessionReport method");
-            _uiActionServiceMock.Setup(x => x.PrintLaneSessionReport(It.IsAny<LaneSessionReportRequestModel>())).ThrowsAsync(someEx);
+            _uiActionServiceMock.Setup(x => x.PrintLaneSessionReportAsync(It.IsAny<LaneSessionReportRequestModel>())).ThrowsAsync(someEx);
 
             // Act
             var controller = new ReportController(_loggerMock.Object, _uiActionServiceMock.Object, _rabbitMQPublisherServiceMock.Object);

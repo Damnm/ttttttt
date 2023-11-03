@@ -49,7 +49,7 @@ namespace EPAY.ETC.Core.API.Controllers.Reports
             {
                 _logger.LogInformation($"Executing {nameof(PrintLaneSessionReport)}...");
 
-                var result = await _uiActionService.PrintLaneSessionReport(request);
+                var result = await _uiActionService.PrintLaneSessionReportAsync(request);
 
                 if (result.Succeeded)
                 {

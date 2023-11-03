@@ -106,7 +106,7 @@ namespace EPAY.ETC.Core.API.Controllers.UIAction
         [HttpGet("v1/add-remove-transaction")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> AddOrRemoveCurrentTransaction(ActionEnum? action)
+        public IActionResult AddOrRemoveCurrentTransaction(ActionEnum? action)
         {
             List<ValidationError> validationErrors = new();
 
@@ -131,7 +131,7 @@ namespace EPAY.ETC.Core.API.Controllers.UIAction
                         break;
 
                     case ActionEnum.Delete:
-                        var result = await _uiActionService.GetFeeProcessing();
+                        var result = _uiActionService.GetFeeProcessing();
 
                         if (!string.IsNullOrEmpty(result))
                         {

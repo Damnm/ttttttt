@@ -50,7 +50,7 @@ namespace EPAY.ETC.Core.API.Controllers.Devices
             try
             {
                 _logger.LogInformation($"Executing {nameof(ManipulateBarrier)}...");
-                var result = await _uiActionService.ManipulateBarrier(request);
+                var result = await _uiActionService.ManipulateBarrierAsync(request);
 
                 if (result.Succeeded)
                 {

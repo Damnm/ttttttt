@@ -10,12 +10,12 @@ namespace EPAY.ETC.Core.API.Core.Interfaces.Services.UIActions
 {
     public interface IUIActionService
     {
-        Task<ValidationResult<ReconcileResultModel>> ReconcileVehicleInfoAsync(ReconcileVehicleInfoModel reconcileVehicleInfo);
-        Task<ValidationResult<LaneSessionReportModel>> PrintLaneSessionReport(LaneSessionReportRequestModel request);
-        Task<ValidationResult<PaymenStatusResponseModel>> UpdatePaymentMethod(PaymentStatusUIRequestModel request);
-        Task<ValidationResult<ManipulateBarrierResponseModel>> ManipulateBarrier(BarrierRequestModel request);
+        ValidationResult<ReconcileResultModel> ReconcileVehicleInfo(ReconcileVehicleInfoModel reconcileVehicleInfo);
+        Task<ValidationResult<LaneSessionReportModel>> PrintLaneSessionReportAsync(LaneSessionReportRequestModel request);
+        ValidationResult<PaymenStatusResponseModel> UpdatePaymentMethod(PaymentStatusUIRequestModel request);
+        Task<ValidationResult<ManipulateBarrierResponseModel>> ManipulateBarrierAsync(BarrierRequestModel request);
         Task<ValidationResult<UIModel>> LoadCurrentUIAsync(AuthenticatedEmployeeResponseModel? authenticatedEmployee = null);
-        Task AddOrUpdateCurrentUIAsync(UIModel input);
-        Task<string> GetFeeProcessing();
+        void AddOrUpdateCurrentUI(UIModel input);
+        string GetFeeProcessing();
     }
 }
