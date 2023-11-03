@@ -352,15 +352,12 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                     }
                 };
 
-                var firstPaymentStatus = paymentStatuses.Where(x => x.Payment != null && x.Payment.Fee != null).FirstOrDefault();
-
                 // TODO: Need to get fullname of employee
                 result.Layout.Footer.Line3 = "Nguyen Van A";
-
                 result.Layout.Body.Heading = ReceiptTypeEnum.SessionReport.ToEnumMemberAttrValue().ToUpper();
 
                 // TODO: Need to get name of Shift
-                result.Layout.Body.SubHeading1 = $"Ngày: {fromDate.ToString("dd/MM/yyyy")}  Ca: 01  Trạm: {firstPaymentStatus?.Payment.LaneOutId}";
+                result.Layout.Body.SubHeading1 = $"Ngày: {fromDate.ToString("dd/MM/yyyy")}  Ca: 01  Trạm: {request.LaneOutId}";
                 result.Layout.Body.SubHeading2 = $"Từ giờ: {fromDate.ToString("HH:mm:ss")}  Đến giờ: {toDate.ToString("HH:mm:ss")}";
 
                 // TODO: Need to get fullname of employee
@@ -376,11 +373,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                     BottomLine = grandTotal.ToMoneyString()
                 };
 
-                var paymentMethodCashs = paymentStatuses
-                    .Where(x => x.PaymentMethod == PaymentMethodEnum.Cash);
-
-                var paymentMethodNoneCashs = paymentStatuses
-                    .Where(x => x.PaymentMethod != PaymentMethodEnum.Cash);
+                var paymentMethodCashs = paymentStatuses.Where(x => x.PaymentMethod == PaymentMethodEnum.Cash);
+                var paymentMethodNoneCashs = paymentStatuses.Where(x => x.PaymentMethod != PaymentMethodEnum.Cash);
 
                 result.Layout.Body.Data.Payments = new List<LaneSessionPaymentDataModel>()
                 {

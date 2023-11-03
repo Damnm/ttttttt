@@ -98,22 +98,22 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PaymentStatu
 #pragma warning disable CS8602 // Disable warning nullable field
                 var result = _dbContext.PaymentStatuses
                     .Include(x => x.Payment)
-                    .Include(x => x.Payment.Fee)
+                    .ThenInclude(x => x.Fee)
                     .AsNoTracking()
                     .Where(x =>
                         request != null
                         ? (
-                            (!string.IsNullOrEmpty(request.LaneOutId) ? x.Payment.Fee.LaneOutId == request.LaneOutId : true)
-                            && (!string.IsNullOrEmpty(request.EmployeeId) ? x.Payment.Fee.EmployeeId == request.EmployeeId : true)
+                            (!string.IsNullOrEmpty(request.LaneOutId) ? request.LaneOutId.Equals(x.Payment.Fee.LaneOutId) : true)
+                            && (!string.IsNullOrEmpty(request.EmployeeId) ? request.EmployeeId.Equals(x.Payment.Fee.EmployeeId) : true)
                             && (!string.IsNullOrEmpty(request.ShiftId) ? shift != null : true)
                             && x.PaymentDate >= fromDate && x.PaymentDate <= toDate
                             && x.Status == PaymentStatusEnum.Paid
                         )
                         : true
-                    );
+                    ).AsEnumerable();
 #pragma warning restore CS8602 // Disable warning nullable field
 
-                return Task.FromResult<IEnumerable<PaymentStatusModel>>(result);
+                return Task.FromResult(result);
             }
             catch (Exception ex)
             {
