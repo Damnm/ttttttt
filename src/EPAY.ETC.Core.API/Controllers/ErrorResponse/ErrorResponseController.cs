@@ -1,9 +1,7 @@
 ﻿using EPAY.ETC.Core.API.Core.Exceptions;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.ErrorResponse;
-using EPAY.ETC.Core.API.Core.Models.ErrorResponse;
 using EPAY.ETC.Core.Models.Validation;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq.Expressions;
 
 namespace EPAY.ETC.Core.API.Controllers.ETCCheckouts
 {
@@ -41,9 +39,7 @@ namespace EPAY.ETC.Core.API.Controllers.ETCCheckouts
             {
                 _logger.LogInformation($"Executing {nameof(GetAllAsync)}...");
 
-                Expression<Func<ErrorResponseModel, bool>> expression = s => source != null ? s.Source == source : true;
-
-                var result = await _service.GetAllAsync(expression);
+                var result = await _service.GetErrorResponseBySourceAync(source);
 
                 return Ok(result);
             }
