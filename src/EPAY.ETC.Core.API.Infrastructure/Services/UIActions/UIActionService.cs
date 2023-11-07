@@ -322,6 +322,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
 
                 Expression<Func<AppConfigModel, bool>> expression = s => s.IsApply == true;
 
+                var currentUI = await LoadCurrentUIAsync();
                 var appConfig = (await _appConfigRepository.GetAllAsync(expression)).FirstOrDefault();
                 var vehicleTypes = await _customVehicleTypeRepository.GetAllAsync();
                 vehicleTypes = vehicleTypes.ToList().Where(x => !string.IsNullOrEmpty(x.Name.GetDescription())).OrderBy(x => x.Name);
@@ -352,16 +353,14 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                     }
                 };
 
-                // TODO: Need to get fullname of employee
-                result.Layout.Footer.Line3 = "Nguyen Van A";
+                result.Layout.Footer.Line3 = $"{currentUI.Data?.Header?.EmployeeName ?? "Nguyen Van A"}";
                 result.Layout.Body.Heading = ReceiptTypeEnum.SessionReport.ToEnumMemberAttrValue().ToUpper();
 
                 // TODO: Need to get name of Shift
-                result.Layout.Body.SubHeading1 = $"Ngày: {fromDate.ToString("dd/MM/yyyy")}  Ca: 01  Trạm: {request.LaneOutId}";
+                result.Layout.Body.SubHeading1 = $"Ngày: {fromDate.ToString("dd/MM/yyyy")}  Ca: {currentUI.Data?.Header?.ShiftName ?? "01"}  Trạm: {request.LaneOutId}";
                 result.Layout.Body.SubHeading2 = $"Từ giờ: {fromDate.ToString("HH:mm:ss")}  Đến giờ: {toDate.ToString("HH:mm:ss")}";
 
-                // TODO: Need to get fullname of employee
-                result.Layout.Body.SubHeading3 = $"Nguyen Van A";
+                result.Layout.Body.SubHeading3 = $"{currentUI.Data?.Header?.EmployeeName ?? "Nguyen Van A"}";
 
                 result.Layout.Body.Columns = new List<string>() { "Số", "Loại xe", "Số lượng", "T.tiền" };
 
