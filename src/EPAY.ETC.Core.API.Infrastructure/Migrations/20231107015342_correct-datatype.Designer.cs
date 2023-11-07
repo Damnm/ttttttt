@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EPAY.ETC.Core.API.Infrastructure.Migrations
 {
     [DbContext(typeof(CoreDbContext))]
-    [Migration("20231106083204_add_errroreponse_table")]
-    partial class add_errroreponse_table
+    [Migration("20231107015342_correct-datatype")]
+    partial class correctdatatype
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -242,7 +242,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                         {
                             Id = new Guid("1105a445-09cd-48f2-97f9-1cc6b9be7672"),
                             Code = "400",
-                            CreatedDate = new DateTime(2023, 11, 6, 15, 32, 4, 114, DateTimeKind.Local).AddTicks(4402),
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
                             EpayCode = "301",
                             EpayMessage = "Thiếu tham số đầu vào",
                             ErrorCode = "",
@@ -254,7 +254,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                         {
                             Id = new Guid("1432aea7-f727-4282-9707-23dfbe417d53"),
                             Code = "500",
-                            CreatedDate = new DateTime(2023, 11, 6, 15, 32, 4, 114, DateTimeKind.Local).AddTicks(4412),
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
                             EpayCode = "302",
                             EpayMessage = "Không tồn tại mã RFID",
                             ErrorCode = "ETAG_NOTFOUND",
@@ -266,7 +266,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                         {
                             Id = new Guid("25cf2789-c3f8-48c1-9392-920b3ea5a0a4"),
                             Code = "400",
-                            CreatedDate = new DateTime(2023, 11, 6, 15, 32, 4, 114, DateTimeKind.Local).AddTicks(4414),
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
                             EpayCode = "301",
                             EpayMessage = "Thiếu tham số đầu vào",
                             ErrorCode = "",
@@ -278,7 +278,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                         {
                             Id = new Guid("25ee8f5e-c899-4b55-a894-805dc3333022"),
                             Code = "500",
-                            CreatedDate = new DateTime(2023, 11, 6, 15, 32, 4, 114, DateTimeKind.Local).AddTicks(4415),
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
                             EpayCode = "305",
                             EpayMessage = "Tài khoản không đủ tiền",
                             ErrorCode = "NOT_ENOUGH_MONEY",
@@ -290,7 +290,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                         {
                             Id = new Guid("2c1ad42f-9c67-4ed3-a2f1-f8b912acc396"),
                             Code = "400",
-                            CreatedDate = new DateTime(2023, 11, 6, 15, 32, 4, 114, DateTimeKind.Local).AddTicks(4417),
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
                             EpayCode = "301",
                             EpayMessage = "Thiếu tham số đầu vào",
                             ErrorCode = "",
@@ -302,7 +302,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                         {
                             Id = new Guid("378a72d0-999e-49e9-bab3-9f68bb591de9"),
                             Code = "500",
-                            CreatedDate = new DateTime(2023, 11, 6, 15, 32, 4, 114, DateTimeKind.Local).AddTicks(4418),
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
                             EpayCode = "306",
                             EpayMessage = "Không tìm thấy giao dịch",
                             ErrorCode = "TRANSACTION_NOTFOUND",
@@ -314,7 +314,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                         {
                             Id = new Guid("7fe27592-d680-41a0-a8a6-0ea9441495a0"),
                             Code = "400",
-                            CreatedDate = new DateTime(2023, 11, 6, 15, 32, 4, 114, DateTimeKind.Local).AddTicks(4419),
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
                             EpayCode = "301",
                             EpayMessage = "Thiếu tham số đầu vào",
                             ErrorCode = "",
@@ -326,7 +326,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                         {
                             Id = new Guid("9ee064f5-3053-4367-822f-ecf7e2d230b0"),
                             Code = "500",
-                            CreatedDate = new DateTime(2023, 11, 6, 15, 32, 4, 114, DateTimeKind.Local).AddTicks(4421),
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
                             EpayCode = "308",
                             EpayMessage = "Roll back không thành công",
                             ErrorCode = "PAYMENT_ERROR",
@@ -338,7 +338,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                         {
                             Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d64"),
                             Code = "2",
-                            CreatedDate = new DateTime(2023, 11, 6, 15, 32, 4, 114, DateTimeKind.Local).AddTicks(4423),
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
                             EpayCode = "201",
                             EpayMessage = "Lỗi hệ thống",
                             ErrorCode = "",
@@ -350,7 +350,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                         {
                             Id = new Guid("e09d4996-85ba-49db-b773-f0ea32590abd"),
                             Code = "27",
-                            CreatedDate = new DateTime(2023, 11, 6, 15, 32, 4, 114, DateTimeKind.Local).AddTicks(4425),
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
                             EpayCode = "226",
                             EpayMessage = "Lỗi hệ thống",
                             ErrorCode = "",
@@ -362,7 +362,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                         {
                             Id = new Guid("f8de22ef-2f65-43fc-afd5-defb85f9a62f"),
                             Code = "1",
-                            CreatedDate = new DateTime(2023, 11, 6, 15, 32, 4, 114, DateTimeKind.Local).AddTicks(4426),
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
                             EpayCode = "501",
                             EpayMessage = "Khách hàng hủy thanh toán",
                             ErrorCode = "",
@@ -374,7 +374,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                         {
                             Id = new Guid("fdf50f73-ede5-4db2-82e1-5e0aa08b6c0e"),
                             Code = "13",
-                            CreatedDate = new DateTime(2023, 11, 6, 15, 32, 4, 114, DateTimeKind.Local).AddTicks(4427),
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
                             EpayCode = "513",
                             EpayMessage = "Đầy bộ nhớ",
                             ErrorCode = "",
@@ -520,8 +520,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                     b.Property<int?>("Seat")
                         .HasColumnType("integer");
 
-                    b.Property<Guid?>("ShiftId")
-                        .HasColumnType("uuid");
+                    b.Property<string>("ShiftId")
+                        .HasColumnType("text");
 
                     b.Property<string>("TicketId")
                         .HasMaxLength(50)
