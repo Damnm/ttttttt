@@ -353,14 +353,16 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                     }
                 };
 
-                result.Layout.Footer.Line3 = $"{currentUI.Data?.Header?.EmployeeName ?? "Nguyen Van A"}";
+                string employeeName = currentUI.Data?.Header?.EmployeeName ?? $"{currentUI.Data?.Authentication?.FirstName} {currentUI.Data?.Authentication?.LastName}";
+
+                result.Layout.Footer.Line3 = employeeName;
                 result.Layout.Body.Heading = ReceiptTypeEnum.SessionReport.ToEnumMemberAttrValue().ToUpper();
 
                 // TODO: Need to get name of Shift
                 result.Layout.Body.SubHeading1 = $"Ngày: {fromDate.ToString("dd/MM/yyyy")}  Ca: {currentUI.Data?.Header?.ShiftName ?? "01"}  Trạm: {request.LaneOutId}";
                 result.Layout.Body.SubHeading2 = $"Từ giờ: {fromDate.ToString("HH:mm:ss")}  Đến giờ: {toDate.ToString("HH:mm:ss")}";
 
-                result.Layout.Body.SubHeading3 = $"{currentUI.Data?.Header?.EmployeeName ?? "Nguyen Van A"}";
+                result.Layout.Body.SubHeading3 = employeeName;
 
                 result.Layout.Body.Columns = new List<string>() { "Số", "Loại xe", "Số lượng", "T.tiền" };
 
