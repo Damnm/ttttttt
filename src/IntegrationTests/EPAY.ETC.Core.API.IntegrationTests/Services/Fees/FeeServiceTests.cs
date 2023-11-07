@@ -25,7 +25,7 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Services.Fees
             EmployeeId = "Some employee",
             FeeId = feeId,
             ObjectId = Guid.Parse("a71717fb-cffd-4994-19d9-775a62d89399"),
-            ShiftId = Guid.Parse("a71717fb-cffd-4994-89d9-775a62d89399"),
+            ShiftId = "Some Id",
             Payment = new CoreModel.PaymentModel()
             {
                 Duration = 32541,

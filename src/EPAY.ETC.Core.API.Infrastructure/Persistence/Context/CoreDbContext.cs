@@ -76,28 +76,32 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                     Id = new Guid("fffbf4d1-8b76-4f3a-9070-0cfa0a658f08"),
                     CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
                     Name = CustomVehicleTypeEnum.Type1,
-                    Desc = CustomVehicleTypeEnum.Type1.ToEnumMemberAttrValue()
+                    Desc = CustomVehicleTypeEnum.Type1.ToEnumMemberAttrValue(),
+                    ExternalId = "030101"
                 },
                 new CustomVehicleTypeModel()
                 {
                     Id = new Guid("a4a39e55-85c0-4761-ba64-f941111186f9"),
                     CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
                     Name = CustomVehicleTypeEnum.Type2,
-                    Desc = CustomVehicleTypeEnum.Type2.ToEnumMemberAttrValue()
+                    Desc = CustomVehicleTypeEnum.Type2.ToEnumMemberAttrValue(),
+                    ExternalId = "030102"
                 },
                 new CustomVehicleTypeModel()
                 {
                     Id = new Guid("be652877-ca81-4fb4-bfa1-b9cec61f9e6b"),
                     CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
                     Name = CustomVehicleTypeEnum.Type3,
-                    Desc = CustomVehicleTypeEnum.Type3.ToEnumMemberAttrValue()
+                    Desc = CustomVehicleTypeEnum.Type3.ToEnumMemberAttrValue(),
+                    ExternalId = "030103"
                 },
                 new CustomVehicleTypeModel()
                 {
                     Id = new Guid("090a7db5-2d5d-4c1c-a32c-27f946f8dd61"),
                     CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
                     Name = CustomVehicleTypeEnum.Type4,
-                    Desc = CustomVehicleTypeEnum.Type4.ToEnumMemberAttrValue()
+                    Desc = CustomVehicleTypeEnum.Type4.ToEnumMemberAttrValue(),
+                    ExternalId = "030104"
                 });
             #endregion
 
@@ -673,19 +677,19 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
 
             modelBuilder.Entity<ErrorResponseModel>().HasData(
             #region VETC
-                 // Checkin
-                 new ErrorResponseModel()
-                 {
-                     Id = new Guid("1105a445-09cd-48f2-97f9-1cc6b9be7672"),
-                     Source = "VETC",
-                     Function = "Checkin",
-                     Code = "400",
-                     Status = "BAD_REQUEST",
-                     ErrorCode = string.Empty,
-                     EpayCode = "301",
-                     EpayMessage = "Thiếu tham số đầu vào",
-                     CreatedDate = DateTime.Now
-                 },
+                // Checkin
+                new ErrorResponseModel()
+                {
+                    Id = new Guid("1105a445-09cd-48f2-97f9-1cc6b9be7672"),
+                    Source = "VETC",
+                    Function = "Checkin",
+                    Code = "400",
+                    Status = "BAD_REQUEST",
+                    ErrorCode = string.Empty,
+                    EpayCode = "301",
+                    EpayMessage = "Thiếu tham số đầu vào",
+                    CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
+                },
                 new ErrorResponseModel()
                 {
                     Id = new Guid("1432aea7-f727-4282-9707-23dfbe417d53"),
@@ -696,22 +700,22 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                     ErrorCode = "ETAG_NOTFOUND",
                     EpayCode = "302",
                     EpayMessage = "Không tồn tại mã RFID",
-                     CreatedDate = DateTime.Now
+                    CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
                 },
 
                 // checkout
-                 new ErrorResponseModel()
-                 {
-                     Id = new Guid("25cf2789-c3f8-48c1-9392-920b3ea5a0a4"),
-                     Source = "VETC",
-                     Function = "Checkout",
-                     Code = "400",
-                     Status = "BAD_REQUEST",
-                     ErrorCode = string.Empty,
-                     EpayCode = "301",
-                     EpayMessage = "Thiếu tham số đầu vào",
-                     CreatedDate = DateTime.Now
-                 },
+                new ErrorResponseModel()
+                {
+                    Id = new Guid("25cf2789-c3f8-48c1-9392-920b3ea5a0a4"),
+                    Source = "VETC",
+                    Function = "Checkout",
+                    Code = "400",
+                    Status = "BAD_REQUEST",
+                    ErrorCode = string.Empty,
+                    EpayCode = "301",
+                    EpayMessage = "Thiếu tham số đầu vào",
+                    CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
+                },
                 new ErrorResponseModel()
                 {
                     Id = new Guid("25ee8f5e-c899-4b55-a894-805dc3333022"),
@@ -722,22 +726,22 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                     ErrorCode = "NOT_ENOUGH_MONEY",
                     EpayCode = "305",
                     EpayMessage = "Tài khoản không đủ tiền",
-                    CreatedDate = DateTime.Now
+                    CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
                 },
 
                 // Commit
-                 new ErrorResponseModel()
-                 {
-                     Id = new Guid("2c1ad42f-9c67-4ed3-a2f1-f8b912acc396"),
-                     Source = "VETC",
-                     Function = "Commit",
-                     Code = "400",
-                     Status = "BAD_REQUEST",
-                     ErrorCode = string.Empty,
-                     EpayCode = "301",
-                     EpayMessage = "Thiếu tham số đầu vào",
-                     CreatedDate = DateTime.Now
-                 },
+                new ErrorResponseModel()
+                {
+                    Id = new Guid("2c1ad42f-9c67-4ed3-a2f1-f8b912acc396"),
+                    Source = "VETC",
+                    Function = "Commit",
+                    Code = "400",
+                    Status = "BAD_REQUEST",
+                    ErrorCode = string.Empty,
+                    EpayCode = "301",
+                    EpayMessage = "Thiếu tham số đầu vào",
+                    CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
+                },
                 new ErrorResponseModel()
                 {
                     Id = new Guid("378a72d0-999e-49e9-bab3-9f68bb591de9"),
@@ -748,21 +752,21 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                     ErrorCode = "TRANSACTION_NOTFOUND",
                     EpayCode = "306",
                     EpayMessage = "Không tìm thấy giao dịch",
-                    CreatedDate = DateTime.Now
+                    CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
                 },
-                 // Rollback
-                 new ErrorResponseModel()
-                 {
-                     Id = new Guid("7fe27592-d680-41a0-a8a6-0ea9441495a0"),
-                     Source = "VETC",
-                     Function = "Rollback",
-                     Code = "400",
-                     Status = "BAD_REQUEST",
-                     ErrorCode = string.Empty,
-                     EpayCode = "301",
-                     EpayMessage = "Thiếu tham số đầu vào",
-                     CreatedDate = DateTime.Now
-                 },
+                // Rollback
+                new ErrorResponseModel()
+                {
+                    Id = new Guid("7fe27592-d680-41a0-a8a6-0ea9441495a0"),
+                    Source = "VETC",
+                    Function = "Rollback",
+                    Code = "400",
+                    Status = "BAD_REQUEST",
+                    ErrorCode = string.Empty,
+                    EpayCode = "301",
+                    EpayMessage = "Thiếu tham số đầu vào",
+                    CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
+                },
                 new ErrorResponseModel()
                 {
                     Id = new Guid("9ee064f5-3053-4367-822f-ecf7e2d230b0"),
@@ -773,66 +777,64 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                     ErrorCode = "PAYMENT_ERROR",
                     EpayCode = "308",
                     EpayMessage = "Roll back không thành công",
-                    CreatedDate = DateTime.Now
+                    CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
                 },
+            #endregion
+
+            #region VDTC
+                new ErrorResponseModel()
+                {
+                    Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d64"),
+                    Source = "VDTC",
+                    Function = string.Empty,
+                    Code = "2",
+                    Status = string.Empty,
+                    ErrorCode = string.Empty,
+                    EpayCode = "201",
+                    EpayMessage = "Lỗi hệ thống",
+                    CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
+                },
+                new ErrorResponseModel()
+                {
+                    Id = new Guid("e09d4996-85ba-49db-b773-f0ea32590abd"),
+                    Source = "VDTC",
+                    Function = string.Empty,
+                    Code = "27",
+                    Status = string.Empty,
+                    ErrorCode = string.Empty,
+                    EpayCode = "226",
+                    EpayMessage = "Lỗi hệ thống",
+                    CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
+                },
+            #endregion
+
+            #region POS
+                new ErrorResponseModel()
+                {
+                    Id = new Guid("f8de22ef-2f65-43fc-afd5-defb85f9a62f"),
+                    Source = "POS",
+                    Function = string.Empty,
+                    Code = "1",
+                    Status = string.Empty,
+                    ErrorCode = string.Empty,
+                    EpayCode = "501",
+                    EpayMessage = "Khách hàng hủy thanh toán",
+                    CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
+                },
+                new ErrorResponseModel()
+                {
+                    Id = new Guid("fdf50f73-ede5-4db2-82e1-5e0aa08b6c0e"),
+                    Source = "VDTC",
+                    Function = string.Empty,
+                    Code = "13",
+                    Status = string.Empty,
+                    ErrorCode = string.Empty,
+                    EpayCode = "513",
+                    EpayMessage = "Đầy bộ nhớ",
+                    CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
+                }
                 #endregion
-
-                #region VDTC
-                 new ErrorResponseModel()
-                 {
-                     Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d64"),
-                     Source = "VDTC",
-                     Function = string.Empty,
-                     Code = "2",
-                     Status = string.Empty,
-                     ErrorCode = string.Empty,
-                     EpayCode = "201",
-                     EpayMessage = "Lỗi hệ thống",
-                     CreatedDate = DateTime.Now
-                 },
-                 new ErrorResponseModel()
-                 {
-                     Id = new Guid("e09d4996-85ba-49db-b773-f0ea32590abd"),
-                     Source = "VDTC",
-                     Function = string.Empty,
-                     Code = "27",
-                     Status = string.Empty,
-                     ErrorCode = string.Empty,
-                     EpayCode = "226",
-                     EpayMessage = "Lỗi hệ thống",
-                     CreatedDate = DateTime.Now
-                 },
-                 #endregion
-
-                 #region POS
-                  new ErrorResponseModel()
-                  {
-                      Id = new Guid("f8de22ef-2f65-43fc-afd5-defb85f9a62f"),
-                      Source = "POS",
-                      Function = string.Empty,
-                      Code = "1",
-                      Status = string.Empty,
-                      ErrorCode = string.Empty,
-                      EpayCode = "501",
-                      EpayMessage = "Khách hàng hủy thanh toán",
-                      CreatedDate = DateTime.Now
-                  },
-                 new ErrorResponseModel()
-                 {
-                     Id = new Guid("fdf50f73-ede5-4db2-82e1-5e0aa08b6c0e"),
-                     Source = "VDTC",
-                     Function = string.Empty,
-                     Code = "13",
-                     Status = string.Empty,
-                     ErrorCode = string.Empty,
-                     EpayCode = "513",
-                     EpayMessage = "Đầy bộ nhớ",
-                     CreatedDate = DateTime.Now
-                 }
-                 #endregion
-
-
-                );
+            );
 
             #endregion
         }

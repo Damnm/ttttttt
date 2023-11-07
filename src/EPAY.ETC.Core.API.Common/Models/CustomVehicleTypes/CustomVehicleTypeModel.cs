@@ -18,6 +18,9 @@ namespace EPAY.ETC.Core.API.Core.Models.CustomVehicleTypes
         [MaxLength(255)]
         public string? Desc { get; set; }
 
+        [MaxLength(6)]
+        public string? ExternalId { get; set; }
+
         public virtual ICollection<FeeVehicleCategoryModel>? FeeVehicleCategories { get; set; }
         public virtual ICollection<TimeBlockFeeModel>? TimeBlockFees { get; set; }
         public virtual ICollection<TimeBlockFeeFormulaModel>? TimeBlockFeeFormulas { get; set; }

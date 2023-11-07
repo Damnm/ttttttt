@@ -30,7 +30,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fees
             EmployeeId = "Some employee",
             FeeId = Guid.Parse("a71717fb-cffd-4994-89d9-775a62d89399"),
             ObjectId = Guid.Parse("a71717fb-cffd-4994-89d9-775a62d89399"),
-            ShiftId = Guid.Parse("a71717fb-cffd-4994-89d9-775a62d89399"),
+            ShiftId = "Some Id",
             Payment = new CoreModel.PaymentModel()
             {
                 Duration = 32541,
@@ -45,7 +45,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fees
             EmployeeId = "Some employee",
             Id = Guid.Parse("a71717fb-cffd-4994-89d9-775a62d89399"),
             ObjectId = Guid.Parse("a71717fb-cffd-4994-89d9-775a62d89399"),
-            ShiftId = Guid.Parse("a71717fb-cffd-4994-89d9-775a62d89399"),
+            ShiftId = "Some",
             Duration = 32541,
             Model = "Some model",
             PlateNumber = "Some plate number",
