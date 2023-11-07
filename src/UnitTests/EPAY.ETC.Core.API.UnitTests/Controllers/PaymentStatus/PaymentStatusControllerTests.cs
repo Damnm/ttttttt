@@ -77,24 +77,15 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.PaymentStatus
             {
                 new PaymentStatusHistoryModel()
             {
-                DateTimeEpoch = 324324343,
-                PaymentStatus = PaymentStatusEnum.Failed,
                 Reason = "dfd222fdsf",
-                PaymentMethod = PaymentMethodEnum.RFID,
             },
             new PaymentStatusHistoryModel()
             {
-                DateTimeEpoch = 32443432,
-                PaymentStatus = PaymentStatusEnum.Failed,
                 Reason = "dfd111fdsf",
-                PaymentMethod = PaymentMethodEnum.QRCode,
             },
             new PaymentStatusHistoryModel()
             {
-                DateTimeEpoch = 7657676,
-                PaymentStatus = PaymentStatusEnum.Failed,
                 Reason = "dfd66fdsf",
-                PaymentMethod = PaymentMethodEnum.Cash,
             }
             }
         };

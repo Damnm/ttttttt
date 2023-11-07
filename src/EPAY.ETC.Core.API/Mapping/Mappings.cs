@@ -4,7 +4,6 @@ using EPAY.ETC.Core.API.Core.Models.ETCCheckOuts;
 using EPAY.ETC.Core.API.Core.Models.Fusion;
 using EPAY.ETC.Core.API.Core.Models.ManualBarrierControl;
 using EPAY.ETC.Core.API.Core.Models.Vehicle;
-using EPAY.ETC.Core.API.Core.Utils;
 using EPAY.ETC.Core.API.Models.Configs;
 using EPAY.ETC.Core.Models.Devices;
 using EPAY.ETC.Core.Models.Enums;
@@ -142,10 +141,8 @@ namespace EPAY.ETC.Core.API.Mapping
             CreateMap<PublisherConfigurationOption, PublisherOptions>().ReverseMap();
             CreateMap<BarcodeAddOrUpdateRequestModel, BarcodeModel>().ReverseMap();
             CreateMap<Core.Models.PaymentStatus.PaymentStatusModel, PaymentStatusHistoryModel>()
-                 .ForPath(e => e.DateTimeEpoch, act => act.MapFrom(src => src.PaymentDate.ToUnixTime()))
-                 .ForPath(e => e.PaymentStatus, act => act.MapFrom(src => src.Status))
-                 .ForPath(e => e.Reason, act => act.MapFrom(src => src.Reason))
-                 .ForPath(e => e.PaymentMethod, act => act.MapFrom(src => src.PaymentMethod));
+                 .ForPath(e => e.Time, act => act.MapFrom(src => src.PaymentDate.ToUnixTime().ToAsiaTimeString("HH:mm:ss")))
+                 .ForPath(e => e.Reason, act => act.MapFrom(src => src.Reason));
 
             CreateMap<EmployeeAutoLoginRequest, AuthenticatedEmployeeResponseModel>().ReverseMap();
             CreateMap<EmployeeLoginRequest, AuthenticatedEmployeeResponseModel>().ReverseMap();
