@@ -76,28 +76,32 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                     Id = new Guid("fffbf4d1-8b76-4f3a-9070-0cfa0a658f08"),
                     CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
                     Name = CustomVehicleTypeEnum.Type1,
-                    Desc = CustomVehicleTypeEnum.Type1.ToEnumMemberAttrValue()
+                    Desc = CustomVehicleTypeEnum.Type1.ToEnumMemberAttrValue(),
+                    ExternalId = "030101"
                 },
                 new CustomVehicleTypeModel()
                 {
                     Id = new Guid("a4a39e55-85c0-4761-ba64-f941111186f9"),
                     CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
                     Name = CustomVehicleTypeEnum.Type2,
-                    Desc = CustomVehicleTypeEnum.Type2.ToEnumMemberAttrValue()
+                    Desc = CustomVehicleTypeEnum.Type2.ToEnumMemberAttrValue(),
+                    ExternalId = "030102"
                 },
                 new CustomVehicleTypeModel()
                 {
                     Id = new Guid("be652877-ca81-4fb4-bfa1-b9cec61f9e6b"),
                     CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
                     Name = CustomVehicleTypeEnum.Type3,
-                    Desc = CustomVehicleTypeEnum.Type3.ToEnumMemberAttrValue()
+                    Desc = CustomVehicleTypeEnum.Type3.ToEnumMemberAttrValue(),
+                    ExternalId = "030103"
                 },
                 new CustomVehicleTypeModel()
                 {
                     Id = new Guid("090a7db5-2d5d-4c1c-a32c-27f946f8dd61"),
                     CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
                     Name = CustomVehicleTypeEnum.Type4,
-                    Desc = CustomVehicleTypeEnum.Type4.ToEnumMemberAttrValue()
+                    Desc = CustomVehicleTypeEnum.Type4.ToEnumMemberAttrValue(),
+                    ExternalId = "030104"
                 });
             #endregion
 
