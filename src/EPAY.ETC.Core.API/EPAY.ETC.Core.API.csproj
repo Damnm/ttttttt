@@ -12,7 +12,7 @@
 	<ItemGroup>
 		<PackageReference Include="AutoMapper" Version="12.0.1" />
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
-		<PackageReference Include="EPAY.ETC.Core.Models" Version="2023.11.7.842" />
+		<PackageReference Include="EPAY.ETC.Core.Models" Version="2023.11.8.1038" />
 		<PackageReference Include="EPAY.ETC.Core.Publisher" Version="2023.10.30.1055" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.11" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.11" />

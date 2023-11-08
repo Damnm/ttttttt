@@ -171,6 +171,21 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                             else
                                 feeModel.LaneInVehicle = null;
 
+                            if (!string.IsNullOrEmpty(reconcilVehicleInfo?.Vehicle?.PlateNumber))
+                            {
+                                var rfid = _redisDB.StringGet(RedisConstant.StringType_RFIDValueKey(reconcilVehicleInfo.Vehicle.PlateNumber));
+                                if (!string.IsNullOrEmpty(rfid))
+                                {
+                                    if (feeModel.LaneInVehicle == null)
+                                        feeModel.LaneInVehicle = new LaneInVehicleModel();
+                                    feeModel.LaneInVehicle.RFID = rfid;
+
+                                    if (feeModel.LaneOutVehicle == null)
+                                        feeModel.LaneOutVehicle = new LaneOutVehicleModel();
+                                    feeModel.LaneOutVehicle.RFID = rfid;
+                                }
+                            }
+
                             result.Fee = feeModel;
 
                             return ValidationResult.Success(result);
