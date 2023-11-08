@@ -209,35 +209,35 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("Code")
-                        .HasMaxLength(30)
-                        .HasColumnType("character varying(30)");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("EpayCode")
-                        .HasMaxLength(30)
-                        .HasColumnType("character varying(30)");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("EpayMessage")
-                        .HasMaxLength(30)
-                        .HasColumnType("character varying(30)");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("ErrorCode")
-                        .HasMaxLength(30)
-                        .HasColumnType("character varying(30)");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("Function")
-                        .HasMaxLength(10)
-                        .HasColumnType("character varying(10)");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("Source")
                         .HasMaxLength(10)
                         .HasColumnType("character varying(10)");
 
                     b.Property<string>("Status")
-                        .HasMaxLength(30)
-                        .HasColumnType("character varying(30)");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.HasKey("Id");
 
@@ -270,6 +270,18 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                         },
                         new
                         {
+                            Id = new Guid("1432aea7-f727-4282-9707-23dfbe417d54"),
+                            Code = "500",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "303",
+                            EpayMessage = "Không tìm thấy phương tiện trong bảng giá",
+                            ErrorCode = "VEHICAL_NOTFOUND",
+                            Function = "Checkin",
+                            Source = "VETC",
+                            Status = "INTERNAL_SERVER_ERROR"
+                        },
+                        new
+                        {
                             Id = new Guid("25cf2789-c3f8-48c1-9392-920b3ea5a0a4"),
                             Code = "400",
                             CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
@@ -282,7 +294,55 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("25ee8f5e-c899-4b55-a894-805dc3333022"),
+                            Id = new Guid("25ee8f5e-c899-4b55-a894-805dc3333023"),
+                            Code = "500",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "302",
+                            EpayMessage = "Không tồn tại mã RFID",
+                            ErrorCode = "ETAG_NOTFOUND",
+                            Function = "Checkout",
+                            Source = "VETC",
+                            Status = "INTERNAL_SERVER_ERROR"
+                        },
+                        new
+                        {
+                            Id = new Guid("25ee8f5e-c899-4b55-a894-805dc3333024"),
+                            Code = "500",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "302",
+                            EpayMessage = "Không tồn tại mã RFID",
+                            ErrorCode = "ETAG_NOTFOUND",
+                            Function = "Checkout",
+                            Source = "VETC",
+                            Status = "INTERNAL_SERVER_ERROR"
+                        },
+                        new
+                        {
+                            Id = new Guid("25ee8f5e-c899-4b55-a894-805dc3333025"),
+                            Code = "500",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "303",
+                            EpayMessage = "Không tìm thấy phương tiện trong bảng giá",
+                            ErrorCode = "VEHICAL_NOTFOUND",
+                            Function = "Checkout",
+                            Source = "VETC",
+                            Status = "INTERNAL_SERVER_ERROR"
+                        },
+                        new
+                        {
+                            Id = new Guid("25ee8f5e-c899-4b55-a894-805dc3333026"),
+                            Code = "500",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "304",
+                            EpayMessage = "Thanh toán thành công",
+                            ErrorCode = "PAYMENT_ERROR",
+                            Function = "Checkout",
+                            Source = "VETC",
+                            Status = "INTERNAL_SERVER_ERROR"
+                        },
+                        new
+                        {
+                            Id = new Guid("25ee8f5e-c899-4b55-a894-805dc3333027"),
                             Code = "500",
                             CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
                             EpayCode = "305",
@@ -318,6 +378,18 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                         },
                         new
                         {
+                            Id = new Guid("378a72d0-999e-49e9-bab3-9f68bb591de8"),
+                            Code = "500",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "307",
+                            EpayMessage = "Commit giao dịch không thành công",
+                            ErrorCode = "PAYMENT_ERROR",
+                            Function = "Commit",
+                            Source = "VETC",
+                            Status = "INTERNAL_SERVER_ERROR"
+                        },
+                        new
+                        {
                             Id = new Guid("7fe27592-d680-41a0-a8a6-0ea9441495a0"),
                             Code = "400",
                             CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
@@ -342,6 +414,18 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                         },
                         new
                         {
+                            Id = new Guid("9ee064f5-3053-4367-822f-ecf7e2d230b1"),
+                            Code = "500",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "306",
+                            EpayMessage = "Không tìm thấy giao dịch",
+                            ErrorCode = "TRANSACTION_NOTFOUND",
+                            Function = "Rollback",
+                            Source = "VETC",
+                            Status = "INTERNAL_SERVER_ERROR"
+                        },
+                        new
+                        {
                             Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d64"),
                             Code = "2",
                             CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
@@ -354,11 +438,467 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("e09d4996-85ba-49db-b773-f0ea32590abd"),
+                            Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d65"),
+                            Code = "3",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "202",
+                            EpayMessage = "Vé đã tồn tại",
+                            ErrorCode = "",
+                            Function = "",
+                            Source = "VDTC",
+                            Status = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d66"),
+                            Code = "4",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "203",
+                            EpayMessage = "Lỗi hệ thống",
+                            ErrorCode = "",
+                            Function = "",
+                            Source = "VDTC",
+                            Status = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d67"),
+                            Code = "5",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "204",
+                            EpayMessage = "Lỗi hệ thống",
+                            ErrorCode = "",
+                            Function = "",
+                            Source = "VDTC",
+                            Status = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d68"),
+                            Code = "6",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "205",
+                            EpayMessage = "Lỗi hệ thống",
+                            ErrorCode = "",
+                            Function = "",
+                            Source = "VDTC",
+                            Status = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d70"),
+                            Code = "7",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "206",
+                            EpayMessage = "Lỗi hệ thống",
+                            ErrorCode = "",
+                            Function = "",
+                            Source = "VDTC",
+                            Status = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d69"),
+                            Code = "6",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "205",
+                            EpayMessage = "Lỗi hệ thống",
+                            ErrorCode = "",
+                            Function = "",
+                            Source = "VDTC",
+                            Status = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d71"),
+                            Code = "7",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "206",
+                            EpayMessage = "Lỗi hệ thống",
+                            ErrorCode = "",
+                            Function = "",
+                            Source = "VDTC",
+                            Status = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d72"),
+                            Code = "8",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "207",
+                            EpayMessage = "Lỗi hệ thống",
+                            ErrorCode = "",
+                            Function = "",
+                            Source = "VDTC",
+                            Status = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d46d72"),
+                            Code = "9",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "208",
+                            EpayMessage = "Lỗi hệ thống",
+                            ErrorCode = "",
+                            Function = "",
+                            Source = "VDTC",
+                            Status = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d73"),
+                            Code = "10",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "209",
+                            EpayMessage = "Lỗi hệ thống",
+                            ErrorCode = "",
+                            Function = "",
+                            Source = "VDTC",
+                            Status = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d74"),
+                            Code = "11",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "210",
+                            EpayMessage = "Lỗi hệ thống",
+                            ErrorCode = "",
+                            Function = "",
+                            Source = "VDTC",
+                            Status = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d75"),
+                            Code = "12",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "211",
+                            EpayMessage = "Lỗi hệ thống",
+                            ErrorCode = "",
+                            Function = "",
+                            Source = "VDTC",
+                            Status = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf80d45d76"),
+                            Code = "13",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "212",
+                            EpayMessage = "Lỗi hệ thống",
+                            ErrorCode = "",
+                            Function = "",
+                            Source = "VDTC",
+                            Status = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d76"),
+                            Code = "14",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "213",
+                            EpayMessage = "Lỗi hệ thống",
+                            ErrorCode = "",
+                            Function = "",
+                            Source = "VDTC",
+                            Status = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d77"),
+                            Code = "15",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "214",
+                            EpayMessage = "Lỗi hệ thống",
+                            ErrorCode = "",
+                            Function = "",
+                            Source = "VDTC",
+                            Status = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d78"),
+                            Code = "16",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "215",
+                            EpayMessage = "Lỗi hệ thống",
+                            ErrorCode = "",
+                            Function = "",
+                            Source = "VDTC",
+                            Status = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d79"),
+                            Code = "17",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "216",
+                            EpayMessage = "Lỗi hệ thống",
+                            ErrorCode = "",
+                            Function = "",
+                            Source = "VDTC",
+                            Status = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d80"),
+                            Code = "18",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "217",
+                            EpayMessage = "Lỗi hệ thống",
+                            ErrorCode = "",
+                            Function = "",
+                            Source = "VDTC",
+                            Status = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d81"),
+                            Code = "19",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "218",
+                            EpayMessage = "Lỗi hệ thống",
+                            ErrorCode = "",
+                            Function = "",
+                            Source = "VDTC",
+                            Status = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d82"),
+                            Code = "20",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "219",
+                            EpayMessage = "Lỗi hệ thống",
+                            ErrorCode = "",
+                            Function = "",
+                            Source = "VDTC",
+                            Status = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d83"),
+                            Code = "21",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "220",
+                            EpayMessage = "Lỗi hệ thống",
+                            ErrorCode = "",
+                            Function = "",
+                            Source = "VDTC",
+                            Status = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d84"),
+                            Code = "22",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "221",
+                            EpayMessage = "Lỗi hệ thống",
+                            ErrorCode = "",
+                            Function = "",
+                            Source = "VDTC",
+                            Status = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d85"),
+                            Code = "23",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "222",
+                            EpayMessage = "Lỗi hệ thống",
+                            ErrorCode = "",
+                            Function = "",
+                            Source = "VDTC",
+                            Status = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d86"),
+                            Code = "24",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "223",
+                            EpayMessage = "Lỗi hệ thống",
+                            ErrorCode = "",
+                            Function = "",
+                            Source = "VDTC",
+                            Status = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d88"),
+                            Code = "25",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "224",
+                            EpayMessage = "Lỗi hệ thống",
+                            ErrorCode = "",
+                            Function = "",
+                            Source = "VDTC",
+                            Status = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d89"),
+                            Code = "26",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "225",
+                            EpayMessage = "Lỗi hệ thống",
+                            ErrorCode = "",
+                            Function = "",
+                            Source = "VDTC",
+                            Status = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d90"),
                             Code = "27",
                             CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
                             EpayCode = "226",
                             EpayMessage = "Lỗi hệ thống",
+                            ErrorCode = "",
+                            Function = "",
+                            Source = "VDTC",
+                            Status = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d91"),
+                            Code = "28",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "227",
+                            EpayMessage = "Không cho phép sử dụng dịch vụ",
+                            ErrorCode = "",
+                            Function = "",
+                            Source = "VDTC",
+                            Status = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d92"),
+                            Code = "29",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "228",
+                            EpayMessage = "Lỗi hệ thống",
+                            ErrorCode = "",
+                            Function = "",
+                            Source = "VDTC",
+                            Status = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d93"),
+                            Code = "30",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "229",
+                            EpayMessage = "Lỗi hệ thống",
+                            ErrorCode = "",
+                            Function = "",
+                            Source = "VDTC",
+                            Status = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d94"),
+                            Code = "31",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "230",
+                            EpayMessage = "Lỗi hệ thống",
+                            ErrorCode = "",
+                            Function = "",
+                            Source = "VDTC",
+                            Status = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d95"),
+                            Code = "32",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "231",
+                            EpayMessage = "Lỗi hệ thống",
+                            ErrorCode = "",
+                            Function = "",
+                            Source = "VDTC",
+                            Status = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d96"),
+                            Code = "33",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "232",
+                            EpayMessage = "Lỗi hệ thống",
+                            ErrorCode = "",
+                            Function = "",
+                            Source = "VDTC",
+                            Status = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d97"),
+                            Code = "34",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "233",
+                            EpayMessage = "Lỗi hệ thống",
+                            ErrorCode = "",
+                            Function = "",
+                            Source = "VDTC",
+                            Status = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d98"),
+                            Code = "35",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "234",
+                            EpayMessage = "Lỗi hệ thống",
+                            ErrorCode = "",
+                            Function = "",
+                            Source = "VDTC",
+                            Status = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d99"),
+                            Code = "36",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "235",
+                            EpayMessage = "Lỗi hệ thống",
+                            ErrorCode = "",
+                            Function = "",
+                            Source = "VDTC",
+                            Status = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45c10"),
+                            Code = "37",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "236",
+                            EpayMessage = "Lỗi hệ thống",
+                            ErrorCode = "",
+                            Function = "",
+                            Source = "VDTC",
+                            Status = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45c11"),
+                            Code = "38",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "237",
+                            EpayMessage = "Lỗi hệ thống",
+                            ErrorCode = "",
+                            Function = "",
+                            Source = "VDTC",
+                            Status = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45c12"),
+                            Code = "0",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "238",
+                            EpayMessage = "Tài khoản không đủ tiền",
                             ErrorCode = "",
                             Function = "",
                             Source = "VDTC",
@@ -378,6 +918,126 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                         },
                         new
                         {
+                            Id = new Guid("f8de22ef-2f65-43fc-afd5-defb86f9a63f"),
+                            Code = "2",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "502",
+                            EpayMessage = "Giao dịch thất bại",
+                            ErrorCode = "",
+                            Function = "",
+                            Source = "POS",
+                            Status = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("f8de22ef-2f65-43fc-afd5-defb85f9a63f"),
+                            Code = "3",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "503",
+                            EpayMessage = "Lỗi hệ thống",
+                            ErrorCode = "",
+                            Function = "",
+                            Source = "POS",
+                            Status = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("f8de22ef-2f65-43fc-afd5-defb85f9a64f"),
+                            Code = "4",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "504",
+                            EpayMessage = "Lỗi hệ thống",
+                            ErrorCode = "",
+                            Function = "",
+                            Source = "POS",
+                            Status = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("f8de22ef-2f65-43fc-afd5-defb85f9a65f"),
+                            Code = "5",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "505",
+                            EpayMessage = "Tạo giao dịch bị lỗi",
+                            ErrorCode = "",
+                            Function = "",
+                            Source = "POS",
+                            Status = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("f8de22ef-2f65-43fc-afd5-defb85f9a66f"),
+                            Code = "6",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "506",
+                            EpayMessage = "Lỗi đọc thẻ",
+                            ErrorCode = "",
+                            Function = "",
+                            Source = "POS",
+                            Status = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("f8de22ef-2f65-43fc-afd5-defb85f9a67f"),
+                            Code = "7",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "507",
+                            EpayMessage = "Yêu cầu không hợp lệ",
+                            ErrorCode = "",
+                            Function = "",
+                            Source = "POS",
+                            Status = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("f8de22ef-2f65-43fc-afd5-defb85f9a68f"),
+                            Code = "8",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "508",
+                            EpayMessage = "Lỗi hệ thống",
+                            ErrorCode = "",
+                            Function = "",
+                            Source = "POS",
+                            Status = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("f8de22ef-2f65-43fc-afd5-defb85f9a69f"),
+                            Code = "9",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "509",
+                            EpayMessage = "Quá nhiều thẻ",
+                            ErrorCode = "",
+                            Function = "",
+                            Source = "POS",
+                            Status = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("f8de22ef-2f65-43fc-afd5-defb85f9a70f"),
+                            Code = "11",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "511",
+                            EpayMessage = "Số trace không hợp lệ",
+                            ErrorCode = "",
+                            Function = "",
+                            Source = "POS",
+                            Status = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("f8de22ef-2f65-43fc-afd5-defb85f9a71f"),
+                            Code = "12",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "512",
+                            EpayMessage = "Không được phép hủy",
+                            ErrorCode = "",
+                            Function = "",
+                            Source = "POS",
+                            Status = ""
+                        },
+                        new
+                        {
                             Id = new Guid("fdf50f73-ede5-4db2-82e1-5e0aa08b6c0e"),
                             Code = "13",
                             CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
@@ -386,6 +1046,42 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                             ErrorCode = "",
                             Function = "",
                             Source = "VDTC",
+                            Status = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("f8de22ef-2f65-43fc-afd5-defb85f9a73f"),
+                            Code = "14",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "514",
+                            EpayMessage = "Sai định dạng",
+                            ErrorCode = "",
+                            Function = "",
+                            Source = "POS",
+                            Status = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("f8de22ef-2f65-43fc-afd5-defb85f9a74f"),
+                            Code = "15",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "515",
+                            EpayMessage = "Thẻ hết hạn",
+                            ErrorCode = "",
+                            Function = "",
+                            Source = "POS",
+                            Status = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("f8de22ef-2f65-43fc-afd5-defb85f9a75f"),
+                            Code = "16",
+                            CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            EpayCode = "516",
+                            EpayMessage = "Lỗi đọc file",
+                            ErrorCode = "",
+                            Function = "",
+                            Source = "POS",
                             Status = ""
                         });
                 });
