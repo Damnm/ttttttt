@@ -1,6 +1,7 @@
 ﻿using EPAY.ETC.Core.API.Core.Entities;
 using EPAY.ETC.Core.API.Core.Models.CustomVehicleTypes;
 using EPAY.ETC.Core.API.Core.Models.Payment;
+using EPAY.ETC.Core.API.Core.Models.TicketType;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
@@ -48,12 +49,15 @@ namespace EPAY.ETC.Core.API.Core.Models.Fees
         public double Amount { get; set; }
         public Guid? VehicleCategoryId { get; set; }
         [MaxLength(50)]
-        public string? TicketTypeId { get; set; }
-        [MaxLength(50)]
         public string? TicketId { get; set; }
+        [MaxLength(10)]
         public string? ShiftId { get; set; }
         [MaxLength(20)]
         public string? EmployeeId { get; set; }
+
+        public Guid? TicketTypeId { get; set; }
+        [ForeignKey("TicketTypeId")]
+        public virtual TicketTypeModel? TicketType { get; set; }
 
         public virtual ICollection<PaymentModel> Payments { get; set; }
     }

@@ -9,6 +9,7 @@ using EPAY.ETC.Core.API.Core.Models.FeeVehicleCategories;
 using EPAY.ETC.Core.API.Core.Models.Fusion;
 using EPAY.ETC.Core.API.Core.Models.ManualBarrierControl;
 using EPAY.ETC.Core.API.Core.Models.Payment;
+using EPAY.ETC.Core.API.Core.Models.TicketType;
 using EPAY.ETC.Core.API.Core.Models.TimeBlockFees;
 using EPAY.ETC.Core.API.Core.Models.TransactionLog;
 using EPAY.ETC.Core.API.Core.Models.Vehicle;
@@ -53,6 +54,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
         public virtual DbSet<ManualBarrierControlModel> ManualBarrierControls { get; set; }
         public virtual DbSet<BarcodeModel> Barcodes { get; set; }
         public virtual DbSet<ErrorResponseModel> ErrorResponses { get; set; }
+        public virtual DbSet<TicketTypeModel> TicketTypes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -547,6 +549,10 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                 .HasOne(x => x.CustomVehicleType)
                 .WithMany(x => x.Fees)
                 .HasForeignKey(x => x.CustomVehicleTypeId);
+            modelBuilder.Entity<FeeModel>()
+                .HasOne(x => x.TicketType)
+                .WithMany(x => x.Fees)
+                .HasForeignKey(x => x.TicketTypeId);
             modelBuilder.Entity<FeeModel>().HasIndex(x => x.CustomVehicleTypeId);
             modelBuilder.Entity<FeeModel>().HasIndex(x => x.PlateNumber);
             modelBuilder.Entity<FeeModel>().HasIndex(x => x.TicketId);
@@ -557,6 +563,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
             modelBuilder.Entity<FeeModel>().HasIndex(x => x.LaneOutId);
             modelBuilder.Entity<FeeModel>().HasIndex(x => x.LaneOutDate);
             modelBuilder.Entity<FeeModel>().HasIndex(x => x.LaneOutEpoch);
+            modelBuilder.Entity<FeeModel>().HasIndex(x => x.TicketTypeId);
             #endregion
 
             #region PaymentStatus configuration
@@ -765,17 +772,17 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                     CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
                 },
                 new ErrorResponseModel()
-                 {
-                     Id = new Guid("25ee8f5e-c899-4b55-a894-805dc3333026"),
-                     Source = "VETC",
-                     Function = "Checkout",
-                     Code = "500",
-                     Status = "INTERNAL_SERVER_ERROR",
-                     ErrorCode = "PAYMENT_ERROR",
-                     EpayCode = "304",
-                     EpayMessage = "Thanh toán thành công",
-                     CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
-                 },
+                {
+                    Id = new Guid("25ee8f5e-c899-4b55-a894-805dc3333026"),
+                    Source = "VETC",
+                    Function = "Checkout",
+                    Code = "500",
+                    Status = "INTERNAL_SERVER_ERROR",
+                    ErrorCode = "PAYMENT_ERROR",
+                    EpayCode = "304",
+                    EpayMessage = "Thanh toán thành công",
+                    CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
+                },
                 new ErrorResponseModel()
                 {
                     Id = new Guid("25ee8f5e-c899-4b55-a894-805dc3333027"),
@@ -851,17 +858,17 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                     CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
                 },
                 new ErrorResponseModel()
-                 {
-                     Id = new Guid("9ee064f5-3053-4367-822f-ecf7e2d230b1"),
-                     Source = "VETC",
-                     Function = "Rollback",
-                     Code = "500",
-                     Status = "INTERNAL_SERVER_ERROR",
-                     ErrorCode = "TRANSACTION_NOTFOUND",
-                     EpayCode = "306",
-                     EpayMessage = "Không tìm thấy giao dịch",
-                     CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
-                 },
+                {
+                    Id = new Guid("9ee064f5-3053-4367-822f-ecf7e2d230b1"),
+                    Source = "VETC",
+                    Function = "Rollback",
+                    Code = "500",
+                    Status = "INTERNAL_SERVER_ERROR",
+                    ErrorCode = "TRANSACTION_NOTFOUND",
+                    EpayCode = "306",
+                    EpayMessage = "Không tìm thấy giao dịch",
+                    CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
+                },
             #endregion
 
             #region VDTC
@@ -926,65 +933,65 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                     CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
                 },
                 new ErrorResponseModel()
-                 {
-                     Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d70"),
-                     Source = "VDTC",
-                     Function = string.Empty,
-                     Code = "7",
-                     Status = string.Empty,
-                     ErrorCode = string.Empty,
-                     EpayCode = "206",
-                     EpayMessage = "Lỗi hệ thống",
-                     CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
-                 },
+                {
+                    Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d70"),
+                    Source = "VDTC",
+                    Function = string.Empty,
+                    Code = "7",
+                    Status = string.Empty,
+                    ErrorCode = string.Empty,
+                    EpayCode = "206",
+                    EpayMessage = "Lỗi hệ thống",
+                    CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
+                },
                 new ErrorResponseModel()
-                 {
-                     Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d69"),
-                     Source = "VDTC",
-                     Function = string.Empty,
-                     Code = "6",
-                     Status = string.Empty,
-                     ErrorCode = string.Empty,
-                     EpayCode = "205",
-                     EpayMessage = "Lỗi hệ thống",
-                     CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
-                 },
+                {
+                    Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d69"),
+                    Source = "VDTC",
+                    Function = string.Empty,
+                    Code = "6",
+                    Status = string.Empty,
+                    ErrorCode = string.Empty,
+                    EpayCode = "205",
+                    EpayMessage = "Lỗi hệ thống",
+                    CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
+                },
                 new ErrorResponseModel()
-                 {
-                     Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d71"),
-                     Source = "VDTC",
-                     Function = string.Empty,
-                     Code = "7",
-                     Status = string.Empty,
-                     ErrorCode = string.Empty,
-                     EpayCode = "206",
-                     EpayMessage = "Lỗi hệ thống",
-                     CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
-                 },
+                {
+                    Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d71"),
+                    Source = "VDTC",
+                    Function = string.Empty,
+                    Code = "7",
+                    Status = string.Empty,
+                    ErrorCode = string.Empty,
+                    EpayCode = "206",
+                    EpayMessage = "Lỗi hệ thống",
+                    CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
+                },
                 new ErrorResponseModel()
-                  {
-                      Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d72"),
-                      Source = "VDTC",
-                      Function = string.Empty,
-                      Code = "8",
-                      Status = string.Empty,
-                      ErrorCode = string.Empty,
-                      EpayCode = "207",
-                      EpayMessage = "Lỗi hệ thống",
-                      CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
-                  },
+                {
+                    Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d72"),
+                    Source = "VDTC",
+                    Function = string.Empty,
+                    Code = "8",
+                    Status = string.Empty,
+                    ErrorCode = string.Empty,
+                    EpayCode = "207",
+                    EpayMessage = "Lỗi hệ thống",
+                    CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
+                },
                 new ErrorResponseModel()
-                 {
-                     Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d46d72"),
-                     Source = "VDTC",
-                     Function = string.Empty,
-                     Code = "9",
-                     Status = string.Empty,
-                     ErrorCode = string.Empty,
-                     EpayCode = "208",
-                     EpayMessage = "Lỗi hệ thống",
-                     CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
-                 },
+                {
+                    Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d46d72"),
+                    Source = "VDTC",
+                    Function = string.Empty,
+                    Code = "9",
+                    Status = string.Empty,
+                    ErrorCode = string.Empty,
+                    EpayCode = "208",
+                    EpayMessage = "Lỗi hệ thống",
+                    CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
+                },
                 new ErrorResponseModel()
                 {
                     Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d73"),
@@ -998,29 +1005,29 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                     CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
                 },
                 new ErrorResponseModel()
-                 {
-                     Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d74"),
-                     Source = "VDTC",
-                     Function = string.Empty,
-                     Code = "11",
-                     Status = string.Empty,
-                     ErrorCode = string.Empty,
-                     EpayCode = "210",
-                     EpayMessage = "Lỗi hệ thống",
-                     CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
-                 },
+                {
+                    Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d74"),
+                    Source = "VDTC",
+                    Function = string.Empty,
+                    Code = "11",
+                    Status = string.Empty,
+                    ErrorCode = string.Empty,
+                    EpayCode = "210",
+                    EpayMessage = "Lỗi hệ thống",
+                    CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
+                },
                 new ErrorResponseModel()
-                  {
-                      Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d75"),
-                      Source = "VDTC",
-                      Function = string.Empty,
-                      Code = "12",
-                      Status = string.Empty,
-                      ErrorCode = string.Empty,
-                      EpayCode = "211",
-                      EpayMessage = "Lỗi hệ thống",
-                      CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
-                  },
+                {
+                    Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d75"),
+                    Source = "VDTC",
+                    Function = string.Empty,
+                    Code = "12",
+                    Status = string.Empty,
+                    ErrorCode = string.Empty,
+                    EpayCode = "211",
+                    EpayMessage = "Lỗi hệ thống",
+                    CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
+                },
                 new ErrorResponseModel()
                 {
                     Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf80d45d76"),
@@ -1034,17 +1041,17 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                     CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
                 },
                 new ErrorResponseModel()
-                 {
-                     Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d76"),
-                     Source = "VDTC",
-                     Function = string.Empty,
-                     Code = "14",
-                     Status = string.Empty,
-                     ErrorCode = string.Empty,
-                     EpayCode = "213",
-                     EpayMessage = "Lỗi hệ thống",
-                     CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
-                 },
+                {
+                    Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d76"),
+                    Source = "VDTC",
+                    Function = string.Empty,
+                    Code = "14",
+                    Status = string.Empty,
+                    ErrorCode = string.Empty,
+                    EpayCode = "213",
+                    EpayMessage = "Lỗi hệ thống",
+                    CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
+                },
                 new ErrorResponseModel()
                 {
                     Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d77"),
@@ -1070,17 +1077,17 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                     CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
                 },
                 new ErrorResponseModel()
-                 {
-                     Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d79"),
-                     Source = "VDTC",
-                     Function = string.Empty,
-                     Code = "17",
-                     Status = string.Empty,
-                     ErrorCode = string.Empty,
-                     EpayCode = "216",
-                     EpayMessage = "Lỗi hệ thống",
-                     CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
-                 },
+                {
+                    Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d79"),
+                    Source = "VDTC",
+                    Function = string.Empty,
+                    Code = "17",
+                    Status = string.Empty,
+                    ErrorCode = string.Empty,
+                    EpayCode = "216",
+                    EpayMessage = "Lỗi hệ thống",
+                    CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
+                },
                 new ErrorResponseModel()
                 {
                     Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d80"),
@@ -1094,41 +1101,41 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                     CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
                 },
                 new ErrorResponseModel()
-                 {
-                     Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d81"),
-                     Source = "VDTC",
-                     Function = string.Empty,
-                     Code = "19",
-                     Status = string.Empty,
-                     ErrorCode = string.Empty,
-                     EpayCode = "218",
-                     EpayMessage = "Lỗi hệ thống",
-                     CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
-                 },
+                {
+                    Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d81"),
+                    Source = "VDTC",
+                    Function = string.Empty,
+                    Code = "19",
+                    Status = string.Empty,
+                    ErrorCode = string.Empty,
+                    EpayCode = "218",
+                    EpayMessage = "Lỗi hệ thống",
+                    CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
+                },
                 new ErrorResponseModel()
-                 {
-                     Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d82"),
-                     Source = "VDTC",
-                     Function = string.Empty,
-                     Code = "20",
-                     Status = string.Empty,
-                     ErrorCode = string.Empty,
-                     EpayCode = "219",
-                     EpayMessage = "Lỗi hệ thống",
-                     CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
-                 },
+                {
+                    Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d82"),
+                    Source = "VDTC",
+                    Function = string.Empty,
+                    Code = "20",
+                    Status = string.Empty,
+                    ErrorCode = string.Empty,
+                    EpayCode = "219",
+                    EpayMessage = "Lỗi hệ thống",
+                    CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
+                },
                 new ErrorResponseModel()
-                 {
-                     Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d83"),
-                     Source = "VDTC",
-                     Function = string.Empty,
-                     Code = "21",
-                     Status = string.Empty,
-                     ErrorCode = string.Empty,
-                     EpayCode = "220",
-                     EpayMessage = "Lỗi hệ thống",
-                     CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
-                 },
+                {
+                    Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d83"),
+                    Source = "VDTC",
+                    Function = string.Empty,
+                    Code = "21",
+                    Status = string.Empty,
+                    ErrorCode = string.Empty,
+                    EpayCode = "220",
+                    EpayMessage = "Lỗi hệ thống",
+                    CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
+                },
                 new ErrorResponseModel()
                 {
                     Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d84"),
@@ -1142,17 +1149,17 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                     CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
                 },
                 new ErrorResponseModel()
-                 {
-                     Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d85"),
-                     Source = "VDTC",
-                     Function = string.Empty,
-                     Code = "23",
-                     Status = string.Empty,
-                     ErrorCode = string.Empty,
-                     EpayCode = "222",
-                     EpayMessage = "Lỗi hệ thống",
-                     CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
-                 },
+                {
+                    Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d85"),
+                    Source = "VDTC",
+                    Function = string.Empty,
+                    Code = "23",
+                    Status = string.Empty,
+                    ErrorCode = string.Empty,
+                    EpayCode = "222",
+                    EpayMessage = "Lỗi hệ thống",
+                    CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
+                },
                 new ErrorResponseModel()
                 {
                     Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d86"),
@@ -1178,29 +1185,29 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                     CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
                 },
                 new ErrorResponseModel()
-                 {
-                     Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d89"),
-                     Source = "VDTC",
-                     Function = string.Empty,
-                     Code = "26",
-                     Status = string.Empty,
-                     ErrorCode = string.Empty,
-                     EpayCode = "225",
-                     EpayMessage = "Lỗi hệ thống",
-                     CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
-                 },
+                {
+                    Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d89"),
+                    Source = "VDTC",
+                    Function = string.Empty,
+                    Code = "26",
+                    Status = string.Empty,
+                    ErrorCode = string.Empty,
+                    EpayCode = "225",
+                    EpayMessage = "Lỗi hệ thống",
+                    CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
+                },
                 new ErrorResponseModel()
-                 {
-                     Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d90"),
-                     Source = "VDTC",
-                     Function = string.Empty,
-                     Code = "27",
-                     Status = string.Empty,
-                     ErrorCode = string.Empty,
-                     EpayCode = "226",
-                     EpayMessage = "Lỗi hệ thống",
-                     CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
-                 },
+                {
+                    Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d90"),
+                    Source = "VDTC",
+                    Function = string.Empty,
+                    Code = "27",
+                    Status = string.Empty,
+                    ErrorCode = string.Empty,
+                    EpayCode = "226",
+                    EpayMessage = "Lỗi hệ thống",
+                    CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
+                },
                 new ErrorResponseModel()
                 {
                     Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d91"),
@@ -1214,65 +1221,65 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                     CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
                 },
                 new ErrorResponseModel()
-                 {
-                     Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d92"),
-                     Source = "VDTC",
-                     Function = string.Empty,
-                     Code = "29",
-                     Status = string.Empty,
-                     ErrorCode = string.Empty,
-                     EpayCode = "228",
-                     EpayMessage = "Lỗi hệ thống",
-                     CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
-                 },
+                {
+                    Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d92"),
+                    Source = "VDTC",
+                    Function = string.Empty,
+                    Code = "29",
+                    Status = string.Empty,
+                    ErrorCode = string.Empty,
+                    EpayCode = "228",
+                    EpayMessage = "Lỗi hệ thống",
+                    CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
+                },
                 new ErrorResponseModel()
-                 {
-                     Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d93"),
-                     Source = "VDTC",
-                     Function = string.Empty,
-                     Code = "30",
-                     Status = string.Empty,
-                     ErrorCode = string.Empty,
-                     EpayCode = "229",
-                     EpayMessage = "Lỗi hệ thống",
-                     CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
-                 },
+                {
+                    Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d93"),
+                    Source = "VDTC",
+                    Function = string.Empty,
+                    Code = "30",
+                    Status = string.Empty,
+                    ErrorCode = string.Empty,
+                    EpayCode = "229",
+                    EpayMessage = "Lỗi hệ thống",
+                    CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
+                },
                 new ErrorResponseModel()
-                 {
-                     Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d94"),
-                     Source = "VDTC",
-                     Function = string.Empty,
-                     Code = "31",
-                     Status = string.Empty,
-                     ErrorCode = string.Empty,
-                     EpayCode = "230",
-                     EpayMessage = "Lỗi hệ thống",
-                     CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
-                 },
+                {
+                    Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d94"),
+                    Source = "VDTC",
+                    Function = string.Empty,
+                    Code = "31",
+                    Status = string.Empty,
+                    ErrorCode = string.Empty,
+                    EpayCode = "230",
+                    EpayMessage = "Lỗi hệ thống",
+                    CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
+                },
                 new ErrorResponseModel()
-                 {
-                     Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d95"),
-                     Source = "VDTC",
-                     Function = string.Empty,
-                     Code = "32",
-                     Status = string.Empty,
-                     ErrorCode = string.Empty,
-                     EpayCode = "231",
-                     EpayMessage = "Lỗi hệ thống",
-                     CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
-                 },
+                {
+                    Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d95"),
+                    Source = "VDTC",
+                    Function = string.Empty,
+                    Code = "32",
+                    Status = string.Empty,
+                    ErrorCode = string.Empty,
+                    EpayCode = "231",
+                    EpayMessage = "Lỗi hệ thống",
+                    CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
+                },
                 new ErrorResponseModel()
-                 {
-                     Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d96"),
-                     Source = "VDTC",
-                     Function = string.Empty,
-                     Code = "33",
-                     Status = string.Empty,
-                     ErrorCode = string.Empty,
-                     EpayCode = "232",
-                     EpayMessage = "Lỗi hệ thống",
-                     CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
-                 },
+                {
+                    Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d96"),
+                    Source = "VDTC",
+                    Function = string.Empty,
+                    Code = "33",
+                    Status = string.Empty,
+                    ErrorCode = string.Empty,
+                    EpayCode = "232",
+                    EpayMessage = "Lỗi hệ thống",
+                    CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
+                },
                 new ErrorResponseModel()
                 {
                     Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d97"),
@@ -1298,54 +1305,54 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                     CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
                 },
                 new ErrorResponseModel()
-                 {
-                     Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d99"),
-                     Source = "VDTC",
-                     Function = string.Empty,
-                     Code = "36",
-                     Status = string.Empty,
-                     ErrorCode = string.Empty,
-                     EpayCode = "235",
-                     EpayMessage = "Lỗi hệ thống",
-                     CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
-                 },
+                {
+                    Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45d99"),
+                    Source = "VDTC",
+                    Function = string.Empty,
+                    Code = "36",
+                    Status = string.Empty,
+                    ErrorCode = string.Empty,
+                    EpayCode = "235",
+                    EpayMessage = "Lỗi hệ thống",
+                    CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
+                },
                 new ErrorResponseModel()
-                 {
-                     Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45c10"),
-                     Source = "VDTC",
-                     Function = string.Empty,
-                     Code = "37",
-                     Status = string.Empty,
-                     ErrorCode = string.Empty,
-                     EpayCode = "236",
-                     EpayMessage = "Lỗi hệ thống",
-                     CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
-                 },
+                {
+                    Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45c10"),
+                    Source = "VDTC",
+                    Function = string.Empty,
+                    Code = "37",
+                    Status = string.Empty,
+                    ErrorCode = string.Empty,
+                    EpayCode = "236",
+                    EpayMessage = "Lỗi hệ thống",
+                    CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
+                },
                 new ErrorResponseModel()
-                 {
-                     Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45c11"),
-                     Source = "VDTC",
-                     Function = string.Empty,
-                     Code = "38",
-                     Status = string.Empty,
-                     ErrorCode = string.Empty,
-                     EpayCode = "237",
-                     EpayMessage = "Lỗi hệ thống",
-                     CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
-                 },
+                {
+                    Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45c11"),
+                    Source = "VDTC",
+                    Function = string.Empty,
+                    Code = "38",
+                    Status = string.Empty,
+                    ErrorCode = string.Empty,
+                    EpayCode = "237",
+                    EpayMessage = "Lỗi hệ thống",
+                    CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
+                },
                 new ErrorResponseModel()
-                 {
-                     Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45c12"),
-                     Source = "VDTC",
-                     Function = string.Empty,
-                     Code = "0",
-                     Status = string.Empty,
-                     ErrorCode = string.Empty,
-                     EpayCode = "238",
-                     EpayMessage = "Tài khoản không đủ tiền",
-                     CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
-                 },
-               
+                {
+                    Id = new Guid("a0a7891e-2073-4a9d-b1be-5fcf79d45c12"),
+                    Source = "VDTC",
+                    Function = string.Empty,
+                    Code = "0",
+                    Status = string.Empty,
+                    ErrorCode = string.Empty,
+                    EpayCode = "238",
+                    EpayMessage = "Tài khoản không đủ tiền",
+                    CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
+                },
+
             #endregion
 
             #region POS
@@ -1374,89 +1381,89 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                     CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
                 },
                 new ErrorResponseModel()
-                 {
-                     Id = new Guid("f8de22ef-2f65-43fc-afd5-defb85f9a63f"),
-                     Source = "POS",
-                     Function = string.Empty,
-                     Code = "3",
-                     Status = string.Empty,
-                     ErrorCode = string.Empty,
-                     EpayCode = "503",
-                     EpayMessage = "Lỗi hệ thống",
-                     CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
-                 },
+                {
+                    Id = new Guid("f8de22ef-2f65-43fc-afd5-defb85f9a63f"),
+                    Source = "POS",
+                    Function = string.Empty,
+                    Code = "3",
+                    Status = string.Empty,
+                    ErrorCode = string.Empty,
+                    EpayCode = "503",
+                    EpayMessage = "Lỗi hệ thống",
+                    CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
+                },
                 new ErrorResponseModel()
-                 {
-                     Id = new Guid("f8de22ef-2f65-43fc-afd5-defb85f9a64f"),
-                     Source = "POS",
-                     Function = string.Empty,
-                     Code = "4",
-                     Status = string.Empty,
-                     ErrorCode = string.Empty,
-                     EpayCode = "504",
-                     EpayMessage = "Lỗi hệ thống",
-                     CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
-                 },
+                {
+                    Id = new Guid("f8de22ef-2f65-43fc-afd5-defb85f9a64f"),
+                    Source = "POS",
+                    Function = string.Empty,
+                    Code = "4",
+                    Status = string.Empty,
+                    ErrorCode = string.Empty,
+                    EpayCode = "504",
+                    EpayMessage = "Lỗi hệ thống",
+                    CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
+                },
                 new ErrorResponseModel()
-                  {
-                      Id = new Guid("f8de22ef-2f65-43fc-afd5-defb85f9a65f"),
-                      Source = "POS",
-                      Function = string.Empty,
-                      Code = "5",
-                      Status = string.Empty,
-                      ErrorCode = string.Empty,
-                      EpayCode = "505",
-                      EpayMessage = "Tạo giao dịch bị lỗi",
-                      CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
-                  },
+                {
+                    Id = new Guid("f8de22ef-2f65-43fc-afd5-defb85f9a65f"),
+                    Source = "POS",
+                    Function = string.Empty,
+                    Code = "5",
+                    Status = string.Empty,
+                    ErrorCode = string.Empty,
+                    EpayCode = "505",
+                    EpayMessage = "Tạo giao dịch bị lỗi",
+                    CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
+                },
                 new ErrorResponseModel()
-                   {
-                       Id = new Guid("f8de22ef-2f65-43fc-afd5-defb85f9a66f"),
-                       Source = "POS",
-                       Function = string.Empty,
-                       Code = "6",
-                       Status = string.Empty,
-                       ErrorCode = string.Empty,
-                       EpayCode = "506",
-                       EpayMessage = "Lỗi đọc thẻ",
-                       CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
-                   },
+                {
+                    Id = new Guid("f8de22ef-2f65-43fc-afd5-defb85f9a66f"),
+                    Source = "POS",
+                    Function = string.Empty,
+                    Code = "6",
+                    Status = string.Empty,
+                    ErrorCode = string.Empty,
+                    EpayCode = "506",
+                    EpayMessage = "Lỗi đọc thẻ",
+                    CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
+                },
                 new ErrorResponseModel()
-                    {
-                        Id = new Guid("f8de22ef-2f65-43fc-afd5-defb85f9a67f"),
-                        Source = "POS",
-                        Function = string.Empty,
-                        Code = "7",
-                        Status = string.Empty,
-                        ErrorCode = string.Empty,
-                        EpayCode = "507",
-                        EpayMessage = "Yêu cầu không hợp lệ",
-                        CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
-                    },
+                {
+                    Id = new Guid("f8de22ef-2f65-43fc-afd5-defb85f9a67f"),
+                    Source = "POS",
+                    Function = string.Empty,
+                    Code = "7",
+                    Status = string.Empty,
+                    ErrorCode = string.Empty,
+                    EpayCode = "507",
+                    EpayMessage = "Yêu cầu không hợp lệ",
+                    CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
+                },
                 new ErrorResponseModel()
-                     {
-                         Id = new Guid("f8de22ef-2f65-43fc-afd5-defb85f9a68f"),
-                         Source = "POS",
-                         Function = string.Empty,
-                         Code = "8",
-                         Status = string.Empty,
-                         ErrorCode = string.Empty,
-                         EpayCode = "508",
-                         EpayMessage = "Lỗi hệ thống",
-                         CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
-                     },
+                {
+                    Id = new Guid("f8de22ef-2f65-43fc-afd5-defb85f9a68f"),
+                    Source = "POS",
+                    Function = string.Empty,
+                    Code = "8",
+                    Status = string.Empty,
+                    ErrorCode = string.Empty,
+                    EpayCode = "508",
+                    EpayMessage = "Lỗi hệ thống",
+                    CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
+                },
                 new ErrorResponseModel()
-                     {
-                         Id = new Guid("f8de22ef-2f65-43fc-afd5-defb85f9a69f"),
-                         Source = "POS",
-                         Function = string.Empty,
-                         Code = "9",
-                         Status = string.Empty,
-                         ErrorCode = string.Empty,
-                         EpayCode = "509",
-                         EpayMessage = "Quá nhiều thẻ",
-                         CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
-                     },
+                {
+                    Id = new Guid("f8de22ef-2f65-43fc-afd5-defb85f9a69f"),
+                    Source = "POS",
+                    Function = string.Empty,
+                    Code = "9",
+                    Status = string.Empty,
+                    ErrorCode = string.Empty,
+                    EpayCode = "509",
+                    EpayMessage = "Quá nhiều thẻ",
+                    CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
+                },
                 new ErrorResponseModel()
                 {
                     Id = new Guid("f8de22ef-2f65-43fc-afd5-defb85f9a70f"),
@@ -1470,17 +1477,17 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                     CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
                 },
                 new ErrorResponseModel()
-                 {
-                     Id = new Guid("f8de22ef-2f65-43fc-afd5-defb85f9a71f"),
-                     Source = "POS",
-                     Function = string.Empty,
-                     Code = "12",
-                     Status = string.Empty,
-                     ErrorCode = string.Empty,
-                     EpayCode = "512",
-                     EpayMessage = "Không được phép hủy",
-                     CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
-                 },
+                {
+                    Id = new Guid("f8de22ef-2f65-43fc-afd5-defb85f9a71f"),
+                    Source = "POS",
+                    Function = string.Empty,
+                    Code = "12",
+                    Status = string.Empty,
+                    ErrorCode = string.Empty,
+                    EpayCode = "512",
+                    EpayMessage = "Không được phép hủy",
+                    CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
+                },
                 new ErrorResponseModel()
                 {
                     Id = new Guid("fdf50f73-ede5-4db2-82e1-5e0aa08b6c0e"),
@@ -1494,44 +1501,71 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                     CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
                 },
                 new ErrorResponseModel()
-                 {
-                     Id = new Guid("f8de22ef-2f65-43fc-afd5-defb85f9a73f"),
-                     Source = "POS",
-                     Function = string.Empty,
-                     Code = "14",
-                     Status = string.Empty,
-                     ErrorCode = string.Empty,
-                     EpayCode = "514",
-                     EpayMessage = "Sai định dạng",
-                     CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
-                 },
+                {
+                    Id = new Guid("f8de22ef-2f65-43fc-afd5-defb85f9a73f"),
+                    Source = "POS",
+                    Function = string.Empty,
+                    Code = "14",
+                    Status = string.Empty,
+                    ErrorCode = string.Empty,
+                    EpayCode = "514",
+                    EpayMessage = "Sai định dạng",
+                    CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
+                },
                 new ErrorResponseModel()
-                  {
-                      Id = new Guid("f8de22ef-2f65-43fc-afd5-defb85f9a74f"),
-                      Source = "POS",
-                      Function = string.Empty,
-                      Code = "15",
-                      Status = string.Empty,
-                      ErrorCode = string.Empty,
-                      EpayCode = "515",
-                      EpayMessage = "Thẻ hết hạn",
-                      CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
-                  },
+                {
+                    Id = new Guid("f8de22ef-2f65-43fc-afd5-defb85f9a74f"),
+                    Source = "POS",
+                    Function = string.Empty,
+                    Code = "15",
+                    Status = string.Empty,
+                    ErrorCode = string.Empty,
+                    EpayCode = "515",
+                    EpayMessage = "Thẻ hết hạn",
+                    CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
+                },
                 new ErrorResponseModel()
-                   {
-                       Id = new Guid("f8de22ef-2f65-43fc-afd5-defb85f9a75f"),
-                       Source = "POS",
-                       Function = string.Empty,
-                       Code = "16",
-                       Status = string.Empty,
-                       ErrorCode = string.Empty,
-                       EpayCode = "516",
-                       EpayMessage = "Lỗi đọc file",
-                       CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
-                   }
+                {
+                    Id = new Guid("f8de22ef-2f65-43fc-afd5-defb85f9a75f"),
+                    Source = "POS",
+                    Function = string.Empty,
+                    Code = "16",
+                    Status = string.Empty,
+                    ErrorCode = string.Empty,
+                    EpayCode = "516",
+                    EpayMessage = "Lỗi đọc file",
+                    CreatedDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc)
+                }
                 #endregion
             );
 
+            #endregion
+
+            #region Ticket type
+            modelBuilder.Entity<TicketTypeModel>().HasKey(x => x.Id);
+
+            modelBuilder.Entity<TicketTypeModel>().HasData(
+                new TicketTypeModel()
+                {
+                    Id = new Guid("fffbf4d1-8b76-4f3a-9070-0cfa0a658f08"),
+                    Code = ManualBarrierTypeEnum.OneTimePass.ToString(),
+                    CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
+                    Name = ManualBarrierTypeEnum.OneTimePass.ToDescriptionString()
+                },
+                new TicketTypeModel()
+                {
+                    Id = new Guid("a4a39e55-85c0-4761-ba64-f941111186f9"),
+                    Code = ManualBarrierTypeEnum.Priority.ToString(),
+                    CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
+                    Name = ManualBarrierTypeEnum.Priority.ToDescriptionString()
+                },
+                new TicketTypeModel()
+                {
+                    Id = new Guid("be652877-ca81-4fb4-bfa1-b9cec61f9e6b"),
+                    Code = ManualBarrierTypeEnum.FreeEntry.ToString(),
+                    CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
+                    Name = ManualBarrierTypeEnum.FreeEntry.ToDescriptionString()
+                });
             #endregion
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
