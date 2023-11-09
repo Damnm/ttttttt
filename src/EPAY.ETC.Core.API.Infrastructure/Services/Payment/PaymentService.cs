@@ -36,7 +36,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Payment
                 var existRecords = await _repository.GetAllAsync(s => s.FeeId == input.FeeId);
                 if (existRecords.Any())
                 {
-                    var updateresult = await UpdateAsync(existRecords.FirstOrDefault()!.Id, input);
+                    input.PaymentId = existRecords.FirstOrDefault()!.Id;
+                    var updateresult = await UpdateAsync((Guid)input.PaymentId, input);
                     return updateresult;
                 }
 
