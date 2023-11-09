@@ -71,14 +71,15 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                 if (!string.IsNullOrEmpty(uiModelStr))
                     uiModel = JsonSerializer.Deserialize<UIModel>(uiModelStr);
 
+                Guid objectId = uiModel?.ObjectId ?? Guid.NewGuid();
+                if (reconcilVehicleInfo.ObjectId != null && reconcilVehicleInfo.ObjectId != Guid.Empty)
+                    objectId = (Guid)reconcilVehicleInfo.ObjectId;
+
                 ReconcileResultModel result = new ReconcileResultModel();
                 if (reconcilVehicleInfo?.Payment != null)
                 {
-                    Guid objectId = uiModel?.ObjectId ?? Guid.NewGuid();
                     Guid? paymentId = uiModel?.Body?.Payment?.PaymentId;
 
-                    if (reconcilVehicleInfo.ObjectId != null && reconcilVehicleInfo.ObjectId != Guid.Empty)
-                        objectId = (Guid)reconcilVehicleInfo.ObjectId;
                     if (reconcilVehicleInfo.Payment.PaymentId != null && reconcilVehicleInfo.Payment.PaymentId != Guid.Empty)
                         paymentId = reconcilVehicleInfo.Payment.PaymentId;
 
@@ -121,7 +122,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                                 feeModel.LaneOutVehicle.VehicleInfo = new ETC.Core.Models.VehicleInfoModel();
 
                             // Update PlateNumber for FusionObject
-                            _redisDB.HashSet(reconcilVehicleInfo?.ObjectId.ToString() ?? uiModel?.ObjectId.ToString() ?? string.Empty, nameof(FusionModel.ANPRCam1), reconcilVehicleInfo?.Vehicle?.PlateNumber);
+                            _redisDB.HashSet(objectId.ToString(), nameof(FusionModel.ANPRCam1), reconcilVehicleInfo?.Vehicle?.PlateNumber);
 
                             feeModel.LaneOutVehicle.VehicleInfo.PlateNumber = !string.IsNullOrEmpty(reconcilVehicleInfo?.Vehicle?.PlateNumber) ? reconcilVehicleInfo?.Vehicle?.PlateNumber : feeModel.LaneOutVehicle.VehicleInfo.PlateNumber;
                             feeModel.LaneOutVehicle.RFID = !string.IsNullOrEmpty(reconcilVehicleInfo?.Vehicle?.RFID) ? reconcilVehicleInfo?.Vehicle?.PlateNumber : feeModel.LaneOutVehicle.RFID;
