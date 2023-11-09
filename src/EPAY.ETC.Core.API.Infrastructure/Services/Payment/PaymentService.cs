@@ -33,14 +33,13 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Payment
             _logger.LogInformation($"Executing {nameof(AddAsync)} method...");
             try
             {
-                var existingRecords = await GetExistingRecordAsync(input);
-                if (existingRecords)
+                var existRecords = await _repository.GetAllAsync(s => s.FeeId == input.FeeId);
+                if (existRecords.Any())
                 {
-                    return ValidationResult.Failed<PaymentModel>(new List<ValidationError>()
-                    {
-                        new ValidationError("Gía trị đã có trên hệ thống", ValidationError.Conflict.Code)
-                    });
+                    var updateresult = await UpdateAsync(existRecords.FirstOrDefault()!.Id, input);
+                    return updateresult;
                 }
+
                 var entity = _mapper.Map<PaymentModel>(input);
 
                 var result = await _repository.AddAsync(entity);
@@ -78,7 +77,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Payment
             }
         }
 
-       
+
         #endregion
 
         #region RemoveAsync
