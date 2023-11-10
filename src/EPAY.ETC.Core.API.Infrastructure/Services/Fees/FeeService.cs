@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Fees;
+using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.ETCCheckouts;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Fees;
 using EPAY.ETC.Core.Models.Constants;
 using EPAY.ETC.Core.Models.Devices;
@@ -18,16 +19,21 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
     {
         private readonly ILogger<FeeService> _logger;
         private readonly IFeeRepository _repository;
+        private readonly ITicketTypeRepository _ticketTypeRepository;
         private readonly IMapper _mapper;
         private readonly IDatabase _redisDB;
 
-        public FeeService(
-            ILogger<FeeService> logger, IFeeRepository repository, IMapper mapper, IDatabase redisDB)
+        public FeeService(ILogger<FeeService> logger,
+                          IFeeRepository repository,
+                          ITicketTypeRepository ticketTypeRepository,
+                          IMapper mapper,
+                          IDatabase redisDB)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
-            _mapper = mapper;
-            _redisDB = redisDB;
+            _ticketTypeRepository = ticketTypeRepository ?? throw new ArgumentNullException(nameof(ticketTypeRepository));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _redisDB = redisDB ?? throw new ArgumentNullException(nameof(redisDB));
         }
 
         public async Task<ValidationResult<FeeModel>> AddAsync(CoreModel.FeeModel input)
@@ -50,6 +56,13 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
                 {
                     entity.LaneOutId = Environment.GetEnvironmentVariable(CoreConstant.ENVIRONMENT_LANE_OUT) ?? "1";
                 }
+                if (!string.IsNullOrEmpty(input.Payment?.TicketTypeId))
+                {
+                    var ticketTypes = await _ticketTypeRepository.GetAllAsync(s => s.Code.Equals(input.Payment.TicketTypeId ?? string.Empty));
+                    if (ticketTypes.Any())
+                        entity.TicketTypeId = ticketTypes.FirstOrDefault()?.Id;
+                }
+
                 _logger.LogWarning($"Executing {nameof(AddAsync)} method, add new object {JsonSerializer.Serialize(input)} to database.");
                 var result = await _repository.AddAsync(entity);
 
