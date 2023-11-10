@@ -12,7 +12,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
             migrationBuilder.AlterColumn<Guid>(
                 name: "TicketTypeId",
                 table: "Fee",
-                type: "uuid",
+                type: "uuid using \"TicketTypeId\"::uuid",
                 nullable: true,
                 oldClrType: typeof(string),
                 oldType: "character varying(50)",
@@ -22,8 +22,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "ShiftId",
                 table: "Fee",
-                type: "character varying(10)",
-                maxLength: 10,
+                type: "character varying(50)",
+                maxLength: 50,
                 nullable: true,
                 oldClrType: typeof(string),
                 oldType: "text",
@@ -96,8 +96,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                 type: "text",
                 nullable: true,
                 oldClrType: typeof(string),
-                oldType: "character varying(10)",
-                oldMaxLength: 10,
+                oldType: "character varying(50)",
+                oldMaxLength: 50,
                 oldNullable: true);
         }
     }

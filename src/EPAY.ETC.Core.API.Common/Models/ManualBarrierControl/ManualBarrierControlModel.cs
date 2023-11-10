@@ -13,5 +13,6 @@ namespace EPAY.ETC.Core.API.Core.Models.ManualBarrierControl
         public BarrierActionEnum Action { get; set; }
         [MaxLength(10)]
         public string LaneOutId { get; set; }
+        public string? ManualBarrierType { get; set; }
     }
 }

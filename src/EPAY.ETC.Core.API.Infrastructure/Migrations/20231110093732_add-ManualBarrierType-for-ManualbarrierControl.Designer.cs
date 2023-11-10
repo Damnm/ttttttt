@@ -3,6 +3,7 @@ using System;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EPAY.ETC.Core.API.Infrastructure.Migrations
 {
     [DbContext(typeof(CoreDbContext))]
-    partial class CoreDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231110093732_add-ManualBarrierType-for-ManualbarrierControl")]
+    partial class addManualBarrierTypeforManualbarrierControl
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1223,8 +1225,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("ShiftId")
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasMaxLength(10)
+                        .HasColumnType("character varying(10)");
 
                     b.Property<string>("TicketId")
                         .HasMaxLength(50)

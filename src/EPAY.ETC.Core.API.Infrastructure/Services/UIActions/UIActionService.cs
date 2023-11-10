@@ -242,7 +242,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                     CreatedDate = DateTime.Now,
                     EmployeeId = request.EmployeeId,
                     LaneOutId = request.LaneId ?? string.Empty,
-                    Id = Guid.NewGuid()
+                    Id = Guid.NewGuid(),
+                    ManualBarrierType = request.ManualBarrierType.ToString()
                 });
 
                 var processingObjectId = _redisDB.StringGet(RedisConstant.FUSION_PROCESSING).ToString();
