@@ -1,14 +1,12 @@
-﻿using EPAY.ETC.Core.API.Core.Models.Fees;
+﻿using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.ETCCheckouts;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Fees;
 using EPAY.ETC.Core.API.Infrastructure.Services.Fees;
 using EPAY.ETC.Core.API.Infrastructure.UnitTests.Common;
 using EPAY.ETC.Core.API.Infrastructure.UnitTests.Helpers;
-using EPAY.ETC.Core.Models.Fees;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Moq;
-using StackExchange.Redis;
 using System.Linq.Expressions;
 using CoreModel = EPAY.ETC.Core.Models.Fees;
 using FeeModel = EPAY.ETC.Core.API.Core.Models.Fees.FeeModel;
@@ -20,6 +18,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fees
         #region Init mock instance
         private readonly Mock<ILogger<FeeService>> _loggerMock = new();
         private readonly Mock<IFeeRepository> _feeRepositoryMock = new();
+        private readonly Mock<ITicketTypeRepository> _ticketTypeRepositoryMock = new();
         public readonly Mock<StackExchange.Redis.IDatabase> _redisDBMock = new();
         #endregion
 
@@ -67,7 +66,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fees
             _feeRepositoryMock.Setup(x => x.AddAsync(It.IsAny<FeeModel>())).ReturnsAsync(feeModel);
 
             // Act
-            var service = new FeeService(_loggerMock.Object, _feeRepositoryMock.Object, _mapper, _redisDBMock.Object);
+            var service = new FeeService(_loggerMock.Object, _feeRepositoryMock.Object, _ticketTypeRepositoryMock.Object, _mapper, _redisDBMock.Object);
             var result = await service.AddAsync(request);
 
             // Assert
@@ -89,7 +88,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fees
             _feeRepositoryMock.Setup(x => x.GetAllAsync(It.IsAny<Expression<Func<FeeModel, bool>>>())).ReturnsAsync(new List<FeeModel>() { new FeeModel() });
 
             // Act
-            var service = new FeeService(_loggerMock.Object, _feeRepositoryMock.Object, _mapper, _redisDBMock.Object);
+            var service = new FeeService(_loggerMock.Object, _feeRepositoryMock.Object, _ticketTypeRepositoryMock.Object, _mapper, _redisDBMock.Object);
             var result = await service.AddAsync(request);
 
             // Assert
@@ -113,7 +112,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fees
             _feeRepositoryMock.Setup(x => x.GetAllAsync(It.IsAny<Expression<Func<FeeModel, bool>>>())).ThrowsAsync(exception);
 
             // Act
-            var service = new FeeService(_loggerMock.Object, _feeRepositoryMock.Object, _mapper, _redisDBMock.Object);
+            var service = new FeeService(_loggerMock.Object, _feeRepositoryMock.Object, _ticketTypeRepositoryMock.Object, _mapper, _redisDBMock.Object);
             Func<Task> func = async () => await service.AddAsync(request);
 
             // Assert
@@ -138,7 +137,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fees
             _feeRepositoryMock.Setup(x => x.UpdateAsync(It.IsAny<FeeModel>())).Callback<object>(s => { });
 
             // Act
-            var service = new FeeService(_loggerMock.Object, _feeRepositoryMock.Object, _mapper, _redisDBMock.Object);
+            var service = new FeeService(_loggerMock.Object, _feeRepositoryMock.Object, _ticketTypeRepositoryMock.Object, _mapper, _redisDBMock.Object);
             var result = await service.UpdateAsync(feeModel.Id, request);
 
             // Assert
@@ -162,7 +161,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fees
             _feeRepositoryMock.Setup(x => x.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(new FeeModel());
 
             // Act
-            var service = new FeeService(_loggerMock.Object, _feeRepositoryMock.Object, _mapper, _redisDBMock.Object);
+            var service = new FeeService(_loggerMock.Object, _feeRepositoryMock.Object, _ticketTypeRepositoryMock.Object, _mapper, _redisDBMock.Object);
             var result = await service.UpdateAsync(It.IsAny<Guid>(), request);
 
             // Assert
@@ -186,7 +185,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fees
             _feeRepositoryMock.Setup(x => x.GetByIdAsync(It.IsAny<Guid>()));
 
             // Act
-            var service = new FeeService(_loggerMock.Object, _feeRepositoryMock.Object, _mapper, _redisDBMock.Object);
+            var service = new FeeService(_loggerMock.Object, _feeRepositoryMock.Object, _ticketTypeRepositoryMock.Object, _mapper, _redisDBMock.Object);
             var result = await service.UpdateAsync(It.IsAny<Guid>(), request);
 
             // Assert
@@ -211,7 +210,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fees
             _feeRepositoryMock.Setup(x => x.GetByIdAsync(It.IsAny<Guid>())).ThrowsAsync(exception);
 
             // Act
-            var service = new FeeService(_loggerMock.Object, _feeRepositoryMock.Object, _mapper, _redisDBMock.Object);
+            var service = new FeeService(_loggerMock.Object, _feeRepositoryMock.Object, _ticketTypeRepositoryMock.Object, _mapper, _redisDBMock.Object);
             Func<Task> func = async () => await service.UpdateAsync(It.IsAny<Guid>(), request);
 
             // Assert
@@ -236,7 +235,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fees
             _feeRepositoryMock.Setup(x => x.RemoveAsync(It.IsAny<FeeModel>())).Callback<object>(s => { });
 
             // Act
-            var service = new FeeService(_loggerMock.Object, _feeRepositoryMock.Object, _mapper, _redisDBMock.Object);
+            var service = new FeeService(_loggerMock.Object, _feeRepositoryMock.Object, _ticketTypeRepositoryMock.Object, _mapper, _redisDBMock.Object);
             var result = await service.RemoveAsync(It.IsAny<Guid>());
 
             // Assert
@@ -258,7 +257,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fees
             _feeRepositoryMock.Setup(x => x.GetByIdAsync(It.IsAny<Guid>()));
 
             // Act
-            var service = new FeeService(_loggerMock.Object, _feeRepositoryMock.Object, _mapper, _redisDBMock.Object);
+            var service = new FeeService(_loggerMock.Object, _feeRepositoryMock.Object, _ticketTypeRepositoryMock.Object, _mapper, _redisDBMock.Object);
             var result = await service.RemoveAsync(It.IsAny<Guid>());
 
             // Assert
@@ -282,7 +281,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fees
             _feeRepositoryMock.Setup(x => x.GetByIdAsync(It.IsAny<Guid>())).ThrowsAsync(exception);
 
             // Act
-            var service = new FeeService(_loggerMock.Object, _feeRepositoryMock.Object, _mapper, _redisDBMock.Object);
+            var service = new FeeService(_loggerMock.Object, _feeRepositoryMock.Object, _ticketTypeRepositoryMock.Object, _mapper, _redisDBMock.Object);
             Func<Task> func = async () => await service.RemoveAsync(It.IsAny<Guid>());
 
             // Assert
@@ -305,7 +304,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fees
             _feeRepositoryMock.Setup(x => x.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(feeModel);
 
             // Act
-            var service = new FeeService(_loggerMock.Object, _feeRepositoryMock.Object, _mapper, _redisDBMock.Object);
+            var service = new FeeService(_loggerMock.Object, _feeRepositoryMock.Object, _ticketTypeRepositoryMock.Object, _mapper, _redisDBMock.Object);
             var result = await service.GetByIdAsync(It.IsAny<Guid>());
 
             // Assert
@@ -326,7 +325,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fees
             _feeRepositoryMock.Setup(x => x.GetByIdAsync(It.IsAny<Guid>()));
 
             // Act
-            var service = new FeeService(_loggerMock.Object, _feeRepositoryMock.Object, _mapper, _redisDBMock.Object);
+            var service = new FeeService(_loggerMock.Object, _feeRepositoryMock.Object, _ticketTypeRepositoryMock.Object, _mapper, _redisDBMock.Object);
             var result = await service.GetByIdAsync(It.IsAny<Guid>());
 
             // Assert
@@ -348,7 +347,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fees
             _feeRepositoryMock.Setup(x => x.GetByIdAsync(It.IsAny<Guid>())).ThrowsAsync(exception);
 
             // Act
-            var service = new FeeService(_loggerMock.Object, _feeRepositoryMock.Object, _mapper, _redisDBMock.Object);
+            var service = new FeeService(_loggerMock.Object, _feeRepositoryMock.Object, _ticketTypeRepositoryMock.Object, _mapper, _redisDBMock.Object);
             Func<Task> func = async () => await service.GetByIdAsync(It.IsAny<Guid>());
 
             // Assert
@@ -370,7 +369,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fees
             _feeRepositoryMock.Setup(x => x.GetAllAsync(It.IsAny<Expression<Func<FeeModel, bool>>>())).ReturnsAsync(new List<FeeModel>() { new FeeModel() });
 
             // Act
-            var service = new FeeService(_loggerMock.Object, _feeRepositoryMock.Object, _mapper, _redisDBMock.Object);
+            var service = new FeeService(_loggerMock.Object, _feeRepositoryMock.Object, _ticketTypeRepositoryMock.Object, _mapper, _redisDBMock.Object);
             var result = await service.GetAllAsync(It.IsAny<Expression<Func<FeeModel, bool>>>());
 
             // Assert
@@ -392,7 +391,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fees
             _feeRepositoryMock.Setup(x => x.GetAllAsync(It.IsAny<Expression<Func<FeeModel, bool>>>())).ThrowsAsync(exception);
 
             // Act
-            var service = new FeeService(_loggerMock.Object, _feeRepositoryMock.Object, _mapper, _redisDBMock.Object);
+            var service = new FeeService(_loggerMock.Object, _feeRepositoryMock.Object, _ticketTypeRepositoryMock.Object, _mapper, _redisDBMock.Object);
             Func<Task> func = async () => await service.GetAllAsync(It.IsAny<Expression<Func<FeeModel, bool>>>());
 
             // Assert
