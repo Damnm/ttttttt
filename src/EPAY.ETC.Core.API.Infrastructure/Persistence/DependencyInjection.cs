@@ -22,6 +22,7 @@ using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Fusion;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.ManualBarrierControls;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Payment;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PaymentStatus;
+using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.TicketTypes;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.TimeBlockFees;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Vehicle;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.VehicleCategories;
@@ -75,6 +76,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence
             services.AddScoped<IAppConfigRepository, AppConfigRepository>();
             services.AddScoped<IBarcodeRepository, BarcodeRepository>();
             services.AddScoped<IErrorResponseRepository, ErrorResponseRepository>();
+            services.AddScoped<ITicketTypeRepository, TicketTypeRepository>();
 
             ////Add Services
             services.AddTransient<IVehicleService, VehicleService>();
