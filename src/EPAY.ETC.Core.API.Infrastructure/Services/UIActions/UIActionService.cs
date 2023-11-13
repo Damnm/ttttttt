@@ -520,6 +520,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                     if (result.Header == null)
                         result.Header = new HeaderModel();
                     result.Header.EmployeeName = $"{authenticatedEmployee.FirstName} {authenticatedEmployee.LastName}";
+                    result.Header.ShiftName = $"Ca 1";
                 }
 
                 if (result.Body == null)
