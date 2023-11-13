@@ -68,9 +68,9 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PaymentStatu
             try
             {
                 if (expression != null)
-                    return Task.FromResult(_dbContext.PaymentStatuses.AsNoTracking().Where(expression).OrderByDescending(x => x.PaymentDate).Take(3));
+                    return Task.FromResult(_dbContext.PaymentStatuses.AsNoTracking().Where(expression).OrderByDescending(x => x.PaymentDate).AsQueryable());
 
-                return Task.FromResult(_dbContext.PaymentStatuses.AsNoTracking().OrderByDescending(x => x.PaymentDate).Take(3));
+                return Task.FromResult(_dbContext.PaymentStatuses.AsNoTracking().OrderByDescending(x => x.PaymentDate).AsQueryable());
             }
             catch (Exception ex)
             {
