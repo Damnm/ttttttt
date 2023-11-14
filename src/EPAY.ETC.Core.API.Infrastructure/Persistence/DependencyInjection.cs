@@ -7,6 +7,7 @@ using EPAY.ETC.Core.API.Core.Interfaces.Services.Fusion;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.ManualBarrierControls;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Payment;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.PaymentStatus;
+using EPAY.ETC.Core.API.Core.Interfaces.Services.Transaction;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.UIActions;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Vehicles;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Context;
@@ -24,6 +25,7 @@ using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Payment;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PaymentStatus;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.TicketTypes;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.TimeBlockFees;
+using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.TransactionLog;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Vehicle;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.VehicleCategories;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.VehicleGroups;
@@ -36,6 +38,7 @@ using EPAY.ETC.Core.API.Infrastructure.Services.Fusion;
 using EPAY.ETC.Core.API.Infrastructure.Services.ManualBarrierControls;
 using EPAY.ETC.Core.API.Infrastructure.Services.Payment;
 using EPAY.ETC.Core.API.Infrastructure.Services.PaymentStatus;
+using EPAY.ETC.Core.API.Infrastructure.Services.TransactionLog;
 using EPAY.ETC.Core.API.Infrastructure.Services.UIActions;
 using EPAY.ETC.Core.API.Infrastructure.Services.Vehicles;
 using Microsoft.EntityFrameworkCore;
@@ -77,6 +80,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence
             services.AddScoped<IBarcodeRepository, BarcodeRepository>();
             services.AddScoped<IErrorResponseRepository, ErrorResponseRepository>();
             services.AddScoped<ITicketTypeRepository, TicketTypeRepository>();
+            services.AddScoped<ILaneInCameraTransactionLogRepository, LaneInCameraTransactionLogRepository>();
 
             ////Add Services
             services.AddTransient<IVehicleService, VehicleService>();
@@ -91,6 +95,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence
             services.AddTransient<IAuthenticationService, AuthenticationService>();
             services.AddTransient<IPasswordService, PasswordService>();
             services.AddTransient<IErrorResponseService, ErrorResponseService>();
+            services.AddTransient<ILaneInCameraTransactionLogService, LaneInCameraTransactionLogService>();
 
             return services;
         }

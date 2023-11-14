@@ -33,8 +33,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.TransactionLog
             try
             {
                 var existRecords = await _repository.GetAllAsync(s => 
-                s.PlateNumber.Equals(input.PlateNumber, StringComparison.InvariantCultureIgnoreCase)
-                && s.Epoch == input.Epoch);
+                 s.PlateNumber == input.PlateNumber && s.Epoch == input.Epoch);
 
                 var entityMapped = _mapper.Map<LaneInCameraTransactionLog>(input);
 
