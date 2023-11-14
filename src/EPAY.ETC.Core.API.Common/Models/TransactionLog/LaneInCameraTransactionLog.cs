@@ -35,5 +35,13 @@ namespace EPAY.ETC.Core.API.Core.Models.TransactionLog
         [MaxLength(255)]
         public string? VehiclePhotoUrl { get; set; }
         public double ConfidenceScore { get; set; }
+        [MaxLength(255)]
+        public string? RearPlateNumber { get; set; }
+        [MaxLength(255)]
+        public string? RearPlateColour { get; set; }
+        [MaxLength(1000)]
+        public string? VehicleRearPhotoUrl { get; set; }
+        [MaxLength(1000)]
+        public string? PlateNumberRearPhotoUrl { get; set; }
     }
 }
