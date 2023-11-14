@@ -36,11 +36,11 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.ErrorResponse
                 _logger.LogInformation($"Executing {nameof(GetErrorResponseBySourceAync)} method...");
 
                 // Get from redis
-                var resultDB = await _redisDB.StringGetAsync(RedisConstant.StringType_ErrorResponseKey(source));
-                if(!string.IsNullOrEmpty(resultDB))
+                var resultDB = await _redisDB.StringGetAsync(RedisConstant.ErrorResponseKey(source));
+                if (!string.IsNullOrEmpty(resultDB))
                 {
                     var jsonErrorResponse = JsonSerializer.Deserialize<List<ErrorResponseModel>>(resultDB!, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
-                    
+
                     return ValidationResult.Success(jsonErrorResponse ?? new List<ErrorResponseModel>());
                 }
                 else
@@ -50,14 +50,13 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.ErrorResponse
 
                     var jsonString = JsonSerializer.Serialize(result);
 
-                    if(result != null)
+                    if (result != null)
                     {
-                        await _redisDB.StringSetAsync(RedisConstant.StringType_ErrorResponseKey(source), jsonString, new TimeSpan(1,0,0,0));
+                        await _redisDB.StringSetAsync(RedisConstant.ErrorResponseKey(source), jsonString, new TimeSpan(1, 0, 0, 0));
                     }
 
                     return ValidationResult.Success(result?.ToList() ?? new List<ErrorResponseModel>());
                 }
-                
             }
             catch (Exception ex)
             {

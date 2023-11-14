@@ -202,7 +202,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
                 List<LaneInVehicleModel> result = new List<LaneInVehicleModel>();
                 if (inputVehicle.Length >= 15)
                 {
-                    var keyRFIDVehicles = _redisDB.Execute("keys", RedisConstant.StringType_RFIDInKey($"*{inputVehicle}*"));
+                    var keyRFIDVehicles = _redisDB.Execute("keys", RedisConstant.RFIDInKey($"*{inputVehicle}*"));
                     var redisKeys = (RedisKey[]?)keyRFIDVehicles;
                     if (redisKeys != null)
                     {
@@ -218,7 +218,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
                 }
                 else if (inputVehicle.Length < 15)
                 {
-                    var keyCAMVehicles = _redisDB.Execute("keys", RedisConstant.StringType_CameraInKey($"*{inputVehicle}*"));
+                    var keyCAMVehicles = _redisDB.Execute("keys", RedisConstant.CameraInKey($"*{inputVehicle}*"));
                     var redisKeys = (RedisKey[]?)keyCAMVehicles;
                     if (redisKeys != null)
                     {

@@ -101,7 +101,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                 {
                     // Get FeeModel object from Redis.
                     FeeModel? feeModel = null;
-                    var feeObject = _redisDB.StringGet(RedisConstant.StringType_FeeModules(reconcilVehicleInfo?.ObjectId.ToString() ?? uiModel?.ObjectId.ToString() ?? string.Empty));
+                    var feeObject = _redisDB.StringGet(RedisConstant.FeeModulesKey(reconcilVehicleInfo?.ObjectId.ToString() ?? uiModel?.ObjectId.ToString() ?? string.Empty));
 
                     if (!string.IsNullOrEmpty(feeObject.ToString()))
                     {
@@ -131,7 +131,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                             feeModel.LaneOutVehicle.Epoch = (reconcilVehicleInfo?.Vehicle?.Out?.LaneOutDateTimeEpoch > 0) ? reconcilVehicleInfo.Vehicle.Out.LaneOutDateTimeEpoch ?? 0 : feeModel.LaneOutVehicle.Epoch;
 
                             // Load reconciliation image
-                            var camOutStr = _redisDB.StringGet(RedisConstant.StringType_CameraOutKey(feeModel.LaneOutVehicle.VehicleInfo.PlateNumber ?? string.Empty)).ToString();
+                            var camOutStr = _redisDB.StringGet(RedisConstant.CameraOutKey(feeModel.LaneOutVehicle.VehicleInfo.PlateNumber ?? string.Empty)).ToString();
 
                             if (!string.IsNullOrEmpty(camOutStr))
                             {
@@ -157,7 +157,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                                 feeModel.LaneInVehicle.VehicleInfo.PlateNumber = !string.IsNullOrEmpty(reconcilVehicleInfo?.Vehicle?.PlateNumber) ? reconcilVehicleInfo?.Vehicle?.PlateNumber : feeModel.LaneInVehicle.VehicleInfo.PlateNumber;
                                 feeModel.LaneInVehicle.VehicleInfo.VehicleType = !string.IsNullOrEmpty(reconcilVehicleInfo?.Vehicle?.VehicleType) ? reconcilVehicleInfo?.Vehicle?.VehicleType : feeModel.LaneInVehicle.VehicleInfo.VehicleType;
 
-                                var camInStr = _redisDB.StringGet(RedisConstant.StringType_CameraInKey(feeModel.LaneOutVehicle.VehicleInfo.PlateNumber ?? string.Empty)).ToString();
+                                var camInStr = _redisDB.StringGet(RedisConstant.CameraInKey(feeModel.LaneOutVehicle.VehicleInfo.PlateNumber ?? string.Empty)).ToString();
 
                                 if (!string.IsNullOrEmpty(camInStr))
                                 {
@@ -174,7 +174,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
 
                             if (!string.IsNullOrEmpty(reconcilVehicleInfo?.Vehicle?.PlateNumber))
                             {
-                                var rfid = _redisDB.StringGet(RedisConstant.StringType_RFIDValueKey(reconcilVehicleInfo.Vehicle.PlateNumber));
+                                var rfid = _redisDB.StringGet(RedisConstant.RFIDValueKey(reconcilVehicleInfo.Vehicle.PlateNumber));
                                 if (!string.IsNullOrEmpty(rfid))
                                 {
                                     if (feeModel.LaneInVehicle == null)
@@ -258,9 +258,9 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
 
                         if (paymentMethod != null)
                         {
-                            _logger.LogInformation($"Save to Redis with Key={RedisConstant.BARCODE_PAYMENT_METHOD}, Value={paymentMethod}");
+                            _logger.LogInformation($"Save to Redis with Key={RedisConstant.MANUALBARRIER_PAYMENT_METHOD}, Value={paymentMethod}");
 
-                            _redisDB.StringSet(RedisConstant.BARCODE_PAYMENT_METHOD, paymentMethod.ToString());
+                            _redisDB.StringSet(RedisConstant.MANUALBARRIER_PAYMENT_METHOD, paymentMethod.ToString());
                         }
 
                         if (request.ManualBarrierType != ManualBarrierTypeEnum.OneTimePass)
@@ -285,7 +285,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                                 var lastLoopStatus = _redisDB.StringGet(RedisConstant.LAST_LOOP_UNPAID);
                                 if (bool.TryParse(lastLoopStatus, out bool lastLoopStatusValue) && lastLoopStatusValue)
                                 {
-                                    var feeModelStr = _redisDB.StringGet(RedisConstant.StringType_FeeModules(processingObjectId)).ToString();
+                                    var feeModelStr = _redisDB.StringGet(RedisConstant.FeeModulesKey(processingObjectId)).ToString();
                                     if (!string.IsNullOrEmpty(feeModelStr))
                                     {
                                         result.Fee = JsonSerializer.Deserialize<FeeModel>(feeModelStr);
@@ -301,14 +301,14 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                         break;
 
                     case BarrierActionEnum.Close:
-                        _logger.LogInformation($"Remove key from Redis: Key={RedisConstant.HASH_BARRIER_OPEN_STATUS}, {RedisConstant.BARCODE_PAYMENT_METHOD}");
+                        _logger.LogInformation($"Remove key from Redis: Key={RedisConstant.HASH_BARRIER_OPEN_STATUS}, {RedisConstant.MANUALBARRIER_PAYMENT_METHOD}");
                         _redisDB.KeyDelete(RedisConstant.HASH_BARRIER_OPEN_STATUS);
-                        _redisDB.KeyDelete(RedisConstant.BARCODE_PAYMENT_METHOD);
+                        _redisDB.KeyDelete(RedisConstant.MANUALBARRIER_PAYMENT_METHOD);
 
                         _logger.LogInformation($"Processing re-send fee calculate if exists trans in queue...");
                         if (!string.IsNullOrEmpty(processingObjectId) && Guid.TryParse(processingObjectId, out objectId))
                         {
-                            var feeModelStr = _redisDB.StringGet(RedisConstant.StringType_FeeModules(processingObjectId)).ToString();
+                            var feeModelStr = _redisDB.StringGet(RedisConstant.FeeModulesKey(processingObjectId)).ToString();
                             if (!string.IsNullOrEmpty(feeModelStr))
                             {
                                 result.Fee = JsonSerializer.Deserialize<FeeModel>(feeModelStr);
@@ -584,7 +584,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
 
                     if (!string.IsNullOrEmpty(fusion.ANPRCam1))
                     {
-                        var camData = _redisDB.StringGet(RedisConstant.StringType_CameraInKey(fusion.ANPRCam1)).ToString();
+                        var camData = _redisDB.StringGet(RedisConstant.CameraInKey(fusion.ANPRCam1)).ToString();
                         if (!string.IsNullOrEmpty(camData))
                         {
                             var anprCamValue = JsonSerializer.Deserialize<ANPRCameraModel>(camData);
@@ -594,7 +594,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
 
                     if (!string.IsNullOrEmpty(fusion.RFID))
                     {
-                        var rfidIn = _redisDB.StringGet(RedisConstant.StringType_RFIDInKey(fusion.RFID)).ToString();
+                        var rfidIn = _redisDB.StringGet(RedisConstant.RFIDInKey(fusion.RFID)).ToString();
                         if (!string.IsNullOrEmpty(rfidIn))
                         {
                             var rfidInValue = JsonSerializer.Deserialize<RFIDDataModel>(rfidIn);
