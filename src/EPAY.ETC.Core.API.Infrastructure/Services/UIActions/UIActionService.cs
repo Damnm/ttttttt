@@ -218,6 +218,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                 _logger.LogInformation($"Executing {nameof(ManipulateBarrierAsync)} method...");
 
                 ManipulateBarrierResponseModel result = new ManipulateBarrierResponseModel();
+                string laneId = Environment.GetEnvironmentVariable(CoreConstant.ENVIRONMENT_LANE_OUT) ?? "1";
 
                 result.BarrierOpenStatus = new BarrierOpenStatus()
                 {
@@ -241,7 +242,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                     Action = request.Action,
                     CreatedDate = DateTime.Now,
                     EmployeeId = request.EmployeeId,
-                    LaneOutId = request.LaneId ?? string.Empty,
+                    LaneOutId = request.LaneId ?? laneId,
                     Id = Guid.NewGuid(),
                     ManualBarrierType = request.ManualBarrierType.ToString()
                 });
