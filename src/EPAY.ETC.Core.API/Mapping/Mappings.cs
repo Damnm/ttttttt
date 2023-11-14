@@ -3,6 +3,7 @@ using EPAY.ETC.Core.API.Core.Models.Barcode;
 using EPAY.ETC.Core.API.Core.Models.ETCCheckOuts;
 using EPAY.ETC.Core.API.Core.Models.Fusion;
 using EPAY.ETC.Core.API.Core.Models.ManualBarrierControl;
+using EPAY.ETC.Core.API.Core.Models.TransactionLog;
 using EPAY.ETC.Core.API.Core.Models.Vehicle;
 using EPAY.ETC.Core.API.Models.Configs;
 using EPAY.ETC.Core.Models.Devices;
@@ -178,7 +179,8 @@ namespace EPAY.ETC.Core.API.Mapping
                 .ForPath(e => e.VehicleInfo.PlateNumberPhotoUrl, act => act.MapFrom(src => src.VehicleInfo.PlateNumberPhotoUrl))
                 .ForPath(e => e.VehicleInfo.ConfidenceScore, act => act.MapFrom(src => src.VehicleInfo.ConfidenceScore));
 
-
+            CreateMap<LaneInCameraTransactionLogRequest, LaneInCameraTransactionLog>()
+               .ReverseMap();
         }
     }
 }

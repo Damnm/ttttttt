@@ -15,7 +15,7 @@ namespace EPAY.ETC.Core.API.Core.Models.TransactionLog
         [MaxLength(50)]
         public string? CameraMacAddr { get; set; }
         [MaxLength(50)]
-        public string? CamerraIPAddr { get; set; }
+        public string? CameraIPAddr { get; set; }
         [MaxLength(10)]
         public string? LaneInId { get; set; }
         [MaxLength(150)]
