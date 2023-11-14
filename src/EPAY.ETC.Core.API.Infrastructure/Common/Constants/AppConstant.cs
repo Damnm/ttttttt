@@ -1,10 +1,11 @@
 ﻿using EPAY.ETC.Core.API.Core.Models.Shifts;
+using EPAY.ETC.Core.Models.Constants;
 
 namespace EPAY.ETC.Core.API.Infrastructure.Common.Constants
 {
     public static class AppConstant
     {
-        public static string REDIS_KEY_FUSION_PROCESSING = "Fusion::Processing";
+        public static string REDIS_KEY_FUSION_PROCESSING = $"Fusion_{Environment.GetEnvironmentVariable(CoreConstant.ENVIRONMENT_LANE_OUT)}_::Processing";
 
         public static IDictionary<string, MockShiftModel> ShiftValuePairs = new Dictionary<string, MockShiftModel>()
         {
