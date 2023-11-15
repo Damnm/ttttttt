@@ -40,9 +40,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.TransactionLog
                 if (existRecords.Any())
                 {
                     var item = existRecords.FirstOrDefault();
-                    entityMapped.Epoch = item?.Epoch ?? 0;
-                    entityMapped.PlateNumber = item?.PlateNumber;
-
+                    entityMapped.Id = item?.Id ?? Guid.NewGuid();
                     await UpdateAsync(entityMapped);
                     return ValidationResult.Success(true);
                 }
