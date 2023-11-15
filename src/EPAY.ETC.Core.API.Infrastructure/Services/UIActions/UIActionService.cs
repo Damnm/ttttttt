@@ -144,7 +144,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                             }
 
                             // LandIn
-                            if (reconcilVehicleInfo?.Vehicle?.In != null)
+                            if (reconcilVehicleInfo?.Vehicle?.In != null && reconcilVehicleInfo.Vehicle.In.LaneInDateTimeEpoch.HasValue)
                             {
                                 if (feeModel.LaneInVehicle == null)
                                     feeModel.LaneInVehicle = new LaneInVehicleModel();
