@@ -41,6 +41,7 @@ using EPAY.ETC.Core.API.Infrastructure.Services.PaymentStatus;
 using EPAY.ETC.Core.API.Infrastructure.Services.TransactionLog;
 using EPAY.ETC.Core.API.Infrastructure.Services.UIActions;
 using EPAY.ETC.Core.API.Infrastructure.Services.Vehicles;
+using EPAY.ETC.Core.Models.Constants;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -56,7 +57,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence
         {
             services.AddDbContext<CoreDbContext>(options =>
             {
-                options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
+                options.UseNpgsql(Environment.GetEnvironmentVariable(CoreConstant.ENVIRONMENT_PGSQL) ?? configuration.GetConnectionString("DefaultConnection"));
                 options.EnableSensitiveDataLogging();
             });
 

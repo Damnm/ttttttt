@@ -99,7 +99,7 @@ builder.Services
     .AddRabbitMQPublisher();
 
 // Init instance Redis
-var multiplexer = ConnectionMultiplexer.Connect(builder.Configuration.GetSection("RedisSettings").GetValue<string>("ConnectionString") ?? "localhost:6379,abortConnect=False,connectRetry=2147483647");
+var multiplexer = ConnectionMultiplexer.Connect(Environment.GetEnvironmentVariable(CoreConstant.ENVIRONMENT_REDIS) ?? builder.Configuration.GetSection("RedisSettings").GetValue<string>("ConnectionString") ?? "localhost:6379,abortConnect=False,connectRetry=2147483647");
 builder.Services.AddSingleton(multiplexer.GetDatabase(builder.Configuration.GetSection("RedisSettings").GetValue<int?>("db") ?? -1));
 builder.Services.AddScoped<IRabbitMQPublisherService, RabbitMQPublisherService>();
 

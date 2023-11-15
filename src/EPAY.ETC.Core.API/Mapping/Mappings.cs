@@ -181,6 +181,49 @@ namespace EPAY.ETC.Core.API.Mapping
 
             CreateMap<LaneInCameraTransactionLogRequest, LaneInCameraTransactionLog>()
                .ReverseMap();
+
+            CreateMap<LaneInVehicleModel, LaneInRFIDTransactionLog>()
+                .ForMember(e => e.Epoch, act => act.MapFrom(src => src.Epoch))
+                .ForMember(e => e.RFID, act => act.MapFrom(src => src.RFID))
+                .ForMember(e => e.RFIDReaderMacAddr, act => act.MapFrom(src => src.Device.MacAddr))
+                .ForMember(e => e.RFIDReaderIPAddr, act => act.MapFrom(src => src.Device.IpAddr))
+                .ForMember(e => e.LaneInId, act => act.MapFrom(src => src.LaneInId))
+                .ForMember(e => e.Make, act => act.MapFrom(src => src.VehicleInfo.Make))
+                .ForMember(e => e.Model, act => act.MapFrom(src => src.VehicleInfo.Model))
+                .ForMember(e => e.PlateNumber, act => act.MapFrom(src => src.VehicleInfo.PlateNumber))
+                .ForMember(e => e.PlateColour, act => act.MapFrom(src => src.VehicleInfo.PlateColour))
+                .ForMember(e => e.VehicleType, act => act.MapFrom(src => src.VehicleInfo.VehicleType))
+                .ForMember(e => e.Seat, act => act.MapFrom(src => src.VehicleInfo.Seat))
+                .ForMember(e => e.Weight, act => act.MapFrom(src => src.VehicleInfo.Weight))
+                .ForMember(e => e.PlateNumberPhotoUrl, act => act.MapFrom(src => src.VehicleInfo.PlateNumberPhotoUrl))
+                .ForMember(e => e.VehiclePhotoUrl, act => act.MapFrom(src => src.VehicleInfo.VehiclePhotoUrl))
+                .ForMember(e => e.ConfidenceScore, act => act.MapFrom(src => src.VehicleInfo.ConfidenceScore))
+                .ForMember(e => e.RearPlateNumber, act => act.MapFrom(src => src.VehicleInfo.RearPlateNumber))
+                .ForMember(e => e.RearPlateColour, act => act.MapFrom(src => src.VehicleInfo.RearPlateColour))
+                .ForMember(e => e.VehicleRearPhotoUrl, act => act.MapFrom(src => src.VehicleInfo.VehicleRearPhotoUrl))
+                .ForMember(e => e.PlateNumberRearPhotoUrl, act => act.MapFrom(src => src.VehicleInfo.PlateNumberRearPhotoUrl))
+                .ForMember(e => e.CreatedDate, act => act.MapFrom(src => DateTime.Now));
+
+            CreateMap<LaneInRFIDTransactionLog, LaneInVehicleModel>()
+                .ForMember(e => e.Epoch, act => act.MapFrom(src => src.Epoch))
+                .ForMember(e => e.RFID, act => act.MapFrom(src => src.RFID))
+                .ForMember(e => e.LaneInId, act => act.MapFrom(src => src.LaneInId))
+                .ForPath(e => e.Device.MacAddr, act => act.MapFrom(src => src.RFIDReaderMacAddr))
+                .ForPath(e => e.Device.IpAddr, act => act.MapFrom(src => src.RFIDReaderIPAddr))
+                .ForPath(e => e.VehicleInfo.Make, act => act.MapFrom(src => src.Make))
+                .ForPath(e => e.VehicleInfo.Model, act => act.MapFrom(src => src.Model))
+                .ForPath(e => e.VehicleInfo.PlateNumber, act => act.MapFrom(src => src.PlateNumber))
+                .ForPath(e => e.VehicleInfo.PlateColour, act => act.MapFrom(src => src.PlateColour))
+                .ForPath(e => e.VehicleInfo.VehicleType, act => act.MapFrom(src => src.VehicleType))
+                .ForPath(e => e.VehicleInfo.Seat, act => act.MapFrom(src => src.Seat))
+                .ForPath(e => e.VehicleInfo.Weight, act => act.MapFrom(src => src.Weight))
+                .ForPath(e => e.VehicleInfo.PlateNumberPhotoUrl, act => act.MapFrom(src => src.PlateNumberPhotoUrl))
+                .ForPath(e => e.VehicleInfo.VehiclePhotoUrl, act => act.MapFrom(src => src.VehiclePhotoUrl))
+                .ForPath(e => e.VehicleInfo.ConfidenceScore, act => act.MapFrom(src => src.ConfidenceScore))
+                .ForPath(e => e.VehicleInfo.RearPlateNumber, act => act.MapFrom(src => src.RearPlateNumber))
+                .ForPath(e => e.VehicleInfo.RearPlateColour, act => act.MapFrom(src => src.RearPlateColour))
+                .ForPath(e => e.VehicleInfo.VehicleRearPhotoUrl, act => act.MapFrom(src => src.VehicleRearPhotoUrl))
+                .ForPath(e => e.VehicleInfo.PlateNumberRearPhotoUrl, act => act.MapFrom(src => src.PlateNumberRearPhotoUrl));
         }
     }
 }
