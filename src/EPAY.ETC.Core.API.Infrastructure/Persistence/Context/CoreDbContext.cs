@@ -9,6 +9,7 @@ using EPAY.ETC.Core.API.Core.Models.FeeVehicleCategories;
 using EPAY.ETC.Core.API.Core.Models.Fusion;
 using EPAY.ETC.Core.API.Core.Models.ManualBarrierControl;
 using EPAY.ETC.Core.API.Core.Models.Payment;
+using EPAY.ETC.Core.API.Core.Models.PrintLog;
 using EPAY.ETC.Core.API.Core.Models.TicketType;
 using EPAY.ETC.Core.API.Core.Models.TimeBlockFees;
 using EPAY.ETC.Core.API.Core.Models.TransactionLog;
@@ -55,6 +56,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
         public virtual DbSet<BarcodeModel> Barcodes { get; set; }
         public virtual DbSet<ErrorResponseModel> ErrorResponses { get; set; }
         public virtual DbSet<TicketTypeModel> TicketTypes { get; set; }
+        public virtual DbSet<PrintLogModel> PrintLogs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -1566,6 +1568,10 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                     CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
                     Name = ManualBarrierTypeEnum.FreeEntry.ToDescriptionString()
                 });
+            #endregion
+
+            #region PrintLog configuration
+            modelBuilder.Entity<PrintLogModel>().HasKey(x => x.Id);
             #endregion
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
