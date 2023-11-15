@@ -4,25 +4,20 @@ namespace EPAY.ETC.Core.API.Infrastructure.Common.Utils
 {
     public static class FeeCalculationUtil
     {
-        public static double FeeCalculation(List<TimeBlockFeeModel>? timeBlockFees, TimeBlockFeeFormulaModel? timeBlockFeeFormula, long duration)
+        public static (double Amount, int Block, long Duration) FeeCalculation(List<TimeBlockFeeModel>? timeBlockFees, TimeBlockFeeFormulaModel? timeBlockFeeFormula, long duration)
         {
             double fee = 0;
+            int block = 0;
+            long durationMinute = (long)Math.Ceiling((decimal)duration / 60);
 
             // Return 0 if time block fee does not exists
             if (timeBlockFees == null || !timeBlockFees.Any())
-                return fee;
-
-            // find amount already defined
-            var timeBlockFeeExists = timeBlockFees.FirstOrDefault(x => x.FromSecond <= duration && x.ToSecond >= duration);
-            if (timeBlockFeeExists != null)
-            {
-                return timeBlockFeeExists.Amount ?? 0;
-            }
+                return (fee, block, durationMinute);
 
             // Return 0 if not exists formula
             if (timeBlockFeeFormula == null || timeBlockFeeFormula.IntervalInSeconds == 0)
             {
-                return fee;
+                return (fee, block, durationMinute);
             }
 
             // Get block prev has been defined
@@ -36,9 +31,21 @@ namespace EPAY.ETC.Core.API.Infrastructure.Common.Utils
             }
 
             decimal totalBlock = Math.Ceiling(duration / (decimal)timeBlockFeeFormula.IntervalInSeconds);
+            block = (prevBlock?.BlockNumber ?? 0) + (int)(totalBlock > 0 ? totalBlock : 0);
+
+            // find amount already defined
+            var timeBlockFeeExists = timeBlockFees.FirstOrDefault(x => x.FromSecond <= duration && x.ToSecond >= duration);
+            if (timeBlockFeeExists != null)
+            {
+                fee = timeBlockFeeExists.Amount ?? 0;
+
+                return (fee, block, durationMinute);
+            }
 
             // Calculate amount
-            return (double)totalBlock * timeBlockFeeFormula.Amount + block1Amount;
+            fee = (double)totalBlock * timeBlockFeeFormula.Amount + block1Amount;
+
+            return (fee, block, durationMinute);
         }
     }
 }

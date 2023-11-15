@@ -57,6 +57,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
                     Fee = new FeeModel()
                     {
                         Amount = 0,
+                        DurationTime = duration,
+                        BlockNo = 0
                     }
                 };
 
@@ -118,7 +120,16 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
                     }
                 }
 
-                // Calculate fee
+                // Load fee fomular
+                var timeBlockFeeFormulas = await _feeFormulaRepository.GetAllAsync(x => x.CustomVehicleType != null && x.CustomVehicleType.Name == customVehicleType);
+                var timeBlockFees = await _timeBlockFeeRepository.GetAllAsync(x => x.CustomVehicleType != null && x.CustomVehicleType.Name == customVehicleType);
+
+                // Calculate fee and get block
+                var feeCalculation = FeeCalculationUtil.FeeCalculation(timeBlockFees?.ToList(), timeBlockFeeFormulas.FirstOrDefault(), duration);
+
+                result.Fee.BlockNo = feeCalculation.Block;
+                result.Fee.DurationTime = feeCalculation.Duration;
+
                 switch (feeType)
                 {
                     case FeeTypeEnum.Free:
@@ -133,9 +144,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
                     default:
                         if (feeVehicleCategory?.CustomVehicleType != null)
                             customVehicleType = feeVehicleCategory.CustomVehicleType.Name;
-                        var timeBlockFeeFormulas = await _feeFormulaRepository.GetAllAsync(x => x.CustomVehicleType != null && x.CustomVehicleType.Name == customVehicleType);
-                        var timeBlockFees = await _timeBlockFeeRepository.GetAllAsync(x => x.CustomVehicleType != null && x.CustomVehicleType.Name == customVehicleType);
-                        result.Fee.Amount = FeeCalculationUtil.FeeCalculation(timeBlockFees?.ToList(), timeBlockFeeFormulas.FirstOrDefault(), duration);
+
+                        result.Fee.Amount = feeCalculation.Amount;
                         break;
                 }
 
@@ -207,6 +217,15 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
                     feeType = feeVehicleCategory.FeeType?.FeeName ?? FeeTypeEnum.TimeBlock;
                 }
 
+                // Load fee fomular
+                var timeBlockFeeFormulas = await _feeFormulaRepository.GetAllAsync(x => x.CustomVehicleType != null && x.CustomVehicleType.Name == customVehicleType);
+                var timeBlockFees = await _timeBlockFeeRepository.GetAllAsync(x => x.CustomVehicleType != null && x.CustomVehicleType.Name == customVehicleType);
+
+                var feeCalculation = FeeCalculationUtil.FeeCalculation(timeBlockFees?.ToList(), timeBlockFeeFormulas.FirstOrDefault(), duration);
+
+                result.Fee.BlockNo = feeCalculation.Block;
+                result.Fee.DurationTime = feeCalculation.Duration;
+
                 // Calculate fee
                 switch (feeType)
                 {
@@ -228,15 +247,13 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
                             customVehilceTypeId = feeVehicleCategory.CustomVehicleType.Id;
                         }
 
-                        var timeBlockFeeFormulas = await _feeFormulaRepository.GetAllAsync(x => x.CustomVehicleType != null && x.CustomVehicleType.Name == customVehicleType);
-                        var timeBlockFees = await _timeBlockFeeRepository.GetAllAsync(x => x.CustomVehicleType != null && x.CustomVehicleType.Name == customVehicleType);
                         if (customVehilceTypeId == null)
                         {
                             var customVehicleTypes = await _customVehicleTypeRepository.GetAllAsync(x => x.Name == customVehicleType);
                             customVehilceTypeId = customVehicleTypes?.Select(x => x.Id).FirstOrDefault();
                         }
 
-                        result.Fee.Amount = FeeCalculationUtil.FeeCalculation(timeBlockFees?.ToList(), timeBlockFeeFormulas.FirstOrDefault(), duration);
+                        result.Fee.Amount = feeCalculation.Amount;
                         result.Vehicle = new VehicleModel()
                         {
                             PlateNumber = plateNumber,

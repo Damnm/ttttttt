@@ -110,7 +110,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Common.Utils
             var result = FeeCalculationUtil.FeeCalculation(timeBlockFees, timeBlockFeeFormula, duration ?? 0);
 
             // Assert
-            result.Should().Be(amount);
+            result.Amount.Should().Be(amount);
         }
     }
 }
