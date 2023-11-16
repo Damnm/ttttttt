@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using EPAY.ETC.Core.API.Core.Exceptions;
-using EPAY.ETC.Core.API.Core.Models.Configs;
 using EPAY.ETC.Core.API.Models.Configs;
 using EPAY.ETC.Core.Models.Constants;
 using EPAY.ETC.Core.Models.Enums;
@@ -8,6 +7,7 @@ using EPAY.ETC.Core.Publisher.Common.Options;
 using EPAY.ETC.Core.Publisher.Interface;
 using EPAY.ETC.Core.RabbitMQ.Common.Events;
 using Microsoft.Extensions.Options;
+using System.Text.Json;
 
 namespace EPAY.ETC.Core.API.Services
 {
@@ -52,12 +52,14 @@ namespace EPAY.ETC.Core.API.Services
         {
             try
             {
-                _logger.LogInformation($"Executing {nameof(SendMessage)}...");
+                _logger.LogInformation($"Executing {nameof(SendMessage)} with laneId={Environment.GetEnvironmentVariable(CoreConstant.ENVIRONMENT_LANE_OUT)}...");
 
                 var publisherOption = _publisherOptions.FirstOrDefault(x => x.PublisherTarget == target);
 
                 if (publisherOption != null && publisherOption.BindArguments.ContainsKey(CoreConstant.RABBIT_HEADER_PROP_LANEID))
                     publisherOption.BindArguments[CoreConstant.RABBIT_HEADER_PROP_LANEID] = Environment.GetEnvironmentVariable(CoreConstant.ENVIRONMENT_LANE_OUT) ?? publisherOption.BindArguments[CoreConstant.RABBIT_HEADER_PROP_LANEID];
+
+                _logger.LogInformation($"Publiser option: {JsonSerializer.Serialize(publisherOption)}");
 
                 RabbitMessageOutbound resultMessage = new RabbitMessageOutbound()
                 {

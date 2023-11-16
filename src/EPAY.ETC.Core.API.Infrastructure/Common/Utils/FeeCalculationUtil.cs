@@ -22,7 +22,9 @@ namespace EPAY.ETC.Core.API.Infrastructure.Common.Utils
 
             // Get block prev has been defined
             TimeBlockFeeModel? prevBlock = timeBlockFees.FirstOrDefault(x => x.BlockNumber == (timeBlockFeeFormula.FromBlockNumber - 1));
-            double block1Amount = prevBlock?.Amount ?? 0;
+
+            // find amount already defined
+            var timeBlockFeeExists = timeBlockFees.FirstOrDefault(x => x.FromSecond <= duration && x.ToSecond >= duration);
 
             // Get total block without Block less then fromBlock has define in formula
             if (prevBlock != null)
@@ -30,17 +32,21 @@ namespace EPAY.ETC.Core.API.Infrastructure.Common.Utils
                 duration -= prevBlock.ToSecond + 1;
             }
 
-            decimal totalBlock = Math.Ceiling(duration / (decimal)timeBlockFeeFormula.IntervalInSeconds);
-            block = (prevBlock?.BlockNumber ?? 0) + (int)(totalBlock > 0 ? totalBlock : 0);
+            if (duration < 0)
+                duration = 0;
 
-            // find amount already defined
-            var timeBlockFeeExists = timeBlockFees.FirstOrDefault(x => x.FromSecond <= duration && x.ToSecond >= duration);
+            decimal totalBlock = Math.Ceiling(duration / (decimal)timeBlockFeeFormula.IntervalInSeconds);
+            block = timeBlockFeeExists?.BlockNumber ?? (int)totalBlock;
+
             if (timeBlockFeeExists != null)
             {
                 fee = timeBlockFeeExists.Amount ?? 0;
 
                 return (fee, block, durationMinute);
             }
+
+            double block1Amount = prevBlock?.Amount ?? 0;
+            block = (prevBlock?.BlockNumber ?? 0) + (int)totalBlock;
 
             // Calculate amount
             fee = (double)totalBlock * timeBlockFeeFormula.Amount + block1Amount;
