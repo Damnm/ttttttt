@@ -30,6 +30,9 @@ namespace EPAY.ETC.Core.API.Infrastructure.Common.Utils
                 duration -= prevBlock.ToSecond + 1;
             }
 
+            if (duration < 0)
+                duration = 0;
+
             decimal totalBlock = Math.Ceiling(duration / (decimal)timeBlockFeeFormula.IntervalInSeconds);
             block = (prevBlock?.BlockNumber ?? 0) + (int)(totalBlock > 0 ? totalBlock : 0);
 
