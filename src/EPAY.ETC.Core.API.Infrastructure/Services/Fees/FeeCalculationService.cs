@@ -192,7 +192,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
                     x.PlateNumber != null
                     && !string.IsNullOrEmpty(plateNumber)
                     && x.PlateNumber.Equals(plateNumber)
-                    && x.ValidFrom >= checkOutDateTime && (x.ValidTo == null || x.ValidTo >= checkOutDateTime)
+                    && x.ValidFrom <= checkOutDateTime && (x.ValidTo == null || x.ValidTo >= checkOutDateTime)
                 );
                 var feeVehicleCategory = feeVehicleCategories.OrderBy(x => x.PlateNumber).FirstOrDefault();
 
