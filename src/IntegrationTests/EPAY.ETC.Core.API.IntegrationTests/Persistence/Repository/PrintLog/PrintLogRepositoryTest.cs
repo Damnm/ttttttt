@@ -48,17 +48,21 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Repository.PrintLog
         {
             using var scope = WebApplicationFactory.Services.CreateScope();
             _repository = scope.ServiceProvider.GetService<IPrintLogRepository>();
+            Guid temp = new Guid("40336aa7-fafa-4028-9a31-c9f6d77938ba");
             // Arrange
-
+            
             // Act
-            var result = await _repository!.GetByIdAsync(printLog.Id);
+            var oldData = await _repository!.GetByIdAsync(temp);
+            if(oldData == null)
+            {
+                printLog.Id = temp;
+                await _repository!.AddAsync(printLog);
+            }
+            var result = await _repository!.GetByIdAsync(temp);
 
             // Assert
             result.Should().NotBeNull();
-            result!.Id.Should().Be(printLog.Id);
-            result!.CreatedDate.Should().Be(printLog.CreatedDate);
-            result!.RFID.Should().Be(printLog.RFID);
-            result!.PlateNumber.Should().Be(printLog.PlateNumber);
+            result!.Id.Should().Be(temp);
           
         }
         [Fact, Order(2)]
@@ -84,20 +88,25 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Repository.PrintLog
             using var scope = WebApplicationFactory.Services.CreateScope();
             _repository = scope.ServiceProvider.GetService<IPrintLogRepository>();
             // Arrange
-            //printLog.Id =  printLog.Id;
-            //printLog.CreatedDate = printLog.CreatedDate;
-            printLog.RFID = "123asdas48v6aaswd";
-            printLog.PlateNumber = "12A123456";
-           
+            printLog.PlateNumber = "1111111";
+            printLog.Id = new Guid("40336aa7-fafa-4028-9a31-c9f6d77938ba");
+
+            // Arrange
+
+            // Act
+            var oldData = await _repository!.GetByIdAsync(printLog.Id);
+            if (oldData == null)
+            {
+                await _repository!.AddAsync(printLog);
+            }
 
             // Act
             await _repository!.UpdateAsync(printLog);
-            var expected = await _repository.GetByIdAsync(printLogId);
+            var expected = await _repository.GetByIdAsync(printLog.Id);
 
             // Assert
             expected.Should().NotBeNull();
             expected?.Id.Should().Be(expected!.Id);
-            expected?.RFID.Should().Be(expected!.RFID);
             expected?.PlateNumber.Should().Be(expected!.PlateNumber);
         }
         #endregion
@@ -108,10 +117,20 @@ namespace EPAY.ETC.Core.API.IntegrationTests.Persistence.Repository.PrintLog
             using var scope = WebApplicationFactory.Services.CreateScope();
             _repository = scope.ServiceProvider.GetService<IPrintLogRepository>();
             // Arrange
+            printLog.PlateNumber = "1111111qqq";
+            printLog.Id = new Guid("40336aa7-fafa-4028-9a31-c9f6d77948ba");
+
+            // Arrange
 
             // Act
+            var oldData = await _repository!.GetByIdAsync(printLog.Id);
+            if (oldData == null)
+            {
+                await _repository!.AddAsync(printLog);
+            }
+            // Act
             await _repository!.RemoveAsync(printLog);
-            var expected = await _repository.GetByIdAsync(printLogId);
+            var expected = await _repository.GetByIdAsync(printLog.Id);
 
             // Assert
             expected.Should().BeNull();

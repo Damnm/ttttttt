@@ -227,6 +227,7 @@ namespace EPAY.ETC.Core.API.Mapping
                 .ForPath(e => e.VehicleInfo.PlateNumberRearPhotoUrl, act => act.MapFrom(src => src.PlateNumberRearPhotoUrl));
 
             CreateMap<PrintLogRequestModel, PrintLogModel>()
+                 .ForMember(e => e.Id, act => act.MapFrom(src => src.PrintLogId))
                .ReverseMap();
         }
     }
