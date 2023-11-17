@@ -11,11 +11,13 @@ using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.ETCCheckouts;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.ManualBarrierControls;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Payment;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PaymentStatus;
+using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PrintLog;
 using EPAY.ETC.Core.Models.BarrierOpenStatus;
 using EPAY.ETC.Core.Models.Constants;
 using EPAY.ETC.Core.Models.Devices;
 using EPAY.ETC.Core.Models.Enums;
 using EPAY.ETC.Core.Models.Fees;
+using EPAY.ETC.Core.Models.Receipt;
 using EPAY.ETC.Core.Models.Receipt.SessionReports;
 using EPAY.ETC.Core.Models.Request;
 using EPAY.ETC.Core.Models.UI;
@@ -40,6 +42,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
         private readonly IManualBarrierControlRepository _manualBarrierControlRepository;
         private readonly IDatabase _redisDB;
         private readonly IOptions<UIModel> _uiOptions;
+        private readonly IPrintLogRepository _appPrintLogRepository;
 
         public UIActionService(ILogger<UIActionService> logger,
                                IPaymentRepository paymentRepository,
@@ -48,7 +51,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                                ICustomVehicleTypeRepository customVehicleTypeRepository,
                                IManualBarrierControlRepository manualBarrierControlRepository,
                                IDatabase redisDB,
-                               IOptions<UIModel> uiOptions)
+                               IOptions<UIModel> uiOptions,
+                               IPrintLogRepository appPrintLogRepository)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _paymentRepository = paymentRepository ?? throw new ArgumentNullException(nameof(paymentRepository));
@@ -58,6 +62,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
             _manualBarrierControlRepository = manualBarrierControlRepository ?? throw new ArgumentNullException(nameof(manualBarrierControlRepository));
             _redisDB = redisDB ?? throw new ArgumentNullException(nameof(redisDB));
             _uiOptions = uiOptions ?? throw new ArgumentNullException(nameof(uiOptions));
+            _appPrintLogRepository = appPrintLogRepository ?? throw new ArgumentNullException(nameof(appPrintLogRepository));
         }
 
         public ValidationResult<ReconcileResultModel> ReconcileVehicleInfo(ReconcileVehicleInfoModel reconcilVehicleInfo)
@@ -374,7 +379,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                                 if (uiModelData != null)
                                 {
                                     if (uiModelData.Body == null)
-                                        uiModelData.Body = new BodyModel();
+                                        uiModelData.Body = new EPAY.ETC.Core.Models.UI.BodyModel();
 
                                     uiModelData.Body.InformationBoard = new InformationBoard()
                                     {
@@ -535,6 +540,18 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                     }
                 };
 
+                // Add Report to DB
+
+                await _appPrintLogRepository.AddAsync(new Core.Models.PrintLog.PrintLogModel()
+                {
+                    Id = Guid.NewGuid(),
+                    CreatedDate = DateTime.Now,
+                    PrintType = PrintLogEnum.Report,
+                    DataJson = JsonSerializer.Serialize(result),
+                    LaneOutId = request.LaneOutId,
+                    EmployeeId = request.EmployeeId
+                });
+
                 return ValidationResult.Success(result);
             }
             catch (Exception ex)
@@ -621,13 +638,13 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                     result.Command.LandId = laneId;
 
                     if (result.Header == null)
-                        result.Header = new HeaderModel();
+                        result.Header = new EPAY.ETC.Core.Models.UI.HeaderModel();
                     result.Header.EmployeeName = $"{authenticatedEmployee.FirstName} {authenticatedEmployee.LastName}";
                     result.Header.ShiftName = $"Ca 1";
                 }
 
                 if (result.Body == null)
-                    result.Body = new BodyModel();
+                    result.Body = new EPAY.ETC.Core.Models.UI.BodyModel();
 
                 result.Body.PaidVehicleHistory = paidHistories;
                 result.Body.WaitingVehicles = waitingVehicles;
