@@ -116,10 +116,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                             feeModel.CustomVehicleType = (CustomVehicleTypeEnum)vehicleType;
 
                             // LandOut
-                            if (feeModel.LaneOutVehicle == null)
-                                feeModel.LaneOutVehicle = new LaneOutVehicleModel();
-                            if (feeModel.LaneOutVehicle.VehicleInfo == null)
-                                feeModel.LaneOutVehicle.VehicleInfo = new ETC.Core.Models.VehicleInfoModel();
+                            feeModel.LaneOutVehicle = new LaneOutVehicleModel();
+                            feeModel.LaneOutVehicle.VehicleInfo = new ETC.Core.Models.VehicleInfoModel();
 
                             // Update PlateNumber for FusionObject
                             _redisDB.HashSet(objectId.ToString(), nameof(FusionModel.ANPRCam1), reconcilVehicleInfo?.Vehicle?.PlateNumber);
@@ -137,7 +135,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
 
                             feeModel.LaneOutVehicle.VehicleInfo.VehicleType = !string.IsNullOrEmpty(reconcilVehicleInfo?.Vehicle?.VehicleType) ? reconcilVehicleInfo?.Vehicle?.VehicleType : feeModel.LaneOutVehicle.VehicleInfo.VehicleType;
                             feeModel.LaneOutVehicle.LaneOutId = !string.IsNullOrEmpty(reconcilVehicleInfo?.Vehicle?.Out?.LaneOutId) ? reconcilVehicleInfo?.Vehicle?.Out?.LaneOutId : feeModel.LaneOutVehicle.LaneOutId;
-                            feeModel.LaneOutVehicle.Epoch = (reconcilVehicleInfo?.Vehicle?.Out?.LaneOutDateTimeEpoch > 0) ? reconcilVehicleInfo.Vehicle.Out.LaneOutDateTimeEpoch ?? 0 : feeModel.LaneOutVehicle.Epoch;
+                            feeModel.LaneOutVehicle.Epoch = DateTimeOffset.Now.ToUnixTimeSeconds();
 
                             // Load reconciliation image
                             var camOutStr = _redisDB.StringGet(RedisConstant.CameraOutKey(feeModel.LaneOutVehicle.VehicleInfo.PlateNumber ?? string.Empty)).ToString();
@@ -171,9 +169,12 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
 
                                     if (rfidOut != null)
                                     {
-                                        feeModel.LaneOutVehicle.Epoch = rfidOut.Epoch;
+                                        feeModel.LaneOutVehicle.Epoch = DateTimeOffset.FromUnixTimeMilliseconds(rfidOut.Epoch).ToUnixTimeSeconds();
                                         if (rfidOut.VehicleInfo != null)
                                         {
+                                            if (feeModel.LaneOutVehicle.VehicleInfo == null)
+                                                feeModel.LaneOutVehicle.VehicleInfo = new ETC.Core.Models.VehicleInfoModel();
+
                                             feeModel.LaneOutVehicle.VehicleInfo.VehicleType = rfidOut.VehicleInfo.VehicleType ?? string.Empty;
                                             feeModel.LaneOutVehicle.VehicleInfo.VehicleColour = rfidOut.VehicleInfo.VehicleColour ?? string.Empty;
                                             feeModel.LaneOutVehicle.VehicleInfo.Weight = rfidOut.VehicleInfo.Weight ?? 0;
@@ -191,10 +192,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                             // LandIn
                             if ((reconcilVehicleInfo?.Vehicle?.IsWrongLaneInInfo ?? false) == false)
                             {
-                                if (feeModel.LaneInVehicle == null)
-                                    feeModel.LaneInVehicle = new LaneInVehicleModel();
-                                if (feeModel.LaneInVehicle.VehicleInfo == null)
-                                    feeModel.LaneInVehicle.VehicleInfo = new ETC.Core.Models.VehicleInfoModel();
+                                feeModel.LaneInVehicle = new LaneInVehicleModel();
+                                feeModel.LaneInVehicle.VehicleInfo = new ETC.Core.Models.VehicleInfoModel();
 
                                 feeModel.LaneInVehicle.LaneInId = !string.IsNullOrEmpty(reconcilVehicleInfo?.Vehicle?.In?.LaneInId) ? reconcilVehicleInfo?.Vehicle?.In?.LaneInId : feeModel.LaneInVehicle.LaneInId;
                                 feeModel.LaneInVehicle.Epoch = (reconcilVehicleInfo?.Vehicle?.In?.LaneInDateTimeEpoch > 0) ? reconcilVehicleInfo?.Vehicle?.In?.LaneInDateTimeEpoch ?? 0 : feeModel.LaneInVehicle.Epoch;
@@ -225,6 +224,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                                     else
                                         isEmptyLaneIn = true;
                                 }
+                                else
+                                    isEmptyLaneIn = true;
 
                                 if (!string.IsNullOrEmpty(feeModel.LaneOutVehicle.RFID))
                                 {
@@ -236,7 +237,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                                         if (rfidIn != null)
                                         {
                                             isEmptyLaneIn = false;
-                                            feeModel.LaneInVehicle.Epoch = rfidIn.Epoch;
+                                            feeModel.LaneInVehicle.Epoch = DateTimeOffset.FromUnixTimeMilliseconds(rfidIn.Epoch).ToUnixTimeSeconds();
                                             if (rfidIn.VehicleInfo != null)
                                             {
                                                 feeModel.LaneOutVehicle.VehicleInfo.VehicleType = rfidIn.VehicleInfo.VehicleType ?? string.Empty;
@@ -248,11 +249,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                                                 feeModel.LaneOutVehicle.VehicleInfo.PlateColour = rfidIn.VehicleInfo.PlateColour ?? rfidIn.VehicleInfo.RearPlateColour ?? string.Empty;
                                             }
                                         }
-                                        else
-                                            isEmptyLaneIn = true;
                                     }
-                                    else
-                                        isEmptyLaneIn = true;
                                 }
 
                                 if (isEmptyLaneIn)
@@ -372,6 +369,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                                     }
                                 }
 
+                                uiModel = await LoadCurrentUIAsync();
                                 var uiModelData = uiModel?.Data;
                                 if (uiModelData != null)
                                 {
@@ -399,6 +397,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                                     }
 
                                     result.UI = uiModelData;
+                                    _redisDB.StringSet(RedisConstant.UI_MODEL_KEY, JsonSerializer.Serialize(uiModelData));
                                 }
                             }
                         }
