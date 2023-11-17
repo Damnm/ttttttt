@@ -325,6 +325,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
 
                 var processingObjectId = _redisDB.StringGet(RedisConstant.FUSION_PROCESSING).ToString();
                 Guid objectId;
+                ValidationResult<UIModel>? uiModel;
+                UIModel? uiModelData;
 
                 switch (request.Action)
                 {
@@ -346,15 +348,15 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
 
                             if (!string.IsNullOrEmpty(processingObjectId) && Guid.TryParse(processingObjectId, out objectId))
                             {
-                                var uiModel = await LoadCurrentUIAsync();
-
+                                uiModel = await LoadCurrentUIAsync();
+                                uiModelData = uiModel?.Data;
                                 result.Payment = new PaymentModel()
                                 {
                                     ObjectId = objectId,
                                     Amount = 0,
                                     PaymentMethod = paymentMethod,
-                                    CheckOutTime = uiModel?.Data?.Body?.Out?.LaneOutDateEpoch ?? DateTimeOffset.Now.ToUnixTimeSeconds(),
-                                    PaymentId = uiModel?.Data?.Body?.Payment?.PaymentId ?? Guid.Empty
+                                    CheckOutTime = uiModelData?.Body?.Out?.LaneOutDateEpoch ?? DateTimeOffset.Now.ToUnixTimeSeconds(),
+                                    PaymentId = uiModelData?.Body?.Payment?.PaymentId ?? Guid.Empty
                                 };
 
                                 _logger.LogInformation($"Send message to Payment core with message={JsonSerializer.Serialize(result.Payment)}");
@@ -373,6 +375,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                                         _logger.LogInformation($"Send message to Fees core with message={JsonSerializer.Serialize(result.Fee)}");
                                     }
                                 }
+                            }
 
                                 uiModel = await LoadCurrentUIAsync();
                                 var uiModelData = uiModel?.Data;
@@ -381,29 +384,28 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                                     if (uiModelData.Body == null)
                                         uiModelData.Body = new EPAY.ETC.Core.Models.UI.BodyModel();
 
-                                    uiModelData.Body.InformationBoard = new InformationBoard()
+                                uiModelData.Body.InformationBoard = new InformationBoard()
+                                {
+                                    Message = new MessageModel()
                                     {
-                                        Message = new MessageModel()
-                                        {
-                                            Alert = AlertEnum.Success,
-                                            Heading = "Thông báo",
-                                            SubHeading1 = "Đang mở cho đoàn xe ưu tiên"
-                                        }
-                                    };
-
-                                    switch (paymentMethod)
-                                    {
-                                        case PaymentMethodEnum.Priority:
-                                            uiModelData.Body.InformationBoard.Message.SubHeading1 = "Đang mở cho đoàn xe ưu tiên";
-                                            break;
-                                        case PaymentMethodEnum.FreeEntry:
-                                            uiModelData.Body.InformationBoard.Message.SubHeading1 = "Đang xả trạm";
-                                            break;
+                                        Alert = AlertEnum.Success,
+                                        Heading = "Thông báo",
+                                        SubHeading1 = "Đang mở cho đoàn xe ưu tiên"
                                     }
+                                };
 
-                                    result.UI = uiModelData;
-                                    _redisDB.StringSet(RedisConstant.UI_MODEL_KEY, JsonSerializer.Serialize(uiModelData));
+                                switch (paymentMethod)
+                                {
+                                    case PaymentMethodEnum.Priority:
+                                        uiModelData.Body.InformationBoard.Message.SubHeading1 = "Đang mở cho đoàn xe ưu tiên";
+                                        break;
+                                    case PaymentMethodEnum.FreeEntry:
+                                        uiModelData.Body.InformationBoard.Message.SubHeading1 = "Đang xả trạm";
+                                        break;
                                 }
+
+                                result.UI = uiModelData;
+                                _redisDB.StringSet(RedisConstant.UI_MODEL_KEY, JsonSerializer.Serialize(uiModelData));
                             }
                         }
                         break;
@@ -426,6 +428,19 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                                 }
                                 _logger.LogInformation($"Send message to Fees core with message={JsonSerializer.Serialize(result.Fee)}");
                             }
+                        }
+
+                        uiModel = await LoadCurrentUIAsync();
+                        uiModelData = uiModel?.Data;
+                        if (uiModelData != null)
+                        {
+                            if (uiModelData.Body == null)
+                                uiModelData.Body = new BodyModel();
+
+                            uiModelData.Body.InformationBoard = new InformationBoard();
+
+                            result.UI = uiModelData;
+                            _redisDB.StringSet(RedisConstant.UI_MODEL_KEY, JsonSerializer.Serialize(uiModelData));
                         }
                         break;
                 }
