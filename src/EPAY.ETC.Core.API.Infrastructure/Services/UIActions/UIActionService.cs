@@ -378,7 +378,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                             }
 
                                 uiModel = await LoadCurrentUIAsync();
-                                var uiModelData = uiModel?.Data;
+                                uiModelData = uiModel?.Data;
                                 if (uiModelData != null)
                                 {
                                     if (uiModelData.Body == null)
@@ -435,7 +435,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                         if (uiModelData != null)
                         {
                             if (uiModelData.Body == null)
-                                uiModelData.Body = new BodyModel();
+                                uiModelData.Body = new EPAY.ETC.Core.Models.UI.BodyModel();
 
                             uiModelData.Body.InformationBoard = new InformationBoard();
 
