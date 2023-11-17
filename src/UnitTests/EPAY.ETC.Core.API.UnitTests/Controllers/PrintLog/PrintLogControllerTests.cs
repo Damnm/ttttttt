@@ -1,6 +1,7 @@
 ﻿using EPAY.ETC.Core.API.Controllers.PrintLog;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.PrintLog;
 using EPAY.ETC.Core.API.Core.Models.PrintLog;
+using EPAY.ETC.Core.API.Services;
 using EPAY.ETC.Core.API.UnitTests.Helpers;
 using EPAY.ETC.Core.Models.Request;
 using EPAY.ETC.Core.Models.Validation;
@@ -18,6 +19,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.PrintLog
         private readonly Exception _exception = null!;
         private Mock<IPrintLogService> _printLogServiceMock = new Mock<IPrintLogService>();
         private Mock<ILogger<PrintLogController>> _loggerMock = new Mock<ILogger<PrintLogController>>();
+        private Mock<IRabbitMQPublisherService> _rabbitMQPublisherServiceMock = new Mock<IRabbitMQPublisherService>();
         private PrintLogModel requestMock = new PrintLogModel()
         {
             PlateNumber = "Some Plate number",
@@ -54,7 +56,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.PrintLog
 
             // Act
             var PrintLogController = new PrintLogController(_loggerMock.Object
-                , _printLogServiceMock.Object);
+                , _printLogServiceMock.Object, _rabbitMQPublisherServiceMock.Object);
             var actualResult = await PrintLogController.AddAsync(It.IsAny<PrintLogRequestModel>());
             var data = ((ObjectResult)actualResult).Value as ValidationResult<PrintLogModel>;
 
@@ -77,7 +79,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.PrintLog
 
             // Act
             var PrintLogController = new PrintLogController(_loggerMock.Object
-                , _printLogServiceMock.Object);
+                , _printLogServiceMock.Object, _rabbitMQPublisherServiceMock.Object);
             var actualResult = await PrintLogController.AddAsync(It.IsAny<PrintLogRequestModel>());
             var actualResultRespone = ((ObjectResult)actualResult).Value as ValidationResult<string>;
 
@@ -99,7 +101,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.PrintLog
 
             // Act
             var PrintLogController = new PrintLogController(_loggerMock.Object
-                , _printLogServiceMock.Object);
+                , _printLogServiceMock.Object, _rabbitMQPublisherServiceMock.Object);
             var actualResult = await PrintLogController.UpdateAsync(It.IsAny<Guid>(), It.IsAny<PrintLogRequestModel>());
             var data = ((OkObjectResult)actualResult).Value as ValidationResult<PrintLogModel>;
             // Assert
@@ -127,7 +129,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.PrintLog
 
             // Act
             var PrintLogController = new PrintLogController(_loggerMock.Object
-                , _printLogServiceMock.Object);
+                , _printLogServiceMock.Object, _rabbitMQPublisherServiceMock.Object);
             var actualResult = await PrintLogController.UpdateAsync(It.IsAny<Guid>(), It.IsAny<PrintLogRequestModel>());
             var data = actualResult as NotFoundObjectResult;
             var actualResultRespone = data!.Value as ValidationResult<PrintLogModel>;
@@ -154,7 +156,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.PrintLog
 
             // Act
             var PrintLogController = new PrintLogController(_loggerMock.Object
-                , _printLogServiceMock.Object);
+                , _printLogServiceMock.Object, _rabbitMQPublisherServiceMock.Object);
             var actualResult = await PrintLogController.UpdateAsync(Guid.NewGuid(), It.IsAny<PrintLogRequestModel>());
             var actualResultRespone = ((ObjectResult)actualResult).Value as ValidationResult<string>;
 
@@ -177,7 +179,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.PrintLog
 
             // Act
             var PrintLogController = new PrintLogController(_loggerMock.Object
-                , _printLogServiceMock.Object);
+                , _printLogServiceMock.Object, _rabbitMQPublisherServiceMock.Object);
             var actualResult = await PrintLogController.RemoveAsync(It.IsNotNull<Guid>());
             var data = ((OkObjectResult)actualResult).Value as ValidationResult<PrintLogModel>;
 
@@ -202,7 +204,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.PrintLog
 
             // Act
             var PrintLogController = new PrintLogController(_loggerMock.Object
-                , _printLogServiceMock.Object);
+                , _printLogServiceMock.Object, _rabbitMQPublisherServiceMock.Object);
             var actualResult = await PrintLogController.RemoveAsync(It.IsNotNull<Guid>());
             var data = actualResult as NotFoundObjectResult;
             var actualResultRespone = data!.Value as ValidationResult<PrintLogModel>;
@@ -224,7 +226,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.PrintLog
 
             // Act
             var PrintLogController = new PrintLogController(_loggerMock.Object
-                , _printLogServiceMock.Object);
+                , _printLogServiceMock.Object, _rabbitMQPublisherServiceMock.Object);
             var actualResult = await PrintLogController.RemoveAsync(It.IsNotNull<Guid>());
             var actualResultRespone = ((ObjectResult)actualResult).Value as ValidationResult<string>;
 
@@ -245,7 +247,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.PrintLog
 
             // Act
             var PrintLogController = new PrintLogController(_loggerMock.Object
-                , _printLogServiceMock.Object);
+                , _printLogServiceMock.Object, _rabbitMQPublisherServiceMock.Object);
             var actualResult = await PrintLogController.GetByIdAsync(new Guid());
             var data = ((OkObjectResult)actualResult).Value as ValidationResult<PrintLogModel>;
 
@@ -269,7 +271,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.PrintLog
 
             // Act
             var PrintLogController = new PrintLogController(_loggerMock.Object
-                , _printLogServiceMock.Object);
+                , _printLogServiceMock.Object, _rabbitMQPublisherServiceMock.Object);
             var actualResult = await PrintLogController.GetByIdAsync(new Guid());
             var actualResultRespone = ((ObjectResult)actualResult).Value as ValidationResult<string>;
 

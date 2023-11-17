@@ -1,6 +1,7 @@
 ﻿using EPAY.ETC.Core.API.Core.Exceptions;
 using EPAY.ETC.Core.API.Core.Models.PrintLog;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Context;
+using EPAY.ETC.Core.Models.Request;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Linq.Expressions;
@@ -103,6 +104,32 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PrintLog
             catch (ETCEPAYCoreAPIException ex)
             {
                 _logger.LogError($"An error occurred when calling {nameof(UpdateAsync)} method. Details: {ex.Message}. Stack trace: {ex.StackTrace}");
+                throw;
+            }
+        }
+        #endregion
+
+        #region GetByIdAsync
+        public async Task<string?> PrintAsync(PrintRequestModel request)
+        {
+            _logger.LogInformation($"Executing {nameof(PrintAsync)} method...");
+
+            try
+            {
+                var data = _dbContext.PrintLogs.AsNoTracking()
+                    .Where(x =>
+                     (!string.IsNullOrEmpty(request.LaneOutId) ? request.LaneOutId.Equals(x.LaneOutId) : true)
+                            && (!string.IsNullOrEmpty(request.EmployeeId) ? request.EmployeeId.Equals(x.EmployeeId) : true)
+                            && (!string.IsNullOrEmpty(request.PrintType.ToString()) ? request.PrintType.Equals(x.PrintType) : true)
+                            && ((!string.IsNullOrEmpty(request.RFID) ? request.RFID.Equals(x.RFID) : (!string.IsNullOrEmpty(request.PlateNumber) ? request.PlateNumber.Equals(x.PlateNumber) : true)))
+                            )
+                    .OrderByDescending(m => m.CreatedDate).Select(k => k.DataJson).FirstOrDefault();
+
+                return await Task.FromResult(data);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"An error occurred when calling {nameof(PrintAsync)} method. Details: {ex.Message}. Stack trace: {ex.StackTrace}");
                 throw;
             }
         }

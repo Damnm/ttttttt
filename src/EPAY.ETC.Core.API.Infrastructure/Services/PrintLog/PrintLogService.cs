@@ -122,5 +122,20 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.PrintLog
                 throw;
             }
         }
+
+        public async Task<ValidationResult<string?>> PrintAsync(PrintRequestModel request)
+        {
+            _logger.LogInformation($"Executing {nameof(PrintAsync)} method...");
+            try
+            {
+                var result = await _repository.PrintAsync(request);
+                return ValidationResult.Success(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed to run {nameof(PrintAsync)} method. Error: {ex.Message}");
+                throw;
+            }
+        }
     }
 }

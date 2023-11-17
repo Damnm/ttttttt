@@ -1,8 +1,13 @@
 ﻿using EPAY.ETC.Core.API.Core.Exceptions;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.PrintLog;
+using EPAY.ETC.Core.API.Services;
+using EPAY.ETC.Core.Models.Devices;
+using EPAY.ETC.Core.Models.Enums;
 using EPAY.ETC.Core.Models.Request;
 using EPAY.ETC.Core.Models.Validation;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Text.Json;
 
 namespace EPAY.ETC.Core.API.Controllers.PrintLog
 {
@@ -16,6 +21,7 @@ namespace EPAY.ETC.Core.API.Controllers.PrintLog
         #region Variables
         private readonly ILogger<PrintLogController> _logger;
         private readonly IPrintLogService _printLogService;
+        private readonly IRabbitMQPublisherService _rabbitMQPublisherService;
         #endregion
 
         #region Constructor
@@ -24,12 +30,14 @@ namespace EPAY.ETC.Core.API.Controllers.PrintLog
         /// </summary>
         /// <param name="logger"></param>
         /// <param name="printLogService"></param>
+        /// <param name="rabbitMQPublisherService"></param>
         /// <exception cref="ArgumentNullException"></exception>
         public PrintLogController(ILogger<PrintLogController> logger,
-            IPrintLogService printLogService)
+            IPrintLogService printLogService, IRabbitMQPublisherService rabbitMQPublisherService)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _printLogService = printLogService ?? throw new ArgumentNullException(nameof(printLogService));
+            _rabbitMQPublisherService = rabbitMQPublisherService ?? throw new ArgumentNullException(nameof(rabbitMQPublisherService));
         }
 
         #endregion
@@ -156,6 +164,44 @@ namespace EPAY.ETC.Core.API.Controllers.PrintLog
             {
                 List<ValidationError> validationErrors = new();
                 string errorMessage = $"An error occurred when calling {nameof(UpdateAsync)} method: {ex.Message}. InnerException : {ApiExceptionMessages.ExceptionMessages(ex)}. Stack trace: {ex.StackTrace}";
+                _logger.LogError(errorMessage);
+                validationErrors.Add(ValidationError.InternalServerError);
+                return StatusCode(StatusCodes.Status500InternalServerError, ValidationResult.Failed(errorMessage, validationErrors));
+            }
+        }
+        #endregion
+
+        #region PrintAsync
+        /// <summary>
+        /// Create new vehicle
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPost("/v1/print")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> PrintAsync(PrintRequestModel request)
+        {
+            try
+            {
+                _logger.LogInformation($"Executing {nameof(PrintAsync)}...");
+
+
+                var jsonResult = await _printLogService.PrintAsync(request);
+                if (jsonResult.Succeeded && jsonResult?.Data != null)
+                {
+                    _rabbitMQPublisherService.SendMessage(jsonResult?.Data!, PublisherTargetEnum.Printer);
+                }
+
+                return new ObjectResult(jsonResult?.Data)
+                {
+                    StatusCode = StatusCodes.Status200OK
+                };
+            }
+            catch (Exception ex)
+            {
+                List<ValidationError> validationErrors = new();
+                string errorMessage = $"An error occurred when calling {nameof(PrintAsync)} method: {ex.Message}. InnerException : {ApiExceptionMessages.ExceptionMessages(ex)}. Stack trace: {ex.StackTrace}";
                 _logger.LogError(errorMessage);
                 validationErrors.Add(ValidationError.InternalServerError);
                 return StatusCode(StatusCodes.Status500InternalServerError, ValidationResult.Failed(errorMessage, validationErrors));

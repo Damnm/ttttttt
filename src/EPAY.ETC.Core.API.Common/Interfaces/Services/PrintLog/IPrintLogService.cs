@@ -10,5 +10,6 @@ namespace EPAY.ETC.Core.API.Core.Interfaces.Services.PrintLog
         Task<ValidationResult<PrintLogModel>> GetByIdAsync(Guid id);
         Task<ValidationResult<PrintLogModel>> UpdateAsync(Guid id , PrintLogRequestModel input);
         Task<ValidationResult<PrintLogModel>> RemoveAsync(Guid id);
+        Task<ValidationResult<string?>> PrintAsync(PrintRequestModel request);
     }
 }
