@@ -9,7 +9,7 @@ namespace EPAY.ETC.Core.API.Core.Models.PrintLog
     public class PrintLogModel: BaseEntity<Guid>
     {
         [Key]
-        [Column("PrinterLogId")]
+        [Column("PrintLogId")]
         public new Guid Id { get; set; }
 
         [MaxLength(10)]

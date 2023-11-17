@@ -1572,6 +1572,9 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
 
             #region PrintLog configuration
             modelBuilder.Entity<PrintLogModel>().HasKey(x => x.Id);
+                 modelBuilder.Entity<PrintLogModel>()
+                .Property(x => x.PrintType)
+                .HasConversion(new EnumToStringConverter<PrintLogEnum>());
             #endregion
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
