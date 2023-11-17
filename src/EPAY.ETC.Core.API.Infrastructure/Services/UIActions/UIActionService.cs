@@ -369,6 +369,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                                     }
                                 }
 
+                                uiModel = await LoadCurrentUIAsync();
                                 var uiModelData = uiModel?.Data;
                                 if (uiModelData != null)
                                 {
@@ -396,6 +397,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                                     }
 
                                     result.UI = uiModelData;
+                                    _redisDB.StringSet(RedisConstant.UI_MODEL_KEY, JsonSerializer.Serialize(uiModelData));
                                 }
                             }
                         }
