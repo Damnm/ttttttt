@@ -2,7 +2,8 @@
 {
     public class ReconcileVehicleModel
     {
-        public string? PlateNumber { get; set; }    
+        public bool IsWrongLaneInInfo { get; set; } = false;
+        public string? PlateNumber { get; set; }
         public string? RFID { get; set; }
         public string? VehicleType { get; set; }
         public LaneInModel? In { get; set; }

@@ -189,7 +189,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
 
 
                             // LandIn
-                            if (reconcilVehicleInfo?.Vehicle?.In != null && reconcilVehicleInfo.Vehicle.In.LaneInDateTimeEpoch.HasValue)
+                            if ((reconcilVehicleInfo?.Vehicle?.IsWrongLaneInInfo ?? false) == false)
                             {
                                 if (feeModel.LaneInVehicle == null)
                                     feeModel.LaneInVehicle = new LaneInVehicleModel();
@@ -209,6 +209,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                                     var camData = JsonSerializer.Deserialize<ANPRCameraModel>(camInStr);
                                     if (camData != null)
                                     {
+                                        isEmptyLaneIn = false;
                                         feeModel.LaneInVehicle.Epoch = camData.CheckpointTimeEpoch;
                                         feeModel.LaneInVehicle.VehicleInfo.VehiclePhotoUrl = camData.VehicleInfo?.VehiclePhotoUrl ?? camData.VehicleInfo?.VehicleRearPhotoUrl ?? string.Empty;
                                         feeModel.LaneInVehicle.VehicleInfo.PlateNumberPhotoUrl = camData.VehicleInfo?.PlateNumberPhotoUrl ?? camData.VehicleInfo?.PlateNumberRearPhotoUrl ?? string.Empty;
@@ -234,7 +235,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
 
                                         if (rfidIn != null)
                                         {
-                                            feeModel.LaneOutVehicle.Epoch = rfidIn.Epoch;
+                                            isEmptyLaneIn = false;
+                                            feeModel.LaneInVehicle.Epoch = rfidIn.Epoch;
                                             if (rfidIn.VehicleInfo != null)
                                             {
                                                 feeModel.LaneOutVehicle.VehicleInfo.VehicleType = rfidIn.VehicleInfo.VehicleType ?? string.Empty;
