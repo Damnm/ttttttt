@@ -249,11 +249,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                                                 feeModel.LaneOutVehicle.VehicleInfo.PlateColour = rfidIn.VehicleInfo.PlateColour ?? rfidIn.VehicleInfo.RearPlateColour ?? string.Empty;
                                             }
                                         }
-                                        else
-                                            isEmptyLaneIn = true;
                                     }
-                                    else
-                                        isEmptyLaneIn = true;
                                 }
 
                                 if (isEmptyLaneIn)
