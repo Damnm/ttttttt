@@ -73,6 +73,12 @@ namespace EPAY.ETC.Core.API.Controllers.Devices
                         message = JsonSerializer.Serialize(result.Data?.Fee);
                         _rabbitMQPublisherService.SendMessage(message, ETC.Core.Models.Enums.PublisherTargetEnum.Fee);
                     }
+
+                    if (result.Data?.UI != null)
+                    {
+                        message = JsonSerializer.Serialize(result.Data?.UI);
+                        _rabbitMQPublisherService.SendMessage(message, ETC.Core.Models.Enums.PublisherTargetEnum.UI);
+                    }
                 }
 
                 return Ok(result);

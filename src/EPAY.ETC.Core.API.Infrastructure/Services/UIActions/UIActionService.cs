@@ -369,6 +369,35 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                                         _logger.LogInformation($"Send message to Fees core with message={JsonSerializer.Serialize(result.Fee)}");
                                     }
                                 }
+
+                                var uiModelData = uiModel?.Data;
+                                if (uiModelData != null)
+                                {
+                                    if (uiModelData.Body == null)
+                                        uiModelData.Body = new BodyModel();
+
+                                    uiModelData.Body.InformationBoard = new InformationBoard()
+                                    {
+                                        Message = new MessageModel()
+                                        {
+                                            Alert = AlertEnum.Success,
+                                            Heading = "Thông báo",
+                                            SubHeading1 = "Đang mở cho đoàn xe ưu tiên"
+                                        }
+                                    };
+
+                                    switch (paymentMethod)
+                                    {
+                                        case PaymentMethodEnum.Priority:
+                                            uiModelData.Body.InformationBoard.Message.SubHeading1 = "Đang mở cho đoàn xe ưu tiên";
+                                            break;
+                                        case PaymentMethodEnum.FreeEntry:
+                                            uiModelData.Body.InformationBoard.Message.SubHeading1 = "Đang xả trạm";
+                                            break;
+                                    }
+
+                                    result.UI = uiModelData;
+                                }
                             }
                         }
                         break;
