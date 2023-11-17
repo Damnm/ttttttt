@@ -125,7 +125,16 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                             _redisDB.HashSet(objectId.ToString(), nameof(FusionModel.ANPRCam1), reconcilVehicleInfo?.Vehicle?.PlateNumber);
 
                             feeModel.LaneOutVehicle.VehicleInfo.PlateNumber = !string.IsNullOrEmpty(reconcilVehicleInfo?.Vehicle?.PlateNumber) ? reconcilVehicleInfo?.Vehicle?.PlateNumber : feeModel.LaneOutVehicle.VehicleInfo.PlateNumber;
-                            feeModel.LaneOutVehicle.RFID = !string.IsNullOrEmpty(reconcilVehicleInfo?.Vehicle?.RFID) ? reconcilVehicleInfo?.Vehicle?.PlateNumber : feeModel.LaneOutVehicle.RFID;
+
+                            if (!string.IsNullOrEmpty(feeModel.LaneOutVehicle.VehicleInfo.PlateNumber))
+                            {
+                                var rfid = _redisDB.StringGet(RedisConstant.RFIDValueKey(reconcilVehicleInfo?.Vehicle?.PlateNumber ?? string.Empty));
+                                if (!string.IsNullOrEmpty(rfid))
+                                {
+                                    feeModel.LaneOutVehicle.RFID = rfid;
+                                }
+                            }
+
                             feeModel.LaneOutVehicle.VehicleInfo.VehicleType = !string.IsNullOrEmpty(reconcilVehicleInfo?.Vehicle?.VehicleType) ? reconcilVehicleInfo?.Vehicle?.VehicleType : feeModel.LaneOutVehicle.VehicleInfo.VehicleType;
                             feeModel.LaneOutVehicle.LaneOutId = !string.IsNullOrEmpty(reconcilVehicleInfo?.Vehicle?.Out?.LaneOutId) ? reconcilVehicleInfo?.Vehicle?.Out?.LaneOutId : feeModel.LaneOutVehicle.LaneOutId;
                             feeModel.LaneOutVehicle.Epoch = (reconcilVehicleInfo?.Vehicle?.Out?.LaneOutDateTimeEpoch > 0) ? reconcilVehicleInfo.Vehicle.Out.LaneOutDateTimeEpoch ?? 0 : feeModel.LaneOutVehicle.Epoch;
@@ -138,10 +147,46 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                                 var camData = JsonSerializer.Deserialize<ANPRCameraModel>(camOutStr);
                                 if (camData != null)
                                 {
+                                    feeModel.LaneOutVehicle.Epoch = camData.CheckpointTimeEpoch;
                                     feeModel.LaneOutVehicle.VehicleInfo.VehiclePhotoUrl = camData.VehicleInfo?.VehiclePhotoUrl ?? camData.VehicleInfo?.VehicleRearPhotoUrl ?? string.Empty;
                                     feeModel.LaneOutVehicle.VehicleInfo.PlateNumberPhotoUrl = camData.VehicleInfo?.PlateNumberPhotoUrl ?? camData.VehicleInfo?.PlateNumberRearPhotoUrl ?? string.Empty;
+                                    feeModel.LaneOutVehicle.VehicleInfo.PlateNumberPhotoUrl = camData.VehicleInfo?.PlateNumberPhotoUrl ?? camData.VehicleInfo?.PlateNumberRearPhotoUrl ?? string.Empty;
+                                    feeModel.LaneOutVehicle.VehicleInfo.ConfidenceScore = camData.VehicleInfo?.ConfidenceScore ?? 0;
+                                    feeModel.LaneOutVehicle.VehicleInfo.VehicleType = camData.VehicleInfo?.VehicleType ?? string.Empty;
+                                    feeModel.LaneOutVehicle.VehicleInfo.VehicleColour = camData.VehicleInfo?.VehicleColour ?? string.Empty;
+                                    feeModel.LaneOutVehicle.VehicleInfo.Weight = camData.VehicleInfo?.Weight ?? 0;
+                                    feeModel.LaneOutVehicle.VehicleInfo.Model = camData.VehicleInfo?.Model ?? string.Empty;
+                                    feeModel.LaneOutVehicle.VehicleInfo.Make = camData.VehicleInfo?.Make ?? string.Empty;
+                                    feeModel.LaneOutVehicle.VehicleInfo.Seat = camData.VehicleInfo?.Seat ?? 0;
+                                    feeModel.LaneOutVehicle.VehicleInfo.PlateColour = camData.VehicleInfo?.PlateColour ?? camData.VehicleInfo?.RearPlateColour ?? string.Empty;
                                 }
                             }
+
+                            if (!string.IsNullOrEmpty(feeModel.LaneOutVehicle.RFID))
+                            {
+                                var rfidOutStr = _redisDB.StringGet(RedisConstant.RFIDOutKey(feeModel.LaneOutVehicle.RFID ?? string.Empty)).ToString();
+                                if (!string.IsNullOrEmpty(rfidOutStr))
+                                {
+                                    var rfidOut = JsonSerializer.Deserialize<RFIDDataModel>(rfidOutStr);
+
+                                    if (rfidOut != null)
+                                    {
+                                        feeModel.LaneOutVehicle.Epoch = rfidOut.Epoch;
+                                        if (rfidOut.VehicleInfo != null)
+                                        {
+                                            feeModel.LaneOutVehicle.VehicleInfo.VehicleType = rfidOut.VehicleInfo.VehicleType ?? string.Empty;
+                                            feeModel.LaneOutVehicle.VehicleInfo.VehicleColour = rfidOut.VehicleInfo.VehicleColour ?? string.Empty;
+                                            feeModel.LaneOutVehicle.VehicleInfo.Weight = rfidOut.VehicleInfo.Weight ?? 0;
+                                            feeModel.LaneOutVehicle.VehicleInfo.Model = rfidOut.VehicleInfo.Model ?? string.Empty;
+                                            feeModel.LaneOutVehicle.VehicleInfo.Make = rfidOut.VehicleInfo.Make ?? string.Empty;
+                                            feeModel.LaneOutVehicle.VehicleInfo.Seat = rfidOut.VehicleInfo.Seat ?? 0;
+                                            feeModel.LaneOutVehicle.VehicleInfo.PlateColour = rfidOut.VehicleInfo.PlateColour ?? rfidOut.VehicleInfo.RearPlateColour ?? string.Empty;
+                                        }
+                                    }
+                                }
+                            }
+
+
 
                             // LandIn
                             if (reconcilVehicleInfo?.Vehicle?.In != null && reconcilVehicleInfo.Vehicle.In.LaneInDateTimeEpoch.HasValue)
@@ -153,39 +198,66 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
 
                                 feeModel.LaneInVehicle.LaneInId = !string.IsNullOrEmpty(reconcilVehicleInfo?.Vehicle?.In?.LaneInId) ? reconcilVehicleInfo?.Vehicle?.In?.LaneInId : feeModel.LaneInVehicle.LaneInId;
                                 feeModel.LaneInVehicle.Epoch = (reconcilVehicleInfo?.Vehicle?.In?.LaneInDateTimeEpoch > 0) ? reconcilVehicleInfo?.Vehicle?.In?.LaneInDateTimeEpoch ?? 0 : feeModel.LaneInVehicle.Epoch;
-                                feeModel.LaneInVehicle.RFID = !string.IsNullOrEmpty(reconcilVehicleInfo?.Vehicle?.RFID) ? reconcilVehicleInfo?.Vehicle?.PlateNumber : feeModel.LaneInVehicle.RFID;
+                                feeModel.LaneInVehicle.RFID = feeModel.LaneOutVehicle.RFID;
                                 feeModel.LaneInVehicle.VehicleInfo.PlateNumber = !string.IsNullOrEmpty(reconcilVehicleInfo?.Vehicle?.PlateNumber) ? reconcilVehicleInfo?.Vehicle?.PlateNumber : feeModel.LaneInVehicle.VehicleInfo.PlateNumber;
                                 feeModel.LaneInVehicle.VehicleInfo.VehicleType = !string.IsNullOrEmpty(reconcilVehicleInfo?.Vehicle?.VehicleType) ? reconcilVehicleInfo?.Vehicle?.VehicleType : feeModel.LaneInVehicle.VehicleInfo.VehicleType;
 
                                 var camInStr = _redisDB.StringGet(RedisConstant.CameraInKey(feeModel.LaneOutVehicle.VehicleInfo.PlateNumber ?? string.Empty)).ToString();
-
+                                var isEmptyLaneIn = false;
                                 if (!string.IsNullOrEmpty(camInStr))
                                 {
                                     var camData = JsonSerializer.Deserialize<ANPRCameraModel>(camInStr);
                                     if (camData != null)
                                     {
+                                        feeModel.LaneInVehicle.Epoch = camData.CheckpointTimeEpoch;
                                         feeModel.LaneInVehicle.VehicleInfo.VehiclePhotoUrl = camData.VehicleInfo?.VehiclePhotoUrl ?? camData.VehicleInfo?.VehicleRearPhotoUrl ?? string.Empty;
                                         feeModel.LaneInVehicle.VehicleInfo.PlateNumberPhotoUrl = camData.VehicleInfo?.PlateNumberPhotoUrl ?? camData.VehicleInfo?.PlateNumberRearPhotoUrl ?? string.Empty;
+                                        feeModel.LaneInVehicle.VehicleInfo.ConfidenceScore = camData.VehicleInfo?.ConfidenceScore ?? 0;
+                                        feeModel.LaneInVehicle.VehicleInfo.VehicleType = camData.VehicleInfo?.VehicleType ?? string.Empty;
+                                        feeModel.LaneInVehicle.VehicleInfo.VehicleColour = camData.VehicleInfo?.VehicleColour ?? string.Empty;
+                                        feeModel.LaneInVehicle.VehicleInfo.Weight = camData.VehicleInfo?.Weight ?? 0;
+                                        feeModel.LaneInVehicle.VehicleInfo.Model = camData.VehicleInfo?.Model ?? string.Empty;
+                                        feeModel.LaneInVehicle.VehicleInfo.Make = camData.VehicleInfo?.Make ?? string.Empty;
+                                        feeModel.LaneInVehicle.VehicleInfo.Seat = camData.VehicleInfo?.Seat ?? 0;
+                                        feeModel.LaneInVehicle.VehicleInfo.PlateColour = camData.VehicleInfo?.PlateColour ?? camData.VehicleInfo?.RearPlateColour ?? string.Empty;
                                     }
+                                    else
+                                        isEmptyLaneIn = true;
                                 }
+
+                                if (!string.IsNullOrEmpty(feeModel.LaneOutVehicle.RFID))
+                                {
+                                    var rfidOutStr = _redisDB.StringGet(RedisConstant.RFIDInKey(feeModel.LaneOutVehicle.RFID)).ToString();
+                                    if (!string.IsNullOrEmpty(rfidOutStr))
+                                    {
+                                        var rfidIn = JsonSerializer.Deserialize<RFIDDataModel>(rfidOutStr);
+
+                                        if (rfidIn != null)
+                                        {
+                                            feeModel.LaneOutVehicle.Epoch = rfidIn.Epoch;
+                                            if (rfidIn.VehicleInfo != null)
+                                            {
+                                                feeModel.LaneOutVehicle.VehicleInfo.VehicleType = rfidIn.VehicleInfo.VehicleType ?? string.Empty;
+                                                feeModel.LaneOutVehicle.VehicleInfo.VehicleColour = rfidIn.VehicleInfo.VehicleColour ?? string.Empty;
+                                                feeModel.LaneOutVehicle.VehicleInfo.Weight = rfidIn.VehicleInfo.Weight ?? 0;
+                                                feeModel.LaneOutVehicle.VehicleInfo.Model = rfidIn.VehicleInfo.Model ?? string.Empty;
+                                                feeModel.LaneOutVehicle.VehicleInfo.Make = rfidIn.VehicleInfo.Make ?? string.Empty;
+                                                feeModel.LaneOutVehicle.VehicleInfo.Seat = rfidIn.VehicleInfo.Seat ?? 0;
+                                                feeModel.LaneOutVehicle.VehicleInfo.PlateColour = rfidIn.VehicleInfo.PlateColour ?? rfidIn.VehicleInfo.RearPlateColour ?? string.Empty;
+                                            }
+                                        }
+                                        else
+                                            isEmptyLaneIn = true;
+                                    }
+                                    else
+                                        isEmptyLaneIn = true;
+                                }
+
+                                if (isEmptyLaneIn)
+                                    feeModel.LaneInVehicle = null;
                             }
                             else
                                 feeModel.LaneInVehicle = null;
-
-                            if (!string.IsNullOrEmpty(reconcilVehicleInfo?.Vehicle?.PlateNumber))
-                            {
-                                var rfid = _redisDB.StringGet(RedisConstant.RFIDValueKey(reconcilVehicleInfo.Vehicle.PlateNumber));
-                                if (!string.IsNullOrEmpty(rfid))
-                                {
-                                    if (feeModel.LaneInVehicle == null)
-                                        feeModel.LaneInVehicle = new LaneInVehicleModel();
-                                    feeModel.LaneInVehicle.RFID = rfid;
-
-                                    if (feeModel.LaneOutVehicle == null)
-                                        feeModel.LaneOutVehicle = new LaneOutVehicleModel();
-                                    feeModel.LaneOutVehicle.RFID = rfid;
-                                }
-                            }
 
                             result.Fee = feeModel;
 
