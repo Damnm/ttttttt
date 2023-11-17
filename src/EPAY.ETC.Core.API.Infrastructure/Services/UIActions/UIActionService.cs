@@ -169,7 +169,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
 
                                     if (rfidOut != null)
                                     {
-                                        feeModel.LaneOutVehicle.Epoch = rfidOut.Epoch;
+                                        feeModel.LaneOutVehicle.Epoch = DateTimeOffset.FromUnixTimeMilliseconds(rfidOut.Epoch).ToUnixTimeSeconds();
                                         if (rfidOut.VehicleInfo != null)
                                         {
                                             if (feeModel.LaneOutVehicle.VehicleInfo == null)
@@ -237,7 +237,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                                         if (rfidIn != null)
                                         {
                                             isEmptyLaneIn = false;
-                                            feeModel.LaneInVehicle.Epoch = rfidIn.Epoch;
+                                            feeModel.LaneInVehicle.Epoch = DateTimeOffset.FromUnixTimeMilliseconds(rfidIn.Epoch).ToUnixTimeSeconds();
                                             if (rfidIn.VehicleInfo != null)
                                             {
                                                 feeModel.LaneOutVehicle.VehicleInfo.VehicleType = rfidIn.VehicleInfo.VehicleType ?? string.Empty;
