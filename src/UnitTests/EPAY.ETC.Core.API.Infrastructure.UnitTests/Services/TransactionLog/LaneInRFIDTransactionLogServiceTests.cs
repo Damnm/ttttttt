@@ -1,15 +1,13 @@
-﻿using EPAY.ETC.Core.API.Core.Models.ETCCheckOuts;
-using EPAY.ETC.Core.API.Core.Models.TransactionLog;
+﻿using EPAY.ETC.Core.API.Core.Models.TransactionLog;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.TransactionLog;
 using EPAY.ETC.Core.API.Infrastructure.Services.TransactionLog;
 using EPAY.ETC.Core.API.Infrastructure.UnitTests.Common;
 using EPAY.ETC.Core.API.Infrastructure.UnitTests.Helpers;
-using EPAY.ETC.Core.Models.Fees;
+using EPAY.ETC.Core.Models.Request;
 using EPAY.ETC.Core.Models.Utils;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
-using System.Linq.Expressions;
 
 namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.ETCCheckouts
 {
@@ -21,32 +19,26 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.ETCCheckouts
         #endregion
 
         #region Init test data
-        private LaneInVehicleModel request = new LaneInVehicleModel()
+        private LaneInRFIDTransactionLogRequestModel request = new LaneInRFIDTransactionLogRequestModel()
         {
             Epoch = new DateTime(2023, 9, 11).ToUnixTime(),
             RFID = "0123456789",
             LaneInId = "1",
-            Device = new ETC.Core.Models.Devices.DeviceModel()
-            {
-                IpAddr = "AAA:BBB:CCC",
-                MacAddr = "127.0.0.1",
-            },
-            VehicleInfo = new ETC.Core.Models.VehicleInfoModel()
-            {
-                ConfidenceScore = 0.9,
-                Make = "Some",
-                Model = "Some",
-                PlateColour = "Some",
-                PlateNumber = "21A12345",
-                PlateNumberPhotoUrl = "Some Url",
-                PlateNumberRearPhotoUrl = "Some Url",
-                RearPlateColour = "Some",
-                RearPlateNumber = "21A12345",
-                Seat = 7,
-                VehiclePhotoUrl = "Some Url",
-                VehicleRearPhotoUrl = "Some Url",
-                VehicleType = "Some"
-            }
+            RFIDReaderIPAddr = "AAA:BBB:CCC",
+            RFIDReaderMacAddr = "127.0.0.1",
+            ConfidenceScore = 0.9,
+            Make = "Some",
+            Model = "Some",
+            PlateColour = "Some",
+            PlateNumber = "21A12345",
+            PlateNumberPhotoUrl = "Some Url",
+            PlateNumberRearPhotoUrl = "Some Url",
+            RearPlateColour = "Some",
+            RearPlateNumber = "21A12345",
+            Seat = 7,
+            VehiclePhotoUrl = "Some Url",
+            VehicleRearPhotoUrl = "Some Url",
+            VehicleType = "Some"
         };
 
         private LaneInRFIDTransactionLog laneInRFIDTransactionLog = new LaneInRFIDTransactionLog()

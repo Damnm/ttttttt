@@ -1,7 +1,5 @@
-﻿using EPAY.ETC.Core.API.Controllers.Payment;
-using EPAY.ETC.Core.API.Core.Exceptions;
+﻿using EPAY.ETC.Core.API.Core.Exceptions;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Transaction;
-using EPAY.ETC.Core.API.Infrastructure.Services.TransactionLog;
 using EPAY.ETC.Core.Models.Request;
 using EPAY.ETC.Core.Models.Validation;
 using Microsoft.AspNetCore.Mvc;
@@ -13,25 +11,25 @@ namespace EPAY.ETC.Core.API.Controllers.TransactionLog
     /// </summary>
     [ApiController]
     [Route("~/api/[controller]")]
-    public class LaneInCameraTransactionLogController : ControllerBase
+    public class LaneInRFIDTransactionLogController : ControllerBase
     {
 
         #region Variables
-        private readonly ILogger<LaneInCameraTransactionLogController> _logger;
-        private readonly ILaneInCameraTransactionLogService _laneInCameraTransactionLogService;
+        private readonly ILogger<LaneInRFIDTransactionLogController> _logger;
+        private readonly ILaneInRFIDTransactionLogService _laneInRFIDTransactionLogService;
         #endregion
         #region Constructor
         /// <summary>
         /// 
         /// </summary>
         /// <param name="logger"></param>
-        /// <param name="laneInCameraTransactionLogService"></param>
+        /// <param name="laneInRFIDTransactionLogService"></param>
         /// <exception cref="ArgumentNullException"></exception>
-        public LaneInCameraTransactionLogController(ILogger<LaneInCameraTransactionLogController> logger,
-            ILaneInCameraTransactionLogService laneInCameraTransactionLogService)
+        public LaneInRFIDTransactionLogController(ILogger<LaneInRFIDTransactionLogController> logger,
+            ILaneInRFIDTransactionLogService laneInRFIDTransactionLogService)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _laneInCameraTransactionLogService = laneInCameraTransactionLogService ?? throw new ArgumentNullException(nameof(laneInCameraTransactionLogService));
+            _laneInRFIDTransactionLogService = laneInRFIDTransactionLogService ?? throw new ArgumentNullException(nameof(laneInRFIDTransactionLogService));
         }
         #endregion
         #region AddAsync
@@ -40,17 +38,17 @@ namespace EPAY.ETC.Core.API.Controllers.TransactionLog
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        [HttpPost("v1/LaneInCameraTransactionLogs")]
+        [HttpPost("v1/LaneInRFIDTransactionLogs")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> UpdateInsertAsync([FromBody] LaneInCameraTransactionLogRequest request)
+        public async Task<IActionResult> AddOrUpdateAsync([FromBody] LaneInRFIDTransactionLogRequestModel request)
         {
             try
             {
-                _logger.LogInformation($"Executing {nameof(UpdateInsertAsync)}...");
+                _logger.LogInformation($"Executing {nameof(AddOrUpdateAsync)}...");
 
 
-                var paymentStatusResult = await _laneInCameraTransactionLogService.UpdateInsertAsync(request);
+                var paymentStatusResult = await _laneInRFIDTransactionLogService.AddOrUpdateAsync(request.Id, request);
 
                 return new ObjectResult(paymentStatusResult)
                 {
@@ -60,7 +58,7 @@ namespace EPAY.ETC.Core.API.Controllers.TransactionLog
             catch (Exception ex)
             {
                 List<ValidationError> validationErrors = new();
-                string errorMessage = $"An error occurred when calling {nameof(UpdateInsertAsync)} method: {ex.Message}. InnerException : {ApiExceptionMessages.ExceptionMessages(ex)}. Stack trace: {ex.StackTrace}";
+                string errorMessage = $"An error occurred when calling {nameof(AddOrUpdateAsync)} method: {ex.Message}. InnerException : {ApiExceptionMessages.ExceptionMessages(ex)}. Stack trace: {ex.StackTrace}";
                 _logger.LogError(errorMessage);
                 validationErrors.Add(ValidationError.InternalServerError);
                 return StatusCode(StatusCodes.Status500InternalServerError, ValidationResult.Failed(errorMessage, validationErrors));

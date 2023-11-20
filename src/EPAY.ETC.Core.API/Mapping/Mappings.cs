@@ -183,6 +183,9 @@ namespace EPAY.ETC.Core.API.Mapping
             CreateMap<LaneInCameraTransactionLogRequest, LaneInCameraTransactionLog>()
                .ReverseMap();
 
+            CreateMap<LaneInRFIDTransactionLogRequestModel, LaneInRFIDTransactionLog>()
+               .ReverseMap();
+
             CreateMap<LaneInVehicleModel, LaneInRFIDTransactionLog>()
                 .ForMember(e => e.Epoch, act => act.MapFrom(src => src.Epoch))
                 .ForMember(e => e.RFID, act => act.MapFrom(src => src.RFID))

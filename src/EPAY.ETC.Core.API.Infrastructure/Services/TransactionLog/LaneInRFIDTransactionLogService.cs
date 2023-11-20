@@ -2,7 +2,7 @@
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Transaction;
 using EPAY.ETC.Core.API.Core.Models.TransactionLog;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.TransactionLog;
-using EPAY.ETC.Core.Models.Fees;
+using EPAY.ETC.Core.Models.Request;
 using EPAY.ETC.Core.Models.Validation;
 using Microsoft.Extensions.Logging;
 
@@ -26,7 +26,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.TransactionLog
         }
 
         #endregion
-        public async Task<ValidationResult<bool>> AddOrUpdateAsync(Guid? id, LaneInVehicleModel input)
+        public async Task<ValidationResult<bool>> AddOrUpdateAsync(Guid? id, LaneInRFIDTransactionLogRequestModel input)
         {
             _logger.LogInformation($"Executing {nameof(AddOrUpdateAsync)} method...");
             try

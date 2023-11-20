@@ -56,7 +56,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.TransactionL
             }
         }
 
-        public async Task<LaneInCameraTransactionLog?> GetByIdAsync(Guid id)
+        public Task<LaneInCameraTransactionLog?> GetByIdAsync(Guid id)
         {
             throw new NotImplementedException();
         }
