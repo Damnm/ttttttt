@@ -109,7 +109,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PrintLog
         }
         #endregion
 
-        #region GetByIdAsync
+        #region PrintAsync
         public async Task<string?> PrintAsync(PrintRequestModel request)
         {
             _logger.LogInformation($"Executing {nameof(PrintAsync)} method...");
@@ -121,7 +121,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PrintLog
                      (!string.IsNullOrEmpty(request.LaneOutId) ? request.LaneOutId.Equals(x.LaneOutId) : true)
                             && (!string.IsNullOrEmpty(request.EmployeeId) ? request.EmployeeId.Equals(x.EmployeeId) : true)
                             && (!string.IsNullOrEmpty(request.PrintType.ToString()) ? request.PrintType.Equals(x.PrintType) : true)
-                            && ((!string.IsNullOrEmpty(request.RFID) ? request.RFID.Equals(x.RFID) : (!string.IsNullOrEmpty(request.PlateNumber) ? request.PlateNumber.Equals(x.PlateNumber) : true)))
+                            && ((!string.IsNullOrEmpty(request.RFID) ? request.RFID.Equals(x.RFID) : true) || (!string.IsNullOrEmpty(request.PlateNumber) ? request.PlateNumber.Equals(x.PlateNumber) : true))
                             )
                     .OrderByDescending(m => m.CreatedDate).Select(k => k.DataJson).FirstOrDefault();
 
