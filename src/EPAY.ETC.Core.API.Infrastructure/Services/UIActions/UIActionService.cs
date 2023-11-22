@@ -258,10 +258,10 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                                 }
 
                                 if (isEmptyLaneIn)
-                                    feeModel.LaneInVehicle = null;
+                                    feeModel.LaneInVehicle = new LaneInVehicleModel();
                             }
                             else
-                                feeModel.LaneInVehicle = null;
+                                feeModel.LaneInVehicle = new LaneInVehicleModel();
 
                             result.Fee = feeModel;
 
@@ -377,12 +377,12 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                                 }
                             }
 
-                                uiModel = await LoadCurrentUIAsync();
-                                uiModelData = uiModel?.Data;
-                                if (uiModelData != null)
-                                {
-                                    if (uiModelData.Body == null)
-                                        uiModelData.Body = new EPAY.ETC.Core.Models.UI.BodyModel();
+                            uiModel = await LoadCurrentUIAsync();
+                            uiModelData = uiModel?.Data;
+                            if (uiModelData != null)
+                            {
+                                if (uiModelData.Body == null)
+                                    uiModelData.Body = new EPAY.ETC.Core.Models.UI.BodyModel();
 
                                 uiModelData.Body.InformationBoard = new InformationBoard()
                                 {
