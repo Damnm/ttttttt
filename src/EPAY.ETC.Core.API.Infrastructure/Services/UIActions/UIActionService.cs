@@ -237,7 +237,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                                 }
 
                                 if (isChangePlateNumber)
-                                    feeModel.LaneInVehicle.Cameras = GetAllCameraModelByPattern(RedisConstant.CameraInKey(feeModel.LaneOutVehicle.VehicleInfo.PlateNumber ?? string.Empty));
+                                    feeModel.LaneInVehicle.Cameras = GetAllCameraModelByPattern($"{RedisConstant.CameraInKey(feeModel.LaneOutVehicle.VehicleInfo.PlateNumber ?? string.Empty)}*");
 
                                 if (firstCamInData == null)
                                     firstCamInData = feeModel.LaneInVehicle.Cameras?.FirstOrDefault();
@@ -740,7 +740,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
             {
                 _logger.LogInformation($"Executing {nameof(GetLaneInVehicles)} method...");
 
-                var cameraDatas = GetAllCameraModelByPattern(RedisConstant.CameraInKey(plateNumber));
+                var cameraDatas = GetAllCameraModelByPattern($"{RedisConstant.CameraInKey(plateNumber)}*");
 
                 var result = cameraDatas.Select(x => new LaneInVehicleModel()
                 {
