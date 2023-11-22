@@ -1,7 +1,7 @@
 ﻿using EPAY.ETC.Core.API.Core.Exceptions;
 using EPAY.ETC.Core.API.Core.Models.TicketType;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Context;
-using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.ETCCheckouts;
+using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.TicketType;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Linq.Expressions;
@@ -58,6 +58,22 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.TicketTypes
             catch (ETCEPAYCoreAPIException ex)
             {
                 _logger.LogError($"An error occurred when calling {nameof(GetByIdAsync)} method. Details: {ex.Message}. Stack trace: {ex.StackTrace}");
+                throw;
+            }
+        }
+        public Task<Guid?> GetByCodeAsync(string code)
+        {
+            try
+            {
+                _logger.LogInformation($"Executing {nameof(GetByCodeAsync)} method...");
+
+                TicketTypeModel? entity = _dbContext.TicketTypes.AsNoTracking().FirstOrDefault(x => x.Code == code);
+
+                return Task.FromResult(entity?.Id);
+            }
+            catch (ETCEPAYCoreAPIException ex)
+            {
+                _logger.LogError($"An error occurred when calling {nameof(GetByCodeAsync)} method. Details: {ex.Message}. Stack trace: {ex.StackTrace}");
                 throw;
             }
         }

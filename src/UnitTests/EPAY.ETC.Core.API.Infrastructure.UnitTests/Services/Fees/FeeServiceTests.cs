@@ -1,5 +1,5 @@
-﻿using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.ETCCheckouts;
-using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Fees;
+﻿using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Fees;
+using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.TicketType;
 using EPAY.ETC.Core.API.Infrastructure.Services.Fees;
 using EPAY.ETC.Core.API.Infrastructure.UnitTests.Common;
 using EPAY.ETC.Core.API.Infrastructure.UnitTests.Helpers;

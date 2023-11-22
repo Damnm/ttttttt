@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Fees;
-using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.ETCCheckouts;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Fees;
+using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.TicketType;
 using EPAY.ETC.Core.Models.Constants;
 using EPAY.ETC.Core.Models.Devices;
 using EPAY.ETC.Core.Models.Fees;

@@ -8,6 +8,7 @@ using EPAY.ETC.Core.API.Core.Interfaces.Services.ManualBarrierControls;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Payment;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.PaymentStatus;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.PrintLog;
+using EPAY.ETC.Core.API.Core.Interfaces.Services.TicketType;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Transaction;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.UIActions;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Vehicles;
@@ -26,6 +27,7 @@ using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.ManualBarrierCon
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Payment;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PaymentStatus;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PrintLog;
+using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.TicketType;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.TicketTypes;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.TimeBlockFees;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.TransactionLog;
@@ -42,6 +44,7 @@ using EPAY.ETC.Core.API.Infrastructure.Services.ManualBarrierControls;
 using EPAY.ETC.Core.API.Infrastructure.Services.Payment;
 using EPAY.ETC.Core.API.Infrastructure.Services.PaymentStatus;
 using EPAY.ETC.Core.API.Infrastructure.Services.PrintLog;
+using EPAY.ETC.Core.API.Infrastructure.Services.TicketType;
 using EPAY.ETC.Core.API.Infrastructure.Services.TransactionLog;
 using EPAY.ETC.Core.API.Infrastructure.Services.UIActions;
 using EPAY.ETC.Core.API.Infrastructure.Services.Vehicles;
@@ -103,6 +106,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence
             services.AddTransient<IErrorResponseService, ErrorResponseService>();
             services.AddTransient<ILaneInCameraTransactionLogService, LaneInCameraTransactionLogService>();
             services.AddTransient<IPrintLogService, PrintLogService>();
+            services.AddTransient<ITicketTypeService, TicketTypeService>();
 
             return services;
         }
