@@ -108,7 +108,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                 {
                     // Get FeeModel object from Redis.
                     FeeModel? feeModel = null;
-                    var feeObject = _redisDB.StringGet(RedisConstant.FeeModulesKey(reconcilVehicleInfo?.ObjectId.ToString() ?? uiModel?.ObjectId.ToString() ?? string.Empty));
+                    var feeObject = _redisDB.StringGet(RedisConstant.FeeModulesKey(reconcilVehicleInfo?.ObjectId?.ToString() ?? uiModel?.ObjectId?.ToString() ?? string.Empty));
 
                     if (!string.IsNullOrEmpty(feeObject.ToString()))
                     {
@@ -255,10 +255,10 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                                 }
 
                                 if (isEmptyLaneIn)
-                                    feeModel.LaneInVehicle = new LaneInVehicleModel();
+                                    feeModel.LaneInVehicle = null;
                             }
                             else
-                                feeModel.LaneInVehicle = new LaneInVehicleModel();
+                                feeModel.LaneInVehicle = null;
 
                             result.Fee = feeModel;
 
