@@ -163,7 +163,7 @@ namespace EPAY.ETC.Core.API.Controllers.UIAction
         /// 
         /// </summary>
         /// <returns></returns>
-        [HttpGet("v1/add-remove-transaction")]
+        [HttpGet("v1/lane-in-info/{plateNumber}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult GetLaneInVehicles(string plateNumber)
