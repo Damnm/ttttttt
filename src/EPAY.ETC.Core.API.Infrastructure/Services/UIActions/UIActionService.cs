@@ -106,7 +106,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                 {
                     // Get FeeModel object from Redis.
                     FeeModel? feeModel = null;
-                    var feeObject = _redisDB.StringGet(RedisConstant.FeeModulesKey(reconcilVehicleInfo?.ObjectId.ToString() ?? uiModel?.ObjectId.ToString() ?? string.Empty));
+                    var feeObject = _redisDB.StringGet(RedisConstant.FeeModulesKey(reconcilVehicleInfo?.ObjectId?.ToString() ?? uiModel?.ObjectId?.ToString() ?? string.Empty));
 
                     if (!string.IsNullOrEmpty(feeObject.ToString()))
                     {
