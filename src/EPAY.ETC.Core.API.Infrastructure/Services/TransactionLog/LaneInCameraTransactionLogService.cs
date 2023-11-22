@@ -5,7 +5,6 @@ using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.TransactionLog;
 using EPAY.ETC.Core.Models.Request;
 using EPAY.ETC.Core.Models.Validation;
 using Microsoft.Extensions.Logging;
-using System.Linq.Expressions;
 
 namespace EPAY.ETC.Core.API.Infrastructure.Services.TransactionLog
 {
@@ -32,7 +31,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.TransactionLog
             _logger.LogInformation($"Executing {nameof(UpdateInsertAsync)} method...");
             try
             {
-                var existRecords = await _repository.GetAllAsync(s => 
+                var existRecords = await _repository.GetAllAsync(s =>
                  s.PlateNumber == input.PlateNumber && s.Epoch == input.Epoch);
 
                 var entityMapped = _mapper.Map<LaneInCameraTransactionLog>(input);
@@ -61,8 +60,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.TransactionLog
             _logger.LogInformation($"Executing {nameof(UpdateAsync)} method...");
             try
             {
-               await _repository.UpdateAsync(entity);
-               return ValidationResult.Success(entity);
+                await _repository.UpdateAsync(entity);
+                return ValidationResult.Success(entity);
             }
             catch (Exception ex)
             {

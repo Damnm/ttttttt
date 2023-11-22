@@ -17,7 +17,6 @@ using EPAY.ETC.Core.Models.Constants;
 using EPAY.ETC.Core.Models.Devices;
 using EPAY.ETC.Core.Models.Enums;
 using EPAY.ETC.Core.Models.Fees;
-using EPAY.ETC.Core.Models.Receipt;
 using EPAY.ETC.Core.Models.Receipt.SessionReports;
 using EPAY.ETC.Core.Models.Request;
 using EPAY.ETC.Core.Models.UI;
@@ -41,6 +40,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
         private readonly ICustomVehicleTypeRepository _customVehicleTypeRepository;
         private readonly IManualBarrierControlRepository _manualBarrierControlRepository;
         private readonly IDatabase _redisDB;
+        private readonly IServer _redisServer;
         private readonly IOptions<UIModel> _uiOptions;
         private readonly IPrintLogRepository _appPrintLogRepository;
 
@@ -51,6 +51,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                                ICustomVehicleTypeRepository customVehicleTypeRepository,
                                IManualBarrierControlRepository manualBarrierControlRepository,
                                IDatabase redisDB,
+                               IServer server,
                                IOptions<UIModel> uiOptions,
                                IPrintLogRepository appPrintLogRepository)
         {
@@ -61,6 +62,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
             _customVehicleTypeRepository = customVehicleTypeRepository ?? throw new ArgumentNullException(nameof(customVehicleTypeRepository));
             _manualBarrierControlRepository = manualBarrierControlRepository ?? throw new ArgumentNullException(nameof(manualBarrierControlRepository));
             _redisDB = redisDB ?? throw new ArgumentNullException(nameof(redisDB));
+            _redisServer = server ?? throw new ArgumentNullException(nameof(server));
             _uiOptions = uiOptions ?? throw new ArgumentNullException(nameof(uiOptions));
             _appPrintLogRepository = appPrintLogRepository ?? throw new ArgumentNullException(nameof(appPrintLogRepository));
         }
@@ -193,7 +195,6 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                             }
 
 
-
                             // LandIn
                             if ((reconcilVehicleInfo?.Vehicle?.IsWrongLaneInInfo ?? false) == false)
                             {
@@ -206,28 +207,24 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                                 feeModel.LaneInVehicle.VehicleInfo.PlateNumber = !string.IsNullOrEmpty(reconcilVehicleInfo?.Vehicle?.PlateNumber) ? reconcilVehicleInfo?.Vehicle?.PlateNumber : feeModel.LaneInVehicle.VehicleInfo.PlateNumber;
                                 feeModel.LaneInVehicle.VehicleInfo.VehicleType = !string.IsNullOrEmpty(reconcilVehicleInfo?.Vehicle?.VehicleType) ? reconcilVehicleInfo?.Vehicle?.VehicleType : feeModel.LaneInVehicle.VehicleInfo.VehicleType;
 
-                                var camInStr = _redisDB.StringGet(RedisConstant.CameraInKey(feeModel.LaneOutVehicle.VehicleInfo.PlateNumber ?? string.Empty)).ToString();
-                                var isEmptyLaneIn = false;
-                                if (!string.IsNullOrEmpty(camInStr))
+                                feeModel.LaneInVehicle.Cameras = GetAllCameraModelByPattern(RedisConstant.CameraInKey(feeModel.LaneOutVehicle.VehicleInfo.PlateNumber ?? string.Empty));
+
+                                LaneInCameraDataModel? firstCamInData = feeModel.LaneInVehicle.Cameras.FirstOrDefault();
+                                bool isEmptyLaneIn = false;
+                                if (firstCamInData != null)
                                 {
-                                    var camData = JsonSerializer.Deserialize<ANPRCameraModel>(camInStr);
-                                    if (camData != null)
-                                    {
-                                        isEmptyLaneIn = false;
-                                        feeModel.LaneInVehicle.Epoch = camData.CheckpointTimeEpoch;
-                                        feeModel.LaneInVehicle.VehicleInfo.VehiclePhotoUrl = camData.VehicleInfo?.VehiclePhotoUrl ?? camData.VehicleInfo?.VehicleRearPhotoUrl ?? string.Empty;
-                                        feeModel.LaneInVehicle.VehicleInfo.PlateNumberPhotoUrl = camData.VehicleInfo?.PlateNumberPhotoUrl ?? camData.VehicleInfo?.PlateNumberRearPhotoUrl ?? string.Empty;
-                                        feeModel.LaneInVehicle.VehicleInfo.ConfidenceScore = camData.VehicleInfo?.ConfidenceScore ?? 0;
-                                        feeModel.LaneInVehicle.VehicleInfo.VehicleType = camData.VehicleInfo?.VehicleType ?? string.Empty;
-                                        feeModel.LaneInVehicle.VehicleInfo.VehicleColour = camData.VehicleInfo?.VehicleColour ?? string.Empty;
-                                        feeModel.LaneInVehicle.VehicleInfo.Weight = camData.VehicleInfo?.Weight ?? 0;
-                                        feeModel.LaneInVehicle.VehicleInfo.Model = camData.VehicleInfo?.Model ?? string.Empty;
-                                        feeModel.LaneInVehicle.VehicleInfo.Make = camData.VehicleInfo?.Make ?? string.Empty;
-                                        feeModel.LaneInVehicle.VehicleInfo.Seat = camData.VehicleInfo?.Seat ?? 0;
-                                        feeModel.LaneInVehicle.VehicleInfo.PlateColour = camData.VehicleInfo?.PlateColour ?? camData.VehicleInfo?.RearPlateColour ?? string.Empty;
-                                    }
-                                    else
-                                        isEmptyLaneIn = true;
+                                    isEmptyLaneIn = false;
+                                    feeModel.LaneInVehicle.Epoch = firstCamInData.Epoch;
+                                    feeModel.LaneInVehicle.VehicleInfo.VehiclePhotoUrl = firstCamInData.VehicleInfo?.VehiclePhotoUrl ?? firstCamInData.VehicleInfo?.VehicleRearPhotoUrl ?? string.Empty;
+                                    feeModel.LaneInVehicle.VehicleInfo.PlateNumberPhotoUrl = firstCamInData.VehicleInfo?.PlateNumberPhotoUrl ?? firstCamInData.VehicleInfo?.PlateNumberRearPhotoUrl ?? string.Empty;
+                                    feeModel.LaneInVehicle.VehicleInfo.ConfidenceScore = firstCamInData.VehicleInfo?.ConfidenceScore ?? 0;
+                                    feeModel.LaneInVehicle.VehicleInfo.VehicleType = firstCamInData.VehicleInfo?.VehicleType ?? string.Empty;
+                                    feeModel.LaneInVehicle.VehicleInfo.VehicleColour = firstCamInData.VehicleInfo?.VehicleColour ?? string.Empty;
+                                    feeModel.LaneInVehicle.VehicleInfo.Weight = firstCamInData.VehicleInfo?.Weight ?? 0;
+                                    feeModel.LaneInVehicle.VehicleInfo.Model = firstCamInData.VehicleInfo?.Model ?? string.Empty;
+                                    feeModel.LaneInVehicle.VehicleInfo.Make = firstCamInData.VehicleInfo?.Make ?? string.Empty;
+                                    feeModel.LaneInVehicle.VehicleInfo.Seat = firstCamInData.VehicleInfo?.Seat ?? 0;
+                                    feeModel.LaneInVehicle.VehicleInfo.PlateColour = firstCamInData.VehicleInfo?.PlateColour ?? firstCamInData.VehicleInfo?.RearPlateColour ?? string.Empty;
                                 }
                                 else
                                     isEmptyLaneIn = true;
@@ -377,12 +374,12 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                                 }
                             }
 
-                                uiModel = await LoadCurrentUIAsync();
-                                uiModelData = uiModel?.Data;
-                                if (uiModelData != null)
-                                {
-                                    if (uiModelData.Body == null)
-                                        uiModelData.Body = new EPAY.ETC.Core.Models.UI.BodyModel();
+                            uiModel = await LoadCurrentUIAsync();
+                            uiModelData = uiModel?.Data;
+                            if (uiModelData != null)
+                            {
+                                if (uiModelData.Body == null)
+                                    uiModelData.Body = new EPAY.ETC.Core.Models.UI.BodyModel();
 
                                 uiModelData.Body.InformationBoard = new InformationBoard()
                                 {
@@ -778,7 +775,52 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.StackTrace);
+                _logger.LogError($"An error occurred when calling {nameof(HashGetList)} method. Details: {ex.Message}. Stack trace: {ex.StackTrace}");
+                throw;
+            }
+        }
+
+        public List<LaneInCameraDataModel> GetAllCameraModelByPattern(string pattern)
+        {
+            _logger.LogInformation($"Starting load all camera data...");
+
+            try
+            {
+                List<LaneInCameraDataModel> result = new List<LaneInCameraDataModel>();
+                var redisKeys = _redisServer.Keys(0, pattern).ToList();
+                if (!redisKeys.Any())
+                    return result;
+
+                foreach (RedisKey key in redisKeys)
+                {
+                    string? cameraValue = _redisDB.StringGet(key).ToString();
+                    if (!string.IsNullOrEmpty(cameraValue))
+                    {
+                        // Deserialize Camera data from Lane In
+                        ANPRCameraModel? cameraData = JsonSerializer.Deserialize<ANPRCameraModel>(cameraValue);
+                        if (cameraData != null && cameraData.VehicleInfo != null)
+                        {
+                            result.Add(new LaneInCameraDataModel()
+                            {
+                                CameraDeviceInfo = new DeviceModel()
+                                {
+                                    IpAddr = cameraData.IpAddr,
+                                    MacAddr = cameraData.MacAddr
+                                },
+                                CameraKey = key.ToString(),
+                                Epoch = cameraData.CheckpointTimeEpoch,
+                                LaneId = cameraData.LaneInId,
+                                VehicleInfo = cameraData.VehicleInfo,
+                            });
+                        }
+                    }
+                }
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"An error occurred when calling {nameof(GetAllCameraModelByPattern)} method. Details: {ex.Message}. Stack trace: {ex.StackTrace}");
                 throw;
             }
         }
