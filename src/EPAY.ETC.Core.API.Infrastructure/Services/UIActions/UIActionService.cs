@@ -129,6 +129,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                             // Update PlateNumber for FusionObject
                             _redisDB.HashSet(objectId.ToString(), nameof(FusionModel.ANPRCam1), reconcilVehicleInfo?.Vehicle?.PlateNumber);
 
+                            bool isChangePlateNumber = feeModel.LaneOutVehicle.VehicleInfo.PlateNumber != reconcilVehicleInfo?.Vehicle?.PlateNumber;
                             feeModel.LaneOutVehicle.VehicleInfo.PlateNumber = !string.IsNullOrEmpty(reconcilVehicleInfo?.Vehicle?.PlateNumber) ? reconcilVehicleInfo?.Vehicle?.PlateNumber : feeModel.LaneOutVehicle.VehicleInfo.PlateNumber;
 
                             if (!string.IsNullOrEmpty(feeModel.LaneOutVehicle.VehicleInfo.PlateNumber))
@@ -207,9 +208,40 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                                 feeModel.LaneInVehicle.VehicleInfo.PlateNumber = !string.IsNullOrEmpty(reconcilVehicleInfo?.Vehicle?.PlateNumber) ? reconcilVehicleInfo?.Vehicle?.PlateNumber : feeModel.LaneInVehicle.VehicleInfo.PlateNumber;
                                 feeModel.LaneInVehicle.VehicleInfo.VehicleType = !string.IsNullOrEmpty(reconcilVehicleInfo?.Vehicle?.VehicleType) ? reconcilVehicleInfo?.Vehicle?.VehicleType : feeModel.LaneInVehicle.VehicleInfo.VehicleType;
 
-                                feeModel.LaneInVehicle.Cameras = GetAllCameraModelByPattern(RedisConstant.CameraInKey(feeModel.LaneOutVehicle.VehicleInfo.PlateNumber ?? string.Empty));
+                                feeModel.LaneInVehicle.Cameras = new List<LaneInCameraDataModel>();
+                                LaneInCameraDataModel? firstCamInData = null;
 
-                                LaneInCameraDataModel? firstCamInData = feeModel.LaneInVehicle.Cameras.FirstOrDefault();
+                                if (!string.IsNullOrEmpty(reconcilVehicleInfo?.Vehicle?.In?.CamInKey))
+                                {
+                                    string? camStr = _redisDB.StringGet(reconcilVehicleInfo?.Vehicle?.In?.CamInKey ?? string.Empty);
+                                    if (!string.IsNullOrEmpty(camStr))
+                                    {
+                                        var camData = JsonSerializer.Deserialize<ANPRCameraModel>(camStr);
+                                        if (camData != null)
+                                        {
+                                            firstCamInData = new LaneInCameraDataModel()
+                                            {
+                                                CameraDeviceInfo = new DeviceModel()
+                                                {
+                                                    IpAddr = camData.IpAddr,
+                                                    MacAddr = camData.MacAddr
+                                                },
+                                                CameraKey = reconcilVehicleInfo?.Vehicle?.In?.CamInKey ?? string.Empty,
+                                                Epoch = camData.CheckpointTimeEpoch,
+                                                LaneId = camData.LaneInId,
+                                                TagId = string.Empty,
+                                                VehicleInfo = camData.VehicleInfo
+                                            };
+                                        }
+                                    }
+                                }
+
+                                if (isChangePlateNumber)
+                                    feeModel.LaneInVehicle.Cameras = GetAllCameraModelByPattern(RedisConstant.CameraInKey(feeModel.LaneOutVehicle.VehicleInfo.PlateNumber ?? string.Empty));
+
+                                if (firstCamInData == null)
+                                    firstCamInData = feeModel.LaneInVehicle.Cameras?.FirstOrDefault();
+
                                 bool isEmptyLaneIn = false;
                                 if (firstCamInData != null)
                                 {
