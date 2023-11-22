@@ -89,6 +89,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence
             services.AddScoped<IErrorResponseRepository, ErrorResponseRepository>();
             services.AddScoped<ITicketTypeRepository, TicketTypeRepository>();
             services.AddScoped<ILaneInCameraTransactionLogRepository, LaneInCameraTransactionLogRepository>();
+            services.AddScoped<ILaneInRFIDTransactionLogRepository, LaneInRFIDTransactionLogRepository>();
             services.AddScoped<IPrintLogRepository, PrintLogRepository>();
 
             ////Add Services
@@ -105,6 +106,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence
             services.AddTransient<IPasswordService, PasswordService>();
             services.AddTransient<IErrorResponseService, ErrorResponseService>();
             services.AddTransient<ILaneInCameraTransactionLogService, LaneInCameraTransactionLogService>();
+            services.AddTransient<ILaneInRFIDTransactionLogService, LaneInRFIDTransactionLogService>();
             services.AddTransient<IPrintLogService, PrintLogService>();
             services.AddTransient<ITicketTypeService, TicketTypeService>();
 
