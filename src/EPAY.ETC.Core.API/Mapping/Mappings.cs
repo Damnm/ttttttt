@@ -84,6 +84,8 @@ namespace EPAY.ETC.Core.API.Mapping
                 .ForMember(e => e.ConfidenceScore, act => act.MapFrom(src => src.LaneOutVehicle != null && src.LaneOutVehicle.VehicleInfo != null ? (float?)src.LaneOutVehicle.VehicleInfo.ConfidenceScore : (src.LaneInVehicle != null && src.LaneInVehicle.VehicleInfo != null ? (float?)src.LaneInVehicle.VehicleInfo.ConfidenceScore : null)))
                 .ForMember(e => e.Seat, act => act.MapFrom(src => src.LaneOutVehicle != null && src.LaneOutVehicle.VehicleInfo != null ? src.LaneOutVehicle.VehicleInfo.Seat : (src.LaneInVehicle != null && src.LaneInVehicle.VehicleInfo != null ? src.LaneInVehicle.VehicleInfo.Seat : null)))
                 .ForMember(e => e.Weight, act => act.MapFrom(src => src.LaneOutVehicle != null && src.LaneOutVehicle.VehicleInfo != null ? src.LaneOutVehicle.VehicleInfo.Weight : (src.LaneInVehicle != null && src.LaneInVehicle.VehicleInfo != null ? src.LaneInVehicle.VehicleInfo.Weight : null)))
+                .ForMember(e => e.TicketTypeId, act => act.MapFrom(src => src.Payment != null ? src.Payment.TicketTypeId : null))
+
                 .ForPath(e => e.TicketType.Code, act => act.Ignore())
                 .ForMember(e => e.CustomVehicleType, act => act.Ignore());
             CreateMap<FeeModel, CoreModel.FeeModel>()
@@ -94,6 +96,7 @@ namespace EPAY.ETC.Core.API.Mapping
                 .ForPath(e => e.LaneOutVehicle.Epoch, act => act.MapFrom(src => src.LaneOutEpoch))
                 .ForPath(e => e.Payment.RFID, act => act.MapFrom(src => src.RFID))
                 .ForPath(e => e.Payment.Make, act => act.MapFrom(src => src.Make))
+                .ForPath(e => e.Payment.TicketTypeId, act => act.MapFrom(src => src.TicketTypeId))
                 .ForPath(e => e.Payment.Model, act => act.MapFrom(src => src.Model))
                 .ForPath(e => e.Payment.PlateNumber, act => act.MapFrom(src => src.PlateNumber))
                 .ForPath(e => e.Payment.CustomVehicleTypeId, act => act.MapFrom(src => src.CustomVehicleTypeId))
