@@ -258,10 +258,10 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                                 }
 
                                 if (isEmptyLaneIn)
-                                    feeModel.LaneInVehicle = new LaneInVehicleModel();
+                                    feeModel.LaneInVehicle = null;
                             }
                             else
-                                feeModel.LaneInVehicle = new LaneInVehicleModel();
+                                feeModel.LaneInVehicle = null;
 
                             result.Fee = feeModel;
 
