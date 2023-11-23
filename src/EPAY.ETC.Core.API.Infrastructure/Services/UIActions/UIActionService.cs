@@ -734,33 +734,6 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
             }
         }
 
-        public List<LaneInVehicleModel> GetLaneInVehicles(string plateNumber)
-        {
-            try
-            {
-                _logger.LogInformation($"Executing {nameof(GetLaneInVehicles)} method...");
-
-                var cameraDatas = GetAllCameraModelByPattern($"{RedisConstant.CameraInKey(plateNumber)}*");
-
-                var result = cameraDatas.Select(x => new LaneInVehicleModel()
-                {
-                    LaneInId = x.LaneId,
-                    RFID = x.LaneId,
-                    Device = x.CameraDeviceInfo,
-                    VehicleInfo = x.VehicleInfo,
-                    Epoch = x.Epoch,
-                    Cameras = new List<LaneInCameraDataModel>() { x }
-                }).ToList();
-
-                return result;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"An error occurred when calling {nameof(GetLaneInVehicles)} method. Details: {ex.Message}. Stack trace: {ex.StackTrace}");
-                throw;
-            }
-        }
-
         #region Private method
         public List<WaitingVehicleModel> GetWaitingVehicles()
         {

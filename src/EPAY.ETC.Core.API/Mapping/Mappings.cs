@@ -183,6 +183,23 @@ namespace EPAY.ETC.Core.API.Mapping
                 .ForPath(e => e.VehicleInfo.PlateNumberPhotoUrl, act => act.MapFrom(src => src.VehicleInfo.PlateNumberPhotoUrl))
                 .ForPath(e => e.VehicleInfo.ConfidenceScore, act => act.MapFrom(src => src.VehicleInfo.ConfidenceScore));
 
+            CreateMap<ANPRCameraModel, LaneInCameraDataModel>()
+                .ForPath(e => e.LaneId, act => act.MapFrom(src => src.LaneInId))
+                .ForPath(e => e.Epoch, act => act.MapFrom(src => src.CheckpointTimeEpoch))
+                .ForPath(e => e.CameraDeviceInfo.MacAddr, act => act.MapFrom(src => src.MacAddr))
+                .ForPath(e => e.CameraDeviceInfo.IpAddr, act => act.MapFrom(src => src.IpAddr))
+                .ForPath(e => e.VehicleInfo.Make, act => act.MapFrom(src => src.VehicleInfo.Make))
+                .ForPath(e => e.VehicleInfo.Model, act => act.MapFrom(src => src.VehicleInfo.Model))
+                .ForPath(e => e.VehicleInfo.PlateNumber, act => act.MapFrom(src => src.VehicleInfo.PlateNumber))
+                .ForPath(e => e.VehicleInfo.PlateColour, act => act.MapFrom(src => src.VehicleInfo.PlateColour))
+                .ForPath(e => e.VehicleInfo.VehicleColour, act => act.MapFrom(src => src.VehicleInfo.VehicleColour))
+                .ForPath(e => e.VehicleInfo.VehicleType, act => act.MapFrom(src => src.VehicleInfo.VehicleType))
+                .ForPath(e => e.VehicleInfo.Seat, act => act.MapFrom(src => src.VehicleInfo.Seat))
+                .ForPath(e => e.VehicleInfo.Weight, act => act.MapFrom(src => src.VehicleInfo.Weight))
+                .ForPath(e => e.VehicleInfo.VehiclePhotoUrl, act => act.MapFrom(src => src.VehicleInfo.VehiclePhotoUrl))
+                .ForPath(e => e.VehicleInfo.PlateNumberPhotoUrl, act => act.MapFrom(src => src.VehicleInfo.PlateNumberPhotoUrl))
+                .ForPath(e => e.VehicleInfo.ConfidenceScore, act => act.MapFrom(src => src.VehicleInfo.ConfidenceScore));
+
             CreateMap<LaneInCameraTransactionLogRequest, LaneInCameraTransactionLog>()
                .ReverseMap();
 
