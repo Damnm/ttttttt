@@ -1,6 +1,5 @@
 ﻿using EPAY.ETC.Core.API.Core.Exceptions;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.UIActions;
-using EPAY.ETC.Core.API.Core.Utils;
 using EPAY.ETC.Core.API.Services;
 using EPAY.ETC.Core.Models.Devices;
 using EPAY.ETC.Core.Models.Request;

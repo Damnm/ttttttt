@@ -1,5 +1,4 @@
 ﻿using EPAY.ETC.Core.API.Core.Interfaces.Services.Fees;
-using EPAY.ETC.Core.API.Core.Utils;
 using EPAY.ETC.Core.API.Infrastructure.Common.Utils;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.CustomVehicleTypes;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.FeeVehicleCategories;

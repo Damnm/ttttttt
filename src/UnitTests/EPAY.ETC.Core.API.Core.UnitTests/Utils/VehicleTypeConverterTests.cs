@@ -1,5 +1,5 @@
-﻿using EPAY.ETC.Core.API.Core.Utils;
-using EPAY.ETC.Core.Models.Enums;
+﻿using EPAY.ETC.Core.Models.Enums;
+using EPAY.ETC.Core.Models.Utils;
 using FluentAssertions;
 
 namespace EPAY.ETC.Core.API.Core.UnitTests.Utils
