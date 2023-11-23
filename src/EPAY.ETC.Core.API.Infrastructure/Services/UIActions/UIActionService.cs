@@ -129,7 +129,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                             // Update PlateNumber for FusionObject
                             _redisDB.HashSet(objectId.ToString(), nameof(FusionModel.ANPRCam1), reconcilVehicleInfo?.Vehicle?.PlateNumber);
 
-                            bool isChangePlateNumber = feeModel.LaneOutVehicle.VehicleInfo.PlateNumber != reconcilVehicleInfo?.Vehicle?.PlateNumber;
+                            bool isChangePlateNumber = !string.IsNullOrEmpty(reconcilVehicleInfo?.Vehicle?.PlateNumber) && feeModel.LaneOutVehicle.VehicleInfo.PlateNumber != reconcilVehicleInfo?.Vehicle?.PlateNumber;
                             feeModel.LaneOutVehicle.VehicleInfo.PlateNumber = !string.IsNullOrEmpty(reconcilVehicleInfo?.Vehicle?.PlateNumber) ? reconcilVehicleInfo?.Vehicle?.PlateNumber : feeModel.LaneOutVehicle.VehicleInfo.PlateNumber;
 
                             if (!string.IsNullOrEmpty(feeModel.LaneOutVehicle.VehicleInfo.PlateNumber))
