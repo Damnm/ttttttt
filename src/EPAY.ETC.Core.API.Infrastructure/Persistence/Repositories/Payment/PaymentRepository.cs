@@ -1,5 +1,4 @@
 ﻿using EPAY.ETC.Core.API.Core.Exceptions;
-using EPAY.ETC.Core.API.Core.Utils;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Context;
 using EPAY.ETC.Core.Models.Enums;
 using EPAY.ETC.Core.Models.Fees.PaidVehicleHistory;

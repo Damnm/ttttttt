@@ -17,6 +17,5 @@ namespace EPAY.ETC.Core.API.Core.Interfaces.Services.UIActions
         Task<ValidationResult<UIModel>> LoadCurrentUIAsync(AuthenticatedEmployeeResponseModel? authenticatedEmployee = null);
         void AddOrUpdateCurrentUI(UIModel input);
         string GetFeeProcessing();
-        List<LaneInVehicleModel> GetLaneInVehicles(string plateNumber);
     }
 }

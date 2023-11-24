@@ -1,5 +1,4 @@
 ﻿using EPAY.ETC.Core.API.Core.Interfaces.Services.Fees;
-using EPAY.ETC.Core.API.Core.Utils;
 using EPAY.ETC.Core.API.Infrastructure.Common.Utils;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.CustomVehicleTypes;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.FeeVehicleCategories;
@@ -92,10 +91,13 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
                         CustomVehicleTypeCode = feeVehicleCategory.CustomVehicleType?.Name.ToString(),
                         CustomVehicleTypeName = feeVehicleCategory.CustomVehicleType?.Name.ToEnumMemberAttrValue(),
                         VehicleCategoryId = feeVehicleCategory.VehicleCategoryId,
-                        VehicleCategoryName = feeVehicleCategory.VehicleCategory?.VehicleCategoryName,
+                        VehicleCategoryName = feeVehicleCategory.VehicleCategory?.VehicleCategoryType?.ToEnumMemberAttrValue() ?? feeVehicleCategory.VehicleCategory?.VehicleCategoryName,
                         VehicleGroupId = feeVehicleCategory.VehicleGroupId,
                         VehicleGroupName = feeVehicleCategory.VehicleGroup?.GroupName
                     };
+
+                    if (feeVehicleCategory.CustomVehicleType?.Name != null)
+                        customVehicleType = feeVehicleCategory.CustomVehicleType.Name;
 
                     // Set fee type if exists
                     feeType = feeVehicleCategory.FeeType?.FeeName ?? FeeTypeEnum.TimeBlock;
@@ -208,7 +210,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
                         CustomVehicleTypeCode = feeVehicleCategory.CustomVehicleType?.Name.ToString(),
                         CustomVehicleTypeName = feeVehicleCategory.CustomVehicleType?.Name.ToEnumMemberAttrValue(),
                         VehicleCategoryId = feeVehicleCategory.VehicleCategoryId,
-                        VehicleCategoryName = feeVehicleCategory.VehicleCategory?.VehicleCategoryName,
+                        VehicleCategoryName = feeVehicleCategory.VehicleCategory?.VehicleCategoryType?.ToEnumMemberAttrValue() ?? feeVehicleCategory.VehicleCategory?.VehicleCategoryName,
                         VehicleGroupId = feeVehicleCategory.VehicleGroupId,
                         VehicleGroupName = feeVehicleCategory.VehicleGroup?.GroupName
                     };

@@ -129,7 +129,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                             // Update PlateNumber for FusionObject
                             _redisDB.HashSet(objectId.ToString(), nameof(FusionModel.ANPRCam1), reconcilVehicleInfo?.Vehicle?.PlateNumber);
 
-                            bool isChangePlateNumber = feeModel.LaneOutVehicle.VehicleInfo.PlateNumber != reconcilVehicleInfo?.Vehicle?.PlateNumber;
+                            bool isChangePlateNumber = !string.IsNullOrEmpty(reconcilVehicleInfo?.Vehicle?.PlateNumber) && feeModel.LaneOutVehicle.VehicleInfo.PlateNumber != reconcilVehicleInfo?.Vehicle?.PlateNumber;
                             feeModel.LaneOutVehicle.VehicleInfo.PlateNumber = !string.IsNullOrEmpty(reconcilVehicleInfo?.Vehicle?.PlateNumber) ? reconcilVehicleInfo?.Vehicle?.PlateNumber : feeModel.LaneOutVehicle.VehicleInfo.PlateNumber;
 
                             if (!string.IsNullOrEmpty(feeModel.LaneOutVehicle.VehicleInfo.PlateNumber))
@@ -730,33 +730,6 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
             catch (Exception ex)
             {
                 _logger.LogError($"An error occurred when calling {nameof(GetFeeProcessing)} method. Details: {ex.Message}. Stack trace: {ex.StackTrace}");
-                throw;
-            }
-        }
-
-        public List<LaneInVehicleModel> GetLaneInVehicles(string plateNumber)
-        {
-            try
-            {
-                _logger.LogInformation($"Executing {nameof(GetLaneInVehicles)} method...");
-
-                var cameraDatas = GetAllCameraModelByPattern($"{RedisConstant.CameraInKey(plateNumber)}*");
-
-                var result = cameraDatas.Select(x => new LaneInVehicleModel()
-                {
-                    LaneInId = x.LaneId,
-                    RFID = x.LaneId,
-                    Device = x.CameraDeviceInfo,
-                    VehicleInfo = x.VehicleInfo,
-                    Epoch = x.Epoch,
-                    Cameras = new List<LaneInCameraDataModel>() { x }
-                }).ToList();
-
-                return result;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"An error occurred when calling {nameof(GetLaneInVehicles)} method. Details: {ex.Message}. Stack trace: {ex.StackTrace}");
                 throw;
             }
         }

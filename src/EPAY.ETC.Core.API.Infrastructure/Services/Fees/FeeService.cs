@@ -218,19 +218,39 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
                 }
                 else if (inputVehicle.Length < 15)
                 {
+                    List<LaneInVehicleModel> resultData = new List<LaneInVehicleModel>();
+
                     var keyCAMVehicles = _redisDB.Execute("keys", RedisConstant.CameraInKey($"*{inputVehicle}*"));
                     var redisKeys = (RedisKey[]?)keyCAMVehicles;
                     if (redisKeys != null)
                     {
-                        var laneInCAMVehicle = _redisDB.StringGet(redisKeys);
-                        List<ANPRCameraModel> resultData = laneInCAMVehicle.ToList()
-                            .Select(s => JsonSerializer.Deserialize<ANPRCameraModel>(s.ToString()) ?? new ANPRCameraModel()).ToList();
-                        if (resultData != null && resultData.Count > 0)
+                        foreach (RedisKey key in redisKeys)
                         {
-                            result = _mapper.Map<List<ANPRCameraModel>, List<LaneInVehicleModel>>(resultData);
-                            return ValidationResult.Success(result);
+                            string? cameraValue = _redisDB.StringGet(key).ToString();
+                            if (!string.IsNullOrEmpty(cameraValue))
+                            {
+                                // Deserialize Camera data from Lane In
+                                ANPRCameraModel? cameraData = JsonSerializer.Deserialize<ANPRCameraModel>(cameraValue);
+                                if (cameraData != null && cameraData.VehicleInfo != null)
+                                {
+                                    var laneInCamData = _mapper.Map<LaneInCameraDataModel>(cameraData);
+                                    laneInCamData.CameraKey = key.ToString();
+
+                                    resultData.Add(new LaneInVehicleModel()
+                                    {
+                                        Device = laneInCamData.CameraDeviceInfo,
+                                        Epoch = laneInCamData.Epoch,
+                                        LaneInId = laneInCamData.LaneId,
+                                        VehicleInfo = laneInCamData.VehicleInfo,
+                                        Cameras = new List<LaneInCameraDataModel>() { laneInCamData }
+                                    });
+                                }
+                            }
                         }
                     }
+
+                    if (resultData.Any())
+                        return ValidationResult.Success(resultData);
                 }
 
                 return ValidationResult.Failed<List<LaneInVehicleModel>>(new List<ValidationError>() { ValidationError.NotFound });

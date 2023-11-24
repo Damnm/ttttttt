@@ -157,36 +157,5 @@ namespace EPAY.ETC.Core.API.Controllers.UIAction
             }
         }
         #endregion
-
-        #region GetLaneInVehicles
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("v1/lane-in-info/{plateNumber}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult GetLaneInVehicles(string plateNumber)
-        {
-            List<ValidationError> validationErrors = new();
-
-            try
-            {
-                _logger.LogInformation($"Executing {nameof(GetLaneInVehicles)}...");
-
-                if (string.IsNullOrEmpty(plateNumber))
-                    return BadRequest("PlateNumber is required");
-
-                return Ok(_uiActionService.GetLaneInVehicles(plateNumber));
-            }
-            catch (Exception ex)
-            {
-                string errorMessage = $"An error occurred when calling {nameof(GetLaneInVehicles)} method: {ex.Message}. InnerException : {ApiExceptionMessages.ExceptionMessages(ex)}. Stack trace: {ex.StackTrace}";
-                _logger.LogError(errorMessage);
-                validationErrors.Add(ValidationError.InternalServerError);
-                return StatusCode(StatusCodes.Status500InternalServerError, ValidationResult.Failed(errorMessage, validationErrors));
-            }
-        }
-        #endregion
     }
 }
