@@ -213,6 +213,19 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
 
                                 if (!string.IsNullOrEmpty(reconcilVehicleInfo?.Vehicle?.In?.CamInKey))
                                 {
+                                    // Reset popup after choose laneIn
+                                    if (uiModel != null)
+                                    {
+                                        _logger.LogInformation($"Reset Popup data when choose laneIn data: {reconcilVehicleInfo?.Vehicle?.In?.CamInKey}");
+
+                                        if (uiModel.Body == null)
+                                            uiModel.Body = new BodyModel();
+                                        uiModel.Body.Popup = new PopupModel();
+
+                                        _redisDB.StringSet(RedisConstant.UI_MODEL_KEY, JsonSerializer.Serialize(uiModel));
+                                    }
+
+                                    // Reload laneIn data
                                     string? camStr = _redisDB.StringGet(reconcilVehicleInfo?.Vehicle?.In?.CamInKey ?? string.Empty);
                                     if (!string.IsNullOrEmpty(camStr))
                                     {
