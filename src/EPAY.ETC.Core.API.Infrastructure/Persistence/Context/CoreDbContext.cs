@@ -1,6 +1,7 @@
 ﻿using EPAY.ETC.Core.API.Core.Models.Barcode;
 using EPAY.ETC.Core.API.Core.Models.Configs;
 using EPAY.ETC.Core.API.Core.Models.CustomVehicleTypes;
+using EPAY.ETC.Core.API.Core.Models.Enum;
 using EPAY.ETC.Core.API.Core.Models.ErrorResponse;
 using EPAY.ETC.Core.API.Core.Models.ETCCheckOuts;
 using EPAY.ETC.Core.API.Core.Models.Fees;
@@ -111,38 +112,10 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
 
             #region Vehicle category configuration
             modelBuilder.Entity<VehicleCategoryModel>().HasKey(x => x.Id);
-
-            modelBuilder.Entity<VehicleCategoryModel>().HasData(
-                new VehicleCategoryModel()
-                {
-                    Id = new Guid("70884a61-39f3-4e8e-b936-d5b18652d3ac"),
-                    CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
-                    VehicleCategoryName = "Xe nhượng quyền"
-                },
-                new VehicleCategoryModel()
-                {
-                    Id = new Guid("82f143d3-b2ed-40d6-a59e-4fc980a24450"),
-                    CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
-                    VehicleCategoryName = "Xe nhượng quyền TCP"
-                },
-                new VehicleCategoryModel()
-                {
-                    Id = new Guid("2b0557d0-cc6b-4fc2-a0b3-08788c9fd8c7"),
-                    CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
-                    VehicleCategoryName = "Xe ưu tiên theo tháng"
-                },
-                new VehicleCategoryModel()
-                {
-                    Id = new Guid("bd4e670d-8cae-46fa-8bac-d77ac139a044"),
-                    CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
-                    VehicleCategoryName = "Xe ưu tiên theo quý"
-                },
-                new VehicleCategoryModel()
-                {
-                    Id = new Guid("ac9b71a5-0541-4d2e-a358-6afac6d6c525"),
-                    CreatedDate = new DateTime(2023, 9, 8, 0, 0, 0, DateTimeKind.Utc),
-                    VehicleCategoryName = "Xe ưu tiên theo năm"
-                });
+            modelBuilder.Entity<VehicleCategoryModel>()
+                .Property(x => x.VehicleCategoryType)
+                .HasMaxLength(20)
+                .HasConversion(new EnumToStringConverter<VehicleCategoryTypeEnum>());
             #endregion
 
             #region Fee type configuration
@@ -1572,9 +1545,9 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
 
             #region PrintLog configuration
             modelBuilder.Entity<PrintLogModel>().HasKey(x => x.Id);
-                 modelBuilder.Entity<PrintLogModel>()
-                .Property(x => x.PrintType)
-                .HasConversion(new EnumToStringConverter<PrintLogEnum>());
+            modelBuilder.Entity<PrintLogModel>()
+           .Property(x => x.PrintType)
+           .HasConversion(new EnumToStringConverter<PrintLogEnum>());
             #endregion
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
