@@ -126,8 +126,6 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                             // Update PlateNumber for FusionObject
                             _redisDB.HashSet(objectId.ToString(), nameof(FusionModel.ANPRCam1), reconcilVehicleInfo?.Vehicle?.PlateNumber);
 
-                            bool isChangePlateNumber = !string.IsNullOrEmpty(reconcilVehicleInfo?.Vehicle?.PlateNumber) && feeModel.LaneOutVehicle?.VehicleInfo?.PlateNumber != reconcilVehicleInfo?.Vehicle?.PlateNumber;
-
                             feeModel.LaneOutVehicle = new LaneOutVehicleModel();
                             feeModel.LaneOutVehicle.VehicleInfo = new ETC.Core.Models.VehicleInfoModel();
                             feeModel.LaneOutVehicle.VehicleInfo.PlateNumber = !string.IsNullOrEmpty(reconcilVehicleInfo?.Vehicle?.PlateNumber) ? reconcilVehicleInfo?.Vehicle?.PlateNumber : feeModel.LaneOutVehicle.VehicleInfo.PlateNumber;
@@ -250,8 +248,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                                         }
                                     }
                                 }
-
-                                if (isChangePlateNumber)
+                                else
                                     feeModel.LaneInVehicle.Cameras = GetAllCameraModelByPattern($"{RedisConstant.CameraInKey(feeModel.LaneOutVehicle.VehicleInfo.PlateNumber ?? string.Empty)}*");
 
                                 if (firstCamInData == null)
