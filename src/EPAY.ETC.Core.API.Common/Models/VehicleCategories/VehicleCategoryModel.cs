@@ -20,7 +20,7 @@ namespace EPAY.ETC.Core.API.Core.Models.VehicleCategories
         public string? ExternalId { get; set; }
 
         [MaxLength(20)]
-        public VehicleCategoryTypeEnum VehicleCategoryType { get; set; }
+        public VehicleCategoryTypeEnum? VehicleCategoryType { get; set; }
 
         public virtual ICollection<FeeVehicleCategoryModel>? FeeVehicleCategories { get; set; }
     }
