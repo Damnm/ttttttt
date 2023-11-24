@@ -67,6 +67,7 @@ namespace EPAY.ETC.Core.API.Controllers.Fees
             try
             {
                 _logger.LogInformation($"Executing {nameof(AddAsync)}...");
+                _logger.LogInformation($"Fee request: {JsonSerializer.Serialize(request)}");
 
                 var result = await _service.AddAsync(request);
 
@@ -110,6 +111,7 @@ namespace EPAY.ETC.Core.API.Controllers.Fees
             try
             {
                 _logger.LogInformation($"Executing {nameof(UpdateAsync)}...");
+                _logger.LogInformation($"Fee request: {JsonSerializer.Serialize(request)}");
 
                 var result = await _service.UpdateAsync(id, request);
 
@@ -342,7 +344,7 @@ namespace EPAY.ETC.Core.API.Controllers.Fees
                 {
                     if (reconcileVehicleInfoResult.Data.Fee != null)
                         _rabbitMQPublisherService.SendMessage(JsonSerializer.Serialize(reconcileVehicleInfoResult.Data.Fee), ETC.Core.Models.Enums.PublisherTargetEnum.Fee);
-                    
+
                     if (reconcileVehicleInfoResult.Data.PaymentStatus != null)
                         _rabbitMQPublisherService.SendMessage(JsonSerializer.Serialize(reconcileVehicleInfoResult.Data.PaymentStatus), ETC.Core.Models.Enums.PublisherTargetEnum.PaymentStatus);
 
