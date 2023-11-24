@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.ErrorResponse;
 using EPAY.ETC.Core.API.Core.Models.ErrorResponse;
+using EPAY.ETC.Core.API.Infrastructure.Models.Configs;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.ErrorResponse;
 using EPAY.ETC.Core.Models.Constants;
 using EPAY.ETC.Core.Models.Validation;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using StackExchange.Redis;
 using System.Linq.Expressions;
 using System.Text.Json;
@@ -18,15 +20,17 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.ErrorResponse
         private readonly IErrorResponseRepository _repository;
         private readonly IMapper _mapper;
         private readonly IDatabase _redisDB;
+        private readonly IOptions<AppConfig> _appConfig;
         #endregion
 
         #region Constructor
-        public ErrorResponseService(ILogger<ErrorResponseService> logger, IErrorResponseRepository fusionRepository, IMapper mapper, IDatabase redisDB)
+        public ErrorResponseService(ILogger<ErrorResponseService> logger, IErrorResponseRepository fusionRepository, IMapper mapper, IDatabase redisDB, IOptions<AppConfig> appConfig)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _repository = fusionRepository ?? throw new ArgumentNullException(nameof(fusionRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _redisDB = redisDB ?? throw new ArgumentNullException(nameof(mapper));
+            _appConfig = appConfig ?? throw new ArgumentNullException(nameof(appConfig));
         }
 
         public async Task<ValidationResult<List<ErrorResponseModel>>> GetErrorResponseBySourceAync(string source)
@@ -52,7 +56,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.ErrorResponse
 
                     if (result != null)
                     {
-                        await _redisDB.StringSetAsync(RedisConstant.ErrorResponseKey(source), jsonString, new TimeSpan(1, 0, 0, 0));
+                        await _redisDB.StringSetAsync(RedisConstant.ErrorResponseKey(source), jsonString, new TimeSpan(_appConfig?.Value?.GetErrorResponseRedisCacheTime ?? 1, 0, 0, 0));
                     }
 
                     return ValidationResult.Success(result?.ToList() ?? new List<ErrorResponseModel>());

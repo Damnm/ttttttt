@@ -27,7 +27,7 @@ builder.Configuration.AddJsonFile($"appsettings.{environmentName}.json", optiona
 builder.Services.Configure<List<PublisherConfigurationOption>>(builder.Configuration.GetSection("PublisherConfigurations"));
 builder.Services.Configure<EPAY.ETC.Core.Models.UI.UIModel>(builder.Configuration.GetSection("UITemplate"));
 builder.Services.Configure<JWTSettingsConfig>(builder.Configuration.GetSection("JwtSettings"));
-
+builder.Services.Configure<AppConfig>(builder.Configuration.GetSection("AppConfig"));
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
