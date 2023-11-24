@@ -123,13 +123,13 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                             feeModel.CustomVehicleType = (CustomVehicleTypeEnum)vehicleType;
 
                             // LandOut
-                            feeModel.LaneOutVehicle = new LaneOutVehicleModel();
-                            feeModel.LaneOutVehicle.VehicleInfo = new ETC.Core.Models.VehicleInfoModel();
-
                             // Update PlateNumber for FusionObject
                             _redisDB.HashSet(objectId.ToString(), nameof(FusionModel.ANPRCam1), reconcilVehicleInfo?.Vehicle?.PlateNumber);
 
-                            bool isChangePlateNumber = !string.IsNullOrEmpty(reconcilVehicleInfo?.Vehicle?.PlateNumber) && feeModel.LaneOutVehicle.VehicleInfo.PlateNumber != reconcilVehicleInfo?.Vehicle?.PlateNumber;
+                            bool isChangePlateNumber = !string.IsNullOrEmpty(reconcilVehicleInfo?.Vehicle?.PlateNumber) && feeModel.LaneOutVehicle?.VehicleInfo?.PlateNumber != reconcilVehicleInfo?.Vehicle?.PlateNumber;
+
+                            feeModel.LaneOutVehicle = new LaneOutVehicleModel();
+                            feeModel.LaneOutVehicle.VehicleInfo = new ETC.Core.Models.VehicleInfoModel();
                             feeModel.LaneOutVehicle.VehicleInfo.PlateNumber = !string.IsNullOrEmpty(reconcilVehicleInfo?.Vehicle?.PlateNumber) ? reconcilVehicleInfo?.Vehicle?.PlateNumber : feeModel.LaneOutVehicle.VehicleInfo.PlateNumber;
 
                             if (!string.IsNullOrEmpty(feeModel.LaneOutVehicle.VehicleInfo.PlateNumber))
@@ -232,6 +232,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                                                 TagId = string.Empty,
                                                 VehicleInfo = camData.VehicleInfo
                                             };
+
+                                            feeModel.LaneInVehicle.Cameras.Add(firstCamInData);
                                         }
                                     }
                                 }
