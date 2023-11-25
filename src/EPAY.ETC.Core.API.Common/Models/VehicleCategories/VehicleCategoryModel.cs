@@ -1,6 +1,6 @@
 ﻿using EPAY.ETC.Core.API.Core.Entities;
-using EPAY.ETC.Core.API.Core.Models.Enum;
 using EPAY.ETC.Core.API.Core.Models.FeeVehicleCategories;
+using EPAY.ETC.Core.Models.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;

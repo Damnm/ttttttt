@@ -16,7 +16,7 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="EPAY.ETC.Core.Models" Version="2023.11.23.1607" />
+		<PackageReference Include="EPAY.ETC.Core.Models" Version="2023.11.25.1012" />
 		<PackageReference Include="FluentAssertions" Version="6.12.0" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
 		<PackageReference Include="Moq" Version="4.20.69" />

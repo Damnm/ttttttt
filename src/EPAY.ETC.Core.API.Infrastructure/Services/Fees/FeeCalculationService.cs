@@ -92,6 +92,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
                         CustomVehicleTypeName = feeVehicleCategory.CustomVehicleType?.Name.ToEnumMemberAttrValue(),
                         VehicleCategoryId = feeVehicleCategory.VehicleCategoryId,
                         VehicleCategoryName = feeVehicleCategory.VehicleCategory?.VehicleCategoryType?.ToEnumMemberAttrValue() ?? feeVehicleCategory.VehicleCategory?.VehicleCategoryName,
+                        VehicleCategoryType = feeVehicleCategory.VehicleCategory?.VehicleCategoryType,
                         VehicleGroupId = feeVehicleCategory.VehicleGroupId,
                         VehicleGroupName = feeVehicleCategory.VehicleGroup?.GroupName
                     };
@@ -211,6 +212,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
                         CustomVehicleTypeName = feeVehicleCategory.CustomVehicleType?.Name.ToEnumMemberAttrValue(),
                         VehicleCategoryId = feeVehicleCategory.VehicleCategoryId,
                         VehicleCategoryName = feeVehicleCategory.VehicleCategory?.VehicleCategoryType?.ToEnumMemberAttrValue() ?? feeVehicleCategory.VehicleCategory?.VehicleCategoryName,
+                        VehicleCategoryType = feeVehicleCategory.VehicleCategory?.VehicleCategoryType,
                         VehicleGroupId = feeVehicleCategory.VehicleGroupId,
                         VehicleGroupName = feeVehicleCategory.VehicleGroup?.GroupName
                     };
