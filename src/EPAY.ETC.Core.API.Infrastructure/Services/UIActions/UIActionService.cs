@@ -117,6 +117,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                         {
                             // EmployeeId
                             feeModel.EmployeeId = !string.IsNullOrEmpty(reconcilVehicleInfo?.EmployeeId) ? reconcilVehicleInfo?.EmployeeId : feeModel.EmployeeId;
+                            feeModel.IsETCFailed = false;
 
                             if (!int.TryParse(reconcilVehicleInfo?.Vehicle?.VehicleType, out int vehicleType))
                                 vehicleType = 1;
