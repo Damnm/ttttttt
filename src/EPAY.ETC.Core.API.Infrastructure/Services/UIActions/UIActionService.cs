@@ -127,22 +127,25 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                             // Update PlateNumber for FusionObject
                             _redisDB.HashSet(objectId.ToString(), nameof(FusionModel.ANPRCam1), reconcilVehicleInfo?.Vehicle?.PlateNumber);
 
+                            string? oldRFID = feeModel.LaneOutVehicle?.RFID;
+
                             feeModel.LaneOutVehicle = new LaneOutVehicleModel();
                             feeModel.LaneOutVehicle.VehicleInfo = new ETC.Core.Models.VehicleInfoModel();
                             feeModel.LaneOutVehicle.VehicleInfo.PlateNumber = !string.IsNullOrEmpty(reconcilVehicleInfo?.Vehicle?.PlateNumber) ? reconcilVehicleInfo?.Vehicle?.PlateNumber : feeModel.LaneOutVehicle.VehicleInfo.PlateNumber;
 
                             if (!string.IsNullOrEmpty(reconcilVehicleInfo?.Vehicle?.RFID))
-                                feeModel.LaneOutVehicle.RFID = reconcilVehicleInfo?.Vehicle?.RFID;
+                                oldRFID = reconcilVehicleInfo?.Vehicle?.RFID;
 
                             if (!string.IsNullOrEmpty(feeModel.LaneOutVehicle.VehicleInfo.PlateNumber))
                             {
                                 var rfid = _redisDB.StringGet(RedisConstant.RFIDValueKey(reconcilVehicleInfo?.Vehicle?.PlateNumber ?? string.Empty));
                                 if (!string.IsNullOrEmpty(rfid))
                                 {
-                                    feeModel.LaneOutVehicle.RFID = rfid;
+                                    oldRFID = rfid;
                                 }
                             }
 
+                            feeModel.LaneOutVehicle.RFID = oldRFID;
                             feeModel.LaneOutVehicle.VehicleInfo.VehicleType = !string.IsNullOrEmpty(reconcilVehicleInfo?.Vehicle?.VehicleType) ? reconcilVehicleInfo?.Vehicle?.VehicleType : feeModel.LaneOutVehicle.VehicleInfo.VehicleType;
                             feeModel.LaneOutVehicle.LaneOutId = !string.IsNullOrEmpty(reconcilVehicleInfo?.Vehicle?.Out?.LaneOutId) ? reconcilVehicleInfo?.Vehicle?.Out?.LaneOutId : feeModel.LaneOutVehicle.LaneOutId;
                             feeModel.LaneOutVehicle.Epoch = DateTimeOffset.Now.ToUnixTimeSeconds();
