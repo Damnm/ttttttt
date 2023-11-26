@@ -318,6 +318,9 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
 
                             result.Fee = feeModel;
 
+                            _redisDB.StringSet(RedisConstant.FeeModulesKey(reconcilVehicleInfo?.ObjectId?.ToString() ?? uiModel?.ObjectId?.ToString() ?? string.Empty), JsonSerializer.Serialize(feeModel));
+
+
                             return ValidationResult.Success(result);
                         }
                         else
