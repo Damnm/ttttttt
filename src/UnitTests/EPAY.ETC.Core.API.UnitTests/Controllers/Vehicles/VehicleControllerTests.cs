@@ -1,4 +1,5 @@
 ﻿using EPAY.ETC.Core.API.Controllers.Vehicle;
+using EPAY.ETC.Core.API.Core.Interfaces.Services.InfringedVehicle;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Vehicles;
 using EPAY.ETC.Core.API.Core.Models.Vehicle;
 using EPAY.ETC.Core.API.UnitTests.Helpers;
@@ -16,6 +17,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Vehicles
     {
         private readonly Exception _exception = null!;
         private Mock<IVehicleService> _vehicleServiceMock = new Mock<IVehicleService>();
+        private Mock<IInfringedVehicleService> _infringedVehicleMock = new Mock<IInfringedVehicleService>();
         private Mock<ILogger<VehicleController>> _loggerMock = new Mock<ILogger<VehicleController>>();
         private VehicleModel requestMock = new VehicleModel()
         {
@@ -63,7 +65,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Vehicles
 
             // Act
             var vehicleController = new VehicleController(_loggerMock.Object
-                , _vehicleServiceMock.Object);
+                , _vehicleServiceMock.Object, _infringedVehicleMock.Object);
             var actualResult = await vehicleController.AddAsync(It.IsAny<VehicleRequestModel>());
             var data = ((ObjectResult)actualResult).Value as ValidationResult<VehicleModel>;
 
@@ -89,7 +91,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Vehicles
 
             // Act
             var vehicleController = new VehicleController(_loggerMock.Object
-                , _vehicleServiceMock.Object);
+                , _vehicleServiceMock.Object, _infringedVehicleMock.Object);
             var actualResult = await vehicleController.AddAsync(It.IsAny<VehicleRequestModel>());
             var data = actualResult as ConflictObjectResult;
             var actualResultRespone = data!.Value as ValidationResult<VehicleModel>;
@@ -112,7 +114,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Vehicles
 
             // Act
             var vehicleController = new VehicleController(_loggerMock.Object
-                , _vehicleServiceMock.Object);
+                , _vehicleServiceMock.Object, _infringedVehicleMock.Object);
             var actualResult = await vehicleController.AddAsync(It.IsAny<VehicleRequestModel>());
             var actualResultRespone = ((ObjectResult)actualResult).Value as ValidationResult<string>;
 
@@ -134,7 +136,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Vehicles
 
             // Act
             var vehicleController = new VehicleController(_loggerMock.Object
-                , _vehicleServiceMock.Object);
+                , _vehicleServiceMock.Object, _infringedVehicleMock.Object);
             var actualResult = await vehicleController.UpdateAsync(It.IsAny<Guid>(), It.IsAny<VehicleRequestModel>());
             var data = ((OkObjectResult)actualResult).Value as ValidationResult<VehicleModel>;
             // Assert
@@ -169,7 +171,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Vehicles
 
             // Act
             var vehicleController = new VehicleController(_loggerMock.Object
-                , _vehicleServiceMock.Object);
+                , _vehicleServiceMock.Object, _infringedVehicleMock.Object);
             var actualResult = await vehicleController.UpdateAsync(It.IsAny<Guid>(), It.IsAny<VehicleRequestModel>());
             var data = actualResult as NotFoundObjectResult;
             var actualResultRespone = data!.Value as ValidationResult<VehicleModel>;
@@ -196,7 +198,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Vehicles
 
             // Act
             var vehicleController = new VehicleController(_loggerMock.Object
-                , _vehicleServiceMock.Object);
+                , _vehicleServiceMock.Object, _infringedVehicleMock.Object);
             var actualResult = await vehicleController.UpdateAsync(Guid.NewGuid(), It.IsAny<VehicleRequestModel>());
             var actualResultRespone = ((ObjectResult)actualResult).Value as ValidationResult<string>;
 
@@ -219,7 +221,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Vehicles
 
             // Act
             var vehicleController = new VehicleController(_loggerMock.Object
-                , _vehicleServiceMock.Object);
+                , _vehicleServiceMock.Object, _infringedVehicleMock.Object);
             var actualResult = await vehicleController.RemoveAsync(It.IsNotNull<Guid>());
             var data = ((OkObjectResult)actualResult).Value as ValidationResult<VehicleModel>;
 
@@ -244,7 +246,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Vehicles
 
             // Act
             var vehicleController = new VehicleController(_loggerMock.Object
-                , _vehicleServiceMock.Object);
+                , _vehicleServiceMock.Object, _infringedVehicleMock.Object);
             var actualResult = await vehicleController.RemoveAsync(It.IsNotNull<Guid>());
             var data = actualResult as NotFoundObjectResult;
             var actualResultRespone = data!.Value as ValidationResult<VehicleModel>;
@@ -266,7 +268,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Vehicles
 
             // Act
             var vehicleController = new VehicleController(_loggerMock.Object
-                , _vehicleServiceMock.Object);
+                , _vehicleServiceMock.Object, _infringedVehicleMock.Object);
             var actualResult = await vehicleController.RemoveAsync(It.IsNotNull<Guid>());
             var actualResultRespone = ((ObjectResult)actualResult).Value as ValidationResult<string>;
 
@@ -287,7 +289,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Vehicles
 
             // Act
             var vehicleController = new VehicleController(_loggerMock.Object
-                , _vehicleServiceMock.Object);
+                , _vehicleServiceMock.Object, _infringedVehicleMock.Object);
             var actualResult = await vehicleController.GetByIdAsync(new Guid().ToString());
             var data = ((OkObjectResult)actualResult).Value as ValidationResult<VehicleModel>;
 
@@ -316,7 +318,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Vehicles
 
             // Act
             var vehicleController = new VehicleController(_loggerMock.Object
-                , _vehicleServiceMock.Object);
+                , _vehicleServiceMock.Object, _infringedVehicleMock.Object);
             var actualResult = await vehicleController.GetByIdAsync(new Guid().ToString());
             var actualResultRespone = ((ObjectResult)actualResult).Value as ValidationResult<string>;
 
@@ -344,7 +346,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Vehicles
             _vehicleServiceMock.Setup(x => x.GetVehicleByRFIDAsync(It.IsAny<string>())).ReturnsAsync(ValidationResult.Success(responseMock));
 
             // Act
-            var vehicleController = new VehicleController(_loggerMock.Object, _vehicleServiceMock.Object);
+            var vehicleController = new VehicleController(_loggerMock.Object, _vehicleServiceMock.Object, _infringedVehicleMock.Object);
             var actualResult = await vehicleController.GetVehicleByRFIDAsync(new Guid().ToString());
             var data = ((OkObjectResult)actualResult).Value as ValidationResult<ETC.Core.Models.VehicleInfoModel>;
 
@@ -371,7 +373,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Vehicles
             _vehicleServiceMock.Setup(x => x.GetVehicleByRFIDAsync(It.IsAny<string>())).ThrowsAsync(someEx);
 
             // Act
-            var vehicleController = new VehicleController(_loggerMock.Object, _vehicleServiceMock.Object);
+            var vehicleController = new VehicleController(_loggerMock.Object, _vehicleServiceMock.Object, _infringedVehicleMock.Object);
             var actualResult = await vehicleController.GetVehicleByRFIDAsync(new Guid().ToString());
             var actualResultRespone = ((ObjectResult)actualResult).Value as ValidationResult<string>;
 

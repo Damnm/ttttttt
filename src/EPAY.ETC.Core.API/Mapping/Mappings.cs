@@ -2,6 +2,7 @@
 using EPAY.ETC.Core.API.Core.Models.Barcode;
 using EPAY.ETC.Core.API.Core.Models.ETCCheckOuts;
 using EPAY.ETC.Core.API.Core.Models.Fusion;
+using EPAY.ETC.Core.API.Core.Models.InfringeredVehicle;
 using EPAY.ETC.Core.API.Core.Models.ManualBarrierControl;
 using EPAY.ETC.Core.API.Core.Models.PrintLog;
 using EPAY.ETC.Core.API.Core.Models.TransactionLog;
@@ -251,6 +252,11 @@ namespace EPAY.ETC.Core.API.Mapping
 
             CreateMap<PrintLogRequestModel, PrintLogModel>()
                  .ForMember(e => e.Id, act => act.MapFrom(src => src.PrintLogId))
+               .ReverseMap();
+            CreateMap<InfringedVehicleModel, InfringedVehicleInfoModel>()
+                 .ForMember(e => e.InfringedVehicleId, act => act.MapFrom(src => src.Id))
+                 .ForMember(e => e.PlateNumber, act => act.MapFrom(src => src.PlateNumber))
+                 .ForMember(e => e.RFID, act => act.MapFrom(src => src.RFID))
                .ReverseMap();
         }
     }

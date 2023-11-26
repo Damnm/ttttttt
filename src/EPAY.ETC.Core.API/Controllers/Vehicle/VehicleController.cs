@@ -1,4 +1,5 @@
 ﻿using EPAY.ETC.Core.API.Core.Exceptions;
+using EPAY.ETC.Core.API.Core.Interfaces.Services.InfringedVehicle;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Vehicles;
 using EPAY.ETC.Core.API.Core.Models.Vehicle;
 using EPAY.ETC.Core.Models.Validation;
@@ -17,6 +18,7 @@ namespace EPAY.ETC.Core.API.Controllers.Vehicle
         #region Variables
         private readonly ILogger<VehicleController> _logger;
         private readonly IVehicleService _vehicleService;
+        private readonly IInfringedVehicleService _infringedVehicleService;
         #endregion
 
         #region Constructor
@@ -27,10 +29,11 @@ namespace EPAY.ETC.Core.API.Controllers.Vehicle
         /// <param name="vehicleService"></param>
         /// <exception cref="ArgumentNullException"></exception>
         public VehicleController(ILogger<VehicleController> logger,
-            IVehicleService vehicleService)
+            IVehicleService vehicleService, IInfringedVehicleService infringedVehicleService)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _vehicleService = vehicleService ?? throw new ArgumentNullException(nameof(vehicleService));
+            _infringedVehicleService = infringedVehicleService ?? throw new ArgumentNullException(nameof(infringedVehicleService));
         }
 
         #endregion
@@ -231,10 +234,10 @@ namespace EPAY.ETC.Core.API.Controllers.Vehicle
 
                 if (rfidOrPlateNumber == null)
                 {
-                    return BadRequest(ValidationResult.Failed<bool>(false, new List<ValidationError>() { ValidationError.BadRequest }));
+                    return BadRequest(ValidationResult.Failed<List<InfringedVehicleInfoModel>>(null, new List<ValidationError>() { ValidationError.BadRequest }));
                 }
 
-                var result = await _vehicleService.GetVehicleWithInfringementAsync(rfidOrPlateNumber);
+                var result = await _infringedVehicleService.GetByRFIDOrPlateNumberAsync(rfidOrPlateNumber);
 
                 if (result != null && !result.Succeeded)
                 {

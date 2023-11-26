@@ -179,42 +179,6 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Vehicles
 
             return result.Any();
         }
-
-        public async Task<ValidationResult<List<InfringedVehicleInfoModel>>> GetVehicleWithInfringementAsync(string rfidOrPlateNumber)
-        {
-            _logger.LogInformation($"Executing {nameof(GetVehicleWithInfringementAsync)} method...");
-            try
-            {
-                bool isRFID = rfidOrPlateNumber.Length >= 15 ? true: false;
-                if (string.IsNullOrEmpty(rfidOrPlateNumber)) return ValidationResult.Failed<List<InfringedVehicleInfoModel>>(null, new List<ValidationError>()
-                    {
-                        ValidationError.NotFound
-                    });
-                Expression<Func<VehicleModel, bool>> expression = s => !string.IsNullOrEmpty(s.RFID) && s.RFID.Equals(rfidOrPlateNumber);
-
-                if(!isRFID)
-                {
-                    expression = s => !string.IsNullOrEmpty(s.PlateNumber) && s.PlateNumber.Equals(rfidOrPlateNumber);
-                    isRFID = false;
-                }
-                var vehicles = await _repository.GetVehicleWithInfringementAsync(expression, isRFID);
-
-                if (vehicles == null || vehicles.Count ==0)
-                {
-                    return ValidationResult.Failed<List<InfringedVehicleInfoModel>>(null, new List<ValidationError>()
-                    {
-                        ValidationError.NotFound
-                    });
-                }
-
-                return ValidationResult.Success(vehicles);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Failed to run {nameof(GetVehicleWithInfringementAsync)} method. Error: {ex.Message}");
-                throw;
-            }
-        }
         #endregion
     }
 }

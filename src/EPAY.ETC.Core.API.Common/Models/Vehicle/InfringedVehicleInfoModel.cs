@@ -3,7 +3,7 @@
     public class InfringedVehicleInfoModel
     {
         public Guid ?InfringedVehicleId { get; set; }
-        public string? InfringedPlateNumber { get; set; }
-        public string? InfringedRFID { get; set; }
+        public string? PlateNumber { get; set; }
+        public string? RFID { get; set; }
     }
 }
