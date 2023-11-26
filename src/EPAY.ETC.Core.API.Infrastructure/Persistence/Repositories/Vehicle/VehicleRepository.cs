@@ -129,6 +129,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Vehicle
                     return Task.FromResult(rfidQuery.ToList());
 
                 }
+
                 var plateNumberQuery =
                                       from vehicle in _dbContext.Vehicles.Where(expression).AsNoTracking()
                                       join InfringedVehicle in _dbContext.InfringedVehicles.AsNoTracking()
