@@ -284,7 +284,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                                         if (rfidIn != null)
                                         {
                                             isEmptyLaneIn = false;
-                                            feeModel.LaneInVehicle.Epoch = new DateTimeOffset(rfidIn.Epoch.ToSpecificDateTime()).ToUnixTimeSeconds();
+                                            feeModel.LaneInVehicle.Epoch = new DateTimeOffset(rfidIn.Epoch.FromUnixTime()).ToUnixTimeSeconds();
                                             if (rfidIn.VehicleInfo != null)
                                             {
                                                 feeModel.LaneOutVehicle.VehicleInfo.VehicleType = rfidIn.VehicleInfo.VehicleType ?? string.Empty;
