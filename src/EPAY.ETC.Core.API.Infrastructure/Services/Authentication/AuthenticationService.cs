@@ -170,6 +170,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Authentication
 
                     if (uiModel != null)
                     {
+                        uiModel.CreatedDate = null;
+
                         if (uiModel.Command == null)
                             uiModel.Command = new ETC.Core.Models.UI.Command.CommandModel();
                         if (uiModel.Command.Logon == null)

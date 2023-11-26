@@ -692,6 +692,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
 
                 if (authenticatedEmployee != null)
                 {
+                    result.CreatedDate = DateTime.Now;
                     result.Authentication = authenticatedEmployee;
 
                     if (result.Command == null)

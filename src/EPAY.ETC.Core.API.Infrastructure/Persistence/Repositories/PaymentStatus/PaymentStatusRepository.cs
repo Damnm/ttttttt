@@ -85,8 +85,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.PaymentStatu
             _logger.LogInformation($"Executing {nameof(GetAllWithNavigationAsync)} method...");
             try
             {
-                DateTime fromDate = request.FromDateTimeEpoch.ToSpecificDateTime();
-                DateTime toDate = request.ToDateTimeEpoch.ToSpecificDateTime();
+                DateTime fromDate = request.FromDateTimeEpoch.FromUnixTime();
+                DateTime toDate = request.ToDateTimeEpoch.FromUnixTime();
 
                 MockShiftModel? shift = null;
 
