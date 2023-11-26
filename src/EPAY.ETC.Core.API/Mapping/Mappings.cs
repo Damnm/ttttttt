@@ -15,6 +15,7 @@ using EPAY.ETC.Core.Models.Request;
 using EPAY.ETC.Core.Models.UI;
 using EPAY.ETC.Core.Models.Utils;
 using EPAY.ETC.Core.Publisher.Common.Options;
+using System;
 using System.Diagnostics.CodeAnalysis;
 using CoreModel = EPAY.ETC.Core.Models.Fees;
 using FeeModel = EPAY.ETC.Core.API.Core.Models.Fees.FeeModel;
@@ -147,7 +148,7 @@ namespace EPAY.ETC.Core.API.Mapping
             CreateMap<PublisherConfigurationOption, PublisherOptions>().ReverseMap();
             CreateMap<BarcodeAddOrUpdateRequestModel, BarcodeModel>().ReverseMap();
             CreateMap<Core.Models.PaymentStatus.PaymentStatusModel, PaymentStatusHistoryModel>()
-                 .ForPath(e => e.Time, act => act.MapFrom(src => src.PaymentDate.ConvertToTimeZone(DateTimeKind.Utc, "SE Asia Standard Time").ToUnixTime().ToAsiaTimeString("HH:mm:ss")))
+                 .ForPath(e => e.Time, act => act.MapFrom(src => DateTime.SpecifyKind(src.PaymentDate, DateTimeKind.Utc).ToUnixTime().ToAsiaTimeString("HH:mm:ss")))
                  .ForPath(e => e.Reason, act => act.MapFrom(src => src.Reason));
 
             CreateMap<EmployeeAutoLoginRequest, AuthenticatedEmployeeResponseModel>().ReverseMap();
