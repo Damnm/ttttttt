@@ -130,7 +130,9 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                             feeModel.LaneOutVehicle = new LaneOutVehicleModel();
                             feeModel.LaneOutVehicle.VehicleInfo = new ETC.Core.Models.VehicleInfoModel();
                             feeModel.LaneOutVehicle.VehicleInfo.PlateNumber = !string.IsNullOrEmpty(reconcilVehicleInfo?.Vehicle?.PlateNumber) ? reconcilVehicleInfo?.Vehicle?.PlateNumber : feeModel.LaneOutVehicle.VehicleInfo.PlateNumber;
-                            feeModel.LaneOutVehicle.RFID = reconcilVehicleInfo?.Vehicle?.RFID;
+
+                            if (!string.IsNullOrEmpty(reconcilVehicleInfo?.Vehicle?.RFID))
+                                feeModel.LaneOutVehicle.RFID = reconcilVehicleInfo?.Vehicle?.RFID;
 
                             if (!string.IsNullOrEmpty(feeModel.LaneOutVehicle.VehicleInfo.PlateNumber))
                             {
