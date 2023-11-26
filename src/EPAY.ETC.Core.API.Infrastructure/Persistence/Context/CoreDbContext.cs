@@ -7,6 +7,7 @@ using EPAY.ETC.Core.API.Core.Models.Fees;
 using EPAY.ETC.Core.API.Core.Models.FeeTypes;
 using EPAY.ETC.Core.API.Core.Models.FeeVehicleCategories;
 using EPAY.ETC.Core.API.Core.Models.Fusion;
+using EPAY.ETC.Core.API.Core.Models.InfringeredVehicle;
 using EPAY.ETC.Core.API.Core.Models.ManualBarrierControl;
 using EPAY.ETC.Core.API.Core.Models.Payment;
 using EPAY.ETC.Core.API.Core.Models.PrintLog;
@@ -57,6 +58,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
         public virtual DbSet<ErrorResponseModel> ErrorResponses { get; set; }
         public virtual DbSet<TicketTypeModel> TicketTypes { get; set; }
         public virtual DbSet<PrintLogModel> PrintLogs { get; set; }
+        public virtual DbSet<InfringedVehicleModel> InfringedVehicles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

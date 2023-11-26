@@ -108,5 +108,49 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Vehicle
         }
         #endregion
 
+        #region GetVehicleWithInfringementAsync
+        public Task<List<InfringedVehicleInfoModel>> GetVehicleWithInfringementAsync(Expression<Func<VehicleModel, bool>> expression, bool isRFID)
+        {
+            _logger.LogInformation($"Executing {nameof(GetVehicleWithInfringementAsync)} method...");
+            try
+            {
+                if (isRFID)
+                {
+                    var rfidQuery =
+                     from vehicle in _dbContext.Vehicles.Where(expression).AsNoTracking()
+                     join InfringedVehicle in _dbContext.InfringedVehicles.AsNoTracking()
+                     on vehicle.RFID equals InfringedVehicle.RFID into InfringedGroup
+                     from item in InfringedGroup.DefaultIfEmpty()
+                     select new InfringedVehicleInfoModel
+                     {
+                         InfringedPlateNumber = item.PlateNumber,
+                         InfringedRFID = item.RFID,
+                     };
+                    return Task.FromResult(rfidQuery.ToList());
+
+                }
+                var plateNumberQuery =
+                                      from vehicle in _dbContext.Vehicles.Where(expression).AsNoTracking()
+                                      join InfringedVehicle in _dbContext.InfringedVehicles.AsNoTracking()
+                                      on vehicle.PlateNumber equals InfringedVehicle.PlateNumber
+                                      into InfringedGroup
+                                      from item in InfringedGroup.DefaultIfEmpty()
+                                      select new InfringedVehicleInfoModel
+                                      {
+                                          InfringedPlateNumber = item.PlateNumber,
+                                          InfringedRFID = item.RFID,
+                                      };
+                return Task.FromResult(plateNumberQuery.ToList());
+
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"An error occurred when calling {nameof(GetVehicleWithInfringementAsync)} method. Detail: {ex.Message}. Stack trace: {ex.StackTrace}");
+                throw;
+            }
+        }
+        #endregion
+
     }
 }

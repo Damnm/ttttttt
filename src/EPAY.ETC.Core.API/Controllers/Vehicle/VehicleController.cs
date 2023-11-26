@@ -213,5 +213,46 @@ namespace EPAY.ETC.Core.API.Controllers.Vehicle
             }
         }
         #endregion
+
+        #region GetVehicleByRFIDAsync
+        /// <summary>
+        /// Get Vehicle Detail by RFID
+        /// </summary>
+        /// <param name="rfidOrPlateNumber"></param>
+        /// <returns></returns>
+        [HttpGet("v1/infringed-vehicles/{rfidOrPlateNumber}")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetInfringedVehicleByRFIDOrPlateNumbersync(string rfidOrPlateNumber)
+        {
+            try
+            {
+                _logger.LogInformation($"Executing {nameof(GetInfringedVehicleByRFIDOrPlateNumbersync)}...");
+
+                if (rfidOrPlateNumber == null)
+                {
+                    return BadRequest(ValidationResult.Failed<bool>(false, new List<ValidationError>() { ValidationError.BadRequest }));
+                }
+
+                var result = await _vehicleService.GetVehicleWithInfringementAsync(rfidOrPlateNumber);
+
+                if (result != null && !result.Succeeded)
+                {
+                    if (result.Errors.Count(x => x.Code == (int)HttpStatusCode.NotFound) > 0)
+                        return NotFound(result);
+                }
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                List<ValidationError> validationErrors = new();
+                string errorMessage = $"An error occurred when calling {nameof(GetInfringedVehicleByRFIDOrPlateNumbersync)} method: {ex.Message}. InnerException : {ApiExceptionMessages.ExceptionMessages(ex)}. Stack trace: {ex.StackTrace}";
+                _logger.LogError(errorMessage);
+                validationErrors.Add(ValidationError.InternalServerError);
+                return StatusCode(StatusCodes.Status500InternalServerError, ValidationResult.Failed(errorMessage, validationErrors));
+            }
+        }
+        #endregion
     }
 }
