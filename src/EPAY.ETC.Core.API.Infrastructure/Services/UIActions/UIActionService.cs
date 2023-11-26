@@ -119,9 +119,12 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                             feeModel.EmployeeId = !string.IsNullOrEmpty(reconcilVehicleInfo?.EmployeeId) ? reconcilVehicleInfo?.EmployeeId : feeModel.EmployeeId;
                             feeModel.IsETCFailed = false;
 
-                            if (!int.TryParse(reconcilVehicleInfo?.Vehicle?.VehicleType, out int vehicleType))
-                                vehicleType = 1;
-                            feeModel.CustomVehicleType = (CustomVehicleTypeEnum)vehicleType;
+                            if (!string.IsNullOrEmpty(reconcilVehicleInfo?.Vehicle?.VehicleType))
+                            {
+                                if (!int.TryParse(reconcilVehicleInfo?.Vehicle?.VehicleType, out int vehicleType))
+                                    vehicleType = 1;
+                                feeModel.CustomVehicleType = (CustomVehicleTypeEnum)vehicleType;
+                            }
 
                             // LandOut
                             // Update PlateNumber for FusionObject
