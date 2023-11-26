@@ -136,15 +136,18 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                             feeModel.LaneOutVehicle.VehicleInfo = new ETC.Core.Models.VehicleInfoModel();
                             feeModel.LaneOutVehicle.VehicleInfo.PlateNumber = !string.IsNullOrEmpty(reconcilVehicleInfo?.Vehicle?.PlateNumber) ? reconcilVehicleInfo?.Vehicle?.PlateNumber : feeModel.LaneOutVehicle.VehicleInfo.PlateNumber;
 
-                            if (!string.IsNullOrEmpty(reconcilVehicleInfo?.Vehicle?.RFID))
-                                oldRFID = reconcilVehicleInfo?.Vehicle?.RFID;
-
-                            if (!string.IsNullOrEmpty(feeModel.LaneOutVehicle.VehicleInfo.PlateNumber))
+                            if (!string.IsNullOrEmpty(oldRFID))
                             {
-                                var rfid = _redisDB.StringGet(RedisConstant.RFIDValueKey(reconcilVehicleInfo?.Vehicle?.PlateNumber ?? string.Empty));
-                                if (!string.IsNullOrEmpty(rfid))
+                                if (!string.IsNullOrEmpty(reconcilVehicleInfo?.Vehicle?.RFID))
+                                    oldRFID = reconcilVehicleInfo?.Vehicle?.RFID;
+
+                                if (!string.IsNullOrEmpty(feeModel.LaneOutVehicle.VehicleInfo.PlateNumber))
                                 {
-                                    oldRFID = rfid;
+                                    var rfid = _redisDB.StringGet(RedisConstant.RFIDValueKey(reconcilVehicleInfo?.Vehicle?.PlateNumber ?? string.Empty));
+                                    if (!string.IsNullOrEmpty(rfid))
+                                    {
+                                        oldRFID = rfid;
+                                    }
                                 }
                             }
 
