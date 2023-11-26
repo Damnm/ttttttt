@@ -53,13 +53,7 @@ namespace EPAY.ETC.Core.API.Controllers.Devices
 
                 if (result.Succeeded)
                 {
-                    var barrierRequest = new BarrierModel()
-                    {
-                        Action = result.Data?.BarrierOpenStatus?.Status ?? ETC.Core.Models.Enums.BarrierActionEnum.Close
-                    };
-
-                    string message = JsonSerializer.Serialize(barrierRequest);
-                    _rabbitMQPublisherService.SendMessage(message, ETC.Core.Models.Enums.PublisherTargetEnum.Barrier);
+                    string message = string.Empty;
 
                     if (result.Data?.Payment != null)
                     {
@@ -78,6 +72,14 @@ namespace EPAY.ETC.Core.API.Controllers.Devices
                         message = JsonSerializer.Serialize(result.Data?.UI);
                         _rabbitMQPublisherService.SendMessage(message, ETC.Core.Models.Enums.PublisherTargetEnum.UI);
                     }
+
+                    var barrierRequest = new BarrierModel()
+                    {
+                        Action = result.Data?.BarrierOpenStatus?.Status ?? ETC.Core.Models.Enums.BarrierActionEnum.Close
+                    };
+
+                    message = JsonSerializer.Serialize(barrierRequest);
+                    _rabbitMQPublisherService.SendMessage(message, ETC.Core.Models.Enums.PublisherTargetEnum.Barrier);
                 }
 
                 return Ok(result);
