@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.InfringedVehicle;
 using EPAY.ETC.Core.API.Core.Models.InfringeredVehicle;
+using EPAY.ETC.Core.API.Core.Models.TicketType;
 using EPAY.ETC.Core.API.Core.Models.Vehicle;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.InfringedVehicle;
 using EPAY.ETC.Core.Models.Validation;
@@ -27,26 +28,14 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.InfringedVehicle
         }
         #endregion
 
-        public async Task<ValidationResult<List<InfringedVehicleInfoModel>>?> GetByRFIDOrPlateNumberAsync(string rfidOrPlateNumber)
+        public async Task<ValidationResult<List<InfringedVehicleInfoModel>>?> GetAllAsync(Expression<Func<InfringedVehicleModel, bool>>? expressison = null)
         {
-            _logger.LogInformation($"Executing {nameof(GetByRFIDOrPlateNumberAsync)} method...");
+            _logger.LogInformation($"Executing {nameof(GetAllAsync)} method...");
             try
             {
-                if (string.IsNullOrEmpty(rfidOrPlateNumber)) return ValidationResult.Failed<List<InfringedVehicleInfoModel>>(null, new List<ValidationError>()
-                    {
-                        ValidationError.NotFound
-                    });
+                var vehicles = await _repository.GetAllAsync(expressison);
 
-                bool isRFID = rfidOrPlateNumber.Length >= 15 ? true : false;
-                Expression<Func<InfringedVehicleModel, bool>>? expression = s => !string.IsNullOrEmpty(s.RFID) && s.RFID.Equals(rfidOrPlateNumber);
-
-                if (!isRFID)
-                {
-                    expression = s => !string.IsNullOrEmpty(s.PlateNumber) && s.PlateNumber.Equals(rfidOrPlateNumber);
-                }
-                var vehicles = await _repository.GetInfringedVehicleAsync(expression);
-
-                if (vehicles == null || vehicles.Count == 0)
+                if (vehicles == null || vehicles.Count() == 0)
                 {
                     return ValidationResult.Failed<List<InfringedVehicleInfoModel>>(null, new List<ValidationError>()
                     {
@@ -58,7 +47,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.InfringedVehicle
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed to run {nameof(GetByRFIDOrPlateNumberAsync)} method. Error: {ex.Message}");
+                _logger.LogError($"Failed to run {nameof(GetAllAsync)} method. Error: {ex.Message}");
                 throw;
             }
         }

@@ -221,23 +221,17 @@ namespace EPAY.ETC.Core.API.Controllers.Vehicle
         /// <summary>
         /// Get Vehicle Detail by RFID
         /// </summary>
-        /// <param name="rfidOrPlateNumber"></param>
         /// <returns></returns>
-        [HttpGet("v1/infringed-vehicles/{rfidOrPlateNumber}")]
+        [HttpGet("v1/infringed-vehicles")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetInfringedVehicleByRFIDOrPlateNumbersync(string rfidOrPlateNumber)
+        public async Task<IActionResult> GetInfringedVehicleAsync()
         {
             try
             {
-                _logger.LogInformation($"Executing {nameof(GetInfringedVehicleByRFIDOrPlateNumbersync)}...");
+                _logger.LogInformation($"Executing {nameof(GetInfringedVehicleAsync)}...");
 
-                if (rfidOrPlateNumber == null)
-                {
-                    return BadRequest(ValidationResult.Failed<List<InfringedVehicleInfoModel>>(null, new List<ValidationError>() { ValidationError.BadRequest }));
-                }
-
-                var result = await _infringedVehicleService.GetByRFIDOrPlateNumberAsync(rfidOrPlateNumber);
+                var result = await _infringedVehicleService.GetAllAsync();
 
                 if (result != null && !result.Succeeded)
                 {
@@ -250,7 +244,7 @@ namespace EPAY.ETC.Core.API.Controllers.Vehicle
             catch (Exception ex)
             {
                 List<ValidationError> validationErrors = new();
-                string errorMessage = $"An error occurred when calling {nameof(GetInfringedVehicleByRFIDOrPlateNumbersync)} method: {ex.Message}. InnerException : {ApiExceptionMessages.ExceptionMessages(ex)}. Stack trace: {ex.StackTrace}";
+                string errorMessage = $"An error occurred when calling {nameof(GetInfringedVehicleAsync)} method: {ex.Message}. InnerException : {ApiExceptionMessages.ExceptionMessages(ex)}. Stack trace: {ex.StackTrace}";
                 _logger.LogError(errorMessage);
                 validationErrors.Add(ValidationError.InternalServerError);
                 return StatusCode(StatusCodes.Status500InternalServerError, ValidationResult.Failed(errorMessage, validationErrors));
