@@ -147,7 +147,7 @@ namespace EPAY.ETC.Core.API.Mapping
             CreateMap<PublisherConfigurationOption, PublisherOptions>().ReverseMap();
             CreateMap<BarcodeAddOrUpdateRequestModel, BarcodeModel>().ReverseMap();
             CreateMap<Core.Models.PaymentStatus.PaymentStatusModel, PaymentStatusHistoryModel>()
-                 .ForPath(e => e.Time, act => act.MapFrom(src => src.PaymentDate.ToUnixTime().ToAsiaTimeString("HH:mm:ss")))
+                 .ForPath(e => e.Time, act => act.MapFrom(src => src.PaymentDate.ConvertToTimeZone(DateTimeKind.Utc, "SE Asia Standard Time").ToUnixTime().ToAsiaTimeString("HH:mm:ss")))
                  .ForPath(e => e.Reason, act => act.MapFrom(src => src.Reason));
 
             CreateMap<EmployeeAutoLoginRequest, AuthenticatedEmployeeResponseModel>().ReverseMap();

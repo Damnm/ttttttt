@@ -128,7 +128,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Payment
                        PlateNumber = x.Payment.PlateNumber,
                        RFID = x.Payment.RFID,
                        PaymentMethod = x.PaymentMethod,
-                       PaidDateTimeEpoch = x.PaymentDate.ToUnixTime(),
+                       PaidDateTimeEpoch = x.PaymentDate.ConvertToTimeZone(DateTimeKind.Utc, "SE Asia Standard Time").ToUnixTime(),
                        LaneinDateTimeEpoch = x.Payment.Fee.LaneInEpoch,
                        LaneoutDateTimeEpoch = x.Payment.Fee.LaneOutEpoch,
                        CustomVehicleType = x.Payment.CustomVehicleType.Name,
