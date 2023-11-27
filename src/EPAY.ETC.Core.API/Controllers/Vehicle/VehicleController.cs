@@ -217,7 +217,7 @@ namespace EPAY.ETC.Core.API.Controllers.Vehicle
         }
         #endregion
 
-        #region GetVehicleByRFIDAsync
+        #region GetInfringedVehicleAsync
         /// <summary>
         /// Get Vehicle Detail by RFID
         /// </summary>

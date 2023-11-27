@@ -254,7 +254,7 @@ namespace EPAY.ETC.Core.API.Mapping
             CreateMap<PrintLogRequestModel, PrintLogModel>()
                  .ForMember(e => e.Id, act => act.MapFrom(src => src.PrintLogId))
                .ReverseMap();
-            CreateMap<InfringedVehicleModel, InfringedVehicleInfoModel>()
+            CreateMap<Core.Models.InfringeredVehicle.InfringedVehicleModel, InfringedVehicleInfoModel>()
                  .ForMember(e => e.InfringedVehicleId, act => act.MapFrom(src => src.Id))
                  .ForMember(e => e.PlateNumber, act => act.MapFrom(src => src.PlateNumber))
                  .ForMember(e => e.RFID, act => act.MapFrom(src => src.RFID))
