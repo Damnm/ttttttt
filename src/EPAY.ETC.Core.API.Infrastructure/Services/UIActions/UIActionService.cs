@@ -132,8 +132,10 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
 
                             string? oldRFID = feeModel.LaneOutVehicle?.RFID;
 
-                            feeModel.LaneOutVehicle = new LaneOutVehicleModel();
-                            feeModel.LaneOutVehicle.VehicleInfo = new ETC.Core.Models.VehicleInfoModel();
+                            if (feeModel.LaneOutVehicle == null)
+                                feeModel.LaneOutVehicle = new LaneOutVehicleModel();
+                            if (feeModel.LaneOutVehicle.VehicleInfo == null)
+                                feeModel.LaneOutVehicle.VehicleInfo = new ETC.Core.Models.VehicleInfoModel();
                             feeModel.LaneOutVehicle.VehicleInfo.PlateNumber = !string.IsNullOrEmpty(reconcilVehicleInfo?.Vehicle?.PlateNumber) ? reconcilVehicleInfo?.Vehicle?.PlateNumber : feeModel.LaneOutVehicle.VehicleInfo.PlateNumber;
 
                             if (!string.IsNullOrEmpty(oldRFID))
@@ -166,7 +168,6 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                                 {
                                     feeModel.LaneOutVehicle.Epoch = camData.CheckpointTimeEpoch;
                                     feeModel.LaneOutVehicle.VehicleInfo.VehiclePhotoUrl = camData.VehicleInfo?.VehiclePhotoUrl ?? camData.VehicleInfo?.VehicleRearPhotoUrl ?? string.Empty;
-                                    feeModel.LaneOutVehicle.VehicleInfo.PlateNumberPhotoUrl = camData.VehicleInfo?.PlateNumberPhotoUrl ?? camData.VehicleInfo?.PlateNumberRearPhotoUrl ?? string.Empty;
                                     feeModel.LaneOutVehicle.VehicleInfo.PlateNumberPhotoUrl = camData.VehicleInfo?.PlateNumberPhotoUrl ?? camData.VehicleInfo?.PlateNumberRearPhotoUrl ?? string.Empty;
                                     feeModel.LaneOutVehicle.VehicleInfo.ConfidenceScore = camData.VehicleInfo?.ConfidenceScore ?? 0;
                                     feeModel.LaneOutVehicle.VehicleInfo.VehicleType = camData.VehicleInfo?.VehicleType ?? string.Empty;
