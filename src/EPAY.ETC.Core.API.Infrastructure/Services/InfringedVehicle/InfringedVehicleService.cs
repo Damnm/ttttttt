@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.InfringedVehicle;
 using EPAY.ETC.Core.API.Core.Models.InfringeredVehicle;
-using EPAY.ETC.Core.API.Core.Models.TicketType;
 using EPAY.ETC.Core.API.Core.Models.Vehicle;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.InfringedVehicle;
 using EPAY.ETC.Core.Models.Validation;
@@ -10,17 +9,17 @@ using System.Linq.Expressions;
 
 namespace EPAY.ETC.Core.API.Infrastructure.Services.InfringedVehicle
 {
-    public class InfringedVehicle : IInfringedVehicleService
+    public class InfringedVehicleService : IInfringedVehicleService
     {
 
         #region Variables   -
-        private readonly ILogger<InfringedVehicle> _logger;
+        private readonly ILogger<InfringedVehicleService> _logger;
         private readonly IInfringedVehicleRepository _repository;
         private readonly IMapper _mapper;
         #endregion
 
         #region Constructor
-        public InfringedVehicle(ILogger<InfringedVehicle> logger, IInfringedVehicleRepository vehicleRepository, IMapper mapper)
+        public InfringedVehicleService(ILogger<InfringedVehicleService> logger, IInfringedVehicleRepository vehicleRepository, IMapper mapper)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _repository = vehicleRepository ?? throw new ArgumentNullException(nameof(vehicleRepository));
@@ -42,7 +41,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.InfringedVehicle
                         ValidationError.NotFound
                     });
                 }
-                var result =  _mapper.Map<List<InfringedVehicleModel>, List<InfringedVehicleInfoModel>>(vehicles);
+                var result =  _mapper.Map<List<InfringedVehicleModel>, List<InfringedVehicleInfoModel>>(vehicles.ToList());
                 return ValidationResult.Success(result);
             }
             catch (Exception ex)

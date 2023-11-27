@@ -21,6 +21,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.InfringedVeh
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         }
+        #endregion
 
         public Task<IEnumerable<InfringedVehicleModel>> GetAllAsync(Expression<Func<InfringedVehicleModel, bool>>? expression = null)
         {
@@ -52,6 +53,6 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.InfringedVeh
         {
             throw new NotImplementedException();
         }
-        #endregion
+       
     }
 }

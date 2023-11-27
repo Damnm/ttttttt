@@ -223,8 +223,8 @@ namespace EPAY.ETC.Core.API.Controllers.Vehicle
         /// </summary>
         /// <returns></returns>
         [HttpGet("v1/infringed-vehicles")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetInfringedVehicleAsync()
         {
             try
