@@ -262,7 +262,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                                     }
                                 }
                                 else
-                                    feeModel.LaneInVehicle.Cameras = GetAllCameraModelByPattern($"{RedisConstant.CameraInKey(feeModel.LaneOutVehicle.VehicleInfo.PlateNumber ?? string.Empty)}*").OrderByDescending(x => x.Epoch).ToList();
+                                    feeModel.LaneInVehicle.Cameras = GetAllCameraModelByPattern($"{RedisConstant.CameraInKey(feeModel.LaneOutVehicle.VehicleInfo.PlateNumber ?? "No-Plate")}*").OrderByDescending(x => x.Epoch).ToList();
 
                                 if (firstCamInData == null)
                                     firstCamInData = feeModel.LaneInVehicle.Cameras?.FirstOrDefault();
