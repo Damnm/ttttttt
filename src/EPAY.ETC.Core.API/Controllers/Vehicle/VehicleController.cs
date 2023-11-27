@@ -1,4 +1,5 @@
 ﻿using EPAY.ETC.Core.API.Core.Exceptions;
+using EPAY.ETC.Core.API.Core.Interfaces.Services.InfringedVehicle;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Vehicles;
 using EPAY.ETC.Core.API.Core.Models.Vehicle;
 using EPAY.ETC.Core.Models.Validation;
@@ -17,6 +18,7 @@ namespace EPAY.ETC.Core.API.Controllers.Vehicle
         #region Variables
         private readonly ILogger<VehicleController> _logger;
         private readonly IVehicleService _vehicleService;
+        private readonly IInfringedVehicleService _infringedVehicleService;
         #endregion
 
         #region Constructor
@@ -27,10 +29,11 @@ namespace EPAY.ETC.Core.API.Controllers.Vehicle
         /// <param name="vehicleService"></param>
         /// <exception cref="ArgumentNullException"></exception>
         public VehicleController(ILogger<VehicleController> logger,
-            IVehicleService vehicleService)
+            IVehicleService vehicleService, IInfringedVehicleService infringedVehicleService)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _vehicleService = vehicleService ?? throw new ArgumentNullException(nameof(vehicleService));
+            _infringedVehicleService = infringedVehicleService ?? throw new ArgumentNullException(nameof(infringedVehicleService));
         }
 
         #endregion
@@ -207,6 +210,41 @@ namespace EPAY.ETC.Core.API.Controllers.Vehicle
             {
                 List<ValidationError> validationErrors = new();
                 string errorMessage = $"An error occurred when calling {nameof(UpdateAsync)} method: {ex.Message}. InnerException : {ApiExceptionMessages.ExceptionMessages(ex)}. Stack trace: {ex.StackTrace}";
+                _logger.LogError(errorMessage);
+                validationErrors.Add(ValidationError.InternalServerError);
+                return StatusCode(StatusCodes.Status500InternalServerError, ValidationResult.Failed(errorMessage, validationErrors));
+            }
+        }
+        #endregion
+
+        #region GetVehicleByRFIDAsync
+        /// <summary>
+        /// Get Vehicle Detail by RFID
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("v1/infringed-vehicles")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetInfringedVehicleAsync()
+        {
+            try
+            {
+                _logger.LogInformation($"Executing {nameof(GetInfringedVehicleAsync)}...");
+
+                var result = await _infringedVehicleService.GetAllAsync();
+
+                if (result != null && !result.Succeeded)
+                {
+                    if (result.Errors.Count(x => x.Code == (int)HttpStatusCode.NotFound) > 0)
+                        return NotFound(result);
+                }
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                List<ValidationError> validationErrors = new();
+                string errorMessage = $"An error occurred when calling {nameof(GetInfringedVehicleAsync)} method: {ex.Message}. InnerException : {ApiExceptionMessages.ExceptionMessages(ex)}. Stack trace: {ex.StackTrace}";
                 _logger.LogError(errorMessage);
                 validationErrors.Add(ValidationError.InternalServerError);
                 return StatusCode(StatusCodes.Status500InternalServerError, ValidationResult.Failed(errorMessage, validationErrors));

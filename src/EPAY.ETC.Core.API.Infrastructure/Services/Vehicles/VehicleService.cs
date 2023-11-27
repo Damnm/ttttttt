@@ -52,29 +52,6 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Vehicles
             }
         }
 
-        public async Task<ValidationResult<VehicleModel>> GetByIdAsync(Guid id)
-        {
-            _logger.LogInformation($"Executing {nameof(GetByIdAsync)} method...");
-            try
-            {
-                var result = await _repository.GetByIdAsync(id);
-                if (result == null)
-                {
-                    return ValidationResult.Failed<VehicleModel>(null, new List<ValidationError>()
-                    {
-                        ValidationError.NotFound
-                    });
-                }
-
-                return ValidationResult.Success(result);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Failed to run {nameof(GetByIdAsync)} method. Error: {ex.Message}");
-                throw;
-            }
-        }
-
         public async Task<ValidationResult<VehicleInfoModel>> GetVehicleByRFIDAsync(string rfid)
         {
             _logger.LogInformation($"Executing {nameof(GetVehicleByRFIDAsync)} method...");
@@ -165,6 +142,29 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Vehicles
             catch (Exception ex)
             {
                 _logger.LogError($"Failed to run {nameof(UpdateAsync)} method. Error: {ex.Message}");
+                throw;
+            }
+        }
+
+        public async Task<ValidationResult<VehicleModel>> GetByIdAsync(Guid id)
+        {
+            _logger.LogInformation($"Executing {nameof(GetByIdAsync)} method...");
+            try
+            {
+                var result = await _repository.GetByIdAsync(id);
+                if (result == null)
+                {
+                    return ValidationResult.Failed<VehicleModel>(null, new List<ValidationError>()
+                    {
+                        ValidationError.NotFound
+                    });
+                }
+
+                return ValidationResult.Success(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed to run {nameof(GetByIdAsync)} method. Error: {ex.Message}");
                 throw;
             }
         }

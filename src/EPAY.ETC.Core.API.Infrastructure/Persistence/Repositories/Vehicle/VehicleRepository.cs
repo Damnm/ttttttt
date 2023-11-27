@@ -107,6 +107,5 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Vehicle
             }
         }
         #endregion
-
     }
 }
