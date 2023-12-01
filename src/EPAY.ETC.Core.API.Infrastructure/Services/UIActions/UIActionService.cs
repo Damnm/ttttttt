@@ -531,7 +531,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
 
                 LaneSessionReportModel result = new LaneSessionReportModel()
                 {
-                    PrintType = ReceiptTypeEnum.SessionReport,
+                    PrintType = ReceiptTypeEnum.Report,
                     Layout = new LaneSessionLayoutModel()
                     {
                         Header = new ETC.Core.Models.Receipt.HeaderModel
@@ -553,7 +553,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                 string employeeName = currentUI.Data?.Header?.EmployeeName ?? $"{currentUI.Data?.Authentication?.FirstName} {currentUI.Data?.Authentication?.LastName}";
 
                 result.Layout.Footer.Line3 = employeeName;
-                result.Layout.Body.Heading = ReceiptTypeEnum.SessionReport.ToEnumMemberAttrValue().ToUpper();
+                result.Layout.Body.Heading = ReceiptTypeEnum.Report.ToEnumMemberAttrValue().ToUpper();
 
                 // TODO: Need to get name of Shift
                 result.Layout.Body.SubHeading1 = $"Ngày: {fromDate.ToString("dd/MM/yyyy")}  Ca: {currentUI.Data?.Header?.ShiftName ?? "01"}  Trạm: {request.LaneOutId}";

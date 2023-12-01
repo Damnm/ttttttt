@@ -33,7 +33,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Reports
         };
         private LaneSessionReportModel sessionReportResponse = new LaneSessionReportModel()
         {
-            PrintType = ReceiptTypeEnum.SessionReport,
+            PrintType = ReceiptTypeEnum.Report,
             Layout = new LaneSessionLayoutModel()
             {
                 Header = new HeaderModel()
