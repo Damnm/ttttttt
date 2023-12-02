@@ -71,7 +71,7 @@ namespace EPAY.ETC.Core.API.Controllers.Devices
                     {
                         if (result.Data.UI.Header == null) result.Data.UI.Header = new ETC.Core.Models.UI.HeaderModel();
                         if (result.Data.UI.Header.Sender == null) result.Data.UI.Header.Sender = new ETC.Core.Models.UI.SenderModel();
-                        result.Data.UI.Header.Sender.ModuleName = ETC.Core.Models.UI.ModuleNameEnum.Core_API;
+                        result.Data.UI.Header.Sender.ModuleName = ETC.Core.Models.UI.ModuleNameEnum.Core_API.ToString();
                         result.Data.UI.Header.Sender.FunctionName = "In case: Endpoint v1/barrier";
 
                         message = JsonSerializer.Serialize(result.Data?.UI);
