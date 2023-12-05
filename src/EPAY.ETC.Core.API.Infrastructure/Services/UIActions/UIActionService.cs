@@ -282,6 +282,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                                     feeModel.LaneInVehicle.VehicleInfo.Make = firstCamInData.VehicleInfo?.Make ?? string.Empty;
                                     feeModel.LaneInVehicle.VehicleInfo.Seat = firstCamInData.VehicleInfo?.Seat ?? 0;
                                     feeModel.LaneInVehicle.VehicleInfo.PlateColour = firstCamInData.VehicleInfo?.PlateColour ?? firstCamInData.VehicleInfo?.RearPlateColour ?? string.Empty;
+                                    feeModel.LaneInVehicle.IsEpayWalletRegisteredVehicle = feeModel.LaneInVehicle.Cameras?.Any(x => x.IsEpayWalletRegisteredVehicle == true) ?? false;
                                 }
                                 else
                                     isEmptyLaneIn = true;
@@ -872,6 +873,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                                 Epoch = cameraData.CheckpointTimeEpoch,
                                 LaneId = cameraData.LaneInId,
                                 VehicleInfo = cameraData.VehicleInfo,
+                                IsEpayWalletRegisteredVehicle = cameraData.IsEpayWalletRegisteredVehicle
                             });
                         }
                     }
