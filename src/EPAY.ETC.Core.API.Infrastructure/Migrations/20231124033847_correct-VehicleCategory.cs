@@ -34,31 +34,31 @@ namespace EPAY.ETC.Core.API.Infrastructure.Migrations
                 keyColumn: "Id",
                 keyValue: new Guid("bd4e670d-8cae-46fa-8bac-d77ac139a044"));
 
-            //migrationBuilder.AddColumn<string>(
-            //    name: "ExternalId",
-            //    table: "VehicleCategory",
-            //    type: "character varying(6)",
-            //    maxLength: 6,
-            //    nullable: true);
+            migrationBuilder.AddColumn<string>(
+                name: "ExternalId",
+                table: "VehicleCategory",
+                type: "character varying(6)",
+                maxLength: 6,
+                nullable: true);
 
-            //migrationBuilder.AddColumn<string>(
-            //    name: "VehicleCategoryType",
-            //    table: "VehicleCategory",
-            //    type: "character varying(20)",
-            //    maxLength: 20,
-            //    nullable: false,
-            //    defaultValue: "");
+            migrationBuilder.AddColumn<string>(
+                name: "VehicleCategoryType",
+                table: "VehicleCategory",
+                type: "character varying(20)",
+                maxLength: 20,
+                nullable: false,
+                defaultValue: "");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            //migrationBuilder.DropColumn(
-            //    name: "ExternalId",
-            //    table: "VehicleCategory");
+            migrationBuilder.DropColumn(
+                name: "ExternalId",
+                table: "VehicleCategory");
 
-            //migrationBuilder.DropColumn(
-            //    name: "VehicleCategoryType",
-            //    table: "VehicleCategory");
+            migrationBuilder.DropColumn(
+                name: "VehicleCategoryType",
+                table: "VehicleCategory");
 
             migrationBuilder.InsertData(
                 table: "VehicleCategory",

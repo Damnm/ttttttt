@@ -13,11 +13,11 @@ using EPAY.ETC.Core.API.Core.Interfaces.Services.TicketType;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Transaction;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.UIActions;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Vehicles;
-using EPAY.ETC.Core.API.Core.Models.PrintLog;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Context;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.AppConfigs;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Barcode;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.CustomVehicleTypes;
+using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Employees;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.ErrorResponse;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.ETCCheckouts;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Fees;
@@ -95,6 +95,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence
             services.AddScoped<ILaneInRFIDTransactionLogRepository, LaneInRFIDTransactionLogRepository>();
             services.AddScoped<IPrintLogRepository, PrintLogRepository>();
             services.AddScoped<IInfringedVehicleRepository, InfringedVehicleRepository>();
+            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
             ////Add Services
             services.AddTransient<IVehicleService, VehicleService>();

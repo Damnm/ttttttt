@@ -2,6 +2,7 @@
 using EPAY.ETC.Core.API.Core.Interfaces.Services.UIActions;
 using EPAY.ETC.Core.API.Core.Models.Employees;
 using EPAY.ETC.Core.API.Infrastructure.Models.Configs;
+using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Employees;
 using EPAY.ETC.Core.Models.Enums;
 using EPAY.ETC.Core.Models.Request;
 using EPAY.ETC.Core.Models.UI;
@@ -21,15 +22,17 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Authentication
     {
         #region Variables   -
         private readonly ILogger<AuthenticationService> _logger;
+        private readonly IEmployeeRepository _employeeRepository;
         private readonly IPasswordService _passwordService;
         private readonly IUIActionService _uIActionService;
         private readonly IOptions<JWTSettingsConfig> _jwtSettingsOption;
         #endregion
 
         #region Constructor
-        public AuthenticationService(ILogger<AuthenticationService> logger, IPasswordService passwordService, IUIActionService uIActionService, IOptions<JWTSettingsConfig> jwtSettingsOption)
+        public AuthenticationService(ILogger<AuthenticationService> logger, IEmployeeRepository employeeRepository, IPasswordService passwordService, IUIActionService uIActionService, IOptions<JWTSettingsConfig> jwtSettingsOption)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _employeeRepository = employeeRepository ?? throw new ArgumentNullException(nameof(employeeRepository));
             _passwordService = passwordService ?? throw new ArgumentNullException(nameof(passwordService));
             _uIActionService = uIActionService ?? throw new ArgumentNullException(nameof(uIActionService));
             _jwtSettingsOption = jwtSettingsOption ?? throw new ArgumentNullException(nameof(jwtSettingsOption));
@@ -41,8 +44,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Authentication
             {
                 _logger.LogInformation($"Executing {nameof(AuthenticateAsync)} method...");
 
-                var employees = await UseStreamReaderWithSystemTextJson();
-                var employee = employees?.FirstOrDefault(x => x.Id == input.EmployeeId);
+                var employee = await _employeeRepository.GetByIdAsync(input.EmployeeId);
 
                 // Thực hiện xác thực dựa trên thông tin từ input
                 if (employee == null || !_passwordService.IsMatched(input.Password, employee.Password, employee.Salt).Data)
@@ -57,7 +59,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Authentication
                 List<Claim> claimsIdentities = new List<Claim>(){
                     new Claim(ClaimTypes.NameIdentifier, input.EmployeeId.ToString()),
                     new Claim(ClaimTypes.Name,  employee.FullName.ToString()),
-                    new Claim(ClaimTypes.Email, employee.Email == null ? "" : employee.Email.ToString())
+                    new Claim(ClaimTypes.Email, employee.Email == null ? "" : employee.Email.ToString()),
+                    new Claim("LoginTime", DateTimeOffset.Now.ToUnixTimeSeconds().ToString()),
                 };
 
                 DateTimeOffset expiredDate = DateTimeOffset.Now
@@ -102,8 +105,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Authentication
             {
                 _logger.LogInformation($"Executing {nameof(AutoAuthenticateAsync)} method...");
 
-                var employees = await UseStreamReaderWithSystemTextJson();
-                var employee = employees?.FirstOrDefault(x => x.Id == request.EmployeeId);
+                var employee = await _employeeRepository.GetByIdAsync(request.EmployeeId);
 
                 // Thực hiện xác thực dựa trên thông tin từ input
                 if (employee == null || request.ActionCode != LogonStatusEnum.Login.ToString())
@@ -118,7 +120,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Authentication
                 List<Claim> claimsIdentities = new List<Claim>(){
                     new Claim(ClaimTypes.NameIdentifier, request.EmployeeId.ToString()),
                     new Claim(ClaimTypes.Name,  employee.FullName.ToString()),
-                    new Claim(ClaimTypes.Email, employee.Email == null ? "" : employee.Email.ToString())
+                    new Claim(ClaimTypes.Email, employee.Email == null ? "" : employee.Email.ToString()),
+                    new Claim("LoginTime", DateTimeOffset.Now.ToUnixTimeSeconds().ToString()),
                 };
 
                 DateTimeOffset expiredDate = DateTimeOffset.Now
