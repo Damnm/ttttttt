@@ -1,5 +1,6 @@
 using EPAY.ETC.Core.API.Filters;
 using EPAY.ETC.Core.API.Infrastructure.Models.Configs;
+using EPAY.ETC.Core.API.Infrastructure.Models.Options;
 using EPAY.ETC.Core.API.Infrastructure.Persistence;
 using EPAY.ETC.Core.API.Models.Configs;
 using EPAY.ETC.Core.API.Services;
@@ -28,6 +29,8 @@ builder.Services.Configure<List<PublisherConfigurationOption>>(builder.Configura
 builder.Services.Configure<EPAY.ETC.Core.Models.UI.UIModel>(builder.Configuration.GetSection("UITemplate"));
 builder.Services.Configure<JWTSettingsConfig>(builder.Configuration.GetSection("JwtSettings"));
 builder.Services.Configure<AppConfig>(builder.Configuration.GetSection("AppConfig"));
+builder.Services.Configure<WalletUrlOptions>(builder.Configuration.GetSection("WalletAPISettings"));
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 

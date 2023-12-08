@@ -1,4 +1,5 @@
-﻿using EPAY.ETC.Core.API.Core.Models.Configs;
+﻿using EPAY.ETC.Core.API.Core.Interfaces.Services.ExternalServices;
+using EPAY.ETC.Core.API.Core.Models.Configs;
 using EPAY.ETC.Core.API.Core.Models.CustomVehicleTypes;
 using EPAY.ETC.Core.API.Core.Models.ManualBarrierControl;
 using EPAY.ETC.Core.API.Core.Models.Vehicle.ReconcileVehicle;
@@ -40,6 +41,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
         private readonly Mock<IDatabase> _redisDatabaseMock = new();
         private readonly Mock<IServer> _redisServerMock = new();
         private readonly Mock<IPrintLogRepository> _appPrintLogRepository = new Mock<IPrintLogRepository>();
+        private readonly Mock<IPOSService> _pOSServiceMock = new Mock<IPOSService>();
         #endregion
 
         #region Init mock data
@@ -138,7 +140,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
             _paymentStatusRepositoryMock.Setup(x => x.GetAllWithNavigationAsync(It.IsAny<LaneSessionReportRequestModel>())).ReturnsAsync(paymentStatuses);
 
             // Act
-            var service = new UIActionService(_loggerMock.Object, _paymentRepository.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _manualBarrierControlRepository.Object, _redisDatabaseMock.Object, _redisServerMock.Object, _uiOptions, _appPrintLogRepository.Object);
+            var service = new UIActionService(_loggerMock.Object, _paymentRepository.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _manualBarrierControlRepository.Object, _redisDatabaseMock.Object, _redisServerMock.Object, _uiOptions, _appPrintLogRepository.Object, _pOSServiceMock.Object);
             var result = await service.PrintLaneSessionReportAsync(sessionReportRequest);
 
             // Assert
@@ -163,7 +165,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
 
             // Act
             var service = new UIActionService(_loggerMock.Object, _paymentRepository.Object, _paymentStatusRepositoryMock.Object
-                , _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _manualBarrierControlRepository.Object, _redisDatabaseMock.Object, _redisServerMock.Object, _uiOptions, _appPrintLogRepository.Object);
+                , _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _manualBarrierControlRepository.Object, _redisDatabaseMock.Object, _redisServerMock.Object, _uiOptions, _appPrintLogRepository.Object, _pOSServiceMock.Object);
             Func<Task> func = () => service.PrintLaneSessionReportAsync(sessionReportRequest);
 
             // Assert
@@ -188,7 +190,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
             _customVehicleTypeRepositoryMock.Setup(x => x.GetAllAsync(It.IsAny<Expression<Func<CustomVehicleTypeModel, bool>>>())).ThrowsAsync(exception);
 
             // Act
-            var service = new UIActionService(_loggerMock.Object, _paymentRepository.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _manualBarrierControlRepository.Object, _redisDatabaseMock.Object, _redisServerMock.Object, _uiOptions, _appPrintLogRepository.Object);
+            var service = new UIActionService(_loggerMock.Object, _paymentRepository.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _manualBarrierControlRepository.Object, _redisDatabaseMock.Object, _redisServerMock.Object, _uiOptions, _appPrintLogRepository.Object, _pOSServiceMock.Object);
             Func<Task> func = () => service.PrintLaneSessionReportAsync(sessionReportRequest);
 
             // Assert
@@ -214,7 +216,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
             _paymentStatusRepositoryMock.Setup(x => x.GetAllWithNavigationAsync(It.IsAny<LaneSessionReportRequestModel>())).ThrowsAsync(exception);
 
             // Act
-            var service = new UIActionService(_loggerMock.Object, _paymentRepository.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _manualBarrierControlRepository.Object, _redisDatabaseMock.Object, _redisServerMock.Object, _uiOptions, _appPrintLogRepository.Object);
+            var service = new UIActionService(_loggerMock.Object, _paymentRepository.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _manualBarrierControlRepository.Object, _redisDatabaseMock.Object, _redisServerMock.Object, _uiOptions, _appPrintLogRepository.Object, _pOSServiceMock.Object);
             Func<Task> func = () => service.PrintLaneSessionReportAsync(sessionReportRequest);
 
             // Assert
@@ -240,7 +242,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
             _manualBarrierControlRepository.Setup(x => x.AddAsync(It.IsAny<ManualBarrierControlModel>()));
 
             // Act
-            var service = new UIActionService(_loggerMock.Object, _paymentRepository.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _manualBarrierControlRepository.Object, _redisDatabaseMock.Object, _redisServerMock.Object, _uiOptions, _appPrintLogRepository.Object);
+            var service = new UIActionService(_loggerMock.Object, _paymentRepository.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _manualBarrierControlRepository.Object, _redisDatabaseMock.Object, _redisServerMock.Object, _uiOptions, _appPrintLogRepository.Object, _pOSServiceMock.Object);
             var result = await service.ManipulateBarrierAsync(barrierRequest);
 
             // Assert
@@ -263,7 +265,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
             _redisDatabaseMock.Setup(x => x.HashSetAsync(It.IsAny<RedisKey>(), It.IsAny<HashEntry[]>(), It.IsAny<CommandFlags>())).ThrowsAsync(exception);
 
             // Act
-            var service = new UIActionService(_loggerMock.Object, _paymentRepository.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _manualBarrierControlRepository.Object, _redisDatabaseMock.Object, _redisServerMock.Object, _uiOptions, _appPrintLogRepository.Object);
+            var service = new UIActionService(_loggerMock.Object, _paymentRepository.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _manualBarrierControlRepository.Object, _redisDatabaseMock.Object, _redisServerMock.Object, _uiOptions, _appPrintLogRepository.Object, _pOSServiceMock.Object);
             Func<Task> func = () => service.ManipulateBarrierAsync(barrierRequest);
 
             // Assert
@@ -287,7 +289,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
             _manualBarrierControlRepository.Setup(x => x.AddAsync(It.IsAny<ManualBarrierControlModel>())).ThrowsAsync(exception);
 
             // Act
-            var service = new UIActionService(_loggerMock.Object, _paymentRepository.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _manualBarrierControlRepository.Object, _redisDatabaseMock.Object, _redisServerMock.Object, _uiOptions, _appPrintLogRepository.Object);
+            var service = new UIActionService(_loggerMock.Object, _paymentRepository.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _manualBarrierControlRepository.Object, _redisDatabaseMock.Object, _redisServerMock.Object, _uiOptions, _appPrintLogRepository.Object, _pOSServiceMock.Object);
             Func<Task> func = () => service.ManipulateBarrierAsync(barrierRequest);
 
             // Assert
@@ -333,7 +335,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
             _redisDatabaseMock.Setup(x => x.StringGetAsync(It.IsNotNull<RedisKey>(), It.IsAny<CommandFlags>())).ReturnsAsync(new RedisValue(feeModel));
 
             // Act
-            var service = new UIActionService(_loggerMock.Object, _paymentRepository.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _manualBarrierControlRepository.Object, _redisDatabaseMock.Object, _redisServerMock.Object, _uiOptions, _appPrintLogRepository.Object);
+            var service = new UIActionService(_loggerMock.Object, _paymentRepository.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _manualBarrierControlRepository.Object, _redisDatabaseMock.Object, _redisServerMock.Object, _uiOptions, _appPrintLogRepository.Object, _pOSServiceMock.Object);
             var result = service.ReconcileVehicleInfo(reconcileVehicleInfo);
 
             // Assert
@@ -355,7 +357,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
             _redisDatabaseMock.Setup(x => x.StringGetAsync(It.IsAny<RedisKey>(), It.IsAny<CommandFlags>())).ThrowsAsync(exception);
 
             // Act
-            var service = new UIActionService(_loggerMock.Object, _paymentRepository.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _manualBarrierControlRepository.Object, _redisDatabaseMock.Object, _redisServerMock.Object, _uiOptions, _appPrintLogRepository.Object);
+            var service = new UIActionService(_loggerMock.Object, _paymentRepository.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _manualBarrierControlRepository.Object, _redisDatabaseMock.Object, _redisServerMock.Object, _uiOptions, _appPrintLogRepository.Object, _pOSServiceMock.Object);
             Func<ValidationResult<ReconcileResultModel>> func = () => service.ReconcileVehicleInfo(null!);
 
             // Assert
@@ -395,7 +397,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
             _redisDatabaseMock.Setup(x => x.StringGetAsync(It.IsNotNull<RedisKey>(), It.IsAny<CommandFlags>())).ReturnsAsync(new RedisValue(feeModel));
 
             // Act
-            var service = new UIActionService(_loggerMock.Object, _paymentRepository.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _manualBarrierControlRepository.Object, _redisDatabaseMock.Object, _redisServerMock.Object, _uiOptions, _appPrintLogRepository.Object);
+            var service = new UIActionService(_loggerMock.Object, _paymentRepository.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _manualBarrierControlRepository.Object, _redisDatabaseMock.Object, _redisServerMock.Object, _uiOptions, _appPrintLogRepository.Object, _pOSServiceMock.Object);
             var result = service.ReconcileVehicleInfo(null!);
 
             // Assert
@@ -437,7 +439,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
             _redisDatabaseMock.Setup(x => x.StringGetAsync(It.IsNotNull<RedisKey>(), It.IsAny<CommandFlags>())).ReturnsAsync(new RedisValue(feeModel));
 
             // Act
-            var service = new UIActionService(_loggerMock.Object, _paymentRepository.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _manualBarrierControlRepository.Object, _redisDatabaseMock.Object, _redisServerMock.Object, _uiOptions, _appPrintLogRepository.Object);
+            var service = new UIActionService(_loggerMock.Object, _paymentRepository.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _manualBarrierControlRepository.Object, _redisDatabaseMock.Object, _redisServerMock.Object, _uiOptions, _appPrintLogRepository.Object, _pOSServiceMock.Object);
             var result = service.ReconcileVehicleInfo(reconcileVehicleInfo);
 
             // Assert
@@ -464,7 +466,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
             _redisDatabaseMock.Setup(x => x.StringSetAsync(RedisConstant.UI_MODEL_KEY, redisValue, It.IsAny<TimeSpan>(), It.IsAny<When>(), It.IsAny<CommandFlags>())).ReturnsAsync(true);
 
             // Act
-            var service = new UIActionService(_loggerMock.Object, _paymentRepository.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _manualBarrierControlRepository.Object, _redisDatabaseMock.Object, _redisServerMock.Object, _uiOptions, _appPrintLogRepository.Object);
+            var service = new UIActionService(_loggerMock.Object, _paymentRepository.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _manualBarrierControlRepository.Object, _redisDatabaseMock.Object, _redisServerMock.Object, _uiOptions, _appPrintLogRepository.Object, _pOSServiceMock.Object);
             var result = await service.LoadCurrentUIAsync();
 
             // Assert
@@ -488,7 +490,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
             _redisDatabaseMock.Setup(x => x.StringSetAsync(RedisConstant.UI_MODEL_KEY, redisValue, It.IsAny<TimeSpan>(), It.IsAny<When>(), It.IsAny<CommandFlags>())).ReturnsAsync(true);
 
             // Act
-            var service = new UIActionService(_loggerMock.Object, _paymentRepository.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _manualBarrierControlRepository.Object, _redisDatabaseMock.Object, _redisServerMock.Object, _uiOptions, _appPrintLogRepository.Object);
+            var service = new UIActionService(_loggerMock.Object, _paymentRepository.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _manualBarrierControlRepository.Object, _redisDatabaseMock.Object, _redisServerMock.Object, _uiOptions, _appPrintLogRepository.Object, _pOSServiceMock.Object);
             var result = await service.LoadCurrentUIAsync();
 
             // Assert
@@ -511,7 +513,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.UIActions
             _redisDatabaseMock.Setup(x => x.StringGetAsync(RedisConstant.UI_MODEL_KEY, It.IsAny<CommandFlags>())).ThrowsAsync(exception);
 
             // Act
-            var service = new UIActionService(_loggerMock.Object, _paymentRepository.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _manualBarrierControlRepository.Object, _redisDatabaseMock.Object, _redisServerMock.Object, _uiOptions, _appPrintLogRepository.Object);
+            var service = new UIActionService(_loggerMock.Object, _paymentRepository.Object, _paymentStatusRepositoryMock.Object, _appConfigRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _manualBarrierControlRepository.Object, _redisDatabaseMock.Object, _redisServerMock.Object, _uiOptions, _appPrintLogRepository.Object, _pOSServiceMock.Object);
             Func<Task> func = () => service.LoadCurrentUIAsync();
 
             // Assert

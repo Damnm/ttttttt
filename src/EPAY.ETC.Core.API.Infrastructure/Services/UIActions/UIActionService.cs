@@ -1,4 +1,5 @@
 ﻿using EPAY.ETC.Core.API.Core.Extensions;
+using EPAY.ETC.Core.API.Core.Interfaces.Services.ExternalServices;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.UIActions;
 using EPAY.ETC.Core.API.Core.Models.Configs;
 using EPAY.ETC.Core.API.Core.Models.Fusion;
@@ -43,6 +44,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
         private readonly IServer _redisServer;
         private readonly IOptions<UIModel> _uiOptions;
         private readonly IPrintLogRepository _appPrintLogRepository;
+        private readonly IPOSService _pOSService;
 
         public UIActionService(ILogger<UIActionService> logger,
                                IPaymentRepository paymentRepository,
@@ -53,7 +55,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                                IDatabase redisDB,
                                IServer server,
                                IOptions<UIModel> uiOptions,
-                               IPrintLogRepository appPrintLogRepository)
+                               IPrintLogRepository appPrintLogRepository,
+                               IPOSService pOSService)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _paymentRepository = paymentRepository ?? throw new ArgumentNullException(nameof(paymentRepository));
@@ -65,6 +68,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
             _redisServer = server ?? throw new ArgumentNullException(nameof(server));
             _uiOptions = uiOptions ?? throw new ArgumentNullException(nameof(uiOptions));
             _appPrintLogRepository = appPrintLogRepository ?? throw new ArgumentNullException(nameof(appPrintLogRepository));
+            _pOSService = pOSService ?? throw new ArgumentNullException(nameof(pOSService));
         }
 
         public ValidationResult<ReconcileResultModel> ReconcileVehicleInfo(ReconcileVehicleInfoModel reconcilVehicleInfo)
@@ -392,6 +396,14 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                         _logger.LogInformation($"Save to Redis with Key={RedisConstant.HASH_BARRIER_OPEN_STATUS}, Value={JsonSerializer.Serialize(result.BarrierOpenStatus)}");
 
                         _redisDB.HashSet(RedisConstant.HASH_BARRIER_OPEN_STATUS, result.BarrierOpenStatus.ToHashEntries());
+
+                        var posTransId = _redisDB.StringGet(RedisConstant.POS_TRANSID).ToString();
+                        if (!string.IsNullOrEmpty(posTransId))
+                        {
+                            await _pOSService.CancelPaymentAsync(posTransId);
+
+                            _redisDB.KeyDelete(RedisConstant.POS_TRANSID);
+                        }
 
                         if (paymentMethod != null)
                         {

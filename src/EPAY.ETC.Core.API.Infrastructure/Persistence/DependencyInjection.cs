@@ -2,6 +2,7 @@
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Barcode;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.ErrorResponse;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.ETCCheckouts;
+using EPAY.ETC.Core.API.Core.Interfaces.Services.ExternalServices;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Fees;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Fusion;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.InfringedVehicle;
@@ -40,6 +41,7 @@ using EPAY.ETC.Core.API.Infrastructure.Services.Authentication;
 using EPAY.ETC.Core.API.Infrastructure.Services.Barcode;
 using EPAY.ETC.Core.API.Infrastructure.Services.ErrorResponse;
 using EPAY.ETC.Core.API.Infrastructure.Services.ETCCheckouts;
+using EPAY.ETC.Core.API.Infrastructure.Services.ExternalServices;
 using EPAY.ETC.Core.API.Infrastructure.Services.Fees;
 using EPAY.ETC.Core.API.Infrastructure.Services.Fusion;
 using EPAY.ETC.Core.API.Infrastructure.Services.InfringedVehicle;
@@ -69,6 +71,12 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence
             {
                 options.UseNpgsql(Environment.GetEnvironmentVariable(CoreConstant.ENVIRONMENT_PGSQL) ?? configuration.GetConnectionString("DefaultConnection"));
                 options.EnableSensitiveDataLogging();
+            });
+
+            services.AddHttpClient<IPOSService, POSService>(args =>
+            {
+                args.BaseAddress = new Uri(Environment.GetEnvironmentVariable(CoreConstant.ENVIRONMENT_WALLET_API_BASE) ?? configuration.GetSection("WalletAPISettings").GetValue<string>("Endpoint") ?? string.Empty);
+                args.Timeout = TimeSpan.FromSeconds(120);
             });
 
             //Add Repositories...
