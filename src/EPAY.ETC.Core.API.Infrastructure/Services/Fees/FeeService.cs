@@ -41,13 +41,11 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
             try
             {
                 _logger.LogInformation($"Executing {nameof(AddAsync)} method...");
-
-                var existFees = await GetByIdAsync(input.FeeId ?? Guid.NewGuid());
-                if (existFees?.Data != null)
+                var existRecord = await CheckExistsRecordByObjectId(input.FeeId, input.ObjectId);
+                if (existRecord != null)
                 {
-                    _logger.LogWarning($"Executing {nameof(AddAsync)} method, existed object {JsonSerializer.Serialize(input)} in database.");
-
-                    return await UpdateAsync(existFees.Data!.Id, input);
+                    _logger.LogWarning($"Executing {nameof(AddAsync)} method, existed object {JsonSerializer.Serialize(existRecord)} in database.");
+                    return await UpdateAsync(existRecord.Id, input);
                 }
 
                 var entity = _mapper.Map<FeeModel>(input);
@@ -258,6 +256,30 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
             catch (Exception ex)
             {
                 _logger.LogError($"An error occurred when calling {nameof(FindVehicle)} method. Details: {ex.Message}. Stack trace: {ex.StackTrace}");
+                throw;
+            }
+        }
+
+        private async Task<FeeModel?> CheckExistsRecordByObjectId(Guid? id, Guid objectId)
+        {
+            try
+            {
+                _logger.LogInformation($"Executing {nameof(CheckExistsRecordByObjectId)} method...");
+
+                Expression<Func<FeeModel, bool>> expression = s => (id.HasValue ? s.Id == id : true) || s.ObjectId == objectId;
+
+                var result = await _repository.GetAllAsync(expression);
+
+                if (result.Any())
+                {
+                    return result?.ToList().FirstOrDefault();
+                }
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"An error occurred when calling {nameof(CheckExistsRecordByObjectId)} method. Details: {ex.Message}. Stack trace: {ex.StackTrace}");
                 throw;
             }
         }
