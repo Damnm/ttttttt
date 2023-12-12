@@ -127,6 +127,10 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence.Context
                 .Property(x => x.FeeName)
                 .HasMaxLength(50)
                 .HasConversion(new EnumToStringConverter<FeeTypeEnum>());
+            modelBuilder.Entity<FeeTypeModel>()
+                .Property(x => x.CustomVehicleType)
+                .HasMaxLength(50)
+                .HasConversion(new EnumToStringConverter<CustomVehicleTypeEnum>());
 
             modelBuilder.Entity<FeeTypeModel>().HasData(
                 new FeeTypeModel()
