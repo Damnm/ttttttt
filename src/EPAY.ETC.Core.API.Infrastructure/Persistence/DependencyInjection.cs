@@ -115,6 +115,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence
             services.AddTransient<IPaymentStatusService, PaymentStatusService>();
             services.AddTransient<IPaymentService, PaymentService>();
             services.AddTransient<IUIActionService, UIActionService>();
+            services.AddTransient<IUIActionLoadParkingDataService, UIActionLoadParkingDataService>();
             services.AddTransient<IManualBarrierControlsService, ManualBarrierControlsService>();
             services.AddTransient<IBarcodeService, BarcodeService>();
             services.AddTransient<IAuthenticationService, AuthenticationService>();

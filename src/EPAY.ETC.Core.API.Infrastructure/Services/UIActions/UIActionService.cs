@@ -32,7 +32,7 @@ using ValidationResult = EPAY.ETC.Core.Models.Validation.ValidationResult;
 
 namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
 {
-    public class UIActionService : IUIActionService
+    public class UIActionService : UIActionBaseService, IUIActionService
     {
         private readonly ILogger<UIActionService> _logger;
         private readonly IPaymentRepository _paymentRepository;
@@ -40,11 +40,10 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
         private readonly IAppConfigRepository _appConfigRepository;
         private readonly ICustomVehicleTypeRepository _customVehicleTypeRepository;
         private readonly IManualBarrierControlRepository _manualBarrierControlRepository;
-        private readonly IDatabase _redisDB;
-        private readonly IServer _redisServer;
         private readonly IOptions<UIModel> _uiOptions;
         private readonly IPrintLogRepository _appPrintLogRepository;
         private readonly IPOSService _pOSService;
+        private readonly IUIActionLoadParkingDataService _uIActionLoadParkingDataService;
 
         public UIActionService(ILogger<UIActionService> logger,
                                IPaymentRepository paymentRepository,
@@ -56,7 +55,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                                IServer server,
                                IOptions<UIModel> uiOptions,
                                IPrintLogRepository appPrintLogRepository,
-                               IPOSService pOSService)
+                               IPOSService pOSService,
+                               IUIActionLoadParkingDataService uIActionLoadParkingDataService) : base(logger, redisDB, server)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _paymentRepository = paymentRepository ?? throw new ArgumentNullException(nameof(paymentRepository));
@@ -64,11 +64,10 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
             _appConfigRepository = appConfigRepository ?? throw new ArgumentNullException(nameof(appConfigRepository));
             _customVehicleTypeRepository = customVehicleTypeRepository ?? throw new ArgumentNullException(nameof(customVehicleTypeRepository));
             _manualBarrierControlRepository = manualBarrierControlRepository ?? throw new ArgumentNullException(nameof(manualBarrierControlRepository));
-            _redisDB = redisDB ?? throw new ArgumentNullException(nameof(redisDB));
-            _redisServer = server ?? throw new ArgumentNullException(nameof(server));
             _uiOptions = uiOptions ?? throw new ArgumentNullException(nameof(uiOptions));
             _appPrintLogRepository = appPrintLogRepository ?? throw new ArgumentNullException(nameof(appPrintLogRepository));
             _pOSService = pOSService ?? throw new ArgumentNullException(nameof(pOSService));
+            _uIActionLoadParkingDataService = uIActionLoadParkingDataService ?? throw new ArgumentNullException(nameof(uIActionLoadParkingDataService));
         }
 
         public ValidationResult<ReconcileResultModel> ReconcileVehicleInfo(ReconcileVehicleInfoModel reconcilVehicleInfo)
@@ -161,6 +160,9 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                             feeModel.LaneOutVehicle.VehicleInfo.VehicleType = !string.IsNullOrEmpty(reconcilVehicleInfo?.Vehicle?.VehicleType) ? reconcilVehicleInfo?.Vehicle?.VehicleType : feeModel.LaneOutVehicle.VehicleInfo.VehicleType;
                             feeModel.LaneOutVehicle.LaneOutId = !string.IsNullOrEmpty(reconcilVehicleInfo?.Vehicle?.Out?.LaneOutId) ? reconcilVehicleInfo?.Vehicle?.Out?.LaneOutId : feeModel.LaneOutVehicle.LaneOutId;
                             feeModel.LaneOutVehicle.Epoch = DateTimeOffset.Now.ToUnixTimeSeconds();
+
+                            // Load new parking data
+                            feeModel.Parking = _uIActionLoadParkingDataService.LoadParkingData(oldRFID, reconcilVehicleInfo?.Vehicle?.PlateNumber);
 
                             // Load reconciliation image
                             var camOutStr = _redisDB.StringGet(RedisConstant.CameraOutKey(feeModel.LaneOutVehicle.VehicleInfo.PlateNumber ?? string.Empty)).ToString();
@@ -775,130 +777,5 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
                 throw;
             }
         }
-
-        #region Private method
-        public List<WaitingVehicleModel> GetWaitingVehicles()
-        {
-            var fusionObjects = HashGetList<FusionModel>(null, RedisConstant.SORTED_SET_FUSION_OUT);
-            List<WaitingVehicleModel> waitingVehicles = new List<WaitingVehicleModel>();
-            if (fusionObjects != null && fusionObjects.Any())
-            {
-                foreach (var fusion in fusionObjects)
-                {
-                    string? plateNumber = fusion.ANPRCam1;
-                    long? inEpoch = null;
-
-                    if (!string.IsNullOrEmpty(fusion.ANPRCam1))
-                    {
-                        var camData = _redisDB.StringGet(RedisConstant.CameraInKey(fusion.ANPRCam1)).ToString();
-                        if (!string.IsNullOrEmpty(camData))
-                        {
-                            var anprCamValue = JsonSerializer.Deserialize<ANPRCameraModel>(camData);
-                            inEpoch = anprCamValue?.CheckpointTimeEpoch;
-                        }
-                    }
-
-                    if (!string.IsNullOrEmpty(fusion.RFID))
-                    {
-                        var rfidIn = _redisDB.StringGet(RedisConstant.RFIDInKey(fusion.RFID)).ToString();
-                        if (!string.IsNullOrEmpty(rfidIn))
-                        {
-                            var rfidInValue = JsonSerializer.Deserialize<RFIDDataModel>(rfidIn);
-                            plateNumber = rfidInValue?.VehicleInfo?.PlateNumber ?? plateNumber;
-                            inEpoch = rfidInValue?.Epoch;
-                        }
-                    }
-
-                    // Create list vehicle is waiting
-                    waitingVehicles.Add(new WaitingVehicleModel()
-                    {
-                        RFID = fusion.RFID,
-                        PlateNumber = plateNumber,
-                        LaneinDateTimeEpoch = inEpoch ?? fusion.Epoch
-                    });
-                }
-            }
-
-            return waitingVehicles;
-        }
-        private List<T>? HashGetList<T>(Func<T, bool>? action, string sortedKey, Order order = Order.Ascending)
-        {
-            _logger.LogInformation($"Executing {nameof(HashGetList)} method...");
-            List<T>? result = new List<T>();
-
-            try
-            {
-                var members = _redisDB.SortedSetRangeByScoreWithScores(sortedKey, order: order);
-
-                foreach (var member in members)
-                {
-                    var hashEntries = _redisDB.HashGetAll(member.Element.ToString());
-
-                    if (hashEntries != null && hashEntries.Any())
-                    {
-                        var item = RedisExtention.ConvertFromRedis<T>(hashEntries);
-
-                        if (item != null && (action == null || action.Invoke(item)))
-                        {
-                            result.Add(item);
-                        }
-                    }
-                }
-
-                return result;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"An error occurred when calling {nameof(HashGetList)} method. Details: {ex.Message}. Stack trace: {ex.StackTrace}");
-                throw;
-            }
-        }
-
-        public List<LaneInCameraDataModel> GetAllCameraModelByPattern(string pattern)
-        {
-            _logger.LogInformation($"Starting load all camera data...");
-
-            try
-            {
-                List<LaneInCameraDataModel> result = new List<LaneInCameraDataModel>();
-                var redisKeys = _redisServer.Keys(0, pattern).ToList();
-                if (!redisKeys.Any())
-                    return result;
-
-                foreach (RedisKey key in redisKeys)
-                {
-                    string? cameraValue = _redisDB.StringGet(key).ToString();
-                    if (!string.IsNullOrEmpty(cameraValue))
-                    {
-                        // Deserialize Camera data from Lane In
-                        ANPRCameraModel? cameraData = JsonSerializer.Deserialize<ANPRCameraModel>(cameraValue);
-                        if (cameraData != null && cameraData.VehicleInfo != null)
-                        {
-                            result.Add(new LaneInCameraDataModel()
-                            {
-                                CameraDeviceInfo = new DeviceModel()
-                                {
-                                    IpAddr = cameraData.IpAddr,
-                                    MacAddr = cameraData.MacAddr
-                                },
-                                CameraKey = key.ToString(),
-                                Epoch = cameraData.CheckpointTimeEpoch,
-                                LaneId = cameraData.LaneInId,
-                                VehicleInfo = cameraData.VehicleInfo,
-                                IsEpayWalletRegisteredVehicle = cameraData.IsEpayWalletRegisteredVehicle
-                            });
-                        }
-                    }
-                }
-
-                return result;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"An error occurred when calling {nameof(GetAllCameraModelByPattern)} method. Details: {ex.Message}. Stack trace: {ex.StackTrace}");
-                throw;
-            }
-        }
-        #endregion
     }
 }

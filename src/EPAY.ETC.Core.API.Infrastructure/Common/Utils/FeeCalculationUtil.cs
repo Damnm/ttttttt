@@ -41,7 +41,9 @@ namespace EPAY.ETC.Core.API.Infrastructure.Common.Utils
             block = timeBlockFeeExists?.BlockNumber ?? (int)totalBlock;
 
             double prevblockAmount = prevBlock?.Amount ?? 0;
-            block = (prevBlock?.BlockNumber ?? 0) + (int)totalBlock;
+
+            if (timeBlockFeeExists == null)
+                block = (prevBlock?.BlockNumber ?? 0) + (int)totalBlock;
 
             if (isBlock0)
             {
