@@ -117,7 +117,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
                         if (checkInDateEpoch == 0)
                             checkInDateEpoch = checkOutDateEpoch;
 
-                        duration = checkOutDateEpoch - checkInDateEpoch;
+                        result.Fee.DurationTime = duration = checkOutDateEpoch - checkInDateEpoch;
                     }
                 }
 
@@ -276,7 +276,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
                         if (checkInDateEpoch == 0)
                             checkInDateEpoch = checkOutDateEpoch;
 
-                        duration = checkOutDateEpoch - checkInDateEpoch;
+                        result.Fee.DurationTime = duration = checkOutDateEpoch - checkInDateEpoch;
                     }
                 }
 
