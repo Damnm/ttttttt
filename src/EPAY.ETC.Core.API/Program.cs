@@ -14,6 +14,7 @@ using Microsoft.OpenApi.Models;
 using NLog;
 using NLog.Web;
 using StackExchange.Redis;
+using System.Linq.Dynamic.Core;
 using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -30,6 +31,7 @@ builder.Services.Configure<EPAY.ETC.Core.Models.UI.UIModel>(builder.Configuratio
 builder.Services.Configure<JWTSettingsConfig>(builder.Configuration.GetSection("JwtSettings"));
 builder.Services.Configure<AppConfig>(builder.Configuration.GetSection("AppConfig"));
 builder.Services.Configure<WalletUrlOptions>(builder.Configuration.GetSection("WalletAPISettings"));
+builder.Services.Configure<ConfigDetails>(builder.Configuration);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

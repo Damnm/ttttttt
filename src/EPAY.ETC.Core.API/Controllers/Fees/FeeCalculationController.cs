@@ -45,9 +45,9 @@ namespace EPAY.ETC.Core.API.Controllers.Fees
                 ValidationResult<VehicleFeeModel>? result;
 
                 if (input.CustomVehicleType == null)
-                    result = await _feeCalculationService.CalculateFeeAsync(input.RFID, input.PlateNumber, input.CheckInDateEpoch, input.CheckOutDateEpoch);
+                    result = await _feeCalculationService.CalculateFeeAsync(input.RFID, input.PlateNumber, input.CheckInDateEpoch, input.CheckOutDateEpoch, input.Parking);
                 else
-                    result = await _feeCalculationService.CalculateFeeAsync(input.PlateNumber, input.CustomVehicleType, input.CheckInDateEpoch, input.CheckOutDateEpoch);
+                    result = await _feeCalculationService.CalculateFeeAsync(input.PlateNumber, input.CustomVehicleType, input.CheckInDateEpoch, input.CheckOutDateEpoch, input.Parking);
 
                 return Ok(result);
             }

@@ -38,7 +38,6 @@ namespace EPAY.ETC.Core.API.Controllers.TicketType
         /// <summary>
         /// Get Vehicle Detail
         /// </summary>
-        /// <param name="code"></param>
         /// <returns></returns>
         [HttpGet("v1/tickettypes")]
         [ProducesResponseType(StatusCodes.Status200OK)]

@@ -77,7 +77,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Fees
                 RFID = "123456879213547"
             };
 
-            _feesCalculationService.Setup(x => x.CalculateFeeAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<long>(), It.IsAny<long>())).ReturnsAsync(response);
+            _feesCalculationService.Setup(x => x.CalculateFeeAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<long>(), It.IsAny<long>(), It.IsAny<ParkingRequestModel>())).ReturnsAsync(response);
 
             // Act
             var controller = new FeeCalculationController(_loggerMock.Object, _feesCalculationService.Object);
@@ -85,8 +85,8 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Fees
             var data = ((OkObjectResult)actualResult).Value as ValidationResult<VehicleFeeModel>;
 
             // Assert
-            _feesCalculationService.Verify(x => x.CalculateFeeAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<long>(), It.IsAny<long>()), Times.Once);
-            _feesCalculationService.Verify(x => x.CalculateFeeAsync(It.IsAny<string>(), It.IsAny<CustomVehicleTypeEnum>(), It.IsAny<long>(), It.IsAny<long>()), Times.Never);
+            _feesCalculationService.Verify(x => x.CalculateFeeAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<long>(), It.IsAny<long>(), It.IsAny<ParkingRequestModel>()), Times.Once);
+            _feesCalculationService.Verify(x => x.CalculateFeeAsync(It.IsAny<string>(), It.IsAny<CustomVehicleTypeEnum>(), It.IsAny<long>(), It.IsAny<long>(), It.IsAny<ParkingRequestModel>()), Times.Never);
 
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(controller.CalculateFeeAsync)}...", Times.Once, exception);
             _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(controller.CalculateFeeAsync)} method", Times.Never, exception);
@@ -103,7 +103,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Fees
             // Arrange
             var response = ValidationResult.Success(vehicleFee);
 
-            _feesCalculationService.Setup(x => x.CalculateFeeAsync(It.IsAny<string>(), It.IsAny<CustomVehicleTypeEnum>(), It.IsAny<long>(), It.IsAny<long>())).ReturnsAsync(response);
+            _feesCalculationService.Setup(x => x.CalculateFeeAsync(It.IsAny<string>(), It.IsAny<CustomVehicleTypeEnum>(), It.IsAny<long>(), It.IsAny<long>(), It.IsAny<ParkingRequestModel>())).ReturnsAsync(response);
 
             // Act
             var controller = new FeeCalculationController(_loggerMock.Object, _feesCalculationService.Object);
@@ -111,8 +111,8 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Fees
             var data = ((OkObjectResult)actualResult).Value as ValidationResult<VehicleFeeModel>;
 
             // Assert
-            _feesCalculationService.Verify(x => x.CalculateFeeAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<long>(), It.IsAny<long>()), Times.Never);
-            _feesCalculationService.Verify(x => x.CalculateFeeAsync(It.IsAny<string>(), It.IsAny<CustomVehicleTypeEnum>(), It.IsAny<long>(), It.IsAny<long>()), Times.Once);
+            _feesCalculationService.Verify(x => x.CalculateFeeAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<long>(), It.IsAny<long>(), It.IsAny<ParkingRequestModel>()), Times.Never);
+            _feesCalculationService.Verify(x => x.CalculateFeeAsync(It.IsAny<string>(), It.IsAny<CustomVehicleTypeEnum>(), It.IsAny<long>(), It.IsAny<long>(), It.IsAny<ParkingRequestModel>()), Times.Once);
 
             _loggerMock.VerifyLog(LogLevel.Information, $"Executing {nameof(controller.CalculateFeeAsync)}...", Times.Once, exception);
             _loggerMock.VerifyLog(LogLevel.Error, $"An error occurred when calling {nameof(controller.CalculateFeeAsync)} method", Times.Never, exception);
@@ -143,7 +143,7 @@ namespace EPAY.ETC.Core.API.UnitTests.Controllers.Fees
         {
             // Arrange
             var someEx = new Exception("An error occurred when calling AddAsync method");
-            _feesCalculationService.Setup(x => x.CalculateFeeAsync(It.IsAny<string>(), It.IsAny<CustomVehicleTypeEnum>(), It.IsAny<long>(), It.IsAny<long>())).ThrowsAsync(someEx);
+            _feesCalculationService.Setup(x => x.CalculateFeeAsync(It.IsAny<string>(), It.IsAny<CustomVehicleTypeEnum>(), It.IsAny<long>(), It.IsAny<long>(), It.IsAny<ParkingRequestModel>())).ThrowsAsync(someEx);
 
             // Act
             var controller = new FeeCalculationController(_loggerMock.Object, _feesCalculationService.Object);

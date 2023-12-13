@@ -7,6 +7,7 @@ using EPAY.ETC.Core.API.Core.Interfaces.Services.Fees;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Fusion;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.InfringedVehicle;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.ManualBarrierControls;
+using EPAY.ETC.Core.API.Core.Interfaces.Services.Parking.ParkingBuilder;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Payment;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.PaymentStatus;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.PrintLog;
@@ -46,6 +47,7 @@ using EPAY.ETC.Core.API.Infrastructure.Services.Fees;
 using EPAY.ETC.Core.API.Infrastructure.Services.Fusion;
 using EPAY.ETC.Core.API.Infrastructure.Services.InfringedVehicle;
 using EPAY.ETC.Core.API.Infrastructure.Services.ManualBarrierControls;
+using EPAY.ETC.Core.API.Infrastructure.Services.Parking.BuilderService;
 using EPAY.ETC.Core.API.Infrastructure.Services.Payment;
 using EPAY.ETC.Core.API.Infrastructure.Services.PaymentStatus;
 using EPAY.ETC.Core.API.Infrastructure.Services.PrintLog;
@@ -123,6 +125,10 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence
             services.AddTransient<IPrintLogService, PrintLogService>();
             services.AddTransient<ITicketTypeService, TicketTypeService>();
             services.AddTransient<IInfringedVehicleService, InfringedVehicleService>();
+
+            // parking builder
+            services.AddTransient<IParkingBuilderService, GeneralParkingBuilderService>();
+            services.AddTransient<IParkingBuilderService, TCPParkingBuilderService>();
 
             return services;
         }

@@ -1,14 +1,16 @@
-﻿using EPAY.ETC.Core.API.Core.Models.TimeBlockFees;
+﻿using EPAY.ETC.Core.API.Core.Models.Enum;
+using EPAY.ETC.Core.API.Core.Models.TimeBlockFees;
 
 namespace EPAY.ETC.Core.API.Infrastructure.Common.Utils
 {
     public static class FeeCalculationUtil
     {
-        public static (double Amount, int Block, long Duration) FeeCalculation(List<TimeBlockFeeModel>? timeBlockFees, TimeBlockFeeFormulaModel? timeBlockFeeFormula, long duration)
+        public static (double Amount, int Block, long Duration) FeeCalculation(List<TimeBlockFeeModel>? timeBlockFees, TimeBlockFeeFormulaModel? timeBlockFeeFormula, long duration, ParkingChargeTypeEnum? parkingChargeType = null)
         {
             double fee = 0;
             int block = 0;
             long durationMinute = (long)Math.Ceiling((decimal)duration / 60);
+            bool isBlock0 = parkingChargeType != null && parkingChargeType == ParkingChargeTypeEnum.Block0;
 
             // Return 0 if time block fee does not exists
             if (timeBlockFees == null || !timeBlockFees.Any())
@@ -38,6 +40,20 @@ namespace EPAY.ETC.Core.API.Infrastructure.Common.Utils
             decimal totalBlock = Math.Ceiling(duration / (decimal)timeBlockFeeFormula.IntervalInSeconds);
             block = timeBlockFeeExists?.BlockNumber ?? (int)totalBlock;
 
+            double prevblockAmount = prevBlock?.Amount ?? 0;
+            block = (prevBlock?.BlockNumber ?? 0) + (int)totalBlock;
+
+            if (isBlock0)
+            {
+                var block0 = timeBlockFees.FirstOrDefault(x => x.BlockNumber == 0);
+                if (block0 != null)
+                {
+                    return (block0.Amount ?? 0, block, durationMinute);
+                }
+            }
+            else if (parkingChargeType == ParkingChargeTypeEnum.Free)
+                return (0, block, durationMinute);
+
             if (timeBlockFeeExists != null)
             {
                 fee = timeBlockFeeExists.Amount ?? 0;
@@ -45,11 +61,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.Common.Utils
                 return (fee, block, durationMinute);
             }
 
-            double block1Amount = prevBlock?.Amount ?? 0;
-            block = (prevBlock?.BlockNumber ?? 0) + (int)totalBlock;
-
             // Calculate amount
-            fee = (double)totalBlock * timeBlockFeeFormula.Amount + block1Amount;
+            fee = (double)totalBlock * timeBlockFeeFormula.Amount + prevblockAmount;
 
             return (fee, block, durationMinute);
         }

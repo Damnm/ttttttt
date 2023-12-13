@@ -27,6 +27,7 @@ namespace EPAY.ETC.Core.API.Controllers.Vehicle
         /// </summary>
         /// <param name="logger"></param>
         /// <param name="vehicleService"></param>
+        /// <param name="infringedVehicleService"></param>
         /// <exception cref="ArgumentNullException"></exception>
         public VehicleController(ILogger<VehicleController> logger,
             IVehicleService vehicleService, IInfringedVehicleService infringedVehicleService)

@@ -3,5 +3,6 @@
     public class AppConfig
     {
         public int GetErrorResponseRedisCacheTime { get; set; }
+        public string? DefaultParkingLocationId { get; set; }
     }
 }

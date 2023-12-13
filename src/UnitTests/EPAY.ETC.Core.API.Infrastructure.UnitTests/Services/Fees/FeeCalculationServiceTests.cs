@@ -1,6 +1,8 @@
-﻿using EPAY.ETC.Core.API.Core.Models.FeeVehicleCategories;
+﻿using EPAY.ETC.Core.API.Core.Interfaces.Services.Parking.ParkingBuilder;
+using EPAY.ETC.Core.API.Core.Models.FeeVehicleCategories;
 using EPAY.ETC.Core.API.Core.Models.TimeBlockFees;
 using EPAY.ETC.Core.API.Core.Models.Vehicle;
+using EPAY.ETC.Core.API.Infrastructure.Models.Configs;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.CustomVehicleTypes;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.FeeVehicleCategories;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.TimeBlockFees;
@@ -10,6 +12,7 @@ using EPAY.ETC.Core.API.Infrastructure.UnitTests.Helpers;
 using EPAY.ETC.Core.Models.Enums;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Moq;
 using System.Linq.Expressions;
 using FeeTypeEnum = EPAY.ETC.Core.API.Core.Models.Enum.FeeTypeEnum;
@@ -25,6 +28,11 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fees
         private readonly Mock<ITimeBlockFeeFormulaRepository> _timeBlockFeeFormulaRepositoryMock = new();
         private readonly Mock<IVehicleRepository> _vehicleRepositoryMock = new();
         private readonly Mock<ICustomVehicleTypeRepository> _customVehicleTypeRepositoryMock = new();
+
+        private readonly static Mock<IParkingBuilderService> _parkingBuilderService = new Mock<IParkingBuilderService>();
+        private readonly List<IParkingBuilderService> _builders = new List<IParkingBuilderService>() { _parkingBuilderService.Object };
+
+        private IOptions<AppConfig> _appConfig = Options.Create(new AppConfig());
         #endregion
 
         #region Init Data mock
@@ -149,7 +157,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fees
             int duration = Convert.ToInt32(endEpochTime - startEpochTime);
 
             // Act
-            var service = new FeeCalculationService(_loggerMock.Object, _feeVehicleCategoryRepositoryMock.Object, _timeBlockFeeRepositoryMock.Object, _timeBlockFeeFormulaRepositoryMock.Object, _vehicleRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object);
+            var service = new FeeCalculationService(_loggerMock.Object, _feeVehicleCategoryRepositoryMock.Object, _timeBlockFeeRepositoryMock.Object, _timeBlockFeeFormulaRepositoryMock.Object, _vehicleRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _builders, _appConfig);
             var result = await service.CalculateFeeAsync(It.IsAny<string>(), It.IsAny<string>(), startEpochTime, endEpochTime);
 
             // Assert
@@ -257,7 +265,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fees
             double amount = 55000;
 
             // Act
-            var service = new FeeCalculationService(_loggerMock.Object, _feeVehicleCategoryRepositoryMock.Object, _timeBlockFeeRepositoryMock.Object, _timeBlockFeeFormulaRepositoryMock.Object, _vehicleRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object);
+            var service = new FeeCalculationService(_loggerMock.Object, _feeVehicleCategoryRepositoryMock.Object, _timeBlockFeeRepositoryMock.Object, _timeBlockFeeFormulaRepositoryMock.Object, _vehicleRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _builders, _appConfig);
             var result = await service.CalculateFeeAsync(vehicle?.RFID ?? string.Empty, It.IsAny<string>(), startEpochTime, endEpochTime);
 
             // Assert
@@ -291,7 +299,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fees
             double amount = 42000;
 
             // Act
-            var service = new FeeCalculationService(_loggerMock.Object, _feeVehicleCategoryRepositoryMock.Object, _timeBlockFeeRepositoryMock.Object, _timeBlockFeeFormulaRepositoryMock.Object, _vehicleRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object);
+            var service = new FeeCalculationService(_loggerMock.Object, _feeVehicleCategoryRepositoryMock.Object, _timeBlockFeeRepositoryMock.Object, _timeBlockFeeFormulaRepositoryMock.Object, _vehicleRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _builders, _appConfig);
             var result = await service.CalculateFeeAsync(vehicle?.RFID ?? string.Empty, It.IsAny<string>(), startEpochTime, endEpochTime);
 
             // Assert
@@ -325,7 +333,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fees
             double amount = 0;
 
             // Act
-            var service = new FeeCalculationService(_loggerMock.Object, _feeVehicleCategoryRepositoryMock.Object, _timeBlockFeeRepositoryMock.Object, _timeBlockFeeFormulaRepositoryMock.Object, _vehicleRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object);
+            var service = new FeeCalculationService(_loggerMock.Object, _feeVehicleCategoryRepositoryMock.Object, _timeBlockFeeRepositoryMock.Object, _timeBlockFeeFormulaRepositoryMock.Object, _vehicleRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _builders, _appConfig);
             var result = await service.CalculateFeeAsync(vehicle?.RFID ?? string.Empty, It.IsAny<string>(), startEpochTime, endEpochTime);
 
             // Assert
@@ -359,7 +367,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fees
             double amount = 0;
 
             // Act
-            var service = new FeeCalculationService(_loggerMock.Object, _feeVehicleCategoryRepositoryMock.Object, _timeBlockFeeRepositoryMock.Object, _timeBlockFeeFormulaRepositoryMock.Object, _vehicleRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object);
+            var service = new FeeCalculationService(_loggerMock.Object, _feeVehicleCategoryRepositoryMock.Object, _timeBlockFeeRepositoryMock.Object, _timeBlockFeeFormulaRepositoryMock.Object, _vehicleRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _builders, _appConfig);
             var result = await service.CalculateFeeAsync(vehicle?.RFID ?? string.Empty, It.IsAny<string>(), startEpochTime, endEpochTime);
 
             // Assert
@@ -387,7 +395,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fees
             _feeVehicleCategoryRepositoryMock.Setup(x => x.GetAllAsync(It.IsAny<Expression<Func<FeeVehicleCategoryModel, bool>>>())).ThrowsAsync(new Exception("Some ex"));
 
             // Act
-            var service = new FeeCalculationService(_loggerMock.Object, _feeVehicleCategoryRepositoryMock.Object, _timeBlockFeeRepositoryMock.Object, _timeBlockFeeFormulaRepositoryMock.Object, _vehicleRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object);
+            var service = new FeeCalculationService(_loggerMock.Object, _feeVehicleCategoryRepositoryMock.Object, _timeBlockFeeRepositoryMock.Object, _timeBlockFeeFormulaRepositoryMock.Object, _vehicleRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _builders, _appConfig);
             Func<Task> func = async () => await service.CalculateFeeAsync(It.IsAny<string>(), It.IsAny<string>(), startEpochTime, endEpochTime);
 
             // Assert
@@ -415,7 +423,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fees
             _timeBlockFeeRepositoryMock.Setup(x => x.GetAllAsync(It.IsAny<Expression<Func<TimeBlockFeeModel, bool>>>())).ThrowsAsync(new Exception("Some ex"));
 
             // Act
-            var service = new FeeCalculationService(_loggerMock.Object, _feeVehicleCategoryRepositoryMock.Object, _timeBlockFeeRepositoryMock.Object, _timeBlockFeeFormulaRepositoryMock.Object, _vehicleRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object);
+            var service = new FeeCalculationService(_loggerMock.Object, _feeVehicleCategoryRepositoryMock.Object, _timeBlockFeeRepositoryMock.Object, _timeBlockFeeFormulaRepositoryMock.Object, _vehicleRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _builders, _appConfig);
             Func<Task> func = async () => await service.CalculateFeeAsync(It.IsAny<string>(), It.IsAny<string>(), startEpochTime, endEpochTime);
 
             // Assert
@@ -442,7 +450,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fees
             _timeBlockFeeFormulaRepositoryMock.Setup(x => x.GetAllAsync(It.IsAny<Expression<Func<TimeBlockFeeFormulaModel, bool>>>())).ThrowsAsync(new Exception("Some ex"));
 
             // Act
-            var service = new FeeCalculationService(_loggerMock.Object, _feeVehicleCategoryRepositoryMock.Object, _timeBlockFeeRepositoryMock.Object, _timeBlockFeeFormulaRepositoryMock.Object, _vehicleRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object);
+            var service = new FeeCalculationService(_loggerMock.Object, _feeVehicleCategoryRepositoryMock.Object, _timeBlockFeeRepositoryMock.Object, _timeBlockFeeFormulaRepositoryMock.Object, _vehicleRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _builders, _appConfig);
             Func<Task> func = async () => await service.CalculateFeeAsync(It.IsAny<string>(), It.IsAny<string>(), startEpochTime, endEpochTime);
 
             // Assert
@@ -469,7 +477,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fees
             _vehicleRepositoryMock.Setup(x => x.GetAllAsync(It.IsAny<Expression<Func<VehicleModel, bool>>>())).ThrowsAsync(new Exception("Some ex"));
 
             // Act
-            var service = new FeeCalculationService(_loggerMock.Object, _feeVehicleCategoryRepositoryMock.Object, _timeBlockFeeRepositoryMock.Object, _timeBlockFeeFormulaRepositoryMock.Object, _vehicleRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object);
+            var service = new FeeCalculationService(_loggerMock.Object, _feeVehicleCategoryRepositoryMock.Object, _timeBlockFeeRepositoryMock.Object, _timeBlockFeeFormulaRepositoryMock.Object, _vehicleRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _builders, _appConfig);
             Func<Task> func = async () => await service.CalculateFeeAsync("Some RFID", It.IsAny<string>(), startEpochTime, endEpochTime);
 
             // Assert
@@ -499,7 +507,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fees
             double amount = 42000;
 
             // Act
-            var service = new FeeCalculationService(_loggerMock.Object, _feeVehicleCategoryRepositoryMock.Object, _timeBlockFeeRepositoryMock.Object, _timeBlockFeeFormulaRepositoryMock.Object, _vehicleRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object);
+            var service = new FeeCalculationService(_loggerMock.Object, _feeVehicleCategoryRepositoryMock.Object, _timeBlockFeeRepositoryMock.Object, _timeBlockFeeFormulaRepositoryMock.Object, _vehicleRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _builders, _appConfig);
             var result = await service.CalculateFeeAsync(It.IsAny<string>(), It.IsAny<CustomVehicleTypeEnum>(), startEpochTime, endEpochTime);
 
             // Assert
@@ -526,7 +534,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fees
             double amount = 0;
 
             // Act
-            var service = new FeeCalculationService(_loggerMock.Object, _feeVehicleCategoryRepositoryMock.Object, _timeBlockFeeRepositoryMock.Object, _timeBlockFeeFormulaRepositoryMock.Object, _vehicleRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object);
+            var service = new FeeCalculationService(_loggerMock.Object, _feeVehicleCategoryRepositoryMock.Object, _timeBlockFeeRepositoryMock.Object, _timeBlockFeeFormulaRepositoryMock.Object, _vehicleRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _builders, _appConfig);
             var result = await service.CalculateFeeAsync(It.IsAny<string>(), It.IsAny<CustomVehicleTypeEnum>(), startEpochTime, endEpochTime);
 
             // Assert
@@ -553,7 +561,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fees
             double amount = 0;
 
             // Act
-            var service = new FeeCalculationService(_loggerMock.Object, _feeVehicleCategoryRepositoryMock.Object, _timeBlockFeeRepositoryMock.Object, _timeBlockFeeFormulaRepositoryMock.Object, _vehicleRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object);
+            var service = new FeeCalculationService(_loggerMock.Object, _feeVehicleCategoryRepositoryMock.Object, _timeBlockFeeRepositoryMock.Object, _timeBlockFeeFormulaRepositoryMock.Object, _vehicleRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _builders, _appConfig);
             var result = await service.CalculateFeeAsync(It.IsAny<string>(), It.IsAny<CustomVehicleTypeEnum>(), startEpochTime, endEpochTime);
 
             // Assert
@@ -578,7 +586,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fees
             int duration = Convert.ToInt32(endEpochTime - startEpochTime);
 
             // Act
-            var service = new FeeCalculationService(_loggerMock.Object, _feeVehicleCategoryRepositoryMock.Object, _timeBlockFeeRepositoryMock.Object, _timeBlockFeeFormulaRepositoryMock.Object, _vehicleRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object);
+            var service = new FeeCalculationService(_loggerMock.Object, _feeVehicleCategoryRepositoryMock.Object, _timeBlockFeeRepositoryMock.Object, _timeBlockFeeFormulaRepositoryMock.Object, _vehicleRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _builders, _appConfig);
             Func<Task> func = async () => await service.CalculateFeeAsync(It.IsAny<string>(), It.IsAny<CustomVehicleTypeEnum>(), startEpochTime, endEpochTime);
 
             // Assert
@@ -602,7 +610,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.UnitTests.Services.Fees
             int duration = Convert.ToInt32(endEpochTime - startEpochTime);
 
             // Act
-            var service = new FeeCalculationService(_loggerMock.Object, _feeVehicleCategoryRepositoryMock.Object, _timeBlockFeeRepositoryMock.Object, _timeBlockFeeFormulaRepositoryMock.Object, _vehicleRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object);
+            var service = new FeeCalculationService(_loggerMock.Object, _feeVehicleCategoryRepositoryMock.Object, _timeBlockFeeRepositoryMock.Object, _timeBlockFeeFormulaRepositoryMock.Object, _vehicleRepositoryMock.Object, _customVehicleTypeRepositoryMock.Object, _builders, _appConfig);
             Func<Task> func = async () => await service.CalculateFeeAsync(It.IsAny<string>(), It.IsAny<CustomVehicleTypeEnum>(), startEpochTime, endEpochTime);
 
             // Assert
