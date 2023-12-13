@@ -2,7 +2,6 @@
 using EPAY.ETC.Core.API.Core.Models.Enum;
 using EPAY.ETC.Core.API.Core.Models.FeeVehicleCategories;
 using EPAY.ETC.Core.API.Infrastructure.Models.Configs;
-using EPAY.ETC.Core.Models.Enums;
 using EPAY.ETC.Core.Models.VehicleFee;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -34,19 +33,11 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Parking.BuilderService
                 var parkingConfig = _options.Value.ParkingConfigs?.FirstOrDefault(x => x.ParkingLocationId.Equals(parking.LocationId) && x.ParkingFeesApplied == YesNoEnum.Yes);
                 deltaT = parkingConfig?.DeltaTInSeconds ?? 0;
 
-                if (
-                    parkingConfig != null
-                    && _options.Value.ParkingLaneConfigs != null
-                    && _options.Value.ParkingLaneConfigs.Any(x =>
-                        x.ParkingLocationId == parkingConfig.ParkingLocationId
-                        && (
-                            x.LaneId.Equals(parking.LaneInId)
-                            || x.LaneId.Equals(parking.LaneOutId)
-                        )
-                        && x.ParkingPaidStatus == PaidStatusEnum.Paid
-                    )
-                )
+                if (parkingConfig != null)
                 {
+                    if (feeVehicleCategory != null && feeVehicleCategory.IsTCPVehicle)
+                        return (ParkingChargeTypeEnum.Block0, deltaT);
+
                     return (ParkingChargeTypeEnum.Free, deltaT);
                 }
 

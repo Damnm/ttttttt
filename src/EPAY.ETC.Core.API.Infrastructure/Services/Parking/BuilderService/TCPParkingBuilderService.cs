@@ -35,25 +35,17 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Parking.BuilderService
                 var parkingConfig = _options.Value.ParkingConfigs?.FirstOrDefault(x => x.ParkingLocationId.Equals(parking.LocationId) && x.ParkingFeesApplied == YesNoEnum.Yes);
                 deltaT = parkingConfig?.DeltaTInSeconds ?? 0;
 
-                if (
-                    parkingConfig != null
-                    && _options.Value.ParkingLaneConfigs != null
-                    && _options.Value.ParkingLaneConfigs.Any(x =>
-                        x.ParkingLocationId == parkingConfig.ParkingLocationId
-                        && (
-                            x.LaneId.Equals(parking.LaneInId)
-                            || x.LaneId.Equals(parking.LaneOutId)
-                        )
-                        && x.ParkingPaidStatus == PaidStatusEnum.Paid
-                    )
-                )
-                {
-                    if (feeVehicleCategory != null && feeVehicleCategory.IsTCPVehicle == true)
-                    {
-                        return (ParkingChargeTypeEnum.Block0, deltaT);
-                    }
+                List<ParkingLaneConfig>? laneConfigs = null;
+                if (parkingConfig != null && _options.Value.ParkingLaneConfigs != null)
+                    laneConfigs = _options.Value.ParkingLaneConfigs.Where(x => x.ParkingLocationId == parkingConfig.ParkingLocationId && (x.LaneId.Equals(parking.LaneInId) || x.LaneId.Equals(parking.LaneOutId))).ToList();
 
-                    return (ParkingChargeTypeEnum.Free, deltaT);
+                if (laneConfigs != null)
+                {
+                    if (feeVehicleCategory != null && feeVehicleCategory.IsTCPVehicle == true || laneConfigs.Any(x => x.ParkingPaidStatus == PaidStatusEnum.Unpaid))
+                        return (ParkingChargeTypeEnum.Block0, deltaT);
+
+                    if (laneConfigs.Any(x => x.ParkingPaidStatus == PaidStatusEnum.Paid))
+                        return (ParkingChargeTypeEnum.Free, deltaT);
                 }
 
                 return (ParkingChargeTypeEnum.Charged, deltaT);
