@@ -7,7 +7,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="EPAY.ETC.Core.Models" Version="2023.12.12.1501" />
+		<PackageReference Include="EPAY.ETC.Core.Models" Version="2023.12.13.1338" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.22" />
 		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.22" />
 	</ItemGroup>
