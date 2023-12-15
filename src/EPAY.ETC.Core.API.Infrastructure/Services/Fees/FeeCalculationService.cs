@@ -183,11 +183,13 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.Fees
 
                     case FeeTypeEnum.Fixed:
                         // Amount is block 0 if customVehicleType = null
-                        result.Fee.Amount = (
-                            feeVehicleCategory != null && feeVehicleCategory.FeeType?.CustomVehicleType == null
-                            ? timeBlockFees?.FirstOrDefault(x => x.BlockNumber == 0)?.Amount ?? feeVehicleCategory?.FeeType?.Amount
-                            : feeVehicleCategory?.FeeType?.Amount
-                        ) ?? 0;
+                        result.Fee.Amount = parkingChargeType == ParkingChargeTypeEnum.Free
+                            ? 0
+                            : (
+                                feeVehicleCategory != null && feeVehicleCategory.FeeType?.CustomVehicleType == null
+                                ? timeBlockFees?.FirstOrDefault(x => x.BlockNumber == 0)?.Amount ?? feeVehicleCategory?.FeeType?.Amount
+                                : feeVehicleCategory?.FeeType?.Amount
+                            ) ?? 0;
                         break;
 
                     // Calculate using TimeBlockFee
