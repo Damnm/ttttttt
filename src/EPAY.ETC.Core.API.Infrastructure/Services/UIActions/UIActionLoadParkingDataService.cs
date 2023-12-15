@@ -27,8 +27,8 @@ namespace EPAY.ETC.Core.API.Infrastructure.Services.UIActions
 
             try
             {
-                var parkingCamKeys = _server.Keys(0, $"{RedisConstant.PARKING_KEY}*{plateNumber}*", int.MaxValue).ToList();
-                var parkingRFIDKeys = _server.Keys(0, $"{RedisConstant.PARKING_KEY}*{rfid}*", int.MaxValue).ToList();
+                var parkingCamKeys = !string.IsNullOrEmpty(plateNumber) ? _server.Keys(0, $"{RedisConstant.PARKING_KEY}*{plateNumber}*", int.MaxValue).ToList() : null;
+                var parkingRFIDKeys = !string.IsNullOrEmpty(rfid) ? _server.Keys(0, $"{RedisConstant.PARKING_KEY}*{rfid}*", int.MaxValue).ToList() : null;
 
                 // Load parking from RFID
                 if (parkingRFIDKeys != null && parkingRFIDKeys.Any())
