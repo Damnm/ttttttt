@@ -15,6 +15,7 @@ using EPAY.ETC.Core.API.Core.Interfaces.Services.TicketType;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Transaction;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.UIActions;
 using EPAY.ETC.Core.API.Core.Interfaces.Services.Vehicles;
+using EPAY.ETC.Core.API.Core.Interfaces.Services.VehicleSimulator;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Context;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.AppConfigs;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Barcode;
@@ -38,6 +39,7 @@ using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.TransactionLog;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.Vehicle;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.VehicleCategories;
 using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.VehicleGroups;
+using EPAY.ETC.Core.API.Infrastructure.Persistence.Repositories.VehicleSimulator;
 using EPAY.ETC.Core.API.Infrastructure.Services.Authentication;
 using EPAY.ETC.Core.API.Infrastructure.Services.Barcode;
 using EPAY.ETC.Core.API.Infrastructure.Services.ErrorResponse;
@@ -55,6 +57,7 @@ using EPAY.ETC.Core.API.Infrastructure.Services.TicketType;
 using EPAY.ETC.Core.API.Infrastructure.Services.TransactionLog;
 using EPAY.ETC.Core.API.Infrastructure.Services.UIActions;
 using EPAY.ETC.Core.API.Infrastructure.Services.Vehicles;
+using EPAY.ETC.Core.API.Infrastructure.Services.VehicleSimulator;
 using EPAY.ETC.Core.Models.Constants;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -106,6 +109,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence
             services.AddScoped<IPrintLogRepository, PrintLogRepository>();
             services.AddScoped<IInfringedVehicleRepository, InfringedVehicleRepository>();
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            services.AddScoped<IVehicleSimulatorRepository, VehicleSimulatorRepository>();
 
             ////Add Services
             services.AddTransient<IVehicleService, VehicleService>();
@@ -126,6 +130,7 @@ namespace EPAY.ETC.Core.API.Infrastructure.Persistence
             services.AddTransient<IPrintLogService, PrintLogService>();
             services.AddTransient<ITicketTypeService, TicketTypeService>();
             services.AddTransient<IInfringedVehicleService, InfringedVehicleService>();
+            services.AddTransient<IVehicleSimulatorService, VehicleSimulatorService>();
 
             // parking builder
             services.AddTransient<IParkingBuilderService, GeneralParkingBuilderService>();

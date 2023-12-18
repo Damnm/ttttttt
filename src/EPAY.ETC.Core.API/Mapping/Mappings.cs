@@ -5,6 +5,7 @@ using EPAY.ETC.Core.API.Core.Models.Fusion;
 using EPAY.ETC.Core.API.Core.Models.InfringeredVehicle;
 using EPAY.ETC.Core.API.Core.Models.ManualBarrierControl;
 using EPAY.ETC.Core.API.Core.Models.PrintLog;
+using EPAY.ETC.Core.API.Core.Models.Simulator;
 using EPAY.ETC.Core.API.Core.Models.TransactionLog;
 using EPAY.ETC.Core.API.Core.Models.Vehicle;
 using EPAY.ETC.Core.API.Models.Configs;
@@ -259,6 +260,9 @@ namespace EPAY.ETC.Core.API.Mapping
                  .ForMember(e => e.PlateNumber, act => act.MapFrom(src => src.PlateNumber))
                  .ForMember(e => e.RFID, act => act.MapFrom(src => src.RFID))
                .ReverseMap();
+            CreateMap<VehicleSimulatorRequestModel, VehicleSimulatorModel>()
+                .ForMember(e => e.CreatedDate, act => act.MapFrom(src => DateTime.Now))
+                .ReverseMap();
         }
     }
 }
